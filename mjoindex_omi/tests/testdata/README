@@ -1,0 +1,4 @@
+the following files should be added to ba able to run all unit tests:
+
+-olr.day.mean.nc from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
+
