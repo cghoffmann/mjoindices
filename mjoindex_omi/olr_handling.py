@@ -4,6 +4,7 @@ import numpy as np
 #import Manipulation.Filters
 #import Tools.DateTime
 import matplotlib.pyplot as plt
+import scipy
 
 """
 Created on Tue Dec  4 14:05:34 2018
@@ -38,24 +39,6 @@ class OLRData:
     def long(self):
         return self._long
 
-
-    def restrictDataToLatRange(self, latStart, latStop):
-        print("Restricting lat range...")
-        latfilter = (self._lat>=latStart) & (self._lat<=latStop)
-        self._lat = self._lat[latfilter]
-        temp = self._olr[:,latfilter,:]
-        self._olr = temp
-        #print("latrange",self.__olr_data_cube.shape)
-
-
-    def restrictDataToTimeRange(self, startDate, stopDate):
-        print("Restricting time range...")
-        windowInds = (self._time >= startDate) & (self._time <= stopDate)
-        self.__time=self._time[windowInds]
-        temp = self._olr[windowInds,:,:]
-        self._olr = temp
-        #print("daterange",self.__olr_data_cube.shape)
-
     def extractDayFromOLRData(self, date):
         #FIXME: Check if date is in time range
         cand = self.time == date
@@ -86,6 +69,42 @@ class OLRData:
         result=self.OLRData[dayIndsToConsider,:,:]
         return result
 
+def resampleOLRToOriginalSpatialGrid(olr):
+    """Resamples the data in an OLRData object spatially.
+
+    Afterwards, it corresponds to the original spatial calculation grid:
+    Latitude: 2.5 deg sampling in the tropics (20S to 20 N)
+    Longitude: Whole globe with 2.5 deg sampling
+
+    **Arguments**
+
+    *olr*
+    The OLRData object
+
+    **Returns**
+    A new OLRData object with the resampled data
+
+    """
+
+    orig_lat = np.arange(-20., 20.1, 2.5)
+
+    orig_long = np.arange(0., 359.9, 2.5)
+
+    no_days = olr.time.size
+
+    olr_interpol = np.empty((no_days, orig_lat.size, orig_long.size))
+    for idx in range(0,no_days):
+        f = scipy.interpolate.interp2d(olr.long, olr.lat, np.squeeze(olr.olr[idx,:,:]), kind='linear')
+        olr_interpol[idx,:,:] = f(orig_long, orig_lat)
+    return OLRData(olr_interpol, olr.time, orig_lat, orig_long)
+
+# FIXME: Implement temporal interpolation to original 1day-spacing
+
+def restrictOLRDataToTimeRange(olr, startDate, stopDate):
+    print("Restricting time range...")
+    windowInds = (olr.time >= startDate) & (olr.time <= stopDate)
+    print(windowInds)
+    return OLRData(olr.olr[windowInds,:,:], olr.time[windowInds], olr.lat, olr.long)
 
 def loadNOAAInterpolatedOLR(filename):
     """Loads the standard OLR data product provided by NOAA

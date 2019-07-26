@@ -5,16 +5,60 @@ Created on Thu Feb 28 15:14:10 2019
 @author: ch
 """
 import numpy as np
-import Datasets.OLR
 import matplotlib.pyplot as plt
-import Manipulation.Filters
+import mjoindex_omi.olr_handling
+import scipy
+import scipy.fftpack
 from scipy.io import FortranFile
+
+def filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(olr):
+    return filterOLRTemporallyWith1DSpectralSmoothing(olr, 20., 96.)
+
+def filterOLRTemporallyWith1DSpectralSmoothing(olr, period_min, period_max):
+    print("Smooth data temporally...")
+    #FIXME: Don't use zeros in the follwing
+    filteredOLR = np.zeros(olr.olr.shape)
+    for idx_lat in range (0,olr.olr.shape[1]):
+        for idx_lon in range (0,olr.olr.shape[2]):
+            tempolr = np.squeeze(olr.olr[:,idx_lat, idx_lon])
+            filteredOLR[:,idx_lat, idx_lon] = __performSpectralSmoothing(tempolr, period_min, period_max)
+    #fig = plt.figure()
+    #plt.contourf(np.squeeze(filteredOLR[0,:,:]))
+    #plt.colorbar()
+    #plt.title("Filtered OLR")
+    return (mjoindex_omi.olr_handling.OLRData(filteredOLR, olr.time, olr.lat, olr.long))
+
+def __performSpectralSmoothing(y, lowerCutOff, HigherCutOff ):
+    #FIXME: calculate dt dynamically
+    dt = 1 #day
+    N=y.size
+    #print(y.shape)
+    w = scipy.fftpack.rfft(y)
+    f = scipy.fftpack.rfftfreq(N, dt)
+    P=1/f
+    #spectrum = w**2
+
+    w2 = w.copy()
+    w2[P<lowerCutOff] = 0
+    w2[P > HigherCutOff] = 0
+
+#    fig = plt.figure()
+#    plt.plot(P,spectrum)
+#    plt.plot(P,w2**2)
+
+    #w2[cutoff_idx] = 0
+
+    y2 = scipy.fftpack.irfft(w2)
+#    fig = plt.figure()
+#    plt.plot(y)
+#    plt.plot(y2)
+    return y2
 
 def filterOLRForMJO_PC_Calculation(olr, do_plot=0):
     return filterOLRTemporally(olr,  20., 96., do_plot=do_plot)
 
 def filterOLRTemporally(olr, period_min, period_max, do_plot=0):
-    return filterOLRTemporallyandLongitudinally(olr,  30., 96., -720., 720, do_plot=do_plot)
+    return filterOLRTemporallyandLongitudinally(olr,  period_min, period_max, -720., 720, do_plot=do_plot)
 
 def filterOLRForMJO_EOF_Calculation(olr, do_plot=0):
     return filterOLRTemporallyandLongitudinally(olr,  30., 96., 0., 720, do_plot=do_plot)
@@ -46,24 +90,24 @@ def filterOLRTemporallyandLongitudinally(olr, period_min, period_max, wn_min, wn
 #        ax.set_title("Unfiltered OLR Data lat-Evolution")
 #
 
-    filtered_olr = np.zeros(olr.OLRData.shape)
+    filtered_olr = np.zeros(olr.olr.shape)
 
 
 
     #ilat= 10
 
-    for ilat, lat in enumerate(olr.LatGrid):
+    for ilat, lat in enumerate(olr.lat):
         print("Calculating for latitude: ", lat)
-        time_spacing = (olr.TimeGrid[1] - olr.TimeGrid[0]).astype('timedelta64[s]')/np.timedelta64(1, 'D')  #time spacing in days
+        time_spacing = (olr.time[1] - olr.time[0]).astype('timedelta64[s]')/np.timedelta64(1, 'D')  #time spacing in days
         print("Spacing: ",time_spacing)
 
 
-        dataslice = np.squeeze(olr.OLRData[:,ilat,:])
+        dataslice = np.squeeze(olr.olr[:,ilat,:])
         wkfilter = WKFilter()
         filtered_data = wkfilter.perform2dimSpectralSmoothing(dataslice, time_spacing, period_min, period_max, wn_min, wn_max, do_plot = do_plot, save_debug= 0)
         filtered_olr[:,ilat,:] = filtered_data
 
-    return (Datasets.OLR.OLRData(filtered_olr, olr.TimeGrid, olr.LatGrid, olr.LongGrid))
+    return (mjoindex_omi.olr_handling.OLRData(filtered_olr, olr.time, olr.lat, olr.long))
 
 #        fig = plt.figure()
 #        plt.contourf(np.squeeze(filtered_olr[0,:,:]))
@@ -89,6 +133,31 @@ def filterOLRTemporallyandLongitudinally(olr, period_min, period_max, wn_min, wn
 #        plt.plot(np.squeeze(filtered_olr[:,10,70]))
 #        plt.title("Original and fitered OLR for particular location")
 
+
+def detrendTS(ts):
+
+    x=np.arange(0, ts.size, 1)
+    A = np.vstack([x, np.ones(len(x))]).T
+    #FIXME: Remove FutureWarning  `rcond` parameter will change to the default of machine precision times ``max(M, N)``,...  pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
+    m, b = np.linalg.lstsq(A, ts)[0]
+
+    result = ts - (m*x+b)
+#    plt.plot(ts)
+#    plt.plot(m*x+b)
+#    plt.plot(result)
+    return result
+
+def taperTSToZero(ts, window_length):
+    startinds = np.arange(0,window_length,1)
+    endinds = np.arange(-window_length-1, -1,1)+2
+
+    result = ts
+    result[0:window_length] =  result[0:window_length] *0.5*(1-np.cos(startinds*np.pi/window_length))
+    result[ts.size-window_length:ts.size] =  result[ts.size-window_length:ts.size] *0.5*(1-np.cos(endinds*np.pi/window_length))
+#    plt.figure()
+#    plt.plot(ts)
+#    plt.plot(result)
+    return result
 
 
 class WKFilter:
@@ -161,7 +230,7 @@ class WKFilter:
         orig_nt,nl=orig_data.shape
 
         for idx_l in range(0,nl):
-            orig_data[:,idx_l] = Manipulation.Filters.detrendTS(orig_data[:,idx_l])
+            orig_data[:,idx_l] = detrendTS(orig_data[:,idx_l])
 
         if save_debug:
             self.DebugDetrendedOLR = np.copy(orig_data)
@@ -184,7 +253,7 @@ class WKFilter:
         #10 days tapering according ot Kiladis Code
         #only relevant at beginning of time series as it is zero-padded in the end
         for idx_l in range(0,nl):
-            data[:,idx_l] = Manipulation.Filters.taperTSToZero(data[:,idx_l],int(10*dataperday))
+            data[:,idx_l] = taperTSToZero(data[:,idx_l],int(10*dataperday))
 
         if save_debug:
             self.DebugPreprocessedOLR = np.copy(data)
