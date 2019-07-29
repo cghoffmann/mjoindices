@@ -33,7 +33,7 @@ origOMIPCsFilename = (originalOMIDataDirname
                       + "omi.1x.txt")
 
 setups = [(True, 0.99, 0.99), (False, 0.999, 0.999)]
-@pytest.mark.long
+@pytest.mark.slow
 @pytest.mark.parametrize("useQuickTemporalFilter, expectedCorr1, expectedCorr2", setups)
 @pytest.mark.skipif(not os.path.isfile(olrDataFilename),
                     reason="OLR data file not available")
