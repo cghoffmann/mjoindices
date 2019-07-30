@@ -65,7 +65,7 @@ def __calculatePCs(olrData,
         olr_singleday = olrDataFiltered.extractDayFromOLRData(day)
         doy = tools.calcDayOfYear(day)
         # FIXME: Don't load EOFs from disk every time
-        (eof1, eof2) = omiio.load_EOFs(eof_dir, doy)
+        (eof1, eof2) = omiio.load_eofs_for_doy(eof_dir, doy)
         (pc1_single, pc2_single) = __regressOLROnEOFs(olr_singleday,
                                                        eof1,
                                                        eof2)
@@ -74,7 +74,7 @@ def __calculatePCs(olrData,
     nomalization_factor = 1/np.std(pc1)
     pc1 = np.multiply(pc1, nomalization_factor)
     pc2 = np.multiply(pc2, nomalization_factor)
-    omiio.savePCsToTxt(olrDataFiltered.time, pc1, pc2, result_file )
+    omiio.save_pcs_to_txt_file(olrDataFiltered.time, pc1, pc2, result_file)
     return (pc1, pc2)
 
 def __regressOLROnEOFs(olrData, eof1, eof2):

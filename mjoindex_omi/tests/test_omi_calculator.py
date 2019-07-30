@@ -45,7 +45,7 @@ setups = [(True, 0.99, 0.99), (False, 0.999, 0.999)]
                     reason="Original OMI PCs not available for comparison")
 def test_calculatePCsFromOLRWithOriginalConditions_Quickfilter(useQuickTemporalFilter, expectedCorr1, expectedCorr2):
 
-    (orig_dates, orig_pc1, orig_pc2) = omiio.loadOriginalPCsFromTxt(origOMIPCsFilename)
+    (orig_dates, orig_pc1, orig_pc2) = omiio.load_original_pcs_from_txt_file(origOMIPCsFilename)
     olrData = olr.loadNOAAInterpolatedOLR(olrDataFilename)
     resultFilename= (os.path.dirname(__file__)
                      + os.path.sep

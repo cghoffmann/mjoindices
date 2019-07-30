@@ -11,8 +11,8 @@ import mjoindex_omi.io as omiio
 
 
 def plotComparisonOrigRecalcPCs(filenameRecalcOMIPCs, filenameOrigOMIPCs, startDate=None, endDate=None):
-    (origDates, origPC1, origPC2) = omiio.loadOriginalPCsFromTxt(filenameOrigOMIPCs)
-    (recalcDates, recalcPC1, recalcPC2) = omiio.loadPCsFromTxt(filenameRecalcOMIPCs)
+    (origDates, origPC1, origPC2) = omiio.load_original_pcs_from_txt_file(filenameOrigOMIPCs)
+    (recalcDates, recalcPC1, recalcPC2) = omiio.load_pcs_from_txt_file(filenameRecalcOMIPCs)
 
     fig, axs = plt.subplots(2,1,num="ReproduceOriginalOMIPCs_PCs",clear=True,  figsize=(8, 6), dpi=150)
     plt.subplots_adjust(hspace=0.3)
