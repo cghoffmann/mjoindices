@@ -5,4 +5,4 @@ The following files and directories should be added to ba able to run all unit t
 -OriginalOMI/eof1/eof***.txt from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/
 -OriginalOMI/eof2/eof***.txt from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/
 
--OriginalOMI/omi.1x.txt from https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
+-OriginalOMI/omi.1x.txt (Version that ends on August 28, 2018) from https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt

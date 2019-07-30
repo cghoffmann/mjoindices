@@ -51,7 +51,8 @@ def compare_Recalc_OMI_PCs_OriginalOLROriginalEOFs():
                           + os.path.sep
                           + "omi.1x.txt")
     if not os.path.isfile(origOMIPCsFilename):
-        warnings.warn("File with the original OMI PCs are missing. Generation of the comparison plot will fail. Expected file: %s" % origOMIPCsFilename)
+        warnings.warn(
+            "File with the original OMI PCs are missing. Generation of the comparison plot will fail. Expected file: %s" % origOMIPCsFilename)
 
     resultfile = (os.path.dirname(__file__)
                   + os.path.sep
@@ -59,24 +60,26 @@ def compare_Recalc_OMI_PCs_OriginalOLROriginalEOFs():
                   + os.path.sep
                   + "RecalcPCsOrigOLROrigEOF.txt")
     resultfigfile = (os.path.dirname(__file__)
-                   + os.path.sep
-                   + "example_data"
-                   + os.path.sep
-                   + "RecalcPCsOrigOLROrigEOF")
+                     + os.path.sep
+                     + "example_data"
+                     + os.path.sep
+                     + "RecalcPCsOrigOLROrigEOF")
 
     olrData = olr.loadNOAAInterpolatedOLR(olrDataFilename)
     (target_pc1, target_pc2) = omi.calculatePCsFromOLRWithOriginalConditions(
-                                     olrData,
-                                     originalOMIDataDirname,
-                                     np.datetime64("1979-01-01"),
-                                     np.datetime64("2018-08-28"),
-                                     resultfile,
-                                     useQuickTemporalFilter = True)
+        olrData,
+        originalOMIDataDirname,
+        np.datetime64("1979-01-01"),
+        np.datetime64("2018-08-28"),
+        resultfile,
+        useQuickTemporalFilter=True)
 
-
-    fig = plotting.plotComparisonOrigRecalcPCs(resultfile, origOMIPCsFilename, np.datetime64("2011-06-01"), np.datetime64("2011-12-31"))
+    fig = plotting.plotComparisonOrigRecalcPCs(resultfile, origOMIPCsFilename, np.datetime64("2011-06-01"),
+                                               np.datetime64("2011-12-31"))
+    fig.show()
     fig.savefig(resultfigfile + ".png", bbox_inches='tight')
     fig.savefig(resultfigfile + ".pdf", bbox_inches='tight')
+
 
 if __name__ == '__main__':
     compare_Recalc_OMI_PCs_OriginalOLROriginalEOFs()

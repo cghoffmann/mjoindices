@@ -4,7 +4,6 @@ Created on Tue Jul 23 10:29:17 2019
 
 @author: ch
 """
-import os
 import os.path
 import pytest
 import numpy as np
