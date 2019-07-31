@@ -6,11 +6,13 @@ Created on Wed Jul 24 10:42:52 2019
 """
 
 import os
-import pytest
+
 import numpy as np
-import mjoindex_omi.omi_calculator as omi
-import mjoindex_omi.io as omiio
+import pytest
+
 import mjoindex_omi.olr_handling as olr
+import mjoindex_omi.omi_calculator as omi
+import mjoindex_omi.principal_components as pc
 
 olrDataFilename = (os.path.dirname(__file__)
                    + os.path.sep
@@ -45,26 +47,25 @@ setups = [(True, 0.99, 0.99), (False, 0.999, 0.999)]
                     reason="Original OMI PCs not available for comparison")
 def test_calculatePCsFromOLRWithOriginalConditions_Quickfilter(useQuickTemporalFilter, expectedCorr1, expectedCorr2):
 
-    (orig_dates, orig_pc1, orig_pc2) = omiio.load_original_pcs_from_txt_file(origOMIPCsFilename)
+    orig_omi = pc.load_original_pcs_from_txt_file(origOMIPCsFilename)
     olrData = olr.loadNOAAInterpolatedOLR(olrDataFilename)
-    resultFilename= (os.path.dirname(__file__)
-                     + os.path.sep
-                     + "tempdata"
-                     + os.path.sep
-                     + "PCs_test_calculatePCsFromOLRWithOriginalConditions.txt")
 
-    (target_pc1, target_pc2) = omi.calculatePCsFromOLRWithOriginalConditions(olrData,
+    target = omi.calculatePCsFromOLRWithOriginalConditions(olrData,
                                      originalOMIDataDirname,
                                      np.datetime64("1979-01-01"),
                                      np.datetime64("2018-08-28"),
-                                     resultFilename,
                                      useQuickTemporalFilter = useQuickTemporalFilter)
     errors = []
-    corr1 = (np.corrcoef(orig_pc1,target_pc1))[0,1]
+    if not np.all(target.time == orig_omi.time):
+        errors.append("Test is not reasonable, because temporal coverages of original OMI and recalculation do not "
+                      "fit. Maybe wrong original file downloaded? Supported is the one with coverage until August 28, "
+                      "2018.")
+
+    corr1 = (np.corrcoef(orig_omi.pc1, target.pc1))[0, 1]
     if not corr1 > expectedCorr1:
         errors.append("Correlation of PC1 too low!")
 
-    corr2 = (np.corrcoef(orig_pc2,target_pc2))[0,1]
+    corr2 = (np.corrcoef(orig_omi.pc2, target.pc2))[0,1]
     if not corr2 > expectedCorr2:
         errors.append("Correlation of PC2 too low!")
 
