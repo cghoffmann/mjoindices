@@ -860,3 +860,4 @@ venv.bak/
 /venv3.6/pyvenv.cfg
 /mjoindex_omi/tests/testdata/OriginalOMI/omi.1x.txt
 /venv3.6/lib64/
+/out.txt

@@ -5,18 +5,19 @@ Created on Fri Jul 19 14:39:02 2019
 @author: ch
 """
 
-import os
 import numpy as np
-import mjoindex_omi.olr_handling as olr
-import mjoindex_omi.wheeler_kiladis_mjo_filter as wkfilter
+
 import mjoindex_omi.io as omiio
+import mjoindex_omi.olr_handling as olr
+import mjoindex_omi.principal_components as pc
 import mjoindex_omi.tools as tools
+import mjoindex_omi.wheeler_kiladis_mjo_filter as wkfilter
+
 
 def calculatePCsFromOLRWithOriginalConditions(olrData,
                                               eof_dir,
                                               period_start,
                                               period_end,
-                                              result_file,
                                               useQuickTemporalFilter = False):
     restictedOLRData = olr.restrictOLRDataToTimeRange(olrData, period_start, period_end)
     resampledOLRData = olr. resampleOLRToOriginalSpatialGrid(restictedOLRData)
@@ -24,7 +25,6 @@ def calculatePCsFromOLRWithOriginalConditions(olrData,
                                eof_dir,
                                period_start,
                                period_end,
-                               result_file,
                                useQuickTemporalFilter)
 
 
@@ -34,13 +34,11 @@ def calculatePCsFromOLR(olrData,
                         eof_dir,
                         period_start,
                         period_end,
-                        result_file,
                         useQuickTemporalFilter = False):
     return __calculatePCs(olrData,
                           eof_dir,
                           period_start,
                           period_end,
-                          result_file,
                           useQuickTemporalFilter)
 
 
@@ -48,8 +46,8 @@ def __calculatePCs(olrData,
                    eof_dir,
                    period_start,
                    period_end,
-                   result_file,
                    useQuickTemporalFilter = False):
+    # FIXME: shoukld period really be filtered here? Or should OLR be restricted before?
     print(olrData.lat)
     print(olrData.long)
     if useQuickTemporalFilter:
@@ -74,8 +72,8 @@ def __calculatePCs(olrData,
     nomalization_factor = 1/np.std(pc1)
     pc1 = np.multiply(pc1, nomalization_factor)
     pc2 = np.multiply(pc2, nomalization_factor)
-    omiio.save_pcs_to_txt_file(olrDataFiltered.time, pc1, pc2, result_file)
-    return (pc1, pc2)
+    result = pc.PCData(olrDataFiltered.time, pc1, pc2)
+    return result
 
 def __regressOLROnEOFs(olrData, eof1, eof2):
         #FIXME: Swap rows and columns to fit ti standard lin alg ?!

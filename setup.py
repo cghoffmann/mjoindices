@@ -10,4 +10,4 @@ from setuptools import setup
 packages=['mjoindex_omi','mjoindex_omi.tests']
 
 setup(name='mjoindex_omi',
-      packages=packages)
+      packages=packages, install_requires=['numpy', 'pandas'])

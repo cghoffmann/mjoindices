@@ -7,9 +7,11 @@ Created on Fri Jul 26 13:01:37 2019
 
 import os
 import warnings
+
 import numpy as np
-import mjoindex_omi.omi_calculator as omi
+
 import mjoindex_omi.olr_handling as olr
+import mjoindex_omi.omi_calculator as omi
 import mjoindex_omi.plotting as plotting
 
 
@@ -66,13 +68,13 @@ def compare_Recalc_OMI_PCs_OriginalOLROriginalEOFs():
                      + "RecalcPCsOrigOLROrigEOF")
 
     olrData = olr.loadNOAAInterpolatedOLR(olrDataFilename)
-    (target_pc1, target_pc2) = omi.calculatePCsFromOLRWithOriginalConditions(
+    target = omi.calculatePCsFromOLRWithOriginalConditions(
         olrData,
         originalOMIDataDirname,
         np.datetime64("1979-01-01"),
         np.datetime64("2018-08-28"),
-        resultfile,
         useQuickTemporalFilter=True)
+    target.save_pcs_to_txt_file(resultfile)
 
     fig = plotting.plotComparisonOrigRecalcPCs(resultfile, origOMIPCsFilename, np.datetime64("2011-06-01"),
                                                np.datetime64("2011-12-31"))
