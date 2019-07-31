@@ -5,9 +5,9 @@ Created on Fri Jul 19 14:39:02 2019
 @author: ch
 """
 
+import mjoindex_omi.io as omiio
 import numpy as np
 
-import mjoindex_omi.io as omiio
 import mjoindex_omi.olr_handling as olr
 import mjoindex_omi.principal_components as pc
 import mjoindex_omi.tools as tools
@@ -69,9 +69,9 @@ def __calculatePCs(olrData,
                                                        eof2)
         pc1[idx] = pc1_single
         pc2[idx] = pc2_single
-    nomalization_factor = 1/np.std(pc1)
-    pc1 = np.multiply(pc1, nomalization_factor)
-    pc2 = np.multiply(pc2, nomalization_factor)
+    normalization_factor = 1/np.std(pc1)
+    pc1 = np.multiply(pc1, normalization_factor)
+    pc2 = np.multiply(pc2, normalization_factor)
     result = pc.PCData(olrDataFiltered.time, pc1, pc2)
     return result
 

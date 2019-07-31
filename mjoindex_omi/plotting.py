@@ -8,6 +8,7 @@ Created on Fri Jul 26 11:45:11 2019
 import matplotlib.pyplot as plt
 import numpy as np
 
+import mjoindex_omi.empirical_orthogonal_functions as eof
 import mjoindex_omi.principal_components as pc
 
 
@@ -44,6 +45,33 @@ def plotComparisonOrigRecalcPCs(filenameRecalcOMIPCs, filenameOrigOMIPCs, startD
 
     corr = (np.corrcoef(orig_omi.pc2,recalc_omi.pc2))[0,1]
     plt.text(0.1, 0.1, "Correlation over complete period: %.3f" % corr, transform=ax.transAxes)
+
+    return fig
+
+
+def plot_eof_for_doy(path, doy):
+    # TODO: Plot underlying map
+    eofdata = eof.load_original_eofs_for_doy(path, doy)
+
+    fig, axs = plt.subplots(2, 1, num="plotting.plot_eof_for_doy", clear=True,
+                            figsize=(10, 5), dpi=150, sharex=True, sharey=True)
+    plt.subplots_adjust(wspace=0.35, hspace=0.35)
+    fig.suptitle("EOF Recalculation for DOY %i" % doy)
+
+    ax = axs[0]
+
+    c = ax.contourf(eofdata.long, eofdata.lat, eofdata.eof1map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("EOF1")
+    ax.set_ylabel("Latitude [°]")
+    ax.set_xlabel("Longitude [°]")
+
+    ax = axs[1]
+    c = ax.contourf(eofdata.long, eofdata.lat, eofdata.eof2map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("EOF2")
+    ax.set_ylabel("Latitude [°]")
+    ax.set_xlabel("Longitude [°]")
 
     return fig
 
