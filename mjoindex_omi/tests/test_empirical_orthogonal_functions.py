@@ -12,6 +12,7 @@ import pytest
 
 import mjoindex_omi.empirical_orthogonal_functions as eof
 
+# FIXME Use POSIX Path
 originalOMIDataDirname = (os.path.dirname(__file__)
                           + os.path.sep
                           + "testdata"
@@ -24,43 +25,6 @@ eof1Dirname = (originalOMIDataDirname
 eof2Dirname = (originalOMIDataDirname
                + os.path.sep
                + "eof2")
-
-
-@pytest.mark.skipif(not os.path.isdir(eof1Dirname),
-                    reason="EOF1 data not available")
-@pytest.mark.skipif(not os.path.isdir(eof2Dirname),
-                    reason="EOF2 data not available")
-def test_load_original_eofs_for_doy():
-    target1 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 1)
-    target10 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 10)
-    target366 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 366)
-
-    errors = []
-    if not math.isclose(target1.eof1vector[0], 0.00022178496):
-        errors.append("EOF1 of DOY 1 is incorrect (Position 0)")
-    if not math.isclose(target1.eof1vector[10], -0.0023467445):
-        errors.append("EOF1 of DOY 1 is incorrect (Position 10)")
-    if not math.isclose(target1.eof1vector[-1], 0.013897266):
-        errors.append("EOF1 of DOY 1 is incorrect (Last position)")
-    if not math.isclose(target1.eof2vector[0], 0.0042107304):
-        errors.append("EOF2 of DOY 1 is incorrect (Position 0)")
-    if not math.isclose(target1.eof2vector[10], 0.015404793):
-        errors.append("EOF2 of DOY 1 is incorrect (Position 10)")
-    if not math.isclose(target1.eof2vector[-1], 0.012487547):
-        errors.append("EOF2 of DOY 1 is incorrect (Last position)")
-
-    if not math.isclose(target10.eof1vector[0], 0.00016476621):
-        errors.append("EOF1 of DOY 10 is incorrect (Position 0)")
-    if not math.isclose(target10.eof2vector[0], 0.0044616843):
-        errors.append("EOF2 of DOY 10 is incorrect (Position 0)")
-
-    if not math.isclose(target366.eof1vector[-1], 0.013874311):
-        errors.append("EOF1 of DOY 366 is incorrect (Last position)")
-    if not math.isclose(target366.eof2vector[-1], 0.012473147):
-        errors.append("EOF2 of DOY 366 is incorrect (Last position)")
-
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
-
 
 def test_reshape_to_vector_and_reshape_to_map():
     lat = np.array([-10., 0., 10.])
@@ -80,7 +44,7 @@ def test_reshape_to_vector_and_reshape_to_map():
     if not np.all(test_vec == transform_test_vec):
         errors.append("Result of reshape_to_vector does not meet the expectations (might be a follow-up error)")
 
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
 def test_reshape_to_vector_exceptions():
@@ -103,7 +67,7 @@ def test_reshape_to_vector_exceptions():
         target.reshape_to_vector(np.array([(1, 2, 8), (3, 4, 9), (5, 6, 10)]))
     if "Length of first dimension" not in str(e.value):
         errors.append("Length check failed")
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
 def test_reshape_to_map_exceptions():
@@ -122,10 +86,10 @@ def test_reshape_to_map_exceptions():
         target.reshape_to_map(np.array([1, 2, 3, 4, 5, 6, 7, 8]))
     if "lat.size*long.size" not in str(e.value):
         errors.append("Length check failed")
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-def test_basic_properties():
+def test_EOFData_basic_properties():
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
     eof1 = np.array([1, 2, 3, 4, 5, 6])
@@ -163,7 +127,7 @@ def test_basic_properties():
     if not np.all(target.eof2map == eof2):
         errors.append("eof2map property not correct")
 
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
 def test_initialization_exceptions():
@@ -200,4 +164,136 @@ def test_initialization_exceptions():
     if "correspond to latitude axis" not in str(e.value):
         errors.append("axis check failed")
 
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_save_eofs_to_txt_file_load_eofs_from_txt_file(tmp_path):
+    filename = tmp_path / "out.txt"
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eof1 = np.array([1, 2, 3, 4, 5, 6])
+    eof2 = np.array([10, 20, 30, 40, 50, 60])
+    target = eof.EOFData(lat, long, eof1, eof2)
+
+    target.save_eofs_to_txt_file(filename)
+
+    target_reloaded = eof.load_eofs_from_txt_file(filename)
+
+    errors=[]
+    if not np.all(target_reloaded.lat == lat):
+        errors.append("Latitude grid does not fit")
+    if not np.all(target_reloaded.long == long):
+        errors.append("Longitude grid does not fit")
+    if not np.all(target_reloaded.eof1vector == eof1):
+        errors.append("EOF1 does not fit")
+    if not np.all(target_reloaded.eof2vector == eof2):
+        errors.append("EOF2 does not fit")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+@pytest.mark.skipif(not os.path.isdir(eof1Dirname),
+                    reason="EOF1 data not available")
+@pytest.mark.skipif(not os.path.isdir(eof2Dirname),
+                    reason="EOF2 data not available")
+def test_save_eofs_to_txt_file_load_eofs_from_txt_filetmp_path_original_data(tmp_path):
+    filename = tmp_path / "out.txt"
+    target1 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 1)
+
+    target1.save_eofs_to_txt_file(filename)
+    target1_reloaded = eof.load_eofs_from_txt_file(filename)
+
+    errors = []
+    #First some sample tests comparable to test_load_original_eofs_for_doy
+    #Tolerance of 1e-7 because float format of new file format truncates at the 7th digit
+    if not np.isclose(target1_reloaded.eof1vector[0], 0.00022178496, atol=1e-7):
+        errors.append("EOF1 of DOY 1 is incorrect (Position 0)")
+    if not np.isclose(target1_reloaded.eof1vector[10], -0.0023467445, atol=1e-7):
+        errors.append("EOF1 of DOY 1 is incorrect (Position 10)")
+    if not np.isclose(target1_reloaded.eof1vector[-1], 0.013897266, atol=1e-7):
+        errors.append("EOF1 of DOY 1 is incorrect (Last position)")
+    if not np.isclose(target1_reloaded.eof2vector[0], 0.0042107304, atol=1e-7):
+        errors.append("EOF2 of DOY 1 is incorrect (Position 0)")
+    if not np.isclose(target1_reloaded.eof2vector[10], 0.015404793, atol=1e-7):
+        errors.append("EOF2 of DOY 1 is incorrect (Position 10)")
+    if not np.isclose(target1_reloaded.eof2vector[-1], 0.012487547, atol=1e-7):
+        errors.append("EOF2 of DOY 1 is incorrect (Last position)")
+
+    #Test complete data
+    if not np.all(np.isclose(target1_reloaded.eof1vector,target1.eof1vector,atol=1e-7)):
+        errors.append("EOF1 does not fit")
+    if not np.all(np.isclose(target1_reloaded.eof2vector, target1.eof2vector, atol=1e-7)):
+        errors.append("EOF2 does not fit")
+    if not np.all(np.isclose(target1_reloaded.lat,target1.lat)):
+        errors.append("Latitude Grid does not fit")
+    if not np.all(np.isclose(target1_reloaded.long,target1.long)):
+        errors.append("Longitude Grid does not fit")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+@pytest.mark.skipif(not os.path.isdir(eof1Dirname),
+                    reason="EOF1 data not available")
+@pytest.mark.skipif(not os.path.isdir(eof2Dirname),
+                    reason="EOF2 data not available")
+def test_load_original_eofs_for_doy():
+    target1 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 1)
+    target10 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 10)
+    target366 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 366)
+
+    errors = []
+    if not math.isclose(target1.eof1vector[0], 0.00022178496):
+        errors.append("EOF1 of DOY 1 is incorrect (Position 0)")
+    if not math.isclose(target1.eof1vector[10], -0.0023467445):
+        errors.append("EOF1 of DOY 1 is incorrect (Position 10)")
+    if not math.isclose(target1.eof1vector[-1], 0.013897266):
+        errors.append("EOF1 of DOY 1 is incorrect (Last position)")
+    if not math.isclose(target1.eof2vector[0], 0.0042107304):
+        errors.append("EOF2 of DOY 1 is incorrect (Position 0)")
+    if not math.isclose(target1.eof2vector[10], 0.015404793):
+        errors.append("EOF2 of DOY 1 is incorrect (Position 10)")
+    if not math.isclose(target1.eof2vector[-1], 0.012487547):
+        errors.append("EOF2 of DOY 1 is incorrect (Last position)")
+
+    if not math.isclose(target10.eof1vector[0], 0.00016476621):
+        errors.append("EOF1 of DOY 10 is incorrect (Position 0)")
+    if not math.isclose(target10.eof2vector[0], 0.0044616843):
+        errors.append("EOF2 of DOY 10 is incorrect (Position 0)")
+
+    if not math.isclose(target366.eof1vector[-1], 0.013874311):
+        errors.append("EOF1 of DOY 366 is incorrect (Last position)")
+    if not math.isclose(target366.eof2vector[-1], 0.012473147):
+        errors.append("EOF2 of DOY 366 is incorrect (Last position)")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_EOFDataForAllDOYs_basic_properties():
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eofs = []
+    for doy in range(1, 367):
+        eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
+        eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
+        eofs.append(eof.EOFData(lat, long, eof1, eof2))
+    target = eof.EOFDataForAllDOYs(eofs)
+
+    errors = []
+    # if not np.all(target.lat == lat):
+    #     errors.append("Lat property not correct")
+    # if not np.all(target.long == long):
+    #     errors.append("Long property not correct")
+    # if not np.all(target.eof1vector == eof1):
+    #     errors.append("eof1vector property not correct")
+    # if not np.all(target.eof2vector == eof2):
+    #     errors.append("eof2vector property not correct")
+    # if not np.all(target.eof1map == np.array([(1, 2), (3, 4), (5, 6)])):
+    #     errors.append("eof1map property not correct")
+    # if not np.all(target.eof2map == np.array([(10, 20), (30, 40), (50, 60)])):
+    #     errors.append("eof2map property not correct")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+#test_save_eofs_to_txt_file(pathlib.Path("/tmp/"))
+    #target = pc.load_pcs_from_txt_file(filename)
+test_EOFDataForAllDOYs_basic_properties()

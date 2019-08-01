@@ -61,7 +61,7 @@ def __calculatePCs(olrData,
         # print(idx)
         day = val
         olr_singleday = olrDataFiltered.extractDayFromOLRData(day)
-        doy = tools.calcDayOfYear(day)
+        doy = tools.calc_day_of_year(day)
         # FIXME: Don't load EOFs from disk every time
         (eof1, eof2) = omiio.load_eofs_for_doy(eof_dir, doy)
         (pc1_single, pc2_single) = __regressOLROnEOFs(olr_singleday,

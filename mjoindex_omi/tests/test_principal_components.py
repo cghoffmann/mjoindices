@@ -22,12 +22,28 @@ origOMIPCsFilename = (originalOMIDataDirname
                       + os.path.sep
                       + "omi.1x.txt")
 
+def test_basic_properties():
+    test_pc1 = np.array([0.12345678, 0.33333333, 0.555555555])
+    test_pc2 = np.array([0.38462392, 0.44444444, 0.666666666])
+    test_dates = np.array([np.datetime64("2019-06-10"), np.datetime64("2019-06-11"), np.datetime64("2019-06-12")])
+    target = pc.PCData(test_dates, test_pc1, test_pc2)
+
+    errors = []
+    if not np.all(target.pc1 == test_pc1):
+        errors.append("PC1 property not correct")
+    if not np.all(target.pc2 == test_pc2):
+        errors.append("PC2 property not correct")
+    if not np.all(target.time == test_dates):
+        errors.append("Time property not correct")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
 
 def test_save_pcs_to_txt_file_and_load_pcs_from_txt_file(tmp_path):
     filename = tmp_path / "test_save_pcs_to_txt_file.txt"
     test_pc1 = np.array([0.12345678, 0.33333333, 0.555555555])
     test_pc2 = np.array([0.38462392, 0.44444444, 0.666666666])
-    test_dates= np.array([np.datetime64("2019-06-10"),np.datetime64("2019-06-11"),np.datetime64("2019-06-12"),])
+    test_dates= np.array([np.datetime64("2019-06-10"),np.datetime64("2019-06-11"),np.datetime64("2019-06-12")])
     testPC = pc.PCData(test_dates, test_pc1, test_pc2)
     testPC.save_pcs_to_txt_file(filename)
 
@@ -40,7 +56,7 @@ def test_save_pcs_to_txt_file_and_load_pcs_from_txt_file(tmp_path):
         errors.append("PC1 values do not match.")
     if not np.allclose(np.array([0.38462, 0.44444, 0.66667]), target.pc2):
         errors.append("PC2 values do not match.")
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
 @pytest.mark.skipif(not os.path.isfile(origOMIPCsFilename),
@@ -72,4 +88,4 @@ def test_load_original_pcs_from_txt_file():
     if not target.time[-1] == np.datetime64("2018-08-28"):
         errors.append("Last Entry of Dates wrong!")
 
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
