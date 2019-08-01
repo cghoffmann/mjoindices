@@ -5,8 +5,10 @@ Created on Tue Jul 23 13:44:36 2019
 @author: ch
 """
 import os
+import typing
 
 import numpy as np
+import pandas as pd
 
 
 class EOFData:
@@ -118,6 +120,95 @@ class EOFData:
         # The following transformation has been double-checked graphically by comparing resulting plot to
         # https://www.esrl.noaa.gov/psd/mjo/mjoindex/animation/
         return np.reshape(vector, [self.lat.size, self.long.size])
+
+    def save_eofs_to_txt_file(self, filename: str) -> None:
+        """Saves both EOFs to a .txt file.
+
+        Please note that the file format is not exactly that of the original data files. However, a suitable reader
+        is available in this module for both formats. Particularly, both EOFs are written into the same file instead
+        of 2 separate files. Furthermore, the lat/long-grids are also explicitly saved.
+
+        :param filename: The full filename.
+        """
+        lat_full = np.empty(self.eof1vector.size)
+        long_full = np.empty(self.eof1vector.size)
+        for i_vec in range(0,self.eof1vector.size):
+            # find out lat/long corresponding to the vector position by evaluating the index transformation from map
+            # to vector
+            (i_lat, i_long) = np.unravel_index(i_vec,self.eof1map.shape)
+            lat_full[i_vec] = self.lat[i_lat]
+            long_full[i_vec] = self.long[i_long]
+        df = pd.DataFrame({"Lat": lat_full, "Long": long_full, "EOF1": self.eof1vector, "EOF2": self.eof2vector}).astype(float)
+        df.to_csv(filename, index=False, float_format="%13.7f")
+
+
+class EOFDataForAllDOYs:
+
+    def __init__(self, eof_list: typing.List[EOFData]) -> None:
+        if len(eof_list) != 366:
+            raise AttributeError("List of EOFs must contain 366 entries")
+        reference_lat = eof_list[0].lat
+        reference_long = eof_list[0].long
+        for i in range(0,366):
+            if not np.all(eof_list[i].lat == reference_lat):
+                raise AttributeError("All EOFs must have the same latitude grid. Problematic is DOY %i" % i)
+            if not np.all(eof_list[i].long == reference_long):
+                raise AttributeError("All EOFs must have the same longitude grid. Problematic is DOY %i" % i)
+        self._eof_list = eof_list
+
+    @property
+    def eof_list(self) -> typing.List[EOFData]:
+        return self._eof_list
+    @property
+    def lat(self)-> np.ndarray:
+        return self.eof_list[0].lat
+
+    @property
+    def long(self) -> np.ndarray:
+        return self.eof_list[0].long
+
+    def eofdata_for_doy(self, doy:int) -> EOFData:
+        return self.eof_list[doy-1]
+
+    def eof1vector_for_doy(self, doy: int) -> np.array:
+        return self.eof_list[doy-1].eof1vector
+
+    def eof2vector_for_doy(self, doy: int) -> np.array:
+        return self.eof_list[doy-1].eof2vector
+
+
+
+def load_eofs_from_txt_file(filename: str) -> EOFData:
+    """Loads the Empirical Orthogonal Functions (EOFs) of OMI, which were previously saved with this package.
+
+    :param filename: Path to local principal component file
+    :return: A PCData instance containing the values
+    """
+    df = pd.read_csv(filename, sep=',', header=0)
+    full_lat = df.Lat.values
+    full_long = df.Long.values
+    eof1 = df.EOF1.values
+    eof2 = df.EOF2.values
+
+    # retrieve unique lat/long grids
+    # FIXME: Does probably not work for a file with only one lat
+    lat, repetition_idx, rep_counts = np.unique(full_lat,return_index=True,return_counts=True)
+    long = full_long[repetition_idx[0]:repetition_idx[1]]
+
+    # Apply some heuristic consistency checks
+    if not np.unique(rep_counts).size == 1:
+        # All latitudes must have the same number of longitudes
+        raise AttributeError("Lat/Long grid in input file seems to be corrupted 1")
+    if not np.unique(repetition_idx[0:-1] - repetition_idx[1:]).size == 1:
+        # All beginnings of a new lat have to be equally spaced
+        raise AttributeError("Lat/Long grid in input file seems to be corrupted 2")
+    if not lat.size * long.size == eof1.size:
+        raise AttributeError("Lat/Long grid in input file seems to be corrupted 3")
+    if not np.all(np.tile(long,lat.size) == full_long):
+        # The longitude grid has to be the same for all latitudes
+        raise AttributeError("Lat/Long grid in input file seems to be corrupted 4")
+
+    return EOFData(lat, long, eof1, eof2)
 
 
 def load_original_eofs_for_doy(path: str, doy: int) -> EOFData:
