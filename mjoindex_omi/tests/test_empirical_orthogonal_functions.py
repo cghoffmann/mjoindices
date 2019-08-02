@@ -177,7 +177,7 @@ def test_save_eofs_to_txt_file_load_eofs_from_txt_file(tmp_path):
 
     target.save_eofs_to_txt_file(filename)
 
-    target_reloaded = eof.load_eofs_from_txt_file(filename)
+    target_reloaded = eof.load_single_eofs_from_txt_file(filename)
 
     errors=[]
     if not np.all(target_reloaded.lat == lat):
@@ -201,7 +201,7 @@ def test_save_eofs_to_txt_file_load_eofs_from_txt_filetmp_path_original_data(tmp
     target1 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 1)
 
     target1.save_eofs_to_txt_file(filename)
-    target1_reloaded = eof.load_eofs_from_txt_file(filename)
+    target1_reloaded = eof.load_single_eofs_from_txt_file(filename)
 
     errors = []
     #First some sample tests comparable to test_load_original_eofs_for_doy
@@ -278,18 +278,102 @@ def test_EOFDataForAllDOYs_basic_properties():
     target = eof.EOFDataForAllDOYs(eofs)
 
     errors = []
-    # if not np.all(target.lat == lat):
-    #     errors.append("Lat property not correct")
-    # if not np.all(target.long == long):
-    #     errors.append("Long property not correct")
-    # if not np.all(target.eof1vector == eof1):
-    #     errors.append("eof1vector property not correct")
-    # if not np.all(target.eof2vector == eof2):
-    #     errors.append("eof2vector property not correct")
-    # if not np.all(target.eof1map == np.array([(1, 2), (3, 4), (5, 6)])):
-    #     errors.append("eof1map property not correct")
-    # if not np.all(target.eof2map == np.array([(10, 20), (30, 40), (50, 60)])):
-    #     errors.append("eof2map property not correct")
+    if not target.eof_list == eofs:
+        errors.append("List of EOFData objects incorrect")
+    if not np.all(target.lat == lat):
+        errors.append("Lat is incorrect")
+    if not np.all(target.long == long):
+        errors.append("Long is incorrect")
+    if not target.eofdata_for_doy(1) == eofs[0]:
+        errors.append("Sample EOF data is incorrect")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+def test_EOFDataForAllDOYs_doy_gettfunctions():
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eofs = []
+    for doy in range(1, 367):
+        eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
+        eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
+        eofs.append(eof.EOFData(lat, long, eof1, eof2))
+    target = eof.EOFDataForAllDOYs(eofs)
+
+    errors = []
+    if not target.eofdata_for_doy(1).eof1vector[0] == 1:
+        errors.append("EofData for DOY 1 incorrect")
+    if not target.eofdata_for_doy(12).eof1vector[1] == 24:
+        errors.append("EofData for DOY 1 incorrect")
+
+    if not target.eof1vector_for_doy(1)[0] == 1:
+        errors.append("EOF1Vector for DOY 1 incorrect")
+    if not target.eof1vector_for_doy(12)[1] == 24:
+        errors.append("EOF1Vector for DOY 1 incorrect")
+
+    if not target.eof2vector_for_doy(1)[0] == 10:
+        errors.append("EOF2Vector for DOY 1 incorrect")
+    if not target.eof2vector_for_doy(12)[1] == 240:
+        errors.append("EOF2Vector for DOY 1 incorrect")
+
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+def test_save_all_eofs_to_dir(tmp_path):
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eofs = []
+    for doy in range(1, 367):
+        eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
+        eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
+        eofs.append(eof.EOFData(lat, long, eof1, eof2))
+    target = eof.EOFDataForAllDOYs(eofs)
+    target.save_all_eofs_to_dir(tmp_path / "eofs")
+    print(tmp_path)
+
+    target_reloaded = eof.load_all_eofs_from_directory(tmp_path / "eofs")
+
+    errors = []
+    if not target_reloaded.eof_list == eofs:
+        errors.append("List of EOFData objects incorrect")
+    if not np.all(target_reloaded.lat == lat):
+        errors.append("Lat is incorrect")
+    if not np.all(target_reloaded.long == long):
+        errors.append("Long is incorrect")
+    if not target_reloaded.eofdata_for_doy(1) == eofs[0]:
+        errors.append("Sample EOF data is incorrect")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+@pytest.mark.skipif(not os.path.isdir(eof1Dirname),
+                    reason="EOF1 data not available")
+@pytest.mark.skipif(not os.path.isdir(eof2Dirname),
+                    reason="EOF2 data not available")
+def test_load_all_original_eofs_from_directory():
+    target = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
+
+    errors = []
+    if not math.isclose(target.eofdata_for_doy(1).eof1vector[0], 0.00022178496):
+        errors.append("EOF1 of DOY 1 is incorrect (Position 0)")
+    if not math.isclose(target.eofdata_for_doy(1).eof1vector[10], -0.0023467445):
+        errors.append("EOF1 of DOY 1 is incorrect (Position 10)")
+    if not math.isclose(target.eofdata_for_doy(1).eof1vector[-1], 0.013897266):
+        errors.append("EOF1 of DOY 1 is incorrect (Last position)")
+    if not math.isclose(target.eofdata_for_doy(1).eof2vector[0], 0.0042107304):
+        errors.append("EOF2 of DOY 1 is incorrect (Position 0)")
+    if not math.isclose(target.eofdata_for_doy(1).eof2vector[10], 0.015404793):
+        errors.append("EOF2 of DOY 1 is incorrect (Position 10)")
+    if not math.isclose(target.eofdata_for_doy(1).eof2vector[-1], 0.012487547):
+        errors.append("EOF2 of DOY 1 is incorrect (Last position)")
+
+    if not math.isclose(target.eofdata_for_doy(10).eof1vector[0], 0.00016476621):
+        errors.append("EOF1 of DOY 10 is incorrect (Position 0)")
+    if not math.isclose(target.eofdata_for_doy(10).eof2vector[0], 0.0044616843):
+        errors.append("EOF2 of DOY 10 is incorrect (Position 0)")
+
+    if not math.isclose(target.eofdata_for_doy(366).eof1vector[-1], 0.013874311):
+        errors.append("EOF1 of DOY 366 is incorrect (Last position)")
+    if not math.isclose(target.eofdata_for_doy(366).eof2vector[-1], 0.012473147):
+        errors.append("EOF2 of DOY 366 is incorrect (Last position)")
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 

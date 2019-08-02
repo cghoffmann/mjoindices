@@ -65,7 +65,7 @@ def test_calculatePCsFromOLRWithOriginalConditions_Quickfilter(useQuickTemporalF
     if not corr1 > expectedCorr1:
         errors.append("Correlation of PC1 too low!")
 
-    corr2 = (np.corrcoef(orig_omi.pc2, target.pc2))[0,1]
+    corr2 = (np.corrcoef(orig_omi.pc2, target.pc2))[0, 1]
     if not corr2 > expectedCorr2:
         errors.append("Correlation of PC2 too low!")
 
