@@ -4,8 +4,10 @@ Created on Tue Jul 23 13:44:36 2019
 
 @author: ch
 """
+import copy
 import os
 import typing
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -15,7 +17,7 @@ class EOFData:
     """
     Class as a container for the EOF data of one pair of EOFs.
     """
-
+    #FIXME: Check if we need some deepcopy or writable=false here
     def __init__(self, lat: np.ndarray, long: np.ndarray, eof1: np.ndarray, eof2:np.ndarray) -> None:
         """Initialization with all necessary variables.
 
@@ -49,7 +51,15 @@ class EOFData:
         else:
             raise AttributeError("EOF1 and EOF2 must have a dimension of 1 or 2.")
 
-
+    # FIXME: Unittest for operator
+    # FIXME: Typing
+    def __eq__(self, other):
+        """Override the default Equals behavior
+        """
+        return (np.all(self.lat == other.lat)
+                and np.all(self.long == other.long)
+                and np.all(self.eof1vector == other.eof1vector)
+                and np.all( self.eof2vector == other.eof2vector))
 
     @property
     def lat(self) -> np.ndarray:
@@ -154,31 +164,70 @@ class EOFDataForAllDOYs:
                 raise AttributeError("All EOFs must have the same latitude grid. Problematic is DOY %i" % i)
             if not np.all(eof_list[i].long == reference_long):
                 raise AttributeError("All EOFs must have the same longitude grid. Problematic is DOY %i" % i)
-        self._eof_list = eof_list
+        # deepcopy eofs so that they cannot be modified accidently from outside after the consistency checks
+        self._eof_list = copy.deepcopy(eof_list)
 
+    # FIXME: Could this property be used to modify the EOFData objects because they are mutual?
     @property
     def eof_list(self) -> typing.List[EOFData]:
+        """EOF data for all DOYs as a List.
+
+        Remember that DOY 1 corresponds to list entry 0
+        :return: The List of EOFData objects
+        """
         return self._eof_list
+
     @property
-    def lat(self)-> np.ndarray:
+    def lat(self) -> np.ndarray:
+        """The latitude grid common to the EOFs of all DOYs.
+
+        :return: The grid.
+        """
         return self.eof_list[0].lat
 
     @property
     def long(self) -> np.ndarray:
+        """The longitude grid common to the EOFs of all DOYs.
+
+        :return: The grid.
+        """
         return self.eof_list[0].long
 
-    def eofdata_for_doy(self, doy:int) -> EOFData:
+    def eofdata_for_doy(self, doy: int) -> EOFData:
+        """
+        Returns the EOFData object for a particular DOY
+        :param doy: The DOY
+        :return: The EOFData object
+        """
         return self.eof_list[doy-1]
 
-    def eof1vector_for_doy(self, doy: int) -> np.array:
+    def eof1vector_for_doy(self, doy: int) -> np.ndarray:
+        """
+        Shortcut to the EOF1 vector of a paricular day
+        :param doy: The DOY
+        :return: The vector
+        """
         return self.eof_list[doy-1].eof1vector
 
-    def eof2vector_for_doy(self, doy: int) -> np.array:
+    def eof2vector_for_doy(self, doy: int) -> np.ndarray:
+        """
+        Shortcut to the EOF1 vector of a paricular day
+        :param doy: The DOY
+        :return: The vector
+        """
         return self.eof_list[doy-1].eof2vector
 
+    def save_all_eofs_to_dir(self,dirname: Path, createDir=True):
+        if not dirname.exists() and createDir == True:
+            dirname.mkdir(parents=False, exist_ok=False)
+        for i in range(0,366):
+            filename = dirname / Path("eof%s.txt" %  format(i+1, '03'))
+            self.eof_list[i].save_eofs_to_txt_file(filename)
 
 
-def load_eofs_from_txt_file(filename: str) -> EOFData:
+
+
+def load_single_eofs_from_txt_file(filename: str) -> EOFData:
     """Loads the Empirical Orthogonal Functions (EOFs) of OMI, which were previously saved with this package.
 
     :param filename: Path to local principal component file
@@ -234,3 +283,20 @@ def load_original_eofs_for_doy(path: str, doy: int) -> EOFData:
     eof2filename = path + os.path.sep + "eof2" + os.path.sep + "eof" + str(doy).zfill(3) + ".txt"
     eof2 = np.genfromtxt(eof2filename)
     return EOFData(orig_lat, orig_long, eof1, eof2)
+
+
+def load_all_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
+    eofs = []
+    for doy in range(1, 367):
+        filename = dirname / Path("eof%s.txt" % format(doy, '03'))
+        eof = load_single_eofs_from_txt_file(filename)
+        eofs.append(eof)
+    return EOFDataForAllDOYs(eofs)
+
+
+def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
+    eofs = []
+    for doy in range(1, 367):
+        eof = load_original_eofs_for_doy(str(dirname), doy)
+        eofs.append(eof)
+    return EOFDataForAllDOYs(eofs)

@@ -15,6 +15,7 @@ class PCData:
     Class as a container for the principal component (PC) data.
     """
 
+    # FIXME: Check if we need some deepcopy or writable=false here
     def __init__(self, time: np.ndarray, pc1: np.ndarray, pc2: np.ndarray) -> None:
         """Initialization with all necessary variables.
 
