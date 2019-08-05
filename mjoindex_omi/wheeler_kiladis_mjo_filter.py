@@ -4,12 +4,14 @@ Created on Thu Feb 28 15:14:10 2019
 
 @author: ch
 """
-import numpy as np
 import matplotlib.pyplot as plt
-import mjoindex_omi.olr_handling
+import numpy as np
 import scipy
 import scipy.fftpack
 from scipy.io import FortranFile
+
+import mjoindex_omi.olr_handling
+
 
 def filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(olr):
     return filterOLRTemporallyWith1DSpectralSmoothing(olr, 20., 96.)
@@ -139,7 +141,7 @@ def detrendTS(ts):
     x=np.arange(0, ts.size, 1)
     A = np.vstack([x, np.ones(len(x))]).T
     #FIXME: Remove FutureWarning  `rcond` parameter will change to the default of machine precision times ``max(M, N)``,...  pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
-    m, b = np.linalg.lstsq(A, ts)[0]
+    m, b = np.linalg.lstsq(A, ts, rcond=None)[0]
 
     result = ts - (m*x+b)
 #    plt.plot(ts)

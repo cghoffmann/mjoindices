@@ -5,26 +5,17 @@ Created on Tue Jul 23 10:29:17 2019
 @author: ch
 """
 import math
-import os
+from pathlib import Path
 
 import numpy as np
 import pytest
 
 import mjoindex_omi.empirical_orthogonal_functions as eof
 
-# FIXME Use POSIX Path
-originalOMIDataDirname = (os.path.dirname(__file__)
-                          + os.path.sep
-                          + "testdata"
-                          + os.path.sep
-                          + "OriginalOMI")
-
-eof1Dirname = (originalOMIDataDirname
-               + os.path.sep
-               + "eof1")
-eof2Dirname = (originalOMIDataDirname
-               + os.path.sep
-               + "eof2")
+# FIXME: Define paths as fixture at a central point
+originalOMIDataDirname = Path(__file__).parent / "testdata" / "OriginalOMI"
+eof1Dirname = originalOMIDataDirname / "eof1"
+eof2Dirname = originalOMIDataDirname / "eof2"
 
 def test_reshape_to_vector_and_reshape_to_map():
     lat = np.array([-10., 0., 10.])
@@ -192,10 +183,8 @@ def test_save_eofs_to_txt_file_load_eofs_from_txt_file(tmp_path):
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-@pytest.mark.skipif(not os.path.isdir(eof1Dirname),
-                    reason="EOF1 data not available")
-@pytest.mark.skipif(not os.path.isdir(eof2Dirname),
-                    reason="EOF2 data not available")
+@pytest.mark.skipif(not eof1Dirname.is_dir(), reason="EOF1 data not available")
+@pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available")
 def test_save_eofs_to_txt_file_load_eofs_from_txt_filetmp_path_original_data(tmp_path):
     filename = tmp_path / "out.txt"
     target1 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 1)
@@ -204,8 +193,8 @@ def test_save_eofs_to_txt_file_load_eofs_from_txt_filetmp_path_original_data(tmp
     target1_reloaded = eof.load_single_eofs_from_txt_file(filename)
 
     errors = []
-    #First some sample tests comparable to test_load_original_eofs_for_doy
-    #Tolerance of 1e-7 because float format of new file format truncates at the 7th digit
+    # First some sample tests comparable to test_load_original_eofs_for_doy
+    # Tolerance of 1e-7 because float format of new file format truncates at the 7th digit
     if not np.isclose(target1_reloaded.eof1vector[0], 0.00022178496, atol=1e-7):
         errors.append("EOF1 of DOY 1 is incorrect (Position 0)")
     if not np.isclose(target1_reloaded.eof1vector[10], -0.0023467445, atol=1e-7):
@@ -219,7 +208,7 @@ def test_save_eofs_to_txt_file_load_eofs_from_txt_filetmp_path_original_data(tmp
     if not np.isclose(target1_reloaded.eof2vector[-1], 0.012487547, atol=1e-7):
         errors.append("EOF2 of DOY 1 is incorrect (Last position)")
 
-    #Test complete data
+    # Test complete data
     if not np.all(np.isclose(target1_reloaded.eof1vector,target1.eof1vector,atol=1e-7)):
         errors.append("EOF1 does not fit")
     if not np.all(np.isclose(target1_reloaded.eof2vector, target1.eof2vector, atol=1e-7)):
@@ -231,14 +220,13 @@ def test_save_eofs_to_txt_file_load_eofs_from_txt_filetmp_path_original_data(tmp
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
-@pytest.mark.skipif(not os.path.isdir(eof1Dirname),
-                    reason="EOF1 data not available")
-@pytest.mark.skipif(not os.path.isdir(eof2Dirname),
-                    reason="EOF2 data not available")
+
+@pytest.mark.skipif(not eof1Dirname.is_dir(), reason="EOF1 data not available")
+@pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available")
 def test_load_original_eofs_for_doy():
-    target1 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 1)
-    target10 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 10)
-    target366 = eof.load_original_eofs_for_doy(originalOMIDataDirname, 366)
+    target1 = eof.load_original_eofs_for_doy(Path(originalOMIDataDirname), 1)
+    target10 = eof.load_original_eofs_for_doy(Path(originalOMIDataDirname), 10)
+    target366 = eof.load_original_eofs_for_doy(Path(originalOMIDataDirname), 366)
 
     errors = []
     if not math.isclose(target1.eof1vector[0], 0.00022178496):
@@ -289,6 +277,7 @@ def test_EOFDataForAllDOYs_basic_properties():
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
+
 def test_EOFDataForAllDOYs_doy_gettfunctions():
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
@@ -315,8 +304,8 @@ def test_EOFDataForAllDOYs_doy_gettfunctions():
     if not target.eof2vector_for_doy(12)[1] == 240:
         errors.append("EOF2Vector for DOY 1 incorrect")
 
-
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
 
 def test_save_all_eofs_to_dir(tmp_path):
     lat = np.array([-10., 0., 10.])
@@ -327,12 +316,17 @@ def test_save_all_eofs_to_dir(tmp_path):
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2))
     target = eof.EOFDataForAllDOYs(eofs)
-    target.save_all_eofs_to_dir(tmp_path / "eofs")
+
     print(tmp_path)
 
-    target_reloaded = eof.load_all_eofs_from_directory(tmp_path / "eofs")
-
     errors = []
+    with pytest.raises(FileNotFoundError) as e:
+        target.save_all_eofs_to_dir(tmp_path / "eofs_dir_not_exisiting", create_dir=False)
+    if "No such file or directory" not in str(e.value):
+        errors.append("Test target should raise error, because directory does not exist.")
+
+    target.save_all_eofs_to_dir(tmp_path / "eofs")
+    target_reloaded = eof.load_all_eofs_from_directory(tmp_path / "eofs")
     if not target_reloaded.eof_list == eofs:
         errors.append("List of EOFData objects incorrect")
     if not np.all(target_reloaded.lat == lat):
@@ -344,10 +338,9 @@ def test_save_all_eofs_to_dir(tmp_path):
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
-@pytest.mark.skipif(not os.path.isdir(eof1Dirname),
-                    reason="EOF1 data not available")
-@pytest.mark.skipif(not os.path.isdir(eof2Dirname),
-                    reason="EOF2 data not available")
+
+@pytest.mark.skipif(not eof1Dirname.is_dir(), reason="EOF1 data not available")
+@pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available")
 def test_load_all_original_eofs_from_directory():
     target = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 

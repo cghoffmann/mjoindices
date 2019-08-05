@@ -4,20 +4,24 @@ Created on Tue Jul 23 10:29:17 2019
 
 @author: ch
 """
-import os.path
-import pytest
-import numpy as np
 import math
+import os.path
+from pathlib import Path
+
+import numpy as np
+import pytest
 
 import mjoindex_omi.olr_handling as olr
 
-olr_data_filename = os.path.dirname(__file__) + os.path.sep + "testdata" + os.path.sep + "olr.day.mean.nc"
+olr_data_filename = Path(__file__).parent / "testdata" / "olr.day.mean.nc"
 
-@pytest.mark.skipif(not os.path.isfile(olr_data_filename),
-                    reason="OLR data file not available")
+
+#FIXME: Test basic properties of OLRData
+
+@pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available")
 def test_loadNOAAInterpolatedOLR():
     errors = []
-    target = olr.loadNOAAInterpolatedOLR(olr_data_filename)
+    target = olr.load_noaa_interpolated_olr(olr_data_filename)
 
     # Check time grid
     # Period always starts on 1974/06/01, whereas the ending date
@@ -28,61 +32,61 @@ def test_loadNOAAInterpolatedOLR():
         errors.append("Temporal spacing does not match 1 day")
 
     # Check latitude grid
-    # First latitude in file is 90deg. but order is reversed to be
-    # consistent with original implemenation by G. Kiladis
-    if not target.lat[0] == -90:
-        errors.append("First latitude entry does not matched reversed order")
-    if not target.lat[3] == -82.5:
-        errors.append("Forth latitude entry does not matched reversed order")
-    if not target.lat[-1] == 90:
-        errors.append("Last latitude entry does not matched reversed order")
-    if not (target.lat[0] - target.lat[1]) == -2.5:
-        errors.append("Latitudnal spacing does not meet the expectation")
+    if not target.lat[0] == 90:
+        errors.append("First latitude entry does not match.")
+    if not target.lat[3] == 82.5:
+        errors.append("Forth latitude entry does not match.")
+    if not target.lat[-1] == -90:
+        errors.append("Last latitude entry does not match.")
+    if not (target.lat[0] - target.lat[1]) == 2.5:
+        errors.append("Latitudinal spacing does not meet the expectation")
 
     # Check longitude grid
     if not target.long[0] == 0:
-        errors.append("First latitude entry does not matched reversed order")
+        errors.append("First longitude entry does not match.")
     if not target.long[-1] == 357.5:
-        errors.append("Last latitude entry does not matched reversed order")
+        errors.append("Last longitude entry does not match.")
     if not target.long[1] - target.long[0] == 2.5:
         errors.append("Longitudinal spacing does not meet the expectation")
 
     # Check OLR Data
     # OLR samples extracted from file using Panoply viewer, which directly
     # applies scaling and offset values
-    # Reversed order of latitude grid has been considered manually
-    if not math.isclose(target.olr[0,-1,0],205.450):
-         errors.append("First OLR sample value does not match")
-    if not math.isclose(target.olr[0, 3, 0],117.600):
-         errors.append("Second OLR sample value does not match")
-    if not math.isclose(target.olr[4, 3, 15],122.700):
-         errors.append("Third OLR sample value does not match")
+    if not math.isclose(target.olr[0,0,0], 205.450):
+        errors.append("First OLR sample value does not match")
+    if not math.isclose(target.olr[0, 3, 0], 207.860):
+        errors.append("Second OLR sample value does not match")
+    if not math.isclose(target.olr[4, 3, 15], 216.700):
+        errors.append("Third OLR sample value does not match")
 
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
 @pytest.mark.skipif(not os.path.isfile(olr_data_filename),
                     reason="OLR data file not available")
 def test_resampleOLRToOriginalSpatialGrid():
-    origOLR = olr.loadNOAAInterpolatedOLR(olr_data_filename)
-    target = olr.resampleOLRToOriginalSpatialGrid(origOLR)
+    # Basic assumption of the test is, that both grids are identical and only the direction of latitude is reversed.
+    # Furthermore, the original grid only covers the tropics between -20 and 20 deg lat.
+    origOLR = olr.load_noaa_interpolated_olr(olr_data_filename)
+    target = olr.resample_spatial_grid_to_original(origOLR)
     errors = []
-    if not np.all(target.lat == origOLR.lat[28:45]):
+    print(origOLR.lat[44:27:-1])
+    if not np.all(target.lat == origOLR.lat[44:27:-1]):
         errors.append("Latitude grid does not match middle of original one")
     if not np.all(target.long == origOLR.long):
         errors.append("Logitude grid does not match original one")
     if not np.all(target.time == origOLR.time):
         errors.append("Time grid does not match original one")
-    if not np.all(target.olr == origOLR.olr[:,28:45,:]):
+    if not np.all(target.olr == origOLR.olr[:, 44:27:-1, :]):
         errors.append("OLR data does not match original one in the tropics")
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 #FIXME: Add spatial resampling test, with a really different grid
-
+#FIXME: also test resample_spatial_grid
 @pytest.mark.skipif(not os.path.isfile(olr_data_filename),
                     reason="OLR data file not available")
 def test_restrictOLRDataToTimeRange():
-    origOLR = olr.loadNOAAInterpolatedOLR(olr_data_filename)
+    origOLR = olr.load_noaa_interpolated_olr(olr_data_filename)
     target = olr.restrictOLRDataToTimeRange(origOLR, np.datetime64("1974-06-01"), np.datetime64("1974-06-03"))
     errors = []
     print(target.time)
@@ -95,4 +99,4 @@ def test_restrictOLRDataToTimeRange():
         errors.append("Time grid does not match the beginning of the original one")
     if not np.all(target.olr == origOLR.olr[:3,:,:]):
         errors.append("OLR data does not match the beginning of the original one")
-    assert not errors, "errors occured:\n{}".format("\n".join(errors))
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))

@@ -5,22 +5,16 @@ Created on Tue Jul 23 13:44:36 2019
 @author: ch
 """
 
-import os
+from pathlib import Path
 
 import numpy as np
 import pytest
 
 import mjoindex_omi.principal_components as pc
 
-originalOMIDataDirname = (os.path.dirname(__file__)
-                          + os.path.sep
-                          + "testdata"
-                          + os.path.sep
-                          + "OriginalOMI")
+originalOMIDataDirname = Path(__file__).parent / "testdata" / "OriginalOMI"
+origOMIPCsFilename = originalOMIDataDirname / "omi.1x.txt"
 
-origOMIPCsFilename = (originalOMIDataDirname
-                      + os.path.sep
-                      + "omi.1x.txt")
 
 def test_basic_properties():
     test_pc1 = np.array([0.12345678, 0.33333333, 0.555555555])
@@ -59,8 +53,7 @@ def test_save_pcs_to_txt_file_and_load_pcs_from_txt_file(tmp_path):
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-@pytest.mark.skipif(not os.path.isfile(origOMIPCsFilename),
-                    reason="Original OMI PCs not available for comparison")
+@pytest.mark.skipif(not origOMIPCsFilename.is_file(), reason="Original OMI PCs not available for comparison")
 def test_load_original_pcs_from_txt_file():
     # works with original data file that ends on August 28, 2018.
     target = pc.load_original_pcs_from_txt_file(origOMIPCsFilename)

@@ -5,8 +5,8 @@ Created on Fri Jul 26 13:01:37 2019
 @author: ch
 """
 
-import os
 import warnings
+from pathlib import Path
 
 import numpy as np
 
@@ -29,58 +29,36 @@ def compare_Recalc_OMI_PCs_OriginalOLROriginalEOFs():
 
     """
 
-    olrDataFilename = (os.path.dirname(__file__)
-                       + os.path.sep
-                       + "tests"
-                       + os.path.sep
-                       + "testdata"
-                       + os.path.sep
-                       + "olr.day.mean.nc")
-    if not os.path.isfile(olrDataFilename):
-        raise Exception("OLR data file not available. Expected file: %s" % olrDataFilename)
+    olr_data_filename = Path(__file__).parent / "tests" / "testdata" / "olr.day.mean.nc"
+    originalOMIDataDirname = Path(__file__).parent / "tests" / "testdata" / "OriginalOMI"
+    origOMIPCsFilename = originalOMIDataDirname / "omi.1x.txt"
 
-    originalOMIDataDirname = (os.path.dirname(__file__)
-                              + os.path.sep
-                              + "tests"
-                              + os.path.sep
-                              + "testdata"
-                              + os.path.sep
-                              + "OriginalOMI")
-    if not os.path.isdir(originalOMIDataDirname):
+    if not olr_data_filename.is_file():
+        raise Exception("OLR data file not available. Expected file: %s" % olr_data_filename)
+
+    if not originalOMIDataDirname.is_dir():
         raise Exception("Path to original OMI EOFs is missing. Expected path: %s" % originalOMIDataDirname)
 
-    origOMIPCsFilename = (originalOMIDataDirname
-                          + os.path.sep
-                          + "omi.1x.txt")
-    if not os.path.isfile(origOMIPCsFilename):
+    if not origOMIPCsFilename.is_file():
         warnings.warn(
             "File with the original OMI PCs are missing. Generation of the comparison plot will fail. Expected file: %s" % origOMIPCsFilename)
 
-    resultfile = (os.path.dirname(__file__)
-                  + os.path.sep
-                  + "example_data"
-                  + os.path.sep
-                  + "RecalcPCsOrigOLROrigEOF.txt")
-    resultfigfile = (os.path.dirname(__file__)
-                     + os.path.sep
-                     + "example_data"
-                     + os.path.sep
-                     + "RecalcPCsOrigOLROrigEOF")
+    resultfile = Path(__file__).parent / "example_data" / "RecalcPCsOrigOLROrigEOF.txt"
+    
+    resultfigfile = Path(__file__).parent / "example_data" / "RecalcPCsOrigOLROrigEOF"
 
-    olrData = olr.loadNOAAInterpolatedOLR(olrDataFilename)
+    olrData = olr.load_noaa_interpolated_olr(olr_data_filename)
     target = omi.calculatePCsFromOLRWithOriginalConditions(
         olrData,
         originalOMIDataDirname,
-        np.datetime64("1979-01-01"),
-        np.datetime64("2018-08-28"),
         useQuickTemporalFilter=True)
     target.save_pcs_to_txt_file(resultfile)
 
     fig = plotting.plotComparisonOrigRecalcPCs(resultfile, origOMIPCsFilename, np.datetime64("2011-06-01"),
                                                np.datetime64("2011-12-31"))
     fig.show()
-    fig.savefig(resultfigfile + ".png", bbox_inches='tight')
-    fig.savefig(resultfigfile + ".pdf", bbox_inches='tight')
+    fig.savefig(resultfigfile.with_suffix(".png"), bbox_inches='tight')
+    fig.savefig(resultfigfile.with_suffix(".pdf"), bbox_inches='tight')
 
 
 if __name__ == '__main__':
