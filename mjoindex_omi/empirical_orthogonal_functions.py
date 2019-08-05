@@ -5,7 +5,6 @@ Created on Tue Jul 23 13:44:36 2019
 @author: ch
 """
 import copy
-import os
 import typing
 from pathlib import Path
 
@@ -131,7 +130,7 @@ class EOFData:
         # https://www.esrl.noaa.gov/psd/mjo/mjoindex/animation/
         return np.reshape(vector, [self.lat.size, self.long.size])
 
-    def save_eofs_to_txt_file(self, filename: str) -> None:
+    def save_eofs_to_txt_file(self, filename: Path) -> None:
         """Saves both EOFs to a .txt file.
 
         Please note that the file format is not exactly that of the original data files. However, a suitable reader
@@ -217,17 +216,21 @@ class EOFDataForAllDOYs:
         """
         return self.eof_list[doy-1].eof2vector
 
-    def save_all_eofs_to_dir(self,dirname: Path, createDir=True):
-        if not dirname.exists() and createDir == True:
-            dirname.mkdir(parents=False, exist_ok=False)
+    def save_all_eofs_to_dir(self, dirname: Path, create_dir=True) -> None:
+        """
+        Saves the EOF1 and EOF2 functions for each of the DOYs in the given directory
+        For each DOY, one file will be created, which contains both EOF functions
+        :param dirname: The directory, where the files will be saved
+        :param create_dir: If True, the directory (and parent directories) will be created, if is does not exist.
+        """
+        if not dirname.exists() and create_dir == True:
+            dirname.mkdir(parents=True, exist_ok=False)
         for i in range(0,366):
-            filename = dirname / Path("eof%s.txt" %  format(i+1, '03'))
+            filename = dirname / Path("eof%s.txt" % format(i+1, '03'))
             self.eof_list[i].save_eofs_to_txt_file(filename)
 
 
-
-
-def load_single_eofs_from_txt_file(filename: str) -> EOFData:
+def load_single_eofs_from_txt_file(filename: Path) -> EOFData:
     """Loads the Empirical Orthogonal Functions (EOFs) of OMI, which were previously saved with this package.
 
     :param filename: Path to local principal component file
@@ -260,13 +263,13 @@ def load_single_eofs_from_txt_file(filename: str) -> EOFData:
     return EOFData(lat, long, eof1, eof2)
 
 
-def load_original_eofs_for_doy(path: str, doy: int) -> EOFData:
+def load_original_eofs_for_doy(dirname: Path, doy: int) -> EOFData:
     """Loads the EOF values for the first 2 EOFs
     Note that as in the original treatment, the EOFs are represented as vectors,
     which means that a connection to the individual locations on a world map is not obvious without any further
     knowledge.
 
-    :param path: Path the where the EOFs for all doys are stored. This path should contain the sub directories "eof1"
+    :param dirname: Path the where the EOFs for all doys are stored. This path should contain the sub directories "eof1"
                  and "eof2", in which the 366 files each are located: One file per day of the year.
                  The original EOFs are found here:
                  ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and
@@ -278,14 +281,20 @@ def load_original_eofs_for_doy(path: str, doy: int) -> EOFData:
     """
     orig_lat = np.arange(-20., 20.1, 2.5)
     orig_long = np.arange(0., 359.9, 2.5)
-    eof1filename = path + os.path.sep + "eof1" + os.path.sep + "eof" + str(doy).zfill(3) + ".txt"
+    eof1filename = dirname / "eof1" / ("eof" + str(doy).zfill(3) + ".txt")
     eof1 = np.genfromtxt(eof1filename)
-    eof2filename = path + os.path.sep + "eof2" + os.path.sep + "eof" + str(doy).zfill(3) + ".txt"
+    eof2filename = dirname / "eof2" / ("eof" + str(doy).zfill(3) + ".txt")
     eof2 = np.genfromtxt(eof2filename)
     return EOFData(orig_lat, orig_long, eof1, eof2)
 
 
 def load_all_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
+    """
+    Loads the EOF functions for all DOYs from the given directory The directory content should have been created with
+    EOFDataForAllDOYs.save_all_eofs_to_dir or have a similar structure to be compatible.
+    :param dirname: The directory to search for the files
+    :return: The EOFs for all DOYs as EOFDataForAllDOYs object.
+    """
     eofs = []
     for doy in range(1, 367):
         filename = dirname / Path("eof%s.txt" % format(doy, '03'))
@@ -295,8 +304,15 @@ def load_all_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
 
 
 def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
+    """
+    Loads the EOF functions for all DOYs from the given directory, which are saved in the original format.
+    The directory shpuld contain the sub directories "eof1" and "eof2", which contain the downloaded files from
+    ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/
+    :param dirname: The directory to search for the files.
+    :return: The original EOFs for all DOYs as EOFDataForAllDOYs object.
+    """
     eofs = []
     for doy in range(1, 367):
-        eof = load_original_eofs_for_doy(str(dirname), doy)
+        eof = load_original_eofs_for_doy(dirname, doy)
         eofs.append(eof)
     return EOFDataForAllDOYs(eofs)

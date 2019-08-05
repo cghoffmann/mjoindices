@@ -5,6 +5,7 @@ Created on Tue Jul 23 13:44:36 2019
 @author: ch
 """
 import datetime
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -24,9 +25,9 @@ class PCData:
         :param pc2: The numpy array containing the values of PC2 (has to be of same length as the time array).
         """
         if pc1.size == time.size and pc2.size == time.size:
-            self._time = time
-            self._pc1 = pc1
-            self._pc2 = pc2
+            self._time = time.copy()
+            self._pc1 = pc1.copy()
+            self._pc2 = pc2.copy()
         else:
             raise ValueError('Length of at least one principal component time series does not fit to length of the '
                              'time grid')
@@ -52,7 +53,7 @@ class PCData:
         """
         return self._pc2
 
-    def save_pcs_to_txt_file(self, filename: str) -> None:
+    def save_pcs_to_txt_file(self, filename: Path) -> None:
         """Saves the computed principal components to a .txt file.
 
         Please note that the file format is not exactly that of the original data files. However, a
@@ -64,7 +65,7 @@ class PCData:
         df.to_csv(filename, index=False, float_format="%.5f")
 
 
-def load_pcs_from_txt_file(filename: str) -> PCData:
+def load_pcs_from_txt_file(filename: Path) -> PCData:
     """Loads the principal components (PCs) of OMI, which were previously saved with this package.
 
     :param filename: Path to local principal component file
@@ -77,7 +78,7 @@ def load_pcs_from_txt_file(filename: str) -> PCData:
     return PCData(dates, pc1, pc2)
 
 
-def load_original_pcs_from_txt_file(filename: str) -> PCData:
+def load_original_pcs_from_txt_file(filename: Path) -> PCData:
     """Loads the principal components (PCs) of OMI, which are stored in the original file format.
        Particularly the following file can be loaded:
        https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
