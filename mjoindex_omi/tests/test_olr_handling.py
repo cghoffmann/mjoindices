@@ -100,3 +100,27 @@ def test_restrictOLRDataToTimeRange():
     if not np.all(target.olr == origOLR.olr[:3,:,:]):
         errors.append("OLR data does not match the beginning of the original one")
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_save_to_npzfile_restore_from_npzfile(tmp_path):
+    filename = tmp_path / "OLRSaveTest.npz"
+    time = np.arange("2018-01-01", "2018-01-04", dtype='datetime64[D]')
+    lat= np.array([-2.5, 2.5])
+    long = np.array([10, 20, 30, 40])
+    olrmatrix=np.random.rand(3, 2, 4)
+    testdata = olr.OLRData(olrmatrix, time, lat, long)
+    testdata.save_to_npzfile(filename)
+
+    target = olr.restore_from_npzfile(filename)
+
+    errors = []
+    if not np.all(target.olr == olrmatrix):
+        errors.append("OLR data incorrect")
+    if not np.all(target.time == time):
+        errors.append("Time incorrect")
+    if not np.all(target.lat == lat):
+        errors.append("Latiturde incorrect")
+    if not np.all(target.long == long):
+        errors.append("Longitude incorrect")
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+

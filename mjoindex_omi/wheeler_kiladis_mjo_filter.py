@@ -13,6 +13,11 @@ from scipy.io import FortranFile
 import mjoindex_omi.olr_handling
 
 
+# FIXME Codestyle
+# FIXME: Documentation
+# FIXME: Unittestsd
+
+
 def filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(olr):
     return filterOLRTemporallyWith1DSpectralSmoothing(olr, 20., 96.)
 

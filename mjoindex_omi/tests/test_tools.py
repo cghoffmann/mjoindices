@@ -63,3 +63,24 @@ def test_calc_day_of_year_array():
         errors.append("Error in DOY calc for array")
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_find_doy_ranges_in_dates():
+    dates = np.arange("2018-01-01", "2019-12-31", dtype='datetime64[D]')
+
+    errors = []
+
+    target = tools.find_doy_ranges_in_dates(dates, 50, 20)
+    control = np.concatenate((np.arange(30, 71, 1)-1, np.arange(30, 71, 1) + 365-1))
+    if not np.all(target == control):
+        errors.append("DOY range in the middle of the year is wrong")
+
+    dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
+    doys = tools.calc_day_of_year(dates)
+    target = doys[tools.find_doy_ranges_in_dates(dates, 10, 20)]
+    if not np.all(target == control):
+        errors.append("DOY range ranging in the ending of the previous year is wrong")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+test_find_doy_ranges_in_dates()

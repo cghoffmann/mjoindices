@@ -18,6 +18,179 @@ import mjoindex_omi.tools as tools
 import mjoindex_omi.wheeler_kiladis_mjo_filter as wkfilter
 
 
+# #################EOF calculation
+
+def calc_eofs_from_olr(olrdata: olr.OLRData) -> eof.EOFDataForAllDOYs:
+    preprocessed_olr = preprocess_olr(olrdata)
+    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr)
+    result = post_process_eofs(raw_eofs)
+    return result
+
+
+def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
+    # interpolate on particular spatial grid?
+    olrdata_filtered = wkfilter.filterOLRForMJO_EOF_Calculation(olrdata)
+    return olrdata_filtered
+
+
+def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation="Kutzbach1967") -> eof.EOFDataForAllDOYs:
+    doys = eof.doy_list()
+    eofs = []
+    for doy in doys:
+        print("Calculationg for DOY %i" % doy)
+        if (implementation == "SVD_eofs_package"):
+            singleeof = calc_eofs_for_doy_using_eofs_package(olrdata, doy)
+        else:
+            singleeof = calc_eofs_for_doy(olrdata, doy)
+        eofs.append(singleeof)
+    return eof.EOFDataForAllDOYs(eofs)
+
+
+def post_process_eofs(eofdata: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
+    return eofdata
+    # (eof1, eof2) = self.__correctSpontaneousSignChangesofEOFs(eof1_raw, eof2_raw)
+    # interpolate doy 300 eofs
+
+
+def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
+
+    nlat = olrdata.lat.size
+    nlong = olrdata.long.size
+    olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60)
+    #doyOLR_3dim = self.__olrdata_filtered.returnAverageOLRForIndividualDOY(doy,window_length=60)
+    #doyOLR_3dim = np.mean(doyOLR_3dim,axis=0)
+
+    ntime=olr_maps_for_doy.shape[0]
+    N = ntime
+    M =nlat*nlong
+    #FIXME: The sollowing reshape iincluding the transpose etc. Is this correct? Rule: If original Kiladis Grid is used, the EOFs must be compatible to the saved ones.
+    F = np.reshape(olr_maps_for_doy,[N,M]).T  #vector: only one dimension. Length given by original longitude and latitude bins
+    R = np.matmul(F, F.T)/N
+    L, E = np.linalg.eig(R)
+    total_var = np.sum(L)
+    order = (np.flip(L.argsort()))
+    #print(order)
+    order=order[:2]
+    L=L[order]
+    varianceExplained = L/total_var #See Kutzbach Eq 12
+    #print("total var:", total_var)
+    #print("L",L)
+    E=E[:,order] #is that right?
+    eof1_vec = np.squeeze(E[:,0])
+    eof2_vec = np.squeeze(E[:,1])
+    return eof.EOFData(olrdata.lat, olrdata.long, eof1_vec, eof2_vec,
+                       explained_variance_eof1=varianceExplained[0], explained_variance_eof2=varianceExplained[1],
+                       eigenvalue_eof1=L[0], eigenvalue_eof2=L[1])
+
+def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
+    raise NotImplementedError()
+#
+#     nlat = self.__olrdata_filtered.LatGrid.size
+#     nlong = self.__olrdata_filtered.LongGrid.size
+#     doyOLR_3dim = self.__olrdata_filtered.returnOLRForDOY(doy,window_length=60)
+#     #doyOLR_3dim = self.__olrdata_filtered.returnAverageOLRForIndividualDOY(doy,window_length=60)
+#
+#     N=doyOLR_3dim.shape[0]
+#     print("N", N)
+#     M =nlat*nlong
+#     F = np.reshape(doyOLR_3dim,[N,M]).T  #vector: only one dimension. Length given by original longitude and latitude bins
+#
+#     print("F:", F.shape)
+#     solver = Eof(F.T)
+#     eofs = solver.eofs(neofs=2)
+#     print("VarianceFraction",solver.varianceFraction())
+#     plt.plot(solver.varianceFraction())
+#     print(np.sum(solver.varianceFraction()))
+#
+#     varianceExplained = solver.varianceFraction(neigs=2)
+#
+#     L=solver.eigenvalues(neigs=2)
+#
+#     print("L", L)
+#
+#     print("EOFs:", eofs.shape)
+#     eof1_map = np.reshape(eofs[0,:],[nlat,nlong])
+#     eof2_map = np.reshape(eofs[1,:],[nlat,nlong])
+#
+#     print("EOF1: ", eof1_map.shape)
+#
+#
+#     #        R = np.matmul(F,F.T)/N
+#     #        L,E =  numpy.linalg.eig(R)
+#     #        total_var = np.sum(L)
+#     #        order = (np.flip(L.argsort()))
+#     #        #print(order)
+#     #        order=order[:2]
+#     #        L=L[order] / total_var #See Kutzbach Eq 12
+#     #        #print("total var:", total_var)
+#     #        #print("L",L)
+#     #        E=E[:,order] #is that right?
+#     #        eof1_vec = np.squeeze(E[:,0])
+#     #        eof2_vec = np.squeeze(E[:,1])
+#     #        eof1_map = np.reshape(eof1_vec,[nlat,nlong])
+#     #        eof2_map = np.reshape(eof2_vec,[nlat,nlong])
+#     return eof1_map, eof2_map, L, varianceExplained
+
+
+def __correctSpontaneousSignChangesofEOFs(self, eof1_raw, eof2_raw):
+    eof1 = eof1_raw
+    eof2 = eof2_raw
+    for idx in range(0, eof1_raw.shape[2]):
+        print(idx)
+        if(idx > 0): #Account for spoantaneous sign changes in the EOFS from one day to another. This is metioned in Kiladis 2014 and has been confirmed by G.Kiladis via Mail.
+            if(np.mean(np.abs(eof1[:,:,idx] + eof1[:,:,idx-1]))< np.mean(np.abs(eof1[:,:,idx] - eof1[:,:,idx-1])) ): #if abs(sum) is lower than abs(diff), than the signs are different...
+                eof1[:,:,idx] = -1*eof1[:,:,idx]
+                print("Sign of EOF1 switched")
+            if(np.mean(np.abs(eof2[:,:,idx] + eof2[:,:,idx-1]))< np.mean(np.abs(eof2[:,:,idx] - eof2[:,:,idx-1])) ):
+                eof2[:,:,idx] = -1*eof2[:,:,idx]
+                print("Sign of EOF2 switched")
+        else: #to adjust the signs of the EOFs of the first day, the original Kiladis selection is used.
+            (eof1_orig_vec, eof2_orig_vec) = MJO.RecalculateOMI.load_OMI_EOFs(os.path.dirname(os.path.abspath(__file__)) + '/', 1)
+            eof1_orig_map = np.reshape(eof1_orig_vec,[17,144])
+            eof2_orig_map = np.reshape(eof2_orig_vec,[17,144])
+            if(np.mean(np.abs(eof1[:,:,idx] + eof1_orig_map))< np.abs(np.mean(eof1[:,:,idx] - eof1_orig_map)) ): #if abs(sum) is lower than abs(diff), than the signs are different...
+                eof1[:,:,idx] = -1*eof1[:,:,idx]
+                print("Sign of EOF1 switched")
+            if(np.mean(np.abs(eof2[:,:,idx] + eof2_orig_map))< np.mean(np.abs(eof2[:,:,idx] - eof2_orig_map)) ):
+                eof2[:,:,idx] = -1*eof2[:,:,idx]
+                print("Sign of EOF2 switched")
+    return (eof1, eof2)
+
+def saveResultsasNPZ(self, filename):
+    np.savez(filename, eof1=self.eof1, eof2=self.eof2, EigenValue1=self.EigenValue1, EigenValue2=self.EigenValue2, doygrid = self.doygrid, VarianceExplained1=self.VarianceExplained1, VarianceExplained2=self.VarianceExplained2)
+
+def exportEOFInKiladisStyle(self, directory, file_prefix):
+    for idx,doy in enumerate(self.doygrid):
+        eof1vec = np.reshape(np.squeeze(self.eof1[:,:,idx]),self.__olrdata_filtered.LatGrid.size*self.__olrdata_filtered.LongGrid.size)
+        #filename = directory + "/eof1/" + file_prefix + "_" + format(doy, '03') + ".txt"
+        #np.savetxt(filename, eof1vec, delimiter=",",fmt="%f")
+        MJO_OMI_EOF_Recalculated.saveSingeEOFVecInKiladisStyle(eof1vec, 1, directory, file_prefix, doy)
+        eof2vec = np.reshape(np.squeeze(self.eof2[:,:,idx]),self.__olrdata_filtered.LatGrid.size*self.__olrdata_filtered.LongGrid.size)
+        MJO_OMI_EOF_Recalculated.saveSingeEOFVecInKiladisStyle(eof2vec, 2, directory, file_prefix, doy)
+        #filename = directory + "/eof2/" + file_prefix + "_" + format(doy, '03') + ".txt"
+        #np.savetxt(filename, eof2vec, delimiter=",",fmt="%f")
+
+def saveSingeEOFVecInKiladisStyle(eof_vec, eof_number, directory, file_prefix, doy):
+    filename = directory + "/eof" + format(eof_number, '1') + "/" + file_prefix + format(doy, '03') + ".txt"
+    np.savetxt(filename, eof_vec, delimiter=",",fmt="%f")
+
+def switchSignOfEOFs(inputDir, outputdir, file_prefix, eof_number=0):
+    for doy in range(1,367):
+        (eof1_orig_vec, eof2_orig_vec) = MJO.RecalculateOMI.load_OMI_EOFs(inputDir, doy, prefix=file_prefix)
+        eof1_switched = eof1_orig_vec
+        eof2_switched = eof2_orig_vec
+        if eof_number == 1 or eof_number == 0:
+            eof1_switched = -1* eof1_orig_vec
+        if eof_number == 2 or eof_number == 0:
+            eof2_switched = -1* eof2_orig_vec
+        MJO_OMI_EOF_Recalculated.saveSingeEOFVecInKiladisStyle(eof1_switched, 1, outputdir, file_prefix, doy)
+        MJO_OMI_EOF_Recalculated.saveSingeEOFVecInKiladisStyle(eof2_switched, 2, outputdir, file_prefix, doy)
+
+
+
+
+
+# #################PC Calculation
 def calculatePCsFromOLRWithOriginalConditions(olrData: olr.OLRData,
                                               original_eof_dirname: Path,
                                               useQuickTemporalFilter = False):
@@ -86,4 +259,4 @@ def regress_vector_onto_eofs(vector: np.ndarray, eof1: np.ndarray, eof2: np.ndar
     # Alternative implementation 2:
     #pseudo_inverse = np.linalg.pinv(eof_mat)
     #pcs = np.matmul(pseudo_inverse, vector)
-    #return (pcs[0], pcs[1])
+    #return pcs[0], pcs[1]

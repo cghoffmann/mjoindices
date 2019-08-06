@@ -101,6 +101,22 @@ def test_EOFData_basic_properties():
     if not np.all(target.eof2map == np.array([(10, 20), (30, 40), (50, 60)])):
         errors.append("eof2map property not correct")
 
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eof1 = np.array([1, 2, 3, 4, 5, 6])
+    eof2 = np.array([10, 20, 30, 40, 50, 60])
+    target = eof.EOFData(lat, long, eof1, eof2, explained_variance_eof1=0.1, explained_variance_eof2=0.2,
+                         eigenvalue_eof1=1.1, eigenvalue_eof2=2.2)
+
+    if not target.explained_variance_eof1 == 0.1:
+        errors.append("Explained variance of EOF1 not correct")
+    if not target.explained_variance_eof2 == 0.2:
+        errors.append("Explained variance of EOF2 not correct")
+    if not target.eigenvalue_eof1 == 1.1:
+        errors.append("Eigenvalue of EOF1 not correct")
+    if not target.eigenvalue_eof2 == 2.2:
+        errors.append("Eigenvalue of EOF2 not correct")
+
     eof1 = np.array([(1, 2), (3, 4), (5, 6)])
     eof2 = np.array([(10, 20), (30, 40), (50, 60)])
     target = eof.EOFData(lat, long, eof1, eof2)
@@ -338,6 +354,31 @@ def test_save_all_eofs_to_dir(tmp_path):
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
+def test_save_all_eofs_to_npzfile(tmp_path):
+    filename = tmp_path / "test.npz"
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eofs = []
+    for doy in range(1, 367):
+        eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
+        eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
+        eofs.append(eof.EOFData(lat, long, eof1, eof2,explained_variance_eof1=1.1*doy, explained_variance_eof2=2.2*doy, eigenvalue_eof1=0.1*doy, eigenvalue_eof2=0.2*doy))
+    target = eof.EOFDataForAllDOYs(eofs)
+    target.save_all_eofs_to_npzfile(filename)
+
+    errors = []
+    target_reloaded = eof.restore_all_eofs_from_npzfile(filename)
+    if not target_reloaded.eof_list == eofs:
+        errors.append("List of EOFData objects incorrect")
+    if not np.all(target_reloaded.lat == lat):
+        errors.append("Lat is incorrect")
+    if not np.all(target_reloaded.long == long):
+        errors.append("Long is incorrect")
+    if not target_reloaded.eofdata_for_doy(1) == eofs[0]:
+        errors.append("Sample EOF data is incorrect")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
 
 @pytest.mark.skipif(not eof1Dirname.is_dir(), reason="EOF1 data not available")
 @pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available")
@@ -371,6 +412,8 @@ def test_load_all_original_eofs_from_directory():
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-#test_save_eofs_to_txt_file(pathlib.Path("/tmp/"))
-    #target = pc.load_pcs_from_txt_file(filename)
-test_EOFDataForAllDOYs_basic_properties()
+def test_doy_list():
+    target = eof.doy_list()
+    assert np.all(target==np.arange(1,367,1))
+
+test_EOFData_basic_properties()
