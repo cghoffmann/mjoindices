@@ -16,8 +16,10 @@ class EOFData:
     """
     Class as a container for the EOF data of one pair of EOFs.
     """
-    #FIXME: Check if we need some deepcopy or writable=false here
-    def __init__(self, lat: np.ndarray, long: np.ndarray, eof1: np.ndarray, eof2:np.ndarray) -> None:
+    #FIXME: Enable saving of statictical values (to csv or nz?) and force setting them?
+    def __init__(self, lat: np.ndarray, long: np.ndarray, eof1: np.ndarray, eof2: np.ndarray,
+                 explained_variance_eof1: float = None, explained_variance_eof2: float = None,
+                 eigenvalue_eof1: float = None, eigenvalue_eof2: float = None) -> None:
         """Initialization with all necessary variables.
 
         :param lat: The latitude grid, which represents the EOF data
@@ -28,27 +30,36 @@ class EOFData:
         latitude, etc.) or a 2-dim map with the first index representing the latitude axis and the second index
         representing longitude.
         :param eof2: Values of the second EOF. Structure similar to the first EOF
+        :param explained_variance_eof1: Fraction of data variance that is explained by EOF1. Can be None
+        :param explained_variance_eof2: Fraction of data variance that is explained by EOF2. Can be None
+        :param eigenvalue_eof1: Eigenvalue corresponding to EOF1. Can be None
+        :param eigenvalue_eof1: Eigenvalue corresponding to EOF2. Can be None
         """
         if not eof1.shape == eof2.shape:
             raise AttributeError("EOF1 and EOF2 must have the same shape")
         expected_n = lat.size * long.size
 
-        if eof1.size != expected_n  or eof2.size != expected_n :
+        if eof1.size != expected_n or eof2.size != expected_n:
             raise AttributeError("Number of elements of EOF1 and EOF2 must be identical to lat.size*long.size")
 
-        self._lat = lat
-        self._long = long
+        self._lat = lat.copy()
+        self._long = long.copy()
         if eof1.ndim == 1 and eof2.ndim == 1:
-            self._eof1 = eof1
-            self._eof2 = eof2
+            self._eof1 = eof1.copy()
+            self._eof2 = eof2.copy()
         elif eof1.ndim == 2 and eof2.ndim == 2:
             if not (eof1.shape[0] == lat.size and eof1.shape[1] == long.size and eof2.shape[0] == lat.size and eof2.shape[1]):
                 raise AttributeError("Length of first axis of EOS 1 and 2 must correspond to latitude axis, length of "
                                      "second axis to the longitude axis")
-            self._eof1 = self.reshape_to_vector(eof1)
-            self._eof2 = self.reshape_to_vector(eof2)
+            self._eof1 = self.reshape_to_vector(eof1.copy())
+            self._eof2 = self.reshape_to_vector(eof2.copy())
         else:
             raise AttributeError("EOF1 and EOF2 must have a dimension of 1 or 2.")
+
+        self._explained_variance_eof1 = explained_variance_eof1
+        self._explained_variance_eof2 = explained_variance_eof2
+        self._eigenvalue_eof1 = eigenvalue_eof1
+        self._eigenvalue_eof2 = eigenvalue_eof2
 
     # FIXME: Unittest for operator
     # FIXME: Typing
@@ -58,7 +69,11 @@ class EOFData:
         return (np.all(self.lat == other.lat)
                 and np.all(self.long == other.long)
                 and np.all(self.eof1vector == other.eof1vector)
-                and np.all( self.eof2vector == other.eof2vector))
+                and np.all( self.eof2vector == other.eof2vector)
+                and self._explained_variance_eof1 == other.explained_variance_eof1
+                and self._explained_variance_eof2 == other.explained_variance_eof2
+                and self._eigenvalue_eof1 == other.eigenvalue_eof1
+                and self._eigenvalue_eof2 == other.eigenvalue_eof2)
 
     @property
     def lat(self) -> np.ndarray:
@@ -101,6 +116,38 @@ class EOFData:
         :return: The EOF values
         """
         return self.reshape_to_map(self._eof2)
+
+    @property
+    def explained_variance_eof1(self) -> float:
+        """
+        Explained variance of EOF1 as fraction between 0 and 1
+        :return: Variance. Might be None.
+        """
+        return self._explained_variance_eof1
+
+    @property
+    def explained_variance_eof2(self) -> float:
+        """
+        Explained variance of EOF1 as fraction between 0 and 1
+        :return: Variance. Might be None.
+        """
+        return self._explained_variance_eof2
+
+    @property
+    def eigenvalue_eof1(self) -> float:
+        """
+        Eigenvalue of EOF1
+        :return: Eigenvalue. Might be None.
+        """
+        return self._eigenvalue_eof1
+
+    @property
+    def eigenvalue_eof2(self) -> float:
+        """
+        Eigenvalue of EOF2
+        :return: Eigenvalue. Might be None.
+        """
+        return self._eigenvalue_eof2
 
     def reshape_to_vector(self, map: np.ndarray) -> np.ndarray:
         """ Reshapes the horizontally distributed data to fit into a vector The vector elements will contain the
@@ -225,9 +272,32 @@ class EOFDataForAllDOYs:
         """
         if not dirname.exists() and create_dir == True:
             dirname.mkdir(parents=True, exist_ok=False)
-        for i in range(0,366):
-            filename = dirname / Path("eof%s.txt" % format(i+1, '03'))
-            self.eof_list[i].save_eofs_to_txt_file(filename)
+        for doy in doy_list():
+            filename = dirname / Path("eof%s.txt" % format(doy, '03'))
+            self.eofdata_for_doy(doy).save_eofs_to_txt_file(filename)
+
+    def save_all_eofs_to_npzfile(self, filename: Path) -> None:
+        doys = doy_list()
+        eof1 = np.empty((doys.size, self.lat.size*self.long.size))
+        eof2 = np.empty((doys.size, self.lat.size * self.long.size))
+        explained_variance_eof1 = np.empty(doys.size)
+        explained_variance_eof2 = np.empty(doys.size)
+        eigenvalue_eof1 = np.empty(doys.size)
+        eigenvalue_eof2 = np.empty(doys.size)
+        for i in range(0,doys.size):
+            eof = self.eof_list[i]
+            eof1[i,:] = eof.eof1vector
+            eof2[i, :] = eof.eof2vector
+            explained_variance_eof1[i] = eof.explained_variance_eof1
+            explained_variance_eof2[i] = eof.explained_variance_eof2
+            eigenvalue_eof1[i] = eof.eigenvalue_eof1
+            eigenvalue_eof2[i] = eof.eigenvalue_eof2
+        lat = self.lat
+        long = self.long
+        np.savez(filename, eof1=eof1, eof2=eof2,
+                 explained_variance_eof1=explained_variance_eof1, explained_variance_eof2=explained_variance_eof2,
+                 eigenvalue_eof1=eigenvalue_eof1, eigenvalue_eof2=eigenvalue_eof2, lat=lat, long=long)
+
 
 
 def load_single_eofs_from_txt_file(filename: Path) -> EOFData:
@@ -296,7 +366,7 @@ def load_all_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
     :return: The EOFs for all DOYs as EOFDataForAllDOYs object.
     """
     eofs = []
-    for doy in range(1, 367):
+    for doy in doy_list():
         filename = dirname / Path("eof%s.txt" % format(doy, '03'))
         eof = load_single_eofs_from_txt_file(filename)
         eofs.append(eof)
@@ -312,7 +382,35 @@ def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
     :return: The original EOFs for all DOYs as EOFDataForAllDOYs object.
     """
     eofs = []
-    for doy in range(1, 367):
+    for doy in doy_list():
         eof = load_original_eofs_for_doy(dirname, doy)
         eofs.append(eof)
     return EOFDataForAllDOYs(eofs)
+
+def restore_all_eofs_from_npzfile(filename: Path) -> EOFDataForAllDOYs:
+    with np.load(filename) as data:
+        eof1 = data["eof1"]
+        eof2 = data["eof2"]
+        lat = data["lat"]
+        long = data["long"]
+        explained_variance_eof1 = data["explained_variance_eof1"]
+        explained_variance_eof2 = data["explained_variance_eof2"]
+        eigenvalue_eof1 = data["eigenvalue_eof1"]
+        eigenvalue_eof2 = data["eigenvalue_eof2"]
+    eofs = []
+    for i in range (0, doy_list().size):
+        eof = EOFData(lat, long, np.squeeze(eof1[i,: ]), np.squeeze(eof2[i,:]),
+                      explained_variance_eof1=np.squeeze(explained_variance_eof1[i]), explained_variance_eof2=np.squeeze(explained_variance_eof2[i]),
+                      eigenvalue_eof1=np.squeeze(eigenvalue_eof1[i]), eigenvalue_eof2=np.squeeze(eigenvalue_eof2[i]))
+        eofs.append(eof)
+    return EOFDataForAllDOYs(eofs)
+
+
+def doy_list() -> np.array:
+    """
+    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.
+    Useful for, e.g., as axis for plotting
+
+    :return:
+    """
+    return np.arange(1, 367, 1)

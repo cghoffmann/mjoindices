@@ -49,14 +49,25 @@ def plotComparisonOrigRecalcPCs(filenameRecalcOMIPCs, filenameOrigOMIPCs, startD
     return fig
 
 
-def plot_eof_for_doy(path, doy):
-    # TODO: Plot underlying map
+def plot_original_eof_for_doy(path, doy):
     eofdata = eof.load_original_eofs_for_doy(path, doy)
+
+    return plot_eof(eofdata, doy)
+
+def plot_eof_from_file(filename):
+    eofdata = eof.load_single_eofs_from_txt_file(filename)
+
+    return plot_eof(eofdata)
+
+def plot_eof(eofdata: eof.EOFData, doy: int = None):
+    # TODO: Plot underlying map
+
 
     fig, axs = plt.subplots(2, 1, num="plotting.plot_eof_for_doy", clear=True,
                             figsize=(10, 5), dpi=150, sharex=True, sharey=True)
     plt.subplots_adjust(wspace=0.35, hspace=0.35)
-    fig.suptitle("EOF Recalculation for DOY %i" % doy)
+    if doy is not None:
+        fig.suptitle("EOF Recalculation for DOY %i" % doy)
 
     ax = axs[0]
 
@@ -74,4 +85,65 @@ def plot_eof_for_doy(path, doy):
     ax.set_xlabel("Longitude [°]")
 
     return fig
+
+
+def plot_eof_comparison(orig_eof: eof.EOFData, compare_eof: eof.EOFData, doy=None):
+
+    #nlat = orig_eof.lat.size()
+    #nlong = orig_eof.long.size()
+
+    print(np.corrcoef(orig_eof.eof1vector, compare_eof.eof1vector))
+    print(np.corrcoef(orig_eof.eof2vector, compare_eof.eof2vector))
+
+    #eof1_orig = np.reshape(eof1_orig, [nlat, nlong])
+    #eof2_orig = np.reshape(eof2_orig, [nlat, nlong])
+    #eof1_recalc = np.reshape(eof1_recalc, [nlat, nlong])
+    #eof2_recalc = np.reshape(eof2_recalc, [nlat, nlong])
+
+    #print(np.corrcoef(eof1_orig, eof1_recalc))
+
+    fig, axs = plt.subplots(2, 3, num="ReproduceOriginalOMIPCs_ExplainedVariance_EOF_Comparison", clear=True,
+                            figsize=(10, 5), dpi=150, sharex=True, sharey=True)
+    plt.subplots_adjust(wspace=0.35, hspace=0.35)
+    if doy is not None:
+        fig.suptitle("EOF Recalculation for DOY %i" % doy)
+
+    ax = axs[0, 0]
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Original EOF1")
+    ax.set_ylabel("Latitude [°]")
+
+    ax = axs[0, 1]
+    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof1map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Recalculated EOF1")
+
+    # FIXME: Check that grids are equal
+    ax = axs[0, 2]
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map - compare_eof.eof1map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Difference 1")
+
+    ax = axs[1, 0]
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Original EOF2")
+    ax.set_ylabel("Latitude [°]")
+    ax.set_xlabel("Longitude [°]")
+
+    ax = axs[1, 1]
+    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof2map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Recalculated EOF2")
+    ax.set_xlabel("Longitude [°]")
+
+    ax = axs[1, 2]
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map - compare_eof.eof2map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Difference 2")
+    ax.set_xlabel("Longitude [°]")
+
+    return fig
+
 

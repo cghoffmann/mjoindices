@@ -49,28 +49,28 @@ class OLRData:
         #print(self.__olr_data_cube.shape)
         return np.squeeze(self.olr[cand,:,:])
 
-    def returnOLRForDOY(self, doy, window_length=0):
-        doys = tools.calc_day_of_year(self.TimeGrid)
-        print("doys", doys)
+    def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0) -> np.ndarray:
+        """
+        Extracts the olr data, which belongs to all doys around one center (center_doy +/- windowlength).
+        Keep in mind that the OLR time series might span several years. In this case the center DOy is found more than
+        once and the respective window in considered for each year.
+        Example: 3 full years of data, centerdoy = 20, and window_length = 4 results in 3*(2*4+1) = 27 entries in the
+        time axis
+        :param center_doy: The center DOY
+        :param window_length: The window length in DOYs on both sides of the center DOY. Hence, if the window is fully
+        covered by the data, one gets 2*window_length + 1 entries per year in the result.
+        :return: A matrix: 1. index doys, 2. index lat, 3 index long.
+        """
+        inds = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length)
+        #FIXME: np, squeeze is needed, otherwise 4 dimenasions: (1, time, lat, long). why?
+        return np.squeeze(self.olr[inds, :, :])
 
-
-        lower_limit = doy - window_length
-        if(lower_limit < 1):
-            lower_limit = lower_limit + 366
-        upper_limit = doy + window_length
-        if(upper_limit > 366):
-            upper_limit = upper_limit - 366
-
-        if(lower_limit <= upper_limit):
-            dayIndsToConsider = ((doys >= lower_limit) & (doys <= upper_limit) )
-        else:
-            dayIndsToConsider = ((doys >= lower_limit) | (doys <= upper_limit) )
-
-
-        print(np.where(dayIndsToConsider==True))
-        print("Days To Consider", dayIndsToConsider)
-        result=self.olr[dayIndsToConsider, :, :]
-        return result
+    def save_to_npzfile(self, filename: Path) -> None:
+        """
+        Saves the data array contained in the OLRData object to a numpy file
+        :param filename: The full filename
+        """
+        np.savez(filename, olr=self.olr, time=self.time, lat=self.lat, long=self.long)
 
 
 def resample_spatial_grid_to_original(olr: OLRData) -> OLRData:
@@ -83,6 +83,7 @@ def resample_spatial_grid_to_original(olr: OLRData) -> OLRData:
     :param olr: The OLRData object
     :return:  A new OLRData object with the resampled data
     """
+    # FIXME Combine with definition in empirical_or....py
     orig_lat = np.arange(-20., 20.1, 2.5)
     orig_long = np.arange(0., 359.9, 2.5)
     return resample_spatial_grid(olr, orig_lat, orig_long)
@@ -103,11 +104,10 @@ def resample_spatial_grid(olr: OLRData, target_lat: np.array, target_long: np.ar
         olr_interpol[idx,:,:] = f(target_long, target_lat)
     return OLRData(olr_interpol, olr.time, target_lat, target_long)
 
-def restrictOLRDataToTimeRange(olr, startDate, stopDate):
-    print("Restricting time range...")
-    windowInds = (olr.time >= startDate) & (olr.time <= stopDate)
-    print(windowInds)
-    return OLRData(olr.olr[windowInds,:,:], olr.time[windowInds], olr.lat, olr.long)
+#FIXME: doc, unitttest
+def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime64) -> OLRData:
+    windowInds = (olr.time >= start) & (olr.time <= stop)
+    return OLRData(olr.olr[windowInds, :, :], olr.time[windowInds], olr.lat, olr.long)
 
 
 def load_noaa_interpolated_olr(filename: Path) -> OLRData:
@@ -139,3 +139,17 @@ def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     result = OLRData(np.squeeze(olr), time, lat, lon)
 
     return result
+
+
+def restore_from_npzfile(filename: Path) -> OLRData:
+    """
+    Loads an OLRData object from the array in a numpy file.
+    :param filename: The filename to the .npz file.
+    :return: The OLRData object
+    """
+    with np.load(filename) as data:
+        olr = data["olr"]
+        time = data["time"]
+        lat = data["lat"]
+        long = data["long"]
+    return OLRData(olr, time, lat, long)
