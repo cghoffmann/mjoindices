@@ -8,15 +8,18 @@ import copy
 import typing
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib.figure import Figure
 
 
 class EOFData:
     """
     Class as a container for the EOF data of one pair of EOFs.
     """
-    #FIXME: Enable saving of statictical values (to csv or nz?) and force setting them?
+
+    # FIXME: Enable saving of statictical values (to csv or nz?) and force setting them?
     def __init__(self, lat: np.ndarray, long: np.ndarray, eof1: np.ndarray, eof2: np.ndarray,
                  explained_variance_eof1: float = None, explained_variance_eof2: float = None,
                  eigenvalue_eof1: float = None, eigenvalue_eof2: float = None) -> None:
@@ -48,7 +51,8 @@ class EOFData:
             self._eof1 = eof1.copy()
             self._eof2 = eof2.copy()
         elif eof1.ndim == 2 and eof2.ndim == 2:
-            if not (eof1.shape[0] == lat.size and eof1.shape[1] == long.size and eof2.shape[0] == lat.size and eof2.shape[1]):
+            if not (eof1.shape[0] == lat.size and eof1.shape[1] == long.size and eof2.shape[0] == lat.size and
+                    eof2.shape[1]):
                 raise AttributeError("Length of first axis of EOS 1 and 2 must correspond to latitude axis, length of "
                                      "second axis to the longitude axis")
             self._eof1 = self.reshape_to_vector(eof1.copy())
@@ -69,7 +73,7 @@ class EOFData:
         return (np.all(self.lat == other.lat)
                 and np.all(self.long == other.long)
                 and np.all(self.eof1vector == other.eof1vector)
-                and np.all( self.eof2vector == other.eof2vector)
+                and np.all(self.eof2vector == other.eof2vector)
                 and self._explained_variance_eof1 == other.explained_variance_eof1
                 and self._explained_variance_eof2 == other.explained_variance_eof2
                 and self._eigenvalue_eof1 == other.eigenvalue_eof1
@@ -160,7 +164,8 @@ class EOFData:
         if not map.ndim == 2:
             raise AttributeError("eof_map must have 2 dimensions")
         if not (map.shape[0] == self.lat.size and map.shape[1] == self.long.size):
-            raise AttributeError("Length of first dimension of eof_map must correspond to the latitude grid, length of second dimension to the longitude grid")
+            raise AttributeError(
+                "Length of first dimension of eof_map must correspond to the latitude grid, length of second dimension to the longitude grid")
         return np.reshape(map, self.lat.size * self.long.size)
 
     def reshape_to_map(self, vector: np.ndarray) -> np.ndarray:
@@ -188,13 +193,14 @@ class EOFData:
         """
         lat_full = np.empty(self.eof1vector.size)
         long_full = np.empty(self.eof1vector.size)
-        for i_vec in range(0,self.eof1vector.size):
+        for i_vec in range(0, self.eof1vector.size):
             # find out lat/long corresponding to the vector position by evaluating the index transformation from map
             # to vector
-            (i_lat, i_long) = np.unravel_index(i_vec,self.eof1map.shape)
+            (i_lat, i_long) = np.unravel_index(i_vec, self.eof1map.shape)
             lat_full[i_vec] = self.lat[i_lat]
             long_full[i_vec] = self.long[i_long]
-        df = pd.DataFrame({"Lat": lat_full, "Long": long_full, "EOF1": self.eof1vector, "EOF2": self.eof2vector}).astype(float)
+        df = pd.DataFrame(
+            {"Lat": lat_full, "Long": long_full, "EOF1": self.eof1vector, "EOF2": self.eof2vector}).astype(float)
         df.to_csv(filename, index=False, float_format="%13.7f")
 
 
@@ -205,7 +211,7 @@ class EOFDataForAllDOYs:
             raise AttributeError("List of EOFs must contain 366 entries")
         reference_lat = eof_list[0].lat
         reference_long = eof_list[0].long
-        for i in range(0,366):
+        for i in range(0, 366):
             if not np.all(eof_list[i].lat == reference_lat):
                 raise AttributeError("All EOFs must have the same latitude grid. Problematic is DOY %i" % i)
             if not np.all(eof_list[i].long == reference_long):
@@ -245,7 +251,7 @@ class EOFDataForAllDOYs:
         :param doy: The DOY
         :return: The EOFData object
         """
-        return self.eof_list[doy-1]
+        return self.eof_list[doy - 1]
 
     def eof1vector_for_doy(self, doy: int) -> np.ndarray:
         """
@@ -253,7 +259,7 @@ class EOFDataForAllDOYs:
         :param doy: The DOY
         :return: The vector
         """
-        return self.eof_list[doy-1].eof1vector
+        return self.eof_list[doy - 1].eof1vector
 
     def eof2vector_for_doy(self, doy: int) -> np.ndarray:
         """
@@ -261,12 +267,58 @@ class EOFDataForAllDOYs:
         :param doy: The DOY
         :return: The vector
         """
-        return self.eof_list[doy-1].eof2vector
+        return self.eof_list[doy - 1].eof2vector
+
+    def explained_variance1_for_all_doys(self):
+        """
+        Returns a vector with 366 elements containing the explained variance of EOF1 for each DOY.
+        :return: The variance vector
+        """
+        doys = doy_list()
+        result = []
+        for doy in doys:
+            result.append(self.eofdata_for_doy(doy).explained_variance_eof1)
+        return result
+
+    def explained_variance2_for_all_doys(self):
+        """
+        Returns a vector with 366 elements containing the explained variance of EOF2 for each DOY.
+        :return: The variance vector
+        """
+        doys = doy_list()
+        result = []
+        for doy in doys:
+            result.append(self.eofdata_for_doy(doy).explained_variance_eof2)
+        return result
+
+    def eigenvalue1_for_all_doys(self):
+        """
+        Returns a vector with 366 elements containing the Eigenvalue of EOF1 for each DOY.
+        :return: The Eigenvalue vector
+        """
+        doys = doy_list()
+        result = []
+        for doy in doys:
+            result.append(self.eofdata_for_doy(doy).eigenvalue_eof1)
+        return result
+
+    def eigenvalue2_for_all_doys(self):
+        """
+        Returns a vector with 366 elements containing the Eigenvalue of EOF2 for each DOY.
+        :return: The Eigenvalue vector
+        """
+        doys = doy_list()
+        result = []
+        for doy in doys:
+            result.append(self.eofdata_for_doy(doy).eigenvalue_eof2)
+        return result
+
 
     def save_all_eofs_to_dir(self, dirname: Path, create_dir=True) -> None:
         """
         Saves the EOF1 and EOF2 functions for each of the DOYs in the given directory
-        For each DOY, one file will be created, which contains both EOF functions
+        For each DOY, one text file will be created, which contains both EOF functions
+        Note that the textfiles do not contain the Eigenvalues and explained variance values.
         :param dirname: The directory, where the files will be saved
         :param create_dir: If True, the directory (and parent directories) will be created, if is does not exist.
         """
@@ -277,27 +329,26 @@ class EOFDataForAllDOYs:
             self.eofdata_for_doy(doy).save_eofs_to_txt_file(filename)
 
     def save_all_eofs_to_npzfile(self, filename: Path) -> None:
+        """
+        Saves the complete EOF data to a numpy file.
+        :param filename: The filename.
+        """
         doys = doy_list()
-        eof1 = np.empty((doys.size, self.lat.size*self.long.size))
+        eof1 = np.empty((doys.size, self.lat.size * self.long.size))
         eof2 = np.empty((doys.size, self.lat.size * self.long.size))
-        explained_variance_eof1 = np.empty(doys.size)
-        explained_variance_eof2 = np.empty(doys.size)
-        eigenvalue_eof1 = np.empty(doys.size)
-        eigenvalue_eof2 = np.empty(doys.size)
-        for i in range(0,doys.size):
+        for i in range(0, doys.size):
             eof = self.eof_list[i]
-            eof1[i,:] = eof.eof1vector
+            eof1[i, :] = eof.eof1vector
             eof2[i, :] = eof.eof2vector
-            explained_variance_eof1[i] = eof.explained_variance_eof1
-            explained_variance_eof2[i] = eof.explained_variance_eof2
-            eigenvalue_eof1[i] = eof.eigenvalue_eof1
-            eigenvalue_eof2[i] = eof.eigenvalue_eof2
-        lat = self.lat
-        long = self.long
-        np.savez(filename, eof1=eof1, eof2=eof2,
-                 explained_variance_eof1=explained_variance_eof1, explained_variance_eof2=explained_variance_eof2,
-                 eigenvalue_eof1=eigenvalue_eof1, eigenvalue_eof2=eigenvalue_eof2, lat=lat, long=long)
-
+        np.savez(filename,
+                 eof1=eof1,
+                 eof2=eof2,
+                 explained_variance_eof1= self.explained_variance1_for_all_doys(),
+                 explained_variance_eof2=self.explained_variance2_for_all_doys(),
+                 eigenvalue_eof1=self.eigenvalue1_for_all_doys(),
+                 eigenvalue_eof2=self.eigenvalue2_for_all_doys(),
+                 lat=self.lat,
+                 long=self.long)
 
 
 def load_single_eofs_from_txt_file(filename: Path) -> EOFData:
@@ -314,7 +365,7 @@ def load_single_eofs_from_txt_file(filename: Path) -> EOFData:
 
     # retrieve unique lat/long grids
     # FIXME: Does probably not work for a file with only one lat
-    lat, repetition_idx, rep_counts = np.unique(full_lat,return_index=True,return_counts=True)
+    lat, repetition_idx, rep_counts = np.unique(full_lat, return_index=True, return_counts=True)
     long = full_long[repetition_idx[0]:repetition_idx[1]]
 
     # Apply some heuristic consistency checks
@@ -326,7 +377,7 @@ def load_single_eofs_from_txt_file(filename: Path) -> EOFData:
         raise AttributeError("Lat/Long grid in input file seems to be corrupted 2")
     if not lat.size * long.size == eof1.size:
         raise AttributeError("Lat/Long grid in input file seems to be corrupted 3")
-    if not np.all(np.tile(long,lat.size) == full_long):
+    if not np.all(np.tile(long, lat.size) == full_long):
         # The longitude grid has to be the same for all latitudes
         raise AttributeError("Lat/Long grid in input file seems to be corrupted 4")
 
@@ -387,7 +438,13 @@ def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
         eofs.append(eof)
     return EOFDataForAllDOYs(eofs)
 
+
 def restore_all_eofs_from_npzfile(filename: Path) -> EOFDataForAllDOYs:
+    """
+    Loads all EOF data from a numpy file, which was written with EOFDataForAllDOYs.save_all_eofs_to_npzfile(...)
+    :param filename: The filename
+    :return: The data object
+    """
     with np.load(filename) as data:
         eof1 = data["eof1"]
         eof2 = data["eof2"]
@@ -398,9 +455,10 @@ def restore_all_eofs_from_npzfile(filename: Path) -> EOFDataForAllDOYs:
         eigenvalue_eof1 = data["eigenvalue_eof1"]
         eigenvalue_eof2 = data["eigenvalue_eof2"]
     eofs = []
-    for i in range (0, doy_list().size):
-        eof = EOFData(lat, long, np.squeeze(eof1[i,: ]), np.squeeze(eof2[i,:]),
-                      explained_variance_eof1=np.squeeze(explained_variance_eof1[i]), explained_variance_eof2=np.squeeze(explained_variance_eof2[i]),
+    for i in range(0, doy_list().size):
+        eof = EOFData(lat, long, np.squeeze(eof1[i, :]), np.squeeze(eof2[i, :]),
+                      explained_variance_eof1=np.squeeze(explained_variance_eof1[i]),
+                      explained_variance_eof2=np.squeeze(explained_variance_eof2[i]),
                       eigenvalue_eof1=np.squeeze(eigenvalue_eof1[i]), eigenvalue_eof2=np.squeeze(eigenvalue_eof2[i]))
         eofs.append(eof)
     return EOFDataForAllDOYs(eofs)
@@ -411,6 +469,158 @@ def doy_list() -> np.array:
     Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.
     Useful for, e.g., as axis for plotting
 
-    :return:
+    :return: The doy array
     """
     return np.arange(1, 367, 1)
+
+
+def plot_correlation_with_original_eofs(recalc_eof: EOFDataForAllDOYs, orig_eof: EOFDataForAllDOYs) -> Figure:
+    """
+    Creates a diagnosis plot showing the correlations for all DOYs of between the original EOFs and newly
+    calculated EOF for both, EOF1 and EOF2
+    :param recalc_eof: The object containing the calculated EOFs
+    :param orig_eof: The object containing the ortiginal EOFs
+    :return: Handle to the figure
+    """
+    doys = doy_list()
+    corr1 = np.zeros(doys.size)
+    corr2 = np.zeros(doys.size)
+    for idx, doy in enumerate(doys):
+        corr1[idx] = \
+            (np.corrcoef(orig_eof.eofdata_for_doy(doy).eof1vector, recalc_eof.eofdata_for_doy(doy).eof1vector))[0, 1]
+        corr2[idx] = \
+            (np.corrcoef(orig_eof.eofdata_for_doy(doy).eof2vector, recalc_eof.eofdata_for_doy(doy).eof2vector))[0, 1]
+    fig = plt.figure("plot_correlation_with_original_eofs", clear=True, figsize=(6, 4), dpi=150)
+    plt.ylim([0, 1.05])
+    plt.xlabel("DOY")
+    plt.ylabel("Correlation")
+    plt.title("Correlation Original-Recalculated EOF")
+    p1, = plt.plot(doys, corr1, label="EOF1")
+    p2, = plt.plot(doys, corr2, label="EOF2")
+    plt.legend(handles=(p1, p2))
+    return fig
+
+
+def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs) -> Figure:
+    """
+    Plots the explained variance values for EOF1 and EOF2 for all doys.
+    Comparable to Kiladis (2014), Fig. 1
+    :param eofs: The EOF data to plot
+    :return: Handle to the figure,.
+    """
+    doygrid = doy_list()
+    fig = plt.figure("plot_explained_variance_for_all_doys", clear=True, figsize=(6, 4), dpi=150)
+    p1, = plt.plot(doygrid, eofs.explained_variance1_for_all_doys(), color="blue", label="EOF1")
+    p2, = plt.plot(doygrid, eofs.explained_variance2_for_all_doys(), color="red", label="EOF2")
+    plt.xlabel("DOY")
+    plt.ylabel("Fraction of explained variance")
+    plt.title("Explained variance")
+    plt.legend(handles=(p1, p2))
+    return fig
+
+
+def plot_eigenvalues_for_all_doys(eofs: EOFDataForAllDOYs) -> Figure:
+    """
+    Plots the Eigenvalues for EOF1 and EOF2 for all doys.
+    :param eofs: The EOF data to plot
+    :return: Handle to the figure,.
+    """
+    doygrid = doy_list()
+    fig = plt.figure("plot_eigenvalues_for_all_doys", clear=True, figsize=(6, 4), dpi=150)
+    p1, = plt.plot(doygrid, eofs.eigenvalue1_for_all_doys(), color="blue", label="EOF1")
+    p2, = plt.plot(doygrid, eofs.eigenvalue2_for_all_doys(), color="red", label="EOF2")
+    plt.xlabel("DOY")
+    plt.ylabel("Eigenvalue")
+    plt.title("Eigenvalues")
+    plt.legend(handles=(p1, p2))
+    return fig
+
+
+def plot_original_individual_eof_map(path, doy) -> Figure:
+    eofdata = load_original_eofs_for_doy(path, doy)
+    return plot_individual_eof_map(eofdata, doy=doy)
+
+
+def plot_individual_eof_map_from_file(filename, doy) -> Figure:
+    eofdata = load_single_eofs_from_txt_file(filename, doy=doy)
+    return plot_individual_eof_map(eofdata)
+
+
+def plot_individual_eof_map(eofdata: EOFData, doy: int = None) -> Figure:
+    # TODO: Plot underlying map
+    fig, axs = plt.subplots(2, 1, num="plotting.plot_eof_for_doy", clear=True,
+                            figsize=(10, 5), dpi=150, sharex=True, sharey=True)
+    plt.subplots_adjust(wspace=0.35, hspace=0.35)
+    if doy is not None:
+        fig.suptitle("EOF Recalculation for DOY %i" % doy)
+
+    ax = axs[0]
+
+    c = ax.contourf(eofdata.long, eofdata.lat, eofdata.eof1map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("EOF1")
+    ax.set_ylabel("Latitude [°]")
+    ax.set_xlabel("Longitude [°]")
+
+    ax = axs[1]
+    c = ax.contourf(eofdata.long, eofdata.lat, eofdata.eof2map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("EOF2")
+    ax.set_ylabel("Latitude [°]")
+    ax.set_xlabel("Longitude [°]")
+
+    return fig
+
+
+def plot_individual_eof_map_comparison(orig_eof: EOFData, compare_eof: EOFData, doy=None):
+
+    # TODO: Print correlation values into figure
+    print(np.corrcoef(orig_eof.eof1vector, compare_eof.eof1vector))
+    print(np.corrcoef(orig_eof.eof2vector, compare_eof.eof2vector))
+
+    fig, axs = plt.subplots(2, 3, num="ReproduceOriginalOMIPCs_ExplainedVariance_EOF_Comparison", clear=True,
+                            figsize=(10, 5), dpi=150, sharex=True, sharey=True)
+    plt.subplots_adjust(wspace=0.35, hspace=0.35)
+    if doy is not None:
+        fig.suptitle("EOF Recalculation for DOY %i" % doy)
+
+    ax = axs[0, 0]
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Original EOF1")
+    ax.set_ylabel("Latitude [°]")
+
+    ax = axs[0, 1]
+    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof1map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Recalculated EOF1")
+
+    # FIXME: Check that grids are equal
+    ax = axs[0, 2]
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map - compare_eof.eof1map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Difference 1")
+
+    ax = axs[1, 0]
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Original EOF2")
+    ax.set_ylabel("Latitude [°]")
+    ax.set_xlabel("Longitude [°]")
+
+    ax = axs[1, 1]
+    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof2map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Recalculated EOF2")
+    ax.set_xlabel("Longitude [°]")
+
+    ax = axs[1, 2]
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map - compare_eof.eof2map)
+    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
+    ax.set_title("Difference 2")
+    ax.set_xlabel("Longitude [°]")
+
+    return fig
+
+
+

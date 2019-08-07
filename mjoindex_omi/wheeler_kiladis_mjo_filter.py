@@ -10,7 +10,7 @@ import scipy
 import scipy.fftpack
 from scipy.io import FortranFile
 
-import mjoindex_omi.olr_handling
+import mjoindex_omi.olr_handling as olr
 
 
 # FIXME Codestyle
@@ -33,7 +33,7 @@ def filterOLRTemporallyWith1DSpectralSmoothing(olr, period_min, period_max):
     #plt.contourf(np.squeeze(filteredOLR[0,:,:]))
     #plt.colorbar()
     #plt.title("Filtered OLR")
-    return (mjoindex_omi.olr_handling.OLRData(filteredOLR, olr.time, olr.lat, olr.long))
+    return (olr.OLRData(filteredOLR, olr.time, olr.lat, olr.long))
 
 def __performSpectralSmoothing(y, lowerCutOff, HigherCutOff ):
     #FIXME: calculate dt dynamically
@@ -61,14 +61,18 @@ def __performSpectralSmoothing(y, lowerCutOff, HigherCutOff ):
 #    plt.plot(y2)
     return y2
 
+
 def filterOLRForMJO_PC_Calculation(olr, do_plot=0):
     return filterOLRTemporally(olr,  20., 96., do_plot=do_plot)
+
 
 def filterOLRTemporally(olr, period_min, period_max, do_plot=0):
     return filterOLRTemporallyandLongitudinally(olr,  period_min, period_max, -720., 720, do_plot=do_plot)
 
+
 def filterOLRForMJO_EOF_Calculation(olr, do_plot=0):
     return filterOLRTemporallyandLongitudinally(olr,  30., 96., 0., 720, do_plot=do_plot)
+
 
 def filterOLRTemporallyandLongitudinally(olr, period_min, period_max, wn_min, wn_max, do_plot=0):
     print("Smooth data temporally and longitudally...")
@@ -114,7 +118,7 @@ def filterOLRTemporallyandLongitudinally(olr, period_min, period_max, wn_min, wn
         filtered_data = wkfilter.perform2dimSpectralSmoothing(dataslice, time_spacing, period_min, period_max, wn_min, wn_max, do_plot = do_plot, save_debug= 0)
         filtered_olr[:,ilat,:] = filtered_data
 
-    return (mjoindex_omi.olr_handling.OLRData(filtered_olr, olr.time, olr.lat, olr.long))
+    return (olr.OLRData(filtered_olr, olr.time, olr.lat, olr.long))
 
 #        fig = plt.figure()
 #        plt.contourf(np.squeeze(filtered_olr[0,:,:]))
@@ -183,7 +187,7 @@ class WKFilter:
     def perform2dimSpectralSmoothing(self, data, time_spacing, period_min, period_max, wn_min, wn_max, do_plot = 0, save_debug= 0):
         """
         Bandpass-filters OLR data in time- and longitude direction according to
-        the original Kiladis algoithm.
+        the original Kiladis algorithm.
 
         Note that the temporal and longitudinal dimension have in principle
         different characteristics, so that they are in detail treated a bit
@@ -237,7 +241,7 @@ class WKFilter:
         orig_nt,nl=orig_data.shape
 
         for idx_l in range(0,nl):
-            orig_data[:,idx_l] = detrendTS(orig_data[:,idx_l])
+            orig_data[:, idx_l] = detrendTS(orig_data[:, idx_l])
 
         if save_debug:
             self.DebugDetrendedOLR = np.copy(orig_data)
@@ -402,8 +406,8 @@ class WKFilterValidator:
         self.__do_plot = do_plot
 
     def validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions(self):
-        kiladis_olr = Datasets.OLR.loadKiladisBinaryOLRDataTwicePerDay(self.__data_exchange_dir + "/olr.2x.7918.b")
-        testdata = np.squeeze(kiladis_olr.OLRData[:,0,:]) #select one latitude
+        kiladis_olr = loadKiladisBinaryOLRDataTwicePerDay(self.__data_exchange_dir + "/olr.2x.7918.b")
+        testdata = np.squeeze(kiladis_olr.olr[:,0,:]) #select one latitude
         self.validate_WKFilter_perform2dimSpectralSmoothing(testdata, 0.5, 30., 96., 0., 720)
 
     def validate_WKFilter_perform2dimSpectralSmoothing(self, data, time_spacing, period_min, period_max, wn_min, wn_max,):
@@ -608,6 +612,41 @@ class WKFilterValidator:
         f = FortranFile(filename, 'r')
         record1 = np.squeeze(f.read_record('(131072,144)<complex64'))
         return record1
+
+def loadKiladisBinaryOLRDataTwicePerDay(filename):
+    nt=28970 #known from execution of kiladis fortran code
+
+    time=np.zeros(nt,dtype='datetime64[m]')
+
+    lat = np.arange(-90,90.1,2.5)
+    nlat= lat.size
+    long = np.arange(0,360, 2.5)
+    nlong= long.size
+
+    olrdata = np.zeros([nt, nlat, nlong],dtype='f4')
+    f = FortranFile(filename, 'r')
+    for i_t in range(0,nt):
+        record1 = np.squeeze(f.read_record('(1,7)<i4'))
+        year = str(record1[0])
+        month = str(record1[1]).zfill(2)
+        day=str(record1[2]).zfill(2)
+        hour=str(record1[3]).zfill(2)
+        date = np.datetime64(year + '-' + month + '-' + day + 'T' + hour + ':00')
+        time[i_t]=date
+        #print(record1)
+        olr_record = f.read_record('(145,73)<f4').reshape(nlat,145)
+        #((xx(lon,lat),lon=1,NLON),lat=soutcalc,noutcalc)
+#        if(i_t == 0):
+#            print(olr_record.shape)
+#            print(record1[0])
+#            print(olr_record[0,:])
+#            print(olr_record[69,:])
+        olrdata[i_t,:,:] = olr_record[:,0:nlong] #the first longitude is repeated at the end in this file, so skip last value
+        #print(i_t, ':', date)
+    f.close()
+    #print(time.shape)
+    result=olr.OLRData(olrdata, time, lat, long[0:nlong])
+    return result
 
 
 
