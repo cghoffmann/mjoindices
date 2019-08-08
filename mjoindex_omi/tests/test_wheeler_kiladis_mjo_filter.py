@@ -1,24 +1,34 @@
-import numpy as np
-from scipy.io import FortranFile
-
 import subprocess
-import mjoindex_omi.olr_handling as olr
-import subprocess
+from pathlib import Path
 
 import numpy as np
-from scipy.io import FortranFile
 
-import mjoindex_omi.olr_handling as olr
+import mjoindex_omi.wheeler_kiladis_mjo_filter as wkfilter
+
+testdata_dir = Path(__file__).parent / "testdata"
+
+def test_filter_MJOCondition_lat0deg():
+    reference_dir = testdata_dir / "WKFilterReference" / "lat0degPyIdx36"
+    # FIXME Try to use common OLR data
+    # olr_dir = Path("/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/")
+    # raw_olr = loadKiladisBinaryOLRDataTwicePerDay(olr_dir / "olr.2x.7918.b")
+    # test_olr = np.squeeze(raw_olr.olr[:, 36, :])
+    test_olr = wkfilter.loadKiladisOriginalOLR(reference_dir / "OLROriginal.b")
+
+    validator = wkfilter.WKFilterValidator(test_olr, reference_dir, do_plot=0, atol=1e-8, rtol=100.)
+    errors = validator.validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions()
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-def configure_and_run_fortran_code(lat_index: int):
+def configure_and_run_fortran_code(lat_index_fortran: int):
     fortranfile = "/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/stfilt_CHDebugOutput_MJOConditions_Automatic.f"
     scriptfile = "/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/compileAndStartFilter_CHDebugOutputMJOCond_Automatic.sh"
     with open(fortranfile, 'r') as file:
         # read a list of lines into data
         data = file.readlines()
     # now change the 2nd line, note that you have to add a newline
-    data[112] = "      parameter (soutcalc=%i,noutcalc=%i)  ! Region of output 90ns AUTOMATIC CHANGE!\n" %(lat_index,lat_index)
+    data[112] = "      parameter (soutcalc=%i,noutcalc=%i)  ! Region of output 90ns AUTOMATIC CHANGE!\n" %(lat_index_fortran,lat_index_fortran)
 
     # and write everything back
     with open(fortranfile, 'w') as file:
@@ -26,10 +36,11 @@ def configure_and_run_fortran_code(lat_index: int):
     out = subprocess.call([scriptfile],cwd="/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/")
     print(out)
 
+
 def check_test_input_OLRData():
-    data_exchange_dir = "/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/"
-    kiladis_olr = loadKiladisBinaryOLRDataTwicePerDay(data_exchange_dir + "/olr.2x.7918.b")
-    k_inputOLR = loadKiladisOriginalOLR(data_exchange_dir + "/OLROriginal.b")
+    data_exchange_dir = Path("/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/")
+    kiladis_olr = wkfilter.loadKiladisBinaryOLRDataTwicePerDay(data_exchange_dir / "olr.2x.7918.b")
+    k_inputOLR = wkfilter.loadKiladisOriginalOLR(data_exchange_dir / "OLROriginal.b")
 
     found = None
     for i in range(0, kiladis_olr.olr.shape[1]):
@@ -40,50 +51,5 @@ def check_test_input_OLRData():
     print(np.mean(testdata - k_inputOLR))
 
 
-def loadKiladisOriginalOLR(filename):
-    nl = 144
-    nt = 28970
-    f = FortranFile(filename, 'r')
-    olr=np.zeros([nt,nl])
-    for i_l in range(0,nl):
-        record1 = np.squeeze(f.read_record('(1,28970)<f4'))
-        olr[:,i_l] = record1
-    return olr
-
-def loadKiladisBinaryOLRDataTwicePerDay(filename):
-    nt=28970 #known from execution of kiladis fortran code
-
-    time=np.zeros(nt,dtype='datetime64[m]')
-
-    lat = np.arange(-90,90.1,2.5)
-    nlat= lat.size
-    long = np.arange(0,360, 2.5)
-    nlong= long.size
-
-    olrdata = np.zeros([nt, nlat, nlong],dtype='f4')
-    f = FortranFile(filename, 'r')
-    for i_t in range(0,nt):
-        record1 = np.squeeze(f.read_record('(1,7)<i4'))
-        year = str(record1[0])
-        month = str(record1[1]).zfill(2)
-        day=str(record1[2]).zfill(2)
-        hour=str(record1[3]).zfill(2)
-        date = np.datetime64(year + '-' + month + '-' + day + 'T' + hour + ':00')
-        time[i_t]=date
-        #print(record1)
-        olr_record = f.read_record('(145,73)<f4').reshape(nlat,145)
-        #((xx(lon,lat),lon=1,NLON),lat=soutcalc,noutcalc)
-#        if(i_t == 0):
-#            print(olr_record.shape)
-#            print(record1[0])
-#            print(olr_record[0,:])
-#            print(olr_record[69,:])
-        olrdata[i_t,:,:] = olr_record[:,0:nlong] #the first longitude is repeated at the end in this file, so skip last value
-        #print(i_t, ':', date)
-    f.close()
-    #print(time.shape)
-    result=olr.OLRData(olrdata, time, lat, long[0:nlong])
-    return result
-
-configure_and_run_fortran_code(73)
-check_test_input_OLRData()
+#configure_and_run_fortran_code(29)
+#check_test_input_OLRData()

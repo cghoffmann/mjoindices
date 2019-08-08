@@ -23,9 +23,18 @@ if not olr_data_filename.is_file():
 originalOMIDataDirname = Path(__file__).parents[1] / "tests" / "testdata" / "OriginalOMI"
 preprocessed_olr_file = Path(__file__).parent / "example_data" / "PreprocessedOLR.npz"
 
+reference_dir = Path(__file__).parents[1] / "tests" / "testdata" / "WKFilterReference" / "lat0degPyIdx36"
+# FIXME Try to use common OLR data
+#olr_dir = Path("/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/")
+#raw_olr = loadKiladisBinaryOLRDataTwicePerDay(olr_dir / "olr.2x.7918.b")
+#test_olr = np.squeeze(raw_olr.olr[:, 36, :])
+test_olr = wkfilter.loadKiladisOriginalOLR(reference_dir / "OLROriginal.b")
+validator = wkfilter.WKFilterValidator(test_olr, reference_dir, do_plot=1, atol=1e-8, rtol=100.)
+errors = validator.validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions()
 
-validator = wkfilter.WKFilterValidator(data_exchange_dir="/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/")
-validator.validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions()
+
+#validator = wkfilter.WKFilterValidator(data_exchange_dir="/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/")
+#validator.validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions()
 
 
 
