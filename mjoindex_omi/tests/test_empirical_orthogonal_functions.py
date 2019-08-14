@@ -105,17 +105,27 @@ def test_EOFData_basic_properties():
     long = np.array([0., 5.])
     eof1 = np.array([1, 2, 3, 4, 5, 6])
     eof2 = np.array([10, 20, 30, 40, 50, 60])
-    target = eof.EOFData(lat, long, eof1, eof2, explained_variance_eof1=0.1, explained_variance_eof2=0.2,
-                         eigenvalue_eof1=1.1, eigenvalue_eof2=2.2)
+    eigenvalues = np.array([1.1, 2.2, 3.3, 4.4, 5.5, 6.6])
+    explained_variances = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
+    target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
 
+    if not np.all(target.explained_variances == explained_variances):
+        errors.append("Explained variances not correct")
     if not target.explained_variance_eof1 == 0.1:
         errors.append("Explained variance of EOF1 not correct")
     if not target.explained_variance_eof2 == 0.2:
         errors.append("Explained variance of EOF2 not correct")
+    if not target.sum_of_explained_variances == np.sum(explained_variances):
+        errors.append("Sum of explained variances not correct")
+    if not np.all(target.eigenvalues == eigenvalues):
+        errors.append("Eigenvalues not correct")
     if not target.eigenvalue_eof1 == 1.1:
         errors.append("Eigenvalue of EOF1 not correct")
     if not target.eigenvalue_eof2 == 2.2:
         errors.append("Eigenvalue of EOF2 not correct")
+    if not target.no_observations == 87:
+         errors.append("Number of observations not correct")
 
     eof1 = np.array([(1, 2), (3, 4), (5, 6)])
     eof2 = np.array([(10, 20), (30, 40), (50, 60)])
@@ -170,6 +180,26 @@ def test_initialization_exceptions():
         target = eof.EOFData(lat, long, eof1, eof2)
     if "correspond to latitude axis" not in str(e.value):
         errors.append("axis check failed")
+
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eof1 = np.array([1, 2, 3, 4, 5, 6])
+    eof2 = np.array([10, 20, 30, 40, 50, 60])
+    eigenvalues = np.array([1.1, 2.2, 3.3, 4.4, 5.5])
+    with pytest.raises(AttributeError) as e:
+        target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues)
+    if "Eigenvalues (if not None) must have" not in str(e.value):
+        errors.append("Eigenvalue check failed")
+
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eof1 = np.array([1, 2, 3, 4, 5, 6])
+    eof2 = np.array([10, 20, 30, 40, 50, 60])
+    explained_variances = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
+    with pytest.raises(AttributeError) as e:
+        target = eof.EOFData(lat, long, eof1, eof2, explained_variances=explained_variances)
+    if "Explained variances (if not None) must have" not in str(e.value):
+        errors.append("Explained Variance check failed")
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
@@ -322,34 +352,47 @@ def test_EOFDataForAllDOYs_doy_getfunctions():
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
+
 def test_EOFDataForAllDOYs_alldoy_getfunctions():
     doys = eof.doy_list()
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
-    explained_variance_eof1 = np.arange(1, doys.size+1, 1)+ 111
-    explained_variance_eof2 = np.arange(1, doys.size + 1, 1) + 1111
-    eigenvalue_eof1 = np.arange(1, doys.size + 1, 1) + 11111
-    eigenvalue_eof2 = np.arange(1, doys.size + 1, 1) + 111111
+    explained_variances = np.array([ np.arange(1, doys.size+1, 1)+ 111,
+                                     np.arange(1, doys.size + 1, 1) + 222,
+                                     np.arange(1, doys.size + 1, 1) + 333,
+                                     np.arange(1, doys.size + 1, 1) + 444,
+                                     np.arange(1, doys.size + 1, 1) + 555,
+                                     np.arange(1, doys.size + 1, 1) + 666])
+    eigenvalues = np.array([np.arange(1, doys.size + 1, 1) + 1111,
+                            np.arange(1, doys.size + 1, 1) + 2222,
+                            np.arange(1, doys.size + 1, 1) + 3333,
+                            np.arange(1, doys.size + 1, 1) + 4444,
+                            np.arange(1, doys.size + 1, 1) + 5555,
+                            np.arange(1, doys.size + 1, 1) + 6666])
+    no_obs = doys * 5
+
     eofs = []
     for doy in doys:
         eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2,
-                                explained_variance_eof1=explained_variance_eof1[doy-1],
-                                explained_variance_eof2=explained_variance_eof2[doy-1],
-                                eigenvalue_eof1=eigenvalue_eof1[doy-1],
-                                eigenvalue_eof2=eigenvalue_eof2[doy-1]))
+                                explained_variances=np.squeeze(explained_variances[:, doy-1]),
+                                eigenvalues=np.squeeze(eigenvalues[:, doy-1]), no_observations=no_obs[doy-1]))
     target = eof.EOFDataForAllDOYs(eofs)
 
     errors = []
-    if not np.all(target.explained_variance1_for_all_doys() == explained_variance_eof1):
+    if not np.all(target.explained_variance1_for_all_doys() == explained_variances[0,:]):
         errors.append("Explained variance 1 incorrect")
-    if not np.all(target.explained_variance2_for_all_doys() == explained_variance_eof2):
+    if not np.all(target.explained_variance2_for_all_doys() == explained_variances[1,:]):
         errors.append("Explained variance 2 incorrect")
-    if not np.all(target.eigenvalue1_for_all_doys() == eigenvalue_eof1):
+    if not np.all(target.eigenvalue1_for_all_doys() == eigenvalues[0,:]):
         errors.append("Eigenvalue 1 incorrect")
-    if not np.all(target.eigenvalue2_for_all_doys() == eigenvalue_eof2):
+    if not np.all(target.eigenvalue2_for_all_doys() == eigenvalues[1,:]):
         errors.append("Eigenvalue 2 incorrect")
+    if not np.all(target.total_explained_variance_for_all_doys() == np.sum(explained_variances, axis=0)):
+        errors.append("Total explained variance incorrect")
+    if not np.all(target.no_observations_for_all_doys() == no_obs):
+        errors.append("number of observations incorrect")
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
@@ -387,14 +430,29 @@ def test_save_all_eofs_to_dir(tmp_path):
 
 def test_save_all_eofs_to_npzfile(tmp_path):
     filename = tmp_path / "test.npz"
+    doys = eof.doy_list()
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
+    explained_variances = np.array([np.arange(1, doys.size + 1, 1) + 111,
+                                    np.arange(1, doys.size + 1, 1) + 222,
+                                    np.arange(1, doys.size + 1, 1) + 333,
+                                    np.arange(1, doys.size + 1, 1) + 444,
+                                    np.arange(1, doys.size + 1, 1) + 555,
+                                    np.arange(1, doys.size + 1, 1) + 666])
+    eigenvalues = np.array([np.arange(1, doys.size + 1, 1) + 1111,
+                            np.arange(1, doys.size + 1, 1) + 2222,
+                            np.arange(1, doys.size + 1, 1) + 3333,
+                            np.arange(1, doys.size + 1, 1) + 4444,
+                            np.arange(1, doys.size + 1, 1) + 5555,
+                            np.arange(1, doys.size + 1, 1) + 6666])
+    no_obs = doys * 5
+
     eofs = []
-    for doy in range(1, 367):
+    for doy in doys:
         eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
-        eofs.append(eof.EOFData(lat, long, eof1, eof2, explained_variance_eof1=1.1*doy, explained_variance_eof2=2.2*doy,
-                                eigenvalue_eof1=0.1*doy, eigenvalue_eof2=0.2*doy))
+        eofs.append(eof.EOFData(lat, long, eof1, eof2, explained_variances=np.squeeze(explained_variances[:, doy-1]),
+                                eigenvalues=np.squeeze(eigenvalues[:, doy-1]), no_observations=no_obs[doy-1]))
     target = eof.EOFDataForAllDOYs(eofs)
     target.save_all_eofs_to_npzfile(filename)
 
@@ -446,6 +504,4 @@ def test_load_all_original_eofs_from_directory():
 
 def test_doy_list():
     target = eof.doy_list()
-    assert np.all(target==np.arange(1,367,1))
-
-test_EOFData_basic_properties()
+    assert np.all(target==np.arange(1, 367, 1))

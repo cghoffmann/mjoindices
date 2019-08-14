@@ -9,12 +9,18 @@ from pathlib import Path
 from typing import Tuple
 
 import numpy as np
-
+import warnings
+import importlib
+eofs_spec = importlib.util.find_spec("eofs")
+eofs_package_available = eofs_spec is not None
+if eofs_package_available:
+    import eofs.standard as eofs_package
 import mjoindex_omi.empirical_orthogonal_functions as eof
 import mjoindex_omi.olr_handling as olr
 import mjoindex_omi.principal_components as pc
 import mjoindex_omi.tools as tools
 import mjoindex_omi.wheeler_kiladis_mjo_filter as wkfilter
+
 
 
 # #################EOF calculation
@@ -32,12 +38,15 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
     return olrdata_filtered
 
 
-def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation="Kutzbach1967") -> eof.EOFDataForAllDOYs:
+def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation="internal") -> eof.EOFDataForAllDOYs:
+    if implementation == "eofs_package" and not eofs_package_available:
+        raise AttributeError("Selected calculation with external eofs package, but package not available. Use "
+                             "internal implementation or install eofs package")
     doys = eof.doy_list()
     eofs = []
     for doy in doys:
         print("Calculationg for DOY %i" % doy)
-        if (implementation == "SVD_eofs_package"):
+        if (implementation == "eofs_package"):
             singleeof = calc_eofs_for_doy_using_eofs_package(olrdata, doy)
         else:
             singleeof = calc_eofs_for_doy(olrdata, doy)
@@ -53,113 +62,72 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
     nlat = olrdata.lat.size
     nlong = olrdata.long.size
     olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60)
+    ntime = olr_maps_for_doy.shape[0]
     # doyOLR_3dim = self.__olrdata_filtered.returnAverageOLRForIndividualDOY(doy,window_length=60)
     # doyOLR_3dim = np.mean(doyOLR_3dim,axis=0)
+    # FIXME: remove weights code if not needed
+    # weights= np.empty_like(olr_maps_for_doy)
+    # for i_t in range(0,ntime):
+    #    for i_lon in range (0, nlong):
+    #        for i_lat in range (0,nlat):
+    #            weights[i_t, i_lat, i_lon] = np.cos(np.deg2rad(olrdata.lat[i_lat]))
+    #olr_maps_for_doy = olr_maps_for_doy * weights
 
-    ntime = olr_maps_for_doy.shape[0]
+
     N = ntime
     M = nlat * nlong
     # FIXME: The sollowing reshape iincluding the transpose etc. Is this correct? Rule: If original Kiladis Grid is used, the EOFs must be compatible to the saved ones.
     F = np.reshape(olr_maps_for_doy,
                    [N, M]).T  # vector: only one dimension. Length given by original longitude and latitude bins
-    R = np.matmul(F, F.T) / N
+    R = np.matmul(F, F.T) / N  # FIXME ( has to  N-1 ? See own PCA presentation
+    if not np.allclose(R, R.T):
+        warnings.warn("Covariance matrix is not symmetric within defined tolerance")
     L, E = np.linalg.eig(R)
-    total_var = np.sum(L)
+    if not np.allclose(np.imag(L), 0.):
+        warnings.warn("Imaginary part of at least one Eigenvalue greater than expected. Neglecting it anyway")
+    L = np.real(L)
     order = (np.flip(L.argsort()))
-    # print(order)
-    order = order[:2]
     L = L[order]
-    varianceExplained = L / total_var  # See Kutzbach Eq 12
+    E = E[:, order]
+    if not np.allclose(np.imag(E[:, 0:2]), 0.):
+        warnings.warn("Imaginary part of one of the first two Eigenvectors greater than expected. Neglecting it anyway")
+    E = np.real(E)
+
+    total_var = np.sum(L)
+    explainedVariances = L / total_var  # See Kutzbach Eq 12
+    # print(order)
+    #order = order[:2]
+    #L = L[order]
+
     # print("total var:", total_var)
     # print("L",L)
-    E = E[:, order]  # is that right?
+    #E = E[:, order]  # is that right?
     eof1_vec = np.squeeze(E[:, 0])
     eof2_vec = np.squeeze(E[:, 1])
     return eof.EOFData(olrdata.lat, olrdata.long, eof1_vec, eof2_vec,
-                       explained_variance_eof1=varianceExplained[0], explained_variance_eof2=varianceExplained[1],
-                       eigenvalue_eof1=L[0], eigenvalue_eof2=L[1])
+                       eigenvalues=L, explained_variances=explainedVariances, no_observations=N)
 
 
 def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
-    raise NotImplementedError()
+    if eofs_package_available:
+        nlat = olrdata.lat.size
+        nlong = olrdata.long.size
+        olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60)
 
-
-#
-#     nlat = self.__olrdata_filtered.LatGrid.size
-#     nlong = self.__olrdata_filtered.LongGrid.size
-#     doyOLR_3dim = self.__olrdata_filtered.returnOLRForDOY(doy,window_length=60)
-#     #doyOLR_3dim = self.__olrdata_filtered.returnAverageOLRForIndividualDOY(doy,window_length=60)
-#
-#     N=doyOLR_3dim.shape[0]
-#     print("N", N)
-#     M =nlat*nlong
-#     F = np.reshape(doyOLR_3dim,[N,M]).T  #vector: only one dimension. Length given by original longitude and latitude bins
-#
-#     print("F:", F.shape)
-#     solver = Eof(F.T)
-#     eofs = solver.eofs(neofs=2)
-#     print("VarianceFraction",solver.varianceFraction())
-#     plt.plot(solver.varianceFraction())
-#     print(np.sum(solver.varianceFraction()))
-#
-#     varianceExplained = solver.varianceFraction(neigs=2)
-#
-#     L=solver.eigenvalues(neigs=2)
-#
-#     print("L", L)
-#
-#     print("EOFs:", eofs.shape)
-#     eof1_map = np.reshape(eofs[0,:],[nlat,nlong])
-#     eof2_map = np.reshape(eofs[1,:],[nlat,nlong])
-#
-#     print("EOF1: ", eof1_map.shape)
-#
-#
-#     #        R = np.matmul(F,F.T)/N
-#     #        L,E =  numpy.linalg.eig(R)
-#     #        total_var = np.sum(L)
-#     #        order = (np.flip(L.argsort()))
-#     #        #print(order)
-#     #        order=order[:2]
-#     #        L=L[order] / total_var #See Kutzbach Eq 12
-#     #        #print("total var:", total_var)
-#     #        #print("L",L)
-#     #        E=E[:,order] #is that right?
-#     #        eof1_vec = np.squeeze(E[:,0])
-#     #        eof2_vec = np.squeeze(E[:,1])
-#     #        eof1_map = np.reshape(eof1_vec,[nlat,nlong])
-#     #        eof2_map = np.reshape(eof2_vec,[nlat,nlong])
-#     return eof1_map, eof2_map, L, varianceExplained
-
-
-def __correctSpontaneousSignChangesofEOFs(self, eof1_raw, eof2_raw):
-    eof1 = eof1_raw
-    eof2 = eof2_raw
-    for idx in range(0, eof1_raw.shape[2]):
-        print(idx)
-        if (
-                idx > 0):  # Account for spoantaneous sign changes in the EOFS from one day to another. This is metioned in Kiladis 2014 and has been confirmed by G.Kiladis via Mail.
-            if (np.mean(np.abs(eof1[:, :, idx] + eof1[:, :, idx - 1])) < np.mean(np.abs(eof1[:, :, idx] - eof1[:, :,
-                                                                                                          idx - 1]))):  # if abs(sum) is lower than abs(diff), than the signs are different...
-                eof1[:, :, idx] = -1 * eof1[:, :, idx]
-                print("Sign of EOF1 switched")
-            if (np.mean(np.abs(eof2[:, :, idx] + eof2[:, :, idx - 1])) < np.mean(
-                    np.abs(eof2[:, :, idx] - eof2[:, :, idx - 1]))):
-                eof2[:, :, idx] = -1 * eof2[:, :, idx]
-                print("Sign of EOF2 switched")
-        else:  # to adjust the signs of the EOFs of the first day, the original Kiladis selection is used.
-            (eof1_orig_vec, eof2_orig_vec) = MJO.RecalculateOMI.load_OMI_EOFs(
-                os.path.dirname(os.path.abspath(__file__)) + '/', 1)
-            eof1_orig_map = np.reshape(eof1_orig_vec, [17, 144])
-            eof2_orig_map = np.reshape(eof2_orig_vec, [17, 144])
-            if (np.mean(np.abs(eof1[:, :, idx] + eof1_orig_map)) < np.abs(np.mean(eof1[:, :,
-                                                                                  idx] - eof1_orig_map))):  # if abs(sum) is lower than abs(diff), than the signs are different...
-                eof1[:, :, idx] = -1 * eof1[:, :, idx]
-                print("Sign of EOF1 switched")
-            if (np.mean(np.abs(eof2[:, :, idx] + eof2_orig_map)) < np.mean(np.abs(eof2[:, :, idx] - eof2_orig_map))):
-                eof2[:, :, idx] = -1 * eof2[:, :, idx]
-                print("Sign of EOF2 switched")
-    return (eof1, eof2)
+        ntime = olr_maps_for_doy.shape[0]
+        N = ntime
+        M = nlat * nlong
+        F = np.reshape(olr_maps_for_doy,
+                       [N, M]).T  # vector: only one dimension. Length given by original longitude and latitude bins
+        solver = eofs_package.Eof(F.T)
+        # FIXME Do we have to think about complex values here?
+        eofs = solver.eofs(neofs=2)
+        explainedVariances = solver.varianceFraction()
+        L=solver.eigenvalues()
+        return eof.EOFData(olrdata.lat, olrdata.long, np.squeeze(eofs[0, :]), np.squeeze(eofs[1, :]),
+                           eigenvalues=L, explained_variances=explainedVariances, no_observations=N)
+    else:
+        raise ModuleNotFoundError("eofs")
 
 
 def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
@@ -196,10 +164,9 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
                        target.long,
                        eof1_switched,
                        eof2_switched,
-                       explained_variance_eof1=target.explained_variance_eof1,
-                       explained_variance_eof2=target.explained_variance_eof2,
-                       eigenvalue_eof1=target.eigenvalue_eof1,
-                       eigenvalue_eof2=target.eigenvalue_eof2)
+                       eigenvalues=target.eigenvalues,
+                       explained_variances=target.explained_variances,
+                       no_observations=target.no_observations)
 
 
 # def switchSignOfEOFs(inputDir, outputdir, file_prefix, eof_number=0):

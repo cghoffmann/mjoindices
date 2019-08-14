@@ -21,8 +21,8 @@ class EOFData:
 
     # FIXME: Enable saving of statictical values (to csv or nz?) and force setting them?
     def __init__(self, lat: np.ndarray, long: np.ndarray, eof1: np.ndarray, eof2: np.ndarray,
-                 explained_variance_eof1: float = None, explained_variance_eof2: float = None,
-                 eigenvalue_eof1: float = None, eigenvalue_eof2: float = None) -> None:
+                 explained_variances: np.ndarray = None,  eigenvalues: np.ndarray = None,
+                 no_observations: int = None) -> None:
         """Initialization with all necessary variables.
 
         :param lat: The latitude grid, which represents the EOF data
@@ -33,10 +33,12 @@ class EOFData:
         latitude, etc.) or a 2-dim map with the first index representing the latitude axis and the second index
         representing longitude.
         :param eof2: Values of the second EOF. Structure similar to the first EOF
-        :param explained_variance_eof1: Fraction of data variance that is explained by EOF1. Can be None
-        :param explained_variance_eof2: Fraction of data variance that is explained by EOF2. Can be None
-        :param eigenvalue_eof1: Eigenvalue corresponding to EOF1. Can be None
-        :param eigenvalue_eof1: Eigenvalue corresponding to EOF2. Can be None
+        :param explained_variances: Fraction of data variance that is explained by each EOF for all EOFs. Can be None
+        :param eigenvalues: Eigenvalue corresponding to each EOF. Can be None
+        :param no_observations: The number of observations that went into the EOF calculation
+
+        Note that the explained variances are not independent from the Eigenvalues. However, this class is meant to store
+        the data only, so that the computation logic is somewhere else and we keep redundant data here intentionally.
         """
         if not eof1.shape == eof2.shape:
             raise AttributeError("EOF1 and EOF2 must have the same shape")
@@ -60,10 +62,20 @@ class EOFData:
         else:
             raise AttributeError("EOF1 and EOF2 must have a dimension of 1 or 2.")
 
-        self._explained_variance_eof1 = explained_variance_eof1
-        self._explained_variance_eof2 = explained_variance_eof2
-        self._eigenvalue_eof1 = eigenvalue_eof1
-        self._eigenvalue_eof2 = eigenvalue_eof2
+        if eigenvalues is not None:
+            if eigenvalues.size != self.eof1vector.size:
+                raise AttributeError("Eigenvalues (if not None) must have same length as the second axis of the EOFs")
+            self._eigenvalues = eigenvalues.copy()
+        else:
+            self._eigenvalues = None
+        if explained_variances is not None:
+            if explained_variances.size != self.eof1vector.size:
+                raise AttributeError("Explained variances (if not None) must have same length as the second axis of "
+                                     "the EOFs")
+            self._explained_variances = explained_variances.copy()
+        else:
+            self._explained_variances = None
+        self._no_observations = no_observations
 
     # FIXME: Unittest for operator
     # FIXME: Typing
@@ -74,10 +86,9 @@ class EOFData:
                 and np.all(self.long == other.long)
                 and np.all(self.eof1vector == other.eof1vector)
                 and np.all(self.eof2vector == other.eof2vector)
-                and self._explained_variance_eof1 == other.explained_variance_eof1
-                and self._explained_variance_eof2 == other.explained_variance_eof2
-                and self._eigenvalue_eof1 == other.eigenvalue_eof1
-                and self._eigenvalue_eof2 == other.eigenvalue_eof2)
+                and np.all(self._explained_variances == other.explained_variances)
+                and np.all(self._eigenvalues == other.eigenvalues)
+                and self._no_observations == other.no_observations)
 
     @property
     def lat(self) -> np.ndarray:
@@ -122,12 +133,23 @@ class EOFData:
         return self.reshape_to_map(self._eof2)
 
     @property
+    def explained_variances(self) -> np.ndarray:
+        """
+        All explained variances
+        :return: Explained Variances. Might be None.
+        """
+        return self._explained_variances
+
+    @property
     def explained_variance_eof1(self) -> float:
         """
         Explained variance of EOF1 as fraction between 0 and 1
         :return: Variance. Might be None.
         """
-        return self._explained_variance_eof1
+        if self._explained_variances is not None:
+            return self._explained_variances[0]
+        else:
+            return None
 
     @property
     def explained_variance_eof2(self) -> float:
@@ -135,7 +157,26 @@ class EOFData:
         Explained variance of EOF1 as fraction between 0 and 1
         :return: Variance. Might be None.
         """
-        return self._explained_variance_eof2
+        if self._explained_variances is not None:
+            return self._explained_variances[1]
+        else:
+            return None
+
+    @property
+    def sum_of_explained_variances(self) -> float:
+        """
+        Returns the total variance explained by all EOFs. This should be close to 1., if the calculation was successful
+        :return: The total explained variance
+        """
+        return np.sum(self._explained_variances)
+
+    @property
+    def eigenvalues(self) -> np.ndarray:
+        """
+        All Eigenvalues
+        :return: Eigenvalues. Might be None.
+        """
+        return self._eigenvalues
 
     @property
     def eigenvalue_eof1(self) -> float:
@@ -143,7 +184,10 @@ class EOFData:
         Eigenvalue of EOF1
         :return: Eigenvalue. Might be None.
         """
-        return self._eigenvalue_eof1
+        if self.eigenvalues is not None:
+            return self._eigenvalues[0]
+        else:
+            return None
 
     @property
     def eigenvalue_eof2(self) -> float:
@@ -151,7 +195,18 @@ class EOFData:
         Eigenvalue of EOF2
         :return: Eigenvalue. Might be None.
         """
-        return self._eigenvalue_eof2
+        if self.eigenvalues is not None:
+            return self._eigenvalues[1]
+        else:
+            return None
+
+    @property
+    def no_observations(self) -> int:
+        """
+        The number of observations that went into the calculation of the EOF
+        :return: The number
+        """
+        return self._no_observations
 
     def reshape_to_vector(self, map: np.ndarray) -> np.ndarray:
         """ Reshapes the horizontally distributed data to fit into a vector The vector elements will contain the
@@ -291,6 +346,29 @@ class EOFDataForAllDOYs:
             result.append(self.eofdata_for_doy(doy).explained_variance_eof2)
         return result
 
+    def total_explained_variance_for_all_doys(self):
+        """
+        Returns a vector with 366 elements containing the sum of the explained variance over all EOFs.
+        :return: The variance vector. Should by clode to 1 for each DOY if computation was successful
+        """
+        doys = doy_list()
+        result = []
+        for doy in doys:
+            result.append(self.eofdata_for_doy(doy).sum_of_explained_variances)
+        return result
+
+    def no_observations_for_all_doys(self):
+        """
+        Returns a vector with 366 elements containing the number of observations that went into the computation of the
+        EOFs.
+        :return: The number of observations vector
+        """
+        doys = doy_list()
+        result = []
+        for doy in doys:
+            result.append(self.eofdata_for_doy(doy).no_observations)
+        return result
+
     def eigenvalue1_for_all_doys(self):
         """
         Returns a vector with 366 elements containing the Eigenvalue of EOF1 for each DOY.
@@ -336,17 +414,22 @@ class EOFDataForAllDOYs:
         doys = doy_list()
         eof1 = np.empty((doys.size, self.lat.size * self.long.size))
         eof2 = np.empty((doys.size, self.lat.size * self.long.size))
+        eigenvalues = np.empty((doys.size, self.lat.size * self.long.size))
+        explained_variances = np.empty((doys.size, self.lat.size * self.long.size))
+        no_observations = np.empty(doys.size)
         for i in range(0, doys.size):
             eof = self.eof_list[i]
             eof1[i, :] = eof.eof1vector
             eof2[i, :] = eof.eof2vector
+            eigenvalues[i, :] = eof.eigenvalues
+            explained_variances[i, :] = eof.explained_variances
+            no_observations[i] = eof.no_observations
         np.savez(filename,
                  eof1=eof1,
                  eof2=eof2,
-                 explained_variance_eof1= self.explained_variance1_for_all_doys(),
-                 explained_variance_eof2=self.explained_variance2_for_all_doys(),
-                 eigenvalue_eof1=self.eigenvalue1_for_all_doys(),
-                 eigenvalue_eof2=self.eigenvalue2_for_all_doys(),
+                 explained_variances=explained_variances,
+                 eigenvalues=eigenvalues,
+                 no_observations=no_observations,
                  lat=self.lat,
                  long=self.long)
 
@@ -450,16 +533,15 @@ def restore_all_eofs_from_npzfile(filename: Path) -> EOFDataForAllDOYs:
         eof2 = data["eof2"]
         lat = data["lat"]
         long = data["long"]
-        explained_variance_eof1 = data["explained_variance_eof1"]
-        explained_variance_eof2 = data["explained_variance_eof2"]
-        eigenvalue_eof1 = data["eigenvalue_eof1"]
-        eigenvalue_eof2 = data["eigenvalue_eof2"]
+        eigenvalues = data["eigenvalues"]
+        explained_variances = data["explained_variances"]
+        no_observations=data["no_observations"]
     eofs = []
     for i in range(0, doy_list().size):
         eof = EOFData(lat, long, np.squeeze(eof1[i, :]), np.squeeze(eof2[i, :]),
-                      explained_variance_eof1=np.squeeze(explained_variance_eof1[i]),
-                      explained_variance_eof2=np.squeeze(explained_variance_eof2[i]),
-                      eigenvalue_eof1=np.squeeze(eigenvalue_eof1[i]), eigenvalue_eof2=np.squeeze(eigenvalue_eof2[i]))
+                      eigenvalues=np.squeeze(eigenvalues[i, :]),
+                      explained_variances=np.squeeze(explained_variances[i, :]),
+                      no_observations=no_observations[i])
         eofs.append(eof)
     return EOFDataForAllDOYs(eofs)
 
@@ -501,7 +583,8 @@ def plot_correlation_with_original_eofs(recalc_eof: EOFDataForAllDOYs, orig_eof:
     return fig
 
 
-def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs) -> Figure:
+def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs, include_total_variance:bool = False,
+                                         include_no_observations: bool = False) -> Figure:
     """
     Plots the explained variance values for EOF1 and EOF2 for all doys.
     Comparable to Kiladis (2014), Fig. 1
@@ -510,12 +593,28 @@ def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs) -> Figure:
     """
     doygrid = doy_list()
     fig = plt.figure("plot_explained_variance_for_all_doys", clear=True, figsize=(6, 4), dpi=150)
-    p1, = plt.plot(doygrid, eofs.explained_variance1_for_all_doys(), color="blue", label="EOF1")
-    p2, = plt.plot(doygrid, eofs.explained_variance2_for_all_doys(), color="red", label="EOF2")
-    plt.xlabel("DOY")
-    plt.ylabel("Fraction of explained variance")
+    ax1 = fig.add_subplot(111)
+    handles = []
+    p1, = ax1.plot(doygrid, eofs.explained_variance1_for_all_doys(), color="blue", label="EOF1")
+    handles.append(p1)
+    p2, = ax1.plot(doygrid, eofs.explained_variance2_for_all_doys(), color="red", label="EOF2")
+    handles.append(p2)
+    if include_total_variance:
+        p3, = ax1.plot(doygrid, eofs.total_explained_variance_for_all_doys(), color="green", label="Total")
+        handles.append(p3)
+    ax1.set_xlabel("DOY")
+    ax1.set_ylabel("Fraction of explained variance")
+
+    if include_no_observations:
+        ax2 = ax1.twinx()
+        p4, = ax2.plot(doygrid, eofs.no_observations_for_all_doys(), color="black", label="Number of observations", linestyle="--")
+        handles.append(p4)
+        ax2.set_ylabel("Number of observations")
+        ymin = np.min(eofs.no_observations_for_all_doys()) - np.min(eofs.no_observations_for_all_doys()) * 0.1
+        ymax = np.max(eofs.no_observations_for_all_doys()) + np.max(eofs.no_observations_for_all_doys()) * 0.1
+        ax2.set_ylim([ymin, ymax])
     plt.title("Explained variance")
-    plt.legend(handles=(p1, p2))
+    plt.legend(handles=tuple(handles))
     return fig
 
 
@@ -536,12 +635,12 @@ def plot_eigenvalues_for_all_doys(eofs: EOFDataForAllDOYs) -> Figure:
     return fig
 
 
-def plot_original_individual_eof_map(path, doy) -> Figure:
+def plot_original_individual_eof_map(path, doy: int) -> Figure:
     eofdata = load_original_eofs_for_doy(path, doy)
     return plot_individual_eof_map(eofdata, doy=doy)
 
 
-def plot_individual_eof_map_from_file(filename, doy) -> Figure:
+def plot_individual_eof_map_from_file(filename, doy: int) -> Figure:
     eofdata = load_single_eofs_from_txt_file(filename, doy=doy)
     return plot_individual_eof_map(eofdata)
 
@@ -572,7 +671,7 @@ def plot_individual_eof_map(eofdata: EOFData, doy: int = None) -> Figure:
     return fig
 
 
-def plot_individual_eof_map_comparison(orig_eof: EOFData, compare_eof: EOFData, doy=None):
+def plot_individual_eof_map_comparison(orig_eof: EOFData, compare_eof: EOFData, doy: int=None):
 
     # TODO: Print correlation values into figure
     print(np.corrcoef(orig_eof.eof1vector, compare_eof.eof1vector))
@@ -622,5 +721,30 @@ def plot_individual_eof_map_comparison(orig_eof: EOFData, compare_eof: EOFData, 
 
     return fig
 
+
+def plot_individual_explained_variance_all_eofs(eof:EOFData, doy: int = None, max_eof_number: int = None) -> Figure:
+    """
+    Plots the explained variances for each EOF function, but only for EOF data of one DOY.
+    This is useful to confirm that the first 2 EOFs covers actually most of the variance.
+    :param eof: The EOFData object
+    :param doy: The corresponding DOY. Only used to display it in the title.
+    :param max_eof_number: The limit of the x-axis.
+    :return: Handle to the figure
+    """
+    eof_number_grid = np.arange(0, eof.explained_variances.size , 1) + 1
+    fig = plt.figure("plot_individual_explained_variance_all_eofs", clear=True, figsize=(6, 4), dpi=150)
+    ax = fig.add_subplot(111)
+    p1 = plt.plot(eof_number_grid, eof.explained_variances, color="blue", label="Explained variance" )
+    if max_eof_number is not None:
+        plt.xlim(0.5, max_eof_number)
+    plt.xlabel("EOF Number")
+    plt.ylabel("Fraction of explained variance")
+    plt.text(0.6, 0.9, "Sum over all EOFs: %1.2f" % eof.sum_of_explained_variances, transform=ax.transAxes)
+
+    if doy is not None:
+        plt.title("Explained variance for DOY %i" % doy)
+    else:
+        plt.title("Explained variance")
+    return fig
 
 

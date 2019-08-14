@@ -61,9 +61,8 @@ class OLRData:
         covered by the data, one gets 2*window_length + 1 entries per year in the result.
         :return: A matrix: 1. index doys, 2. index lat, 3 index long.
         """
-        inds = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length)
-        #FIXME: np, squeeze is needed, otherwise 4 dimenasions: (1, time, lat, long). why?
-        return np.squeeze(self.olr[inds, :, :])
+        inds, doys  = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length)
+        return self.olr[inds, :, :]
 
     def save_to_npzfile(self, filename: Path) -> None:
         """

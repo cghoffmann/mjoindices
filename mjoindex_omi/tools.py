@@ -29,20 +29,31 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray]) -> typing.Un
     return result
 
 
-def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: int) -> np.ndarray:
+def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: int) -> typing.Tuple:
+    """
+    Finds the indices in a given array of dates that fit into a particular window of DOYs (days in the year).
+    This task sounds trivial, but is a little bit complicated by the appearance of leap years.
 
+    :param dates: The array of dates
+    :param center_doy: the center of the wanted window
+    :param window_length: the length of the window to both sides in days. The window spans 2*window_length+1 days in
+     total.
+    :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.
+    """
     doys = calc_day_of_year(dates)
+    center_inds = np.nonzero(doys == center_doy)
 
-    lower_limit = center_doy - window_length
-    if lower_limit < 1:
-        lower_limit = lower_limit + 366 #FIXME: precise length of year has to be cosidered here.
-    upper_limit = center_doy + window_length
-    if upper_limit > 366:
-        upper_limit = upper_limit - 366
+    # switch from DOYs to real dates to use built-in leap year functionality
+    startdates = dates[center_inds] - np.timedelta64(window_length,'D')
+    too_early_inds = np.nonzero(startdates < dates[0])
+    startdates[too_early_inds] = dates[0]
 
-    if lower_limit <= upper_limit:
-        inds_consider = ((doys >= lower_limit) & (doys <= upper_limit))
-    else:
-        inds_consider = ((doys >= lower_limit) | (doys <= upper_limit))
+    enddates=dates[center_inds] + np.timedelta64(window_length,'D')
+    too_late_inds = np.nonzero(enddates > dates[-1])
+    enddates[too_late_inds] = dates[-1]
 
-    return np.where(inds_consider == True)
+    resulting_idxlist = np.array([],dtype="int")
+    for ind,startdate in enumerate(startdates):
+        one_window_indices = np.nonzero((dates >= startdates[ind]) & (dates <= enddates[ind]))[0]
+        resulting_idxlist = np.concatenate((resulting_idxlist, one_window_indices))
+    return np.asarray(resulting_idxlist), doys[resulting_idxlist]
