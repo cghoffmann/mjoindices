@@ -124,6 +124,12 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int) -> eof.
         eofs = solver.eofs(neofs=2)
         explainedVariances = solver.varianceFraction()
         L=solver.eigenvalues()
+
+        if L.size < M:
+            # This usually happens if the covariance matrix did not have full rank (e.g. N<M). Missing Eigenvalues
+            # are 0 and can be simply padded here
+            L = np.pad(L, (0, M-L.size), 'constant', constant_values=(0, 0))
+            explainedVariances = np.pad(explainedVariances, (0, M-explainedVariances.size), 'constant', constant_values=(0, 0))
         return eof.EOFData(olrdata.lat, olrdata.long, np.squeeze(eofs[0, :]), np.squeeze(eofs[1, :]),
                            eigenvalues=L, explained_variances=explainedVariances, no_observations=N)
     else:
