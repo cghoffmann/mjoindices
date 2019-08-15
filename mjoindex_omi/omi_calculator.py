@@ -209,7 +209,7 @@ def calculatePCsFromOLR(olrData: olr.OLRData,
                         period_start: np.datetime64,
                         period_end: np.datetime64,
                         useQuickTemporalFilter=False) -> pc.PCData:
-    restictedOLRData = olr.restrictOLRDataToTimeRange(olrData, period_start, period_end)
+    restictedOLRData = olr.restrict_time_coverage(olrData, period_start, period_end)
     resampledOLRData = olr.resample_spatial_grid(restictedOLRData, eofdata.lat, eofdata.long)
     if useQuickTemporalFilter:
         filtered_olr_data = wkfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(resampledOLRData)

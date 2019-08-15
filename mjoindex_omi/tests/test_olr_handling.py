@@ -85,9 +85,9 @@ def test_resampleOLRToOriginalSpatialGrid():
 #FIXME: also test resample_spatial_grid
 @pytest.mark.skipif(not os.path.isfile(olr_data_filename),
                     reason="OLR data file not available")
-def test_restrictOLRDataToTimeRange():
+def test_restrict_time_coverage():
     origOLR = olr.load_noaa_interpolated_olr(olr_data_filename)
-    target = olr.restrictOLRDataToTimeRange(origOLR, np.datetime64("1974-06-01"), np.datetime64("1974-06-03"))
+    target = olr.restrict_time_coverage(origOLR, np.datetime64("1974-06-01"), np.datetime64("1974-06-03"))
     errors = []
     print(target.time)
     print(origOLR.time[:3])
