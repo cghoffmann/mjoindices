@@ -30,13 +30,13 @@ eof50File = Path(__file__).parent / "example_data" / "EOF1.txt"
 eof50File_kil = Path(__file__).parent / "example_data" / "EOF1_kil.txt"
 
 
-raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
-shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
-interpolated_olr = olr.resample_spatial_grid_to_original(shorter_olr)
+#raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+#shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
+#interpolated_olr = olr.resample_spatial_grid_to_original(shorter_olr)
 #
-preprocessed_olr = omi.preprocess_olr(interpolated_olr)
+#preprocessed_olr = omi.preprocess_olr(interpolated_olr)
 #
-preprocessed_olr.save_to_npzfile(preprocessed_olr_file)
+#preprocessed_olr.save_to_npzfile(preprocessed_olr_file)
 
 #preprocessed_olr = olr.restore_from_npzfile(preprocessed_olr_file)
 #
@@ -53,20 +53,20 @@ preprocessed_olr.save_to_npzfile(preprocessed_olr_file)
 #orig_eof50 = eof.load_original_eofs_for_doy(originalOMIDataDirname,50)
 
 
-testeofs = omi.calc_eofs_from_preprocessed_olr(preprocessed_olr)
+#testeofs = omi.calc_eofs_from_preprocessed_olr(preprocessed_olr)
 #testeofs.save_all_eofs_to_dir(eofDir)
-testeofs.save_all_eofs_to_npzfile(eofnpzfile)
+#testeofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 #testeofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 
 #origeofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-#pp_eofs = omi.correct_spontaneous_sign_changes_in_eof_series(testeofs,doy1reference=origeofs.eofdata_for_doy(1))
+#pp_eofs = omi.post_process_eofs(testeofs, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=294, interpolation_end_doy=315)
 
 #eof.plot_correlation_with_original_eofs(pp_eofs, origeofs)
 #eof.plot_explained_variance_for_all_doys(pp_eofs)
-#eof.plot_explained_variance_for_all_doys(pp_eofs, include_total_variance=True)
+#eof.plot_explained_variance_for_all_doys(pp_eofs, include_total_variance=True,include_no_observations=True)
 #eof.plot_eigenvalues_for_all_doys(pp_eofs)
-#doy=1
+#doy=300
 #eof.plot_individual_eof_map(pp_eofs.eofdata_for_doy(doy), doy)
 #eof.plot_individual_eof_map_comparison(origeofs.eofdata_for_doy(doy), pp_eofs.eofdata_for_doy(doy), doy)
 #eof.plot_individual_explained_variance_all_eofs(pp_eofs.eofdata_for_doy(doy), doy=doy, max_eof_number=10)
@@ -75,9 +75,9 @@ testeofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ############# Section with OLR data, which has been filtered with G. Kiladis data
 
-preprocessed_kil_olr = wkfilter.loadKiladisBinaryOLRDataOncePerDay(Path("/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/olr.3096.eastw.1x.7918.b"))
-shorter_preprocessed_kil_olr = olr.restrict_time_coverage(preprocessed_kil_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
-interpolated_preprocessed_kil_olr = olr.resample_spatial_grid_to_original(shorter_preprocessed_kil_olr)
+#preprocessed_kil_olr = wkfilter.loadKiladisBinaryOLRDataOncePerDay(Path("/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/olr.3096.eastw.1x.7918.b"))
+#shorter_preprocessed_kil_olr = olr.restrict_time_coverage(preprocessed_kil_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
+#interpolated_preprocessed_kil_olr = olr.resample_spatial_grid_to_original(shorter_preprocessed_kil_olr)
 
 #testeofdoy50_kil = omi.calc_eofs_for_doy(interpolated_preprocessed_kil_olr, 366)
 #testeofdoy50_kil_eofs = omi.calc_eofs_for_doy_using_eofs_package(interpolated_preprocessed_kil_olr, 366)
@@ -88,12 +88,13 @@ interpolated_preprocessed_kil_olr = olr.resample_spatial_grid_to_original(shorte
 #print(testeofdoy50_kil.explained_variance_eof1)
 #print(testeofdoy50_kil.sum_of_explained_variances)
 
-kileofs = omi.calc_eofs_from_preprocessed_olr(interpolated_preprocessed_kil_olr)
-kileofs.save_all_eofs_to_npzfile(eofnpzfile_kil)
+#kileofs = omi.calc_eofs_from_preprocessed_olr(interpolated_preprocessed_kil_olr)
+#kileofs.save_all_eofs_to_npzfile(eofnpzfile_kil)
 
 #kileofs = eof.restore_all_eofs_from_npzfile(eofnpzfile_kil)
 #origeofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-#pp_eofs_kil = omi.correct_spontaneous_sign_changes_in_eof_series(kileofs,doy1reference=origeofs.eofdata_for_doy(1))
+#pp_eofs_kil = omi.post_process_eofs(kileofs, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=294, interpolation_end_doy=315)
+
 #eof.plot_correlation_with_original_eofs(pp_eofs_kil, origeofs)
 #eof.plot_explained_variance_for_all_doys(pp_eofs_kil,include_total_variance=True, include_no_observations=True)
 #eof.plot_explained_variance_for_all_doys(pp_eofs_kil,include_total_variance=False, include_no_observations=False)
@@ -104,11 +105,11 @@ kileofs.save_all_eofs_to_npzfile(eofnpzfile_kil)
 #eof.plot_individual_explained_variance_all_eofs(pp_eofs_kil.eofdata_for_doy(doy), doy=doy)
 
 
-kileofs_eofspackage = omi.calc_eofs_from_preprocessed_olr(interpolated_preprocessed_kil_olr, implementation="eofs_package")
-kileofs_eofspackage.save_all_eofs_to_npzfile(eofnpzfile_kil_eofs)
+#kileofs_eofspackage = omi.calc_eofs_from_preprocessed_olr(interpolated_preprocessed_kil_olr, implementation="eofs_package")
+#kileofs_eofspackage.save_all_eofs_to_npzfile(eofnpzfile_kil_eofs)
 
-#kileofs_eofspackage = eof.restore_all_eofs_from_npzfile(eofnpzfile_kil_eofs)
-#origeofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-#pp_eofs_kil_eofspackage = omi.correct_spontaneous_sign_changes_in_eof_series(kileofs_eofspackage,doy1reference=origeofs.eofdata_for_doy(1))
-#eof.plot_correlation_with_original_eofs(pp_eofs_kil_eofspackage, origeofs)
-#eof.plot_explained_variance_for_all_doys(pp_eofs_kil_eofspackage)
+kileofs_eofspackage = eof.restore_all_eofs_from_npzfile(eofnpzfile_kil_eofs)
+origeofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
+pp_eofs_kil_eofspackage = omi.post_process_eofs(kileofs_eofspackage, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=294, interpolation_end_doy=315)
+eof.plot_correlation_with_original_eofs(pp_eofs_kil_eofspackage, origeofs)
+#eof.plot_explained_variance_for_all_doys(pp_eofs_kil_eofspackage, include_no_observations=True, include_total_variance=True)

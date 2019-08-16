@@ -54,8 +54,11 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation="intern
     return eof.EOFDataForAllDOYs(eofs)
 
 
-def post_process_eofs(eofdata: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
-    return correct_spontaneous_sign_changes_in_eof_series(eofdata)
+def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: eof.EOFData = None, interpolate_eofs = False, interpolation_start_doy: int = 304, interpolation_end_doy: int = 313) -> eof.EOFDataForAllDOYs:
+    pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
+    if interpolate_eofs:
+        pp_eofs = interpolate_eofs_between_doys(pp_eofs, start_doy=interpolation_start_doy, end_doy=interpolation_end_doy)
+    return pp_eofs
 
 
 def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
@@ -173,6 +176,51 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
                        eigenvalues=target.eigenvalues,
                        explained_variances=target.explained_variances,
                        no_observations=target.no_observations)
+
+
+def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 304, end_doy: int = 313) -> eof.EOFDataForAllDOYs:
+    """
+    Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
+    This should only rarely be used and has only been implemented to closely reproduce the original OMI values. Here,
+    the EOFs of 1 November to 8 November have been replaced by a interpolation according to Kiladis (2014). However, we
+    find that the original EOFs are better reproduced if the replacement takes place during DOY 294 and DOY 315.
+    ATTENTION: The statistical values like the explained variance are not changed by this routine. So they further on
+    represent the original results of the PCA also for the interpolated EOFs.
+    :param eofs: The complete EOF series to interpolate
+    :param start_doy: The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first
+    element, which will be replaced by the interpolation. Default value corresponds to 31 October.
+    :param end_doy:  The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last
+    element, which will be replaced by the interpolation. Default value corresponds to 9 November.
+    :return: The complere EOF series with the interpolated values
+    """
+    # FIXME: Why does correlation not maximize with original Kiladis dates (see and change comment)
+    doys = eof.doy_list()
+    start_idx = start_doy - 1
+    end_idx = end_doy - 1
+    eof_len = eofs.lat.size * eofs.long.size
+    eofs1 = np.empty((doys.size, eof_len))
+    eofs2 = np.empty((doys.size, eof_len))
+    # FIXME: Maybe this could be solved more efficiently by using internal numpy functions for multidimenasional operations
+    for (idx, doy) in enumerate(doys):
+        eofs1[idx,:] = eofs.eof1vector_for_doy(doy)
+        eofs2[idx,:] = eofs.eof2vector_for_doy(doy)
+
+    for i in range (0, eof_len):
+        eofs1[start_idx+1:end_idx-1, i] = np.interp(doys[start_idx+1:end_idx-1], [doys[start_idx], doys[end_idx]],
+                                                    [eofs1[start_idx, i], eofs1[end_idx, i]])
+        eofs2[start_idx+1:end_idx-1, i] = np.interp(doys[start_idx+1:end_idx-1], [doys[start_idx], doys[end_idx]],
+                                                    [eofs2[start_idx, i], eofs2[end_idx, i]])
+    interpolated_eofs = []
+    for (idx, doy) in enumerate(doys):
+        orig_eof = eofs.eofdata_for_doy(doy)
+        interpolated_eofs.append(eof.EOFData(orig_eof.lat, orig_eof.long, np.squeeze(eofs1[idx,:]),
+                                             np.squeeze(eofs2[idx,:]),explained_variances=orig_eof.explained_variances,
+                                             eigenvalues=orig_eof.eigenvalues, no_observations=orig_eof.no_observations)
+                                 )
+    return eof.EOFDataForAllDOYs(interpolated_eofs)
+
+
+
 
 
 # def switchSignOfEOFs(inputDir, outputdir, file_prefix, eof_number=0):
