@@ -30,9 +30,12 @@ eof50File = Path(__file__).parent / "example_data" / "EOF1.txt"
 eof50File_kil = Path(__file__).parent / "example_data" / "EOF1_kil.txt"
 
 
-#raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
-#shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
-#interpolated_olr = olr.resample_spatial_grid_to_original(shorter_olr)
+raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+
+shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
+interpolated_olr = olr.resample_spatial_grid_to_original(shorter_olr)
+
+olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 #
 #preprocessed_olr = omi.preprocess_olr(interpolated_olr)
 #
@@ -108,8 +111,8 @@ eof50File_kil = Path(__file__).parent / "example_data" / "EOF1_kil.txt"
 #kileofs_eofspackage = omi.calc_eofs_from_preprocessed_olr(interpolated_preprocessed_kil_olr, implementation="eofs_package")
 #kileofs_eofspackage.save_all_eofs_to_npzfile(eofnpzfile_kil_eofs)
 
-kileofs_eofspackage = eof.restore_all_eofs_from_npzfile(eofnpzfile_kil_eofs)
-origeofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-pp_eofs_kil_eofspackage = omi.post_process_eofs(kileofs_eofspackage, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=294, interpolation_end_doy=315)
-eof.plot_correlation_with_original_eofs(pp_eofs_kil_eofspackage, origeofs)
+#kileofs_eofspackage = eof.restore_all_eofs_from_npzfile(eofnpzfile_kil_eofs)
+#origeofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
+#pp_eofs_kil_eofspackage = omi.post_process_eofs(kileofs_eofspackage, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=294, interpolation_end_doy=315)
+#eof.plot_correlation_with_original_eofs(pp_eofs_kil_eofspackage, origeofs)
 #eof.plot_explained_variance_for_all_doys(pp_eofs_kil_eofspackage, include_no_observations=True, include_total_variance=True)

@@ -33,6 +33,8 @@ def calc_eofs_from_olr(olrdata: olr.OLRData) -> eof.EOFDataForAllDOYs:
 
 
 def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
+    if np.mean(olrdata.olr) < 0:
+        warnings.warn("OLR data apparently given in negative numbers. Here it is assumed that OLR is positive.")
     # interpolate on particular spatial grid?
     olrdata_filtered = wkfilter.filterOLRForMJO_EOF_Calculation(olrdata)
     return olrdata_filtered
@@ -281,7 +283,7 @@ def regress_3dim_data_onto_eofs(data: object, eofdata: eof.EOFDataForAllDOYs) ->
 
     for idx, val in enumerate(data.time):
         day = val
-        olr_singleday = data.extractDayFromOLRData(day)
+        olr_singleday = data.get_olr_for_date(day)
         doy = tools.calc_day_of_year(day)
         (pc1_single, pc2_single) = regress_vector_onto_eofs(
             eofdata.eofdata_for_doy(doy).reshape_to_vector(olr_singleday),

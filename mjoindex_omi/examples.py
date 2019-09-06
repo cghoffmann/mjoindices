@@ -12,8 +12,9 @@ import numpy as np
 
 import mjoindex_omi.olr_handling as olr
 import mjoindex_omi.omi_calculator as omi
-import mjoindex_omi.plotting as plotting
+import mjoindex_omi.principal_components as pc
 
+#FIXME: Place contents of this file into examples directory
 
 def compare_Recalc_OMI_PCs_OriginalOLROriginalEOFs():
     """ Calulates and plots OMI PCs, which are compareable to the original PCs.
@@ -54,8 +55,8 @@ def compare_Recalc_OMI_PCs_OriginalOLROriginalEOFs():
         useQuickTemporalFilter=True)
     target.save_pcs_to_txt_file(resultfile)
 
-    fig = plotting.plotComparisonOrigRecalcPCs(resultfile, origOMIPCsFilename, np.datetime64("2011-06-01"),
-                                               np.datetime64("2011-12-31"))
+    orig_pcs = pc.load_original_pcs_from_txt_file(origOMIPCsFilename)
+    fig = pc.plot_comparison_orig_calc_pcs(target, orig_pcs, np.datetime64("2011-06-01"), np.datetime64("2011-12-31"))
     fig.show()
     fig.savefig(resultfigfile.with_suffix(".png"), bbox_inches='tight')
     fig.savefig(resultfigfile.with_suffix(".pdf"), bbox_inches='tight')

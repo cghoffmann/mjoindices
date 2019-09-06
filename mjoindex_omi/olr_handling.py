@@ -3,8 +3,10 @@ from pathlib import Path
 
 import numpy as np
 import scipy
+import warnings
 import scipy.interpolate
 from scipy.io import netcdf
+import matplotlib.pyplot as plt
 
 import mjoindex_omi.tools as tools
 
@@ -19,12 +21,11 @@ class OLRData:
     def __init__(self, olr, time, lat, long):
         if( olr.shape[0] == time.size):
             self._olr = olr.copy()
-            self._time= time.copy()
+            self._time = time.copy()
             self._lat = lat.copy()
             self._long = long.copy()
         else:
             raise ValueError('Length of time grid does not fit to first dimension of OLR data cube')
-
 
     @property
     def olr(self):
@@ -42,8 +43,9 @@ class OLRData:
     def long(self):
         return self._long
 
-    def extractDayFromOLRData(self, date):
+    def get_olr_for_date(self, date):
         #FIXME: Check if date is in time range
+        #FIXME: Unit-tested?
         cand = self.time == date
         #print(cand)
         #print(self.__olr_data_cube.shape)
@@ -152,3 +154,22 @@ def restore_from_npzfile(filename: Path) -> OLRData:
         lat = data["lat"]
         long = data["long"]
     return OLRData(olr, time, lat, long)
+
+def plot_olr_map_for_date(olr: OLRData, date: np.datetime64):
+    # TODO: Plot underlying map
+
+    mapdata = olr.get_olr_for_date(date)
+
+    fig, axs = plt.subplots(1, 1, num="plot_olr_map_for_date", clear=True,
+                            figsize=(10, 5), dpi=150, sharex=True, sharey=True)
+    plt.subplots_adjust(wspace=0.35, hspace=0.35)
+
+    ax = axs
+
+    c = ax.contourf(olr.long, olr.lat, mapdata)
+    fig.colorbar(c, ax=ax, label="OLR")
+    ax.set_title("OLR")
+    ax.set_ylabel("Latitude [°]")
+    ax.set_xlabel("Longitude [°]")
+
+    return fig
