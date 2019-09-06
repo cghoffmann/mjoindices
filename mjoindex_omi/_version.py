@@ -43,7 +43,7 @@ def get_config():
     cfg.style = "pep440"
     cfg.tag_prefix = "mjoindex_omi-"
     cfg.parentdir_prefix = "mjoindex_omi-"
-    cfg.versionfile_source = "./_version.py"
+    cfg.versionfile_source = "./mjoindex_omi/_version.py"
     cfg.verbose = False
     return cfg
 

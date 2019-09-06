@@ -1,1 +1,2 @@
 ./_version.py export-subst
+./mjoindex_omi/_version.py export-subst
