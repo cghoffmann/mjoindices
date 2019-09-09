@@ -11,6 +11,7 @@ from typing import Tuple
 import numpy as np
 import warnings
 import importlib
+
 eofs_spec = importlib.util.find_spec("eofs")
 eofs_package_available = eofs_spec is not None
 if eofs_package_available:
@@ -22,13 +23,16 @@ import mjoindex_omi.tools as tools
 import mjoindex_omi.wheeler_kiladis_mjo_filter as wkfilter
 
 
-
 # #################EOF calculation
 
-def calc_eofs_from_olr(olrdata: olr.OLRData) -> eof.EOFDataForAllDOYs:
+def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: eof.EOFData = None,
+                       interpolate_eofs: bool = False, interpolation_start_doy: int = 304,
+                       interpolation_end_doy: int = 313) -> eof.EOFDataForAllDOYs:
     preprocessed_olr = preprocess_olr(olrdata)
-    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr)
-    result = post_process_eofs(raw_eofs)
+    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation)
+    result = post_process_eofs(raw_eofs, sign_doy1reference=sign_doy1reference, interpolate_eofs=interpolate_eofs,
+                               interpolation_start_doy=interpolation_start_doy,
+                               interpolation_end_doy=interpolation_end_doy)
     return result
 
 
@@ -40,7 +44,7 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
     return olrdata_filtered
 
 
-def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation="internal") -> eof.EOFDataForAllDOYs:
+def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = "internal") -> eof.EOFDataForAllDOYs:
     if implementation == "eofs_package" and not eofs_package_available:
         raise AttributeError("Selected calculation with external eofs package, but package not available. Use "
                              "internal implementation or install eofs package")
@@ -56,10 +60,13 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation="intern
     return eof.EOFDataForAllDOYs(eofs)
 
 
-def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: eof.EOFData = None, interpolate_eofs = False, interpolation_start_doy: int = 304, interpolation_end_doy: int = 313) -> eof.EOFDataForAllDOYs:
+def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: eof.EOFData = None,
+                      interpolate_eofs: bool = False, interpolation_start_doy: int = 304,
+                      interpolation_end_doy: int = 313) -> eof.EOFDataForAllDOYs:
     pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
     if interpolate_eofs:
-        pp_eofs = interpolate_eofs_between_doys(pp_eofs, start_doy=interpolation_start_doy, end_doy=interpolation_end_doy)
+        pp_eofs = interpolate_eofs_between_doys(pp_eofs, start_doy=interpolation_start_doy,
+                                                end_doy=interpolation_end_doy)
     return pp_eofs
 
 
@@ -76,8 +83,7 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
     #    for i_lon in range (0, nlong):
     #        for i_lat in range (0,nlat):
     #            weights[i_t, i_lat, i_lon] = np.cos(np.deg2rad(olrdata.lat[i_lat]))
-    #olr_maps_for_doy = olr_maps_for_doy * weights
-
+    # olr_maps_for_doy = olr_maps_for_doy * weights
 
     N = ntime
     M = nlat * nlong
@@ -101,12 +107,12 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
     total_var = np.sum(L)
     explainedVariances = L / total_var  # See Kutzbach Eq 12
     # print(order)
-    #order = order[:2]
-    #L = L[order]
+    # order = order[:2]
+    # L = L[order]
 
     # print("total var:", total_var)
     # print("L",L)
-    #E = E[:, order]  # is that right?
+    # E = E[:, order]  # is that right?
     eof1_vec = np.squeeze(E[:, 0])
     eof2_vec = np.squeeze(E[:, 1])
     return eof.EOFData(olrdata.lat, olrdata.long, eof1_vec, eof2_vec,
@@ -128,13 +134,14 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int) -> eof.
         # FIXME Do we have to think about complex values here?
         eofs = solver.eofs(neofs=2)
         explainedVariances = solver.varianceFraction()
-        L=solver.eigenvalues()
+        L = solver.eigenvalues()
 
         if L.size < M:
             # This usually happens if the covariance matrix did not have full rank (e.g. N<M). Missing Eigenvalues
             # are 0 and can be simply padded here
-            L = np.pad(L, (0, M-L.size), 'constant', constant_values=(0, 0))
-            explainedVariances = np.pad(explainedVariances, (0, M-explainedVariances.size), 'constant', constant_values=(0, 0))
+            L = np.pad(L, (0, M - L.size), 'constant', constant_values=(0, 0))
+            explainedVariances = np.pad(explainedVariances, (0, M - explainedVariances.size), 'constant',
+                                        constant_values=(0, 0))
         return eof.EOFData(olrdata.lat, olrdata.long, np.squeeze(eofs[0, :]), np.squeeze(eofs[1, :]),
                            eigenvalues=L, explained_variances=explainedVariances, no_observations=N)
     else:
@@ -160,13 +167,15 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
 
 def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, target=eof.EOFData) -> eof.EOFData:
     if (np.mean(np.abs(target.eof1vector + reference.eof1vector))
-            < np.mean(np.abs(target.eof1vector - reference.eof1vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
+            < np.mean(np.abs(
+                target.eof1vector - reference.eof1vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
         eof1_switched = -1 * target.eof1vector
         print("Sign of EOF1 switched")
     else:
         eof1_switched = target.eof1vector
     if (np.mean(np.abs(target.eof2vector + reference.eof2vector))
-            < np.mean(np.abs(target.eof2vector - reference.eof2vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
+            < np.mean(np.abs(
+                target.eof2vector - reference.eof2vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
         eof2_switched = -1 * target.eof2vector
         print("Sign of EOF2 switched")
     else:
@@ -180,7 +189,8 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
                        no_observations=target.no_observations)
 
 
-def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 304, end_doy: int = 313) -> eof.EOFDataForAllDOYs:
+def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 304,
+                                  end_doy: int = 313) -> eof.EOFDataForAllDOYs:
     """
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
     This should only rarely be used and has only been implemented to closely reproduce the original OMI values. Here,
@@ -204,25 +214,25 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
     eofs2 = np.empty((doys.size, eof_len))
     # FIXME: Maybe this could be solved more efficiently by using internal numpy functions for multidimenasional operations
     for (idx, doy) in enumerate(doys):
-        eofs1[idx,:] = eofs.eof1vector_for_doy(doy)
-        eofs2[idx,:] = eofs.eof2vector_for_doy(doy)
+        eofs1[idx, :] = eofs.eof1vector_for_doy(doy)
+        eofs2[idx, :] = eofs.eof2vector_for_doy(doy)
 
-    for i in range (0, eof_len):
-        eofs1[start_idx+1:end_idx-1, i] = np.interp(doys[start_idx+1:end_idx-1], [doys[start_idx], doys[end_idx]],
-                                                    [eofs1[start_idx, i], eofs1[end_idx, i]])
-        eofs2[start_idx+1:end_idx-1, i] = np.interp(doys[start_idx+1:end_idx-1], [doys[start_idx], doys[end_idx]],
-                                                    [eofs2[start_idx, i], eofs2[end_idx, i]])
+    for i in range(0, eof_len):
+        eofs1[start_idx + 1:end_idx - 1, i] = np.interp(doys[start_idx + 1:end_idx - 1],
+                                                        [doys[start_idx], doys[end_idx]],
+                                                        [eofs1[start_idx, i], eofs1[end_idx, i]])
+        eofs2[start_idx + 1:end_idx - 1, i] = np.interp(doys[start_idx + 1:end_idx - 1],
+                                                        [doys[start_idx], doys[end_idx]],
+                                                        [eofs2[start_idx, i], eofs2[end_idx, i]])
     interpolated_eofs = []
     for (idx, doy) in enumerate(doys):
         orig_eof = eofs.eofdata_for_doy(doy)
-        interpolated_eofs.append(eof.EOFData(orig_eof.lat, orig_eof.long, np.squeeze(eofs1[idx,:]),
-                                             np.squeeze(eofs2[idx,:]),explained_variances=orig_eof.explained_variances,
+        interpolated_eofs.append(eof.EOFData(orig_eof.lat, orig_eof.long, np.squeeze(eofs1[idx, :]),
+                                             np.squeeze(eofs2[idx, :]),
+                                             explained_variances=orig_eof.explained_variances,
                                              eigenvalues=orig_eof.eigenvalues, no_observations=orig_eof.no_observations)
                                  )
     return eof.EOFDataForAllDOYs(interpolated_eofs)
-
-
-
 
 
 # def switchSignOfEOFs(inputDir, outputdir, file_prefix, eof_number=0):
