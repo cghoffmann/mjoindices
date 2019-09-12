@@ -26,9 +26,16 @@ import versioneer
 
 packages=['mjoindices', 'mjoindices.omi']
 
+# FIXME: Enter better long description (relevant for PyPi)
 setup(name='mjoindices',
       packages=packages,
       package_dir={'': 'src'},
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
-      install_requires=['numpy', 'pandas', 'pytest', 'scipy', 'matplotlib'])
+      install_requires=['numpy', 'pandas', 'pytest', 'scipy', 'matplotlib'],
+      author='Christoph G. Hoffmann',
+      author_email="christoph.hoffmann@uni-greifswald.de",
+      url="https://github.com/cghoffmann/mjoindices",
+      description="Calculation of indices that describe the Madden-Julian-Oscillation (only OMI by now)",
+      long_description="Calculation of indices that describe the Madden-Julian-Oscillation (only OMI by now)",
+      license="GNU General Public License v3")
