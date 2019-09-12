@@ -1,3 +1,4 @@
-include versioneer.py
-include ./src/mjoindex_omi/_version.py
 include LICENSE
+
+include versioneer.py
+include ./src/mjoindices/_version.py
