@@ -4,7 +4,7 @@
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
-# This file is part of mjoindex_omi
+# This file is part of mjoindices
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,10 +24,11 @@
 from setuptools import setup
 import versioneer
 
-packages=['mjoindex_omi','mjoindex_omi.tests']
+packages=['mjoindices', 'mjoindices.omi']
 
-setup(name='mjoindex_omi',
+setup(name='mjoindices',
       packages=packages,
+      package_dir={'': 'src'},
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
       install_requires=['numpy', 'pandas', 'pytest', 'scipy', 'matplotlib'])

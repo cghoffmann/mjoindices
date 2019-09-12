@@ -4,7 +4,7 @@
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
-# This file is part of mjoindex_omi
+# This file is part of mjoindices
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-import mjoindex_omi.olr_handling as olr
-import mjoindex_omi.omi_calculator as omi
-import mjoindex_omi.principal_components as pc
+import mjoindices.olr_handling as olr
+import mjoindices.omi.omi_calculator as omi
+import mjoindices.principal_components as pc
 
 olr_data_filename = Path(__file__).parent / "testdata" /"olr.day.mean.nc"
 originalOMIDataDirname = Path(__file__).parent / "testdata" / "OriginalOMI"

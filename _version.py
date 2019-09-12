@@ -41,8 +41,8 @@ def get_config():
     cfg = VersioneerConfig()
     cfg.VCS = "git"
     cfg.style = "pep440"
-    cfg.tag_prefix = "mjoindex_omi-"
-    cfg.parentdir_prefix = "mjoindex_omi-"
+    cfg.tag_prefix = "mjoindices-"
+    cfg.parentdir_prefix = "mjoindices-"
     cfg.versionfile_source = "./_version.py"
     cfg.verbose = False
     return cfg

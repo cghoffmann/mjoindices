@@ -4,7 +4,7 @@
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
-# This file is part of mjoindex_omi
+# This file is part of mjoindices
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,13 +25,13 @@ import os
 import pycodestyle
 import pytest
 
-import mjoindex_omi
+import mjoindices
 
 
 @pytest.mark.skip
 def test_codingstandard_pep8():
     style = pycodestyle.StyleGuide()
-    dirs = [os.path.dirname(mjoindex_omi.__file__)]
-    print(mjoindex_omi.__file__)
+    dirs = [os.path.dirname(mjoindices.__file__)]
+    print(mjoindices.__file__)
     result = style.check_files(dirs)
     assert result.total_errors == 0

@@ -4,7 +4,7 @@
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
-# This file is part of mjoindex_omi
+# This file is part of mjoindices
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,10 +23,7 @@
 
 from pathlib import Path
 
-import mjoindex_omi.empirical_orthogonal_functions as eof
-import mjoindex_omi.olr_handling as olr
-import mjoindex_omi.omi_calculator as omi
-import mjoindex_omi.wheeler_kiladis_mjo_filter as wkfilter
+import src.mjoindices.olr_handling as olr
 import numpy as np
 
 #FIXME: This file is totally chaotic

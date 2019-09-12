@@ -4,7 +4,7 @@
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
-# This file is part of mjoindex_omi
+# This file is part of mjoindices
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 import numpy as np
 
-import mjoindex_omi.tools as tools
+import src.mjoindices.tools as tools
 
 
 def test_calc_day_of_year_scalar():
@@ -98,7 +98,7 @@ def test_find_doy_ranges_in_dates():
         errors.append("DOY values of DOY range covering the middle of the year are wrong")
 
     dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
-    target_inds, target_doys =tools.find_doy_ranges_in_dates(dates, 10, 20)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20)
     if not target_inds.size == 20*2 + 1:
         errors.append("Length of DOY range covering the ending of the previous year is wrong")
     control = np.concatenate((np.arange(355, 366, 1), np.arange(1, 31, 1)))

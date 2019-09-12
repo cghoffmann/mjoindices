@@ -1,2 +1,2 @@
 include versioneer.py
-include ./mjoindex_omi/_version.py
+include ./src/mjoindex_omi/_version.py

@@ -4,7 +4,7 @@
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
-# This file is part of mjoindex_omi
+# This file is part of mjoindices
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,9 +26,10 @@ from pathlib import Path
 
 import numpy as np
 
-import mjoindex_omi.olr_handling as olr
-import mjoindex_omi.omi_calculator as omi
-import mjoindex_omi.principal_components as pc
+import src.mjoindices.olr_handling as olr
+import omi.omi_calculator as omi
+from src import mjoindices as pc
+
 
 #FIXME: Place contents of this file into examples directory
 

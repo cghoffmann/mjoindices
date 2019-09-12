@@ -4,7 +4,7 @@
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
-# This file is part of mjoindex_omi
+# This file is part of mjoindices
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,11 +34,11 @@ eofs_spec = importlib.util.find_spec("eofs")
 eofs_package_available = eofs_spec is not None
 if eofs_package_available:
     import eofs.standard as eofs_package
-import mjoindex_omi.empirical_orthogonal_functions as eof
-import mjoindex_omi.olr_handling as olr
-import mjoindex_omi.principal_components as pc
-import mjoindex_omi.tools as tools
-import mjoindex_omi.wheeler_kiladis_mjo_filter as wkfilter
+import mjoindices.empirical_orthogonal_functions as eof
+import mjoindices.olr_handling as olr
+import mjoindices.principal_components as pc
+import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
+import mjoindices.tools as tools
 
 
 # #################EOF calculation
