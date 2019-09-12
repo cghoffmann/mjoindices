@@ -26,9 +26,9 @@ from pathlib import Path
 
 import numpy as np
 
-import src.mjoindices.olr_handling as olr
-import omi.omi_calculator as omi
-from src import mjoindices as pc
+import mjoindices.olr_handling as olr
+import mjoindices.omi.omi_calculator as omi
+import mjoindices.principal_components as pc
 
 
 #FIXME: Place contents of this file into examples directory

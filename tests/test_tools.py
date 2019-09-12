@@ -23,7 +23,7 @@
 
 import numpy as np
 
-import src.mjoindices.tools as tools
+import mjoindices.tools as tools
 
 
 def test_calc_day_of_year_scalar():

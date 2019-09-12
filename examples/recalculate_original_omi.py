@@ -23,7 +23,7 @@
 
 from pathlib import Path
 
-import src.mjoindices.olr_handling as olr
+import mjoindices.olr_handling as olr
 import numpy as np
 
 #FIXME: This file is totally chaotic

@@ -30,7 +30,7 @@ import scipy.interpolate
 from scipy.io import netcdf
 import matplotlib.pyplot as plt
 
-import src.mjoindices.tools as tools
+import mjoindices.tools as tools
 
 """
 Created on Tue Dec  4 14:05:34 2018

@@ -30,7 +30,7 @@ import scipy
 import scipy.fftpack
 from scipy.io import FortranFile
 
-import src.mjoindices.olr_handling as olr
+import mjoindices.olr_handling as olr
 
 
 # FIXME Codestyle
