@@ -273,20 +273,20 @@ def calculatePCsFromOLRWithOriginalConditions(olrData: olr.OLRData,
     period_start = np.datetime64("1979-01-01")
     period_end = np.datetime64("2018-08-28")
     eofs = eof.load_all_original_eofs_from_directory(original_eof_dirname)
-    return calculatePCsFromOLR(olrData,
-                               eofs,
-                               period_start,
-                               period_end,
-                               useQuickTemporalFilter)
+    return calculate_pcs_from_olr(olrData,
+                                  eofs,
+                                  period_start,
+                                  period_end,
+                                  useQuickTemporalFilter)
 
 
 # Calculate The index values (principal components)
 # based on a set of already computed EOFs
-def calculatePCsFromOLR(olrData: olr.OLRData,
-                        eofdata: eof.EOFDataForAllDOYs,
-                        period_start: np.datetime64,
-                        period_end: np.datetime64,
-                        useQuickTemporalFilter=False) -> pc.PCData:
+def calculate_pcs_from_olr(olrData: olr.OLRData,
+                           eofdata: eof.EOFDataForAllDOYs,
+                           period_start: np.datetime64,
+                           period_end: np.datetime64,
+                           useQuickTemporalFilter=False) -> pc.PCData:
     restictedOLRData = olr.restrict_time_coverage(olrData, period_start, period_end)
     resampledOLRData = olr.resample_spatial_grid(restictedOLRData, eofdata.lat, eofdata.long)
     if useQuickTemporalFilter:
