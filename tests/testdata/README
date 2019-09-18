@@ -1,4 +1,4 @@
-The following files and directories should be added to ba able to run all unit tests:
+The following files and directories should be added to be able to run all tests:
 
 -olr.day.mean.nc from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
 

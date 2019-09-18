@@ -23,13 +23,14 @@
 
 import subprocess
 from pathlib import Path
-
+import pytest
 import numpy as np
 
-from src import mjoindices as wkfilter
+import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
 
 testdata_dir = Path(__file__).parent / "testdata"
 
+@pytest.mark.skip
 def test_filter_MJOCondition_lat0deg():
     reference_dir = testdata_dir / "WKFilterReference" / "lat0degPyIdx36"
     # FIXME Try to use common OLR data
