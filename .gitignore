@@ -1211,3 +1211,4 @@ venv.bak/
 /examples/example_data/EOFcalc/eof364.txt
 /examples/example_data/EOFcalc/eof365.txt
 /examples/example_data/EOFcalc/eof366.txt
+/tests/testdata/OriginalOMI/omi.1x.txt
