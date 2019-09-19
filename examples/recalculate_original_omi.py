@@ -74,13 +74,10 @@ olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 
 # Calculate the eofs. In the postprocessing, the signs of the EOFs are adjusted and the the EOF  in a period
-# around DOY 300 are replaced by an interpolation see Kiladis, 2014). The periods is somewhat braoder than stated in
-# Kiladis (2014) to achieve good agreement. The reason for this is still unclear.
+# around DOY 300 are replaced by an interpolation see Kiladis, 2014).
 eofs= omi.calc_eofs_from_olr(interpolated_olr,
-                             sign_doy1reference = orig_eofs.eofdata_for_doy(1),
-                             interpolate_eofs=True,
-                             interpolation_start_doy=294,
-                             interpolation_end_doy=315)
+                             sign_doy1reference=orig_eofs.eofdata_for_doy(1),
+                             interpolate_eofs=True)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ### Some diagnostic plots to evaluate the calculated EOFs

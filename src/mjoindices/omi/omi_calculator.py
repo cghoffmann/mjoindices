@@ -44,8 +44,8 @@ import mjoindices.tools as tools
 # #################EOF calculation
 
 def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: eof.EOFData = None,
-                       interpolate_eofs: bool = False, interpolation_start_doy: int = 304,
-                       interpolation_end_doy: int = 313) -> eof.EOFDataForAllDOYs:
+                       interpolate_eofs: bool = False, interpolation_start_doy: int = 294,
+                       interpolation_end_doy: int = 315) -> eof.EOFDataForAllDOYs:
     preprocessed_olr = preprocess_olr(olrdata)
     raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation)
     result = post_process_eofs(raw_eofs, sign_doy1reference=sign_doy1reference, interpolate_eofs=interpolate_eofs,
@@ -79,8 +79,8 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
 
 
 def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: eof.EOFData = None,
-                      interpolate_eofs: bool = False, interpolation_start_doy: int = 304,
-                      interpolation_end_doy: int = 313) -> eof.EOFDataForAllDOYs:
+                      interpolate_eofs: bool = False, interpolation_start_doy: int = 294,
+                      interpolation_end_doy: int = 315) -> eof.EOFDataForAllDOYs:
     pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
     if interpolate_eofs:
         pp_eofs = interpolate_eofs_between_doys(pp_eofs, start_doy=interpolation_start_doy,
@@ -207,13 +207,14 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
                        no_observations=target.no_observations)
 
 
-def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 304,
-                                  end_doy: int = 313) -> eof.EOFDataForAllDOYs:
+def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 294,
+                                  end_doy: int = 315) -> eof.EOFDataForAllDOYs:
     """
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
     This should only rarely be used and has only been implemented to closely reproduce the original OMI values. Here,
-    the EOFs of 1 November to 8 November have been replaced by a interpolation according to Kiladis (2014). However, we
-    find that the original EOFs are better reproduced if the replacement takes place during DOY 294 and DOY 315.
+    the EOFs have also been replaced by a interpolation according to Kiladis (2014). However, the period stated in
+    Kiladis (2014) of 1 November to 8 November seems to be too short. The author have confirmed that the right
+    interpolation period is from DOY 294 to DOY 315, which is used here as default value.
     ATTENTION: The statistical values like the explained variance are not changed by this routine. So they further on
     represent the original results of the PCA also for the interpolated EOFs.
     :param eofs: The complete EOF series to interpolate
