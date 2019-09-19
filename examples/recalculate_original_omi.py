@@ -84,18 +84,23 @@ eofs.save_all_eofs_to_npzfile(eofnpzfile)
 # Load precalculated EOFs first
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 # Check correlation with original EOFs
-eof.plot_correlation_with_original_eofs(eofs, orig_eofs)
+fig = eof.plot_correlation_with_original_eofs(eofs, orig_eofs)
+fig.savefig("EOFs_CorrelationWithOriginal.png")
 # Check the explained variance by the EOFS. Values are lower than in Kiladis, 2014, which is correct!
-eof.plot_explained_variance_for_all_doys(eofs)
+fig = eof.plot_explained_variance_for_all_doys(eofs)
+fig.savefig("EOFs_ExplainedVariance.png")
 
 # Check details of the EOF pair for a particular doy in the following
 doy=50
 # Plot EOFs for this DOY
-eof.plot_individual_eof_map(eofs.eofdata_for_doy(doy), doy)
+fig = eof.plot_individual_eof_map(eofs.eofdata_for_doy(doy), doy)
+fig.savefig("EOF_Sample.png")
 # Plot EOF pair in comparison to the original one fpr this DOY
-eof.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy)
+fig = eof.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy)
+fig.savefig("EOF_SampleComparison.png")
 # Plot the explained variance for the first 10 EOFs of this DOY to check to drop of explained variance after EOF2
-eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=doy, max_eof_number=10)
+fig = eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=doy, max_eof_number=10)
+fig.savefig("EOF_SampleExplainedVariance.png")
 
 
 # ############## Calculation of the PCs ##################
@@ -118,4 +123,6 @@ pcs.save_pcs_to_txt_file(pctxtfile)
 # ### Diagnostic plot: Comparison to original PCs
 pcs = pc.load_pcs_from_txt_file(pctxtfile)
 orig_pcs = pc.load_original_pcs_from_txt_file(originalOMIPCFile)
-pc.plot_comparison_orig_calc_pcs(pcs, orig_pcs)
+fig = pc.plot_comparison_orig_calc_pcs(pcs, orig_pcs)
+fig.savefig("PCs_TimeSeries.png")
+
