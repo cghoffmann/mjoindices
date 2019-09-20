@@ -24,12 +24,10 @@
 import copy
 import typing
 from pathlib import Path
-
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
-
 
 class EOFData:
     """
@@ -572,7 +570,7 @@ def doy_list() -> np.array:
     """
     return np.arange(1, 367, 1)
 
-
+# FIXME: Move to evaluation_tools
 def plot_correlation_with_original_eofs(recalc_eof: EOFDataForAllDOYs, orig_eof: EOFDataForAllDOYs) -> Figure:
     """
     Creates a diagnosis plot showing the correlations for all DOYs of between the original EOFs and newly
@@ -581,14 +579,9 @@ def plot_correlation_with_original_eofs(recalc_eof: EOFDataForAllDOYs, orig_eof:
     :param orig_eof: The object containing the ortiginal EOFs
     :return: Handle to the figure
     """
+    import mjoindices.evaluation_tools  # only imported here to prevent circular import
     doys = doy_list()
-    corr1 = np.zeros(doys.size)
-    corr2 = np.zeros(doys.size)
-    for idx, doy in enumerate(doys):
-        corr1[idx] = \
-            (np.corrcoef(orig_eof.eofdata_for_doy(doy).eof1vector, recalc_eof.eofdata_for_doy(doy).eof1vector))[0, 1]
-        corr2[idx] = \
-            (np.corrcoef(orig_eof.eofdata_for_doy(doy).eof2vector, recalc_eof.eofdata_for_doy(doy).eof2vector))[0, 1]
+    corr1, corr2 = mjoindices.evaluation_tools.calc_correlations_of_eofs_all_doys(orig_eof, recalc_eof)
     fig = plt.figure("plot_correlation_with_original_eofs", clear=True, figsize=(6, 4), dpi=150)
     plt.ylim([0, 1.05])
     plt.xlabel("DOY")
@@ -687,7 +680,7 @@ def plot_individual_eof_map(eofdata: EOFData, doy: int = None) -> Figure:
 
     return fig
 
-
+# FIXME: Move to evaluation_tools
 def plot_individual_eof_map_comparison(orig_eof: EOFData, compare_eof: EOFData, doy: int=None):
 
     # TODO: Print correlation values into figure

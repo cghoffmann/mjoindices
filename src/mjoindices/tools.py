@@ -23,9 +23,7 @@
 
 import datetime as dt
 import typing
-
 import numpy as np
-
 
 def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray]) -> typing.Union[int, np.ndarray]:
     """Calculates the days of the year (DOYs) for an individual date or an array of dates
