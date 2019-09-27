@@ -33,6 +33,9 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray]) -> typing.Un
     :return: the DOY or the DOYs as int.
     """
     if np.isscalar(date):
+        if date.dtype == "<M8[ns]":
+            # work around a bug, which prevents datetime64[ns] from being converted correctly to dt.datetime.
+            date = date.astype("datetime64[us]")
         temp = date.astype(dt.datetime)
         time_fragments = temp.timetuple()
         result = time_fragments[7]

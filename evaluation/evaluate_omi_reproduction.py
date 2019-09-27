@@ -27,10 +27,12 @@
 
 from pathlib import Path
 import numpy as np
+import matplotlib.pyplot as plt
 
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.evaluation_tools
 import mjoindices.principal_components as pc
+import mjoindices.tools as tools
 
 # ################ Settings. Change with respect to your system ###################
 
@@ -80,12 +82,14 @@ maxdiff_abs_2 = maxdiff_abs_2[0:-1]
 maxdiff_rel_1 = maxdiff_rel_1[0:-1]
 maxdiff_rel_2 = maxdiff_rel_2[0:-1]
 
-print("Maximum rel. difference EOFs1: %f" % np.max(maxdiff_rel_1))
-print("Maximum rel. difference EOFs2: %f" % np.max(maxdiff_rel_2))
-print("Maximum abs. difference EOFs1: %f" % np.max(maxdiff_abs_1))
-print("Maximum abs. difference EOFs2: %f" % np.max(maxdiff_abs_2))
+print("Maximum rel. difference EOFs1: %f" % np.median(maxdiff_rel_1))
+print("Maximum rel. difference EOFs2: %f" % np.median(maxdiff_rel_2))
+print("Maximum abs. difference EOFs1: %f" % np.median(maxdiff_abs_1))
+print("Maximum abs. difference EOFs2: %f" % np.median(maxdiff_abs_2))
 
 #calc also rel. mean difference
+
+#median difference
 
 #relative deviations of explained variance
 
@@ -95,9 +99,46 @@ print("Maximum abs. difference EOFs2: %f" % np.max(maxdiff_abs_2))
 #max deviation abs and rel
 #mean deviation
 
+#### correlation and rel differences of strengths
+
+pcs = pc.load_pcs_from_txt_file(pctxtfile)
+strength = np.square(pcs.pc1) + np.square(pcs.pc2)
+orig_pcs = pc.load_original_pcs_from_txt_file(originalOMIPCFile)
+orig_strength = np.square(orig_pcs.pc1) + np.square(orig_pcs.pc2)
+print(np.corrcoef(orig_strength, strength)[0, 1])
+
+mjoindices.evaluation_tools.plot_timeseries_agreement(orig_pcs.pc1, orig_pcs.time, pcs.pc1, pcs.time, title="PC1", do_print=True)
+
+mjoindices.evaluation_tools.plot_timeseries_agreement(orig_strength, orig_pcs.time, strength, pcs.time, title="MJO Strength", do_print=True)
+
+
+
+# fig, axs = plt.subplots(2, 1, num="ReproduceOriginalOMIPCs_PCs", clear=True, figsize=(8, 6), dpi=150)
+# plt.subplots_adjust(hspace=0.3)
+# fig.suptitle("Strength Recalculation")
+# ax = axs[0]
+# ax.set_title("Stength")
+# p1, = ax.plot(orig_pcs.time, orig_strength, label="Original")
+# p2, = ax.plot(pcs.time, strength, label="Recalculation")
 #
-
-
+# doys = tools.calc_day_of_year(orig_pcs.time)
+# doy_not_366_inds = np.nonzero(doys != 366)
+#
+# error_quant = (orig_strength[doy_not_366_inds]-strength[doy_not_366_inds])/np.mean(orig_strength[doy_not_366_inds])*100
+#
+# plt.hist(error_quant, bins=100)
+# print(np.mean(error_quant))
+# print(np.std(error_quant))
+# print(np.max(np.abs(error_quant)))
+#
+# fig, ax = plt.subplots(1, 1, num="ReproduceOriginalOMIPCs_PCsxx", clear=True, figsize=(8, 6), dpi=150)
+# #ax = axs[0]
+# plt.plot(orig_strength, strength, linestyle='None', marker="x")
+#
+# doys = tools.calc_day_of_year(orig_pcs.time)
+# doy366_inds = np.nonzero(doys == 366)
+# print(np.array(doy366_inds)/365)
+# plt.plot(orig_strength[doy366_inds], strength[doy366_inds], linestyle='None', marker="x", color="red")
 
 # # Check the explained variance by the EOFS. Values are lower than in Kiladis, 2014, which is correct!
 # fig = eof.plot_explained_variance_for_all_doys(eofs)
