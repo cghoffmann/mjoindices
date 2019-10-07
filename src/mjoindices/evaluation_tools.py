@@ -25,6 +25,7 @@ import typing
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+import re
 from scipy.stats import norm
 
 import mjoindices.empirical_orthogonal_functions as eof
@@ -111,8 +112,8 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs, o
     doys = eof.doy_list()
     if exclude_doy366:
         doys = doys[:-1]
-    corr_1, diff_mean_1, diff_std_1, diff_abs_percent68_1, diff_abs_percent95_1, diff_abs_percent99_1 =  calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=1, percentage=False, do_print=do_print)
-    corr_2, diff_mean_2, diff_std_2, diff_abs_percent68_2, diff_abs_percent95_2, diff_abs_percent99_2 =  calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=2, percentage=False, do_print=do_print)
+    corr_1, diff_mean_1, diff_std_1, diff_abs_percent68_1, diff_abs_percent95_1, diff_abs_percent99_1 = calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=1, percentage=False, do_print=do_print)
+    corr_2, diff_mean_2, diff_std_2, diff_abs_percent68_2, diff_abs_percent95_2, diff_abs_percent99_2 = calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=2, percentage=False, do_print=do_print)
 
     fig_id = "plot_comparison_stats_for_eofs_all_doys"
     fig, axs = plt.subplots(4, 1, num=fig_id, clear=True, figsize=(12, 9), dpi=150)
@@ -147,7 +148,33 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs, o
     return fig
 
 
-def calc_timeseries_agreement(ref_data, ref_time, data, time, exclude_doy366=False, do_print = False):
+def calc_comparison_stats_for_explained_variance(ref_var, calc_var, do_print=False, exclude_doy366=False):
+    ref_data = ref_var.copy()
+    calc_data = calc_var.copy()
+    if exclude_doy366:
+        if do_print:
+            print("###### DOY 366 excluded")
+        ref_data = ref_data[:-1]
+        calc_data = calc_data[:-1]
+    corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99 = calc_vector_agreement(ref_data, calc_data, percentage=False, do_print=do_print)
+    return corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99
+
+def plot_comparison_stats_for_explained_variance(ref_var, calc_var, title=None, do_print=False, exclude_doy366=False):
+    if do_print:
+        print("##########")
+        if title is not None:
+            print(title)
+    ref_data = ref_var.copy()
+    calc_data = calc_var.copy()
+    if exclude_doy366:
+        if do_print:
+            print("###### DOY 366 excluded")
+        ref_data = ref_data[:-1]
+        calc_data = calc_data[:-1]
+    plot_vector_agreement(ref_data, calc_data, title=title, do_print=do_print)
+
+
+def calc_timeseries_agreement(ref_data, ref_time, data, time, exclude_doy366=False, do_print=False):
     if not np.all(ref_time == time):
         raise AttributeError("Time series do not cover the same periods.")
     if exclude_doy366:
@@ -253,5 +280,13 @@ def plot_vector_agreement(ref_data, data, title=None, do_print=False):
     ax.plot(bins2, 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(- (bins2 - mu) ** 2 / (2 * sigma ** 2)), linewidth = 2, color = 'r')
 
     return fig
+
+
+def load_omi_explained_variance(filename:str) -> np.ndarray:
+    c = lambda s: float(re.sub("[ \[;\]]", "", s.decode("utf-8")))
+    data = np.genfromtxt(filename, converters={0: c, 1: c}, skip_header=7)
+    var1 = data[:, 0]
+    var2 = data[:, 1]
+    return var1, var2
 
 

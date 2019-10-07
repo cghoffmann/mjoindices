@@ -348,7 +348,7 @@ class EOFDataForAllDOYs:
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).explained_variance_eof1)
-        return result
+        return np.array(result)
 
     def explained_variance2_for_all_doys(self):
         """
@@ -359,7 +359,7 @@ class EOFDataForAllDOYs:
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).explained_variance_eof2)
-        return result
+        return np.array(result)
 
     def total_explained_variance_for_all_doys(self):
         """
@@ -370,7 +370,7 @@ class EOFDataForAllDOYs:
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).sum_of_explained_variances)
-        return result
+        return np.array(result)
 
     def no_observations_for_all_doys(self):
         """
@@ -382,7 +382,7 @@ class EOFDataForAllDOYs:
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).no_observations)
-        return result
+        return np.array(result)
 
     def eigenvalue1_for_all_doys(self):
         """
@@ -393,7 +393,7 @@ class EOFDataForAllDOYs:
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).eigenvalue_eof1)
-        return result
+        return np.array(result)
 
     def eigenvalue2_for_all_doys(self):
         """
@@ -404,7 +404,7 @@ class EOFDataForAllDOYs:
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).eigenvalue_eof2)
-        return result
+        return np.array(result)
 
 
     def save_all_eofs_to_dir(self, dirname: Path, create_dir=True) -> None:

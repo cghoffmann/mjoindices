@@ -49,6 +49,9 @@ originalOMIDataDirname = Path(__file__).parents[1] / "tests" / "testdata" / "Ori
 # and adjust the local path below.
 originalOMIPCFile = Path(__file__).parents[1] / "tests" / "testdata" / "OriginalOMI" / "omi.1x.txt"
 
+# The following file is included in the package
+original_omi_explained_variance_file = Path(__file__).parents[1] / "tests" / "testdata" / "OriginalOMI" / "omi_var.txt"
+
 # Files to store the results:
 # The EOFs
 eofnpzfile = Path(__file__).parents[1] / "examples" / "example_data" / "EOFs.npz"
@@ -67,7 +70,10 @@ mjoindices.evaluation_tools.plot_vector_agreement(orig_eofs.eof1vector_for_doy(d
 eof.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy),doy=doy)
 
 ########### Evaluate Explained Variance
-#relative deviations of explained variance
+orig_explained_variance_1, orig_explained_variance_2 = mjoindices.evaluation_tools.load_omi_explained_variance(original_omi_explained_variance_file)
+eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
+mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_1, eofs.explained_variance1_for_all_doys(), title="Explained Variance for EOF1", do_print=True, exclude_doy366=True)
+mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_2, eofs.explained_variance2_for_all_doys(), title="Explained Variance for EOF2", do_print=True, exclude_doy366=True)
 
 ########### evalute PCs
 
