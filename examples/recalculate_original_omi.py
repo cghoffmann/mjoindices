@@ -70,7 +70,7 @@ olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 
 # In order to adjust the signs of the EOFs to fit to the original ones, we need to know the original ones
 # Note that signs switch arbitrarily and are also adjusted in the original approach (Kiladis, 2014).
-# This step will probably be replced in future
+# This step will probably be replaced in future
 orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 
 # Calculate the eofs. In the postprocessing, the signs of the EOFs are adjusted and the the EOF  in a period
