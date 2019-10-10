@@ -92,9 +92,7 @@ class EOFData:
             self._explained_variances = None
         self._no_observations = no_observations
 
-    # FIXME: Unittest for operator
-    # FIXME: Typing
-    def __eq__(self, other):
+    def __eq__(self, other: "EOFData") -> bool:
         """Override the default Equals behavior
         """
         return (np.all(self.lat == other.lat)
@@ -103,6 +101,19 @@ class EOFData:
                 and np.all(self.eof2vector == other.eof2vector)
                 and np.all(self._explained_variances == other.explained_variances)
                 and np.all(self._eigenvalues == other.eigenvalues)
+                and self._no_observations == other.no_observations)
+
+    def close(self, other: "EOFData") -> bool:
+        """ Checks equality of two EOFData object, but allows numerical tolerances.
+            :param other: The second EOFData object to compare with the current one
+            :return: Equality of all members considering the default tolerances of numpy.allclose
+        """
+        return (np.allclose(self.lat, other.lat)
+                and np.allclose(self.long, other.long)
+                and np.allclose(self.eof1vector, other.eof1vector)
+                and np.allclose(self.eof2vector, other.eof2vector)
+                and np.allclose(self._explained_variances, other.explained_variances)
+                and np.allclose(self._eigenvalues, other.eigenvalues)
                 and self._no_observations == other.no_observations)
 
     @property

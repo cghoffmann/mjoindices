@@ -221,6 +221,113 @@ def test_initialization_exceptions():
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
+def test_equality_operator():
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eof1 = np.array([1, 2, 3, 4, 5, 6])
+    eof2 = np.array([10, 20, 30, 40, 50, 60])
+    eigenvalues = np.array([1.1, 2.2, 3.3, 4.4, 5.5, 6.6])
+    explained_variances = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
+    control = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    errors = []
+
+    target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if not target == control:
+        errors.append("equality not detected")
+
+    target = eof.EOFData(np.array([-11., 0., 10.]), long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if target == control:
+        errors.append("inequality of latitude not detected")
+
+    target = eof.EOFData(lat, np.array([1., 5.]), eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if target == control:
+        errors.append("inequality of longitude not detected")
+
+    target = eof.EOFData(lat, long, np.array([0, 2, 3, 4, 5, 6]), eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if target == control:
+        errors.append("inequality of eof1 not detected")
+
+    target = eof.EOFData(lat, long, eof1, np.array([0, 20, 30, 40, 50, 60]), eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if target == control:
+        errors.append("inequality of eof2 not detected")
+
+    target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=np.array([0, 2.2, 3.3, 4.4, 5.5, 6.6]), explained_variances=explained_variances,
+                         no_observations=87)
+    if target == control:
+        errors.append("inequality of eigenvalues not detected")
+
+    target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=np.array([0, 0.2, 0.3, 0.4, 0.5, 0.6]),
+                         no_observations=87)
+    if target == control:
+        errors.append("inequality of explained variances not detected")
+
+    target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=5)
+    if target == control:
+        errors.append("inequality of no_observations not detected")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+def test_close():
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eof1 = np.array([1, 2, 3, 4, 5, 6])
+    eof2 = np.array([10, 20, 30, 40, 50, 60])
+    eigenvalues = np.array([1.1, 2.2, 3.3, 4.4, 5.5, 6.6])
+    explained_variances = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
+    control = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    errors = []
+
+    target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if not target.close(control):
+        errors.append("equality not detected")
+
+    target = eof.EOFData(np.array([-11., 0., 10.]), long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if target.close(control):
+        errors.append("inequality of latitude not detected")
+
+    target = eof.EOFData(lat, np.array([1., 5.]), eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if target.close(control):
+        errors.append("inequality of longitude not detected")
+
+    target = eof.EOFData(lat, long, np.array([0, 2, 3, 4, 5, 6]), eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if target.close(control):
+        errors.append("inequality of eof1 not detected")
+
+    target = eof.EOFData(lat, long, eof1, np.array([0, 20, 30, 40, 50, 60]), eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=87)
+    if target.close(control):
+        errors.append("inequality of eof2 not detected")
+
+    target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=np.array([0, 2.2, 3.3, 4.4, 5.5, 6.6]), explained_variances=explained_variances,
+                         no_observations=87)
+    if target.close(control):
+        errors.append("inequality of eigenvalues not detected")
+
+    target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=np.array([0, 0.2, 0.3, 0.4, 0.5, 0.6]),
+                         no_observations=87)
+    if target.close(control):
+        errors.append("inequality of explained variances not detected")
+
+    target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues, explained_variances=explained_variances,
+                         no_observations=5)
+    if target.close(control):
+        errors.append("inequality of no_observations not detected")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
 def test_save_eofs_to_txt_file_load_eofs_from_txt_file(tmp_path):
     filename = tmp_path / "out.txt"
     lat = np.array([-10., 0., 10.])

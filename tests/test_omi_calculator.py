@@ -141,7 +141,7 @@ def test_completeOMIReproduction(tmp_path):
     # Validate EOFs against mjoindices own reference (results should be equal)
     mjoindices_reference_eofs = eof.restore_all_eofs_from_npzfile(mjoindices_reference_eofs_filename)
     for idx, target_eof in enumerate(eofs.eof_list):
-        if not mjoindices_reference_eofs.eof_list[idx] == target_eof:
+        if not mjoindices_reference_eofs.eof_list[idx].close(target_eof):
             errors.append("mjoindices-reference-validation: EOF data at index %i is incorrect" % idx)
 
     # Calculate PCs
