@@ -44,8 +44,8 @@ import mjoindices.tools as tools
 # #################EOF calculation
 
 def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: eof.EOFData = None,
-                       interpolate_eofs: bool = False, interpolation_start_doy: int = 294,
-                       interpolation_end_doy: int = 315) -> eof.EOFDataForAllDOYs:
+                       interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
+                       interpolation_end_doy: int = 316) -> eof.EOFDataForAllDOYs:
     preprocessed_olr = preprocess_olr(olrdata)
     raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation)
     result = post_process_eofs(raw_eofs, sign_doy1reference=sign_doy1reference, interpolate_eofs=interpolate_eofs,
@@ -79,8 +79,8 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
 
 
 def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: eof.EOFData = None,
-                      interpolate_eofs: bool = False, interpolation_start_doy: int = 294,
-                      interpolation_end_doy: int = 315) -> eof.EOFDataForAllDOYs:
+                      interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
+                      interpolation_end_doy: int = 316) -> eof.EOFDataForAllDOYs:
     pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
     if interpolate_eofs:
         pp_eofs = interpolate_eofs_between_doys(pp_eofs, start_doy=interpolation_start_doy,
@@ -206,9 +206,9 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
                        explained_variances=target.explained_variances,
                        no_observations=target.no_observations)
 
-
-def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 294,
-                                  end_doy: int = 315) -> eof.EOFDataForAllDOYs:
+# FIXME: Check interpolation boundaries everywhere in the project. 293 to 326 is correct
+def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 293,
+                                  end_doy: int = 316) -> eof.EOFDataForAllDOYs:
     """
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
     This should only rarely be used and has only been implemented to closely reproduce the original OMI values. Here,

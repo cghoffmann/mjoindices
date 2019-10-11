@@ -171,7 +171,8 @@ def plot_comparison_stats_for_explained_variance(ref_var, calc_var, title=None, 
             print("###### DOY 366 excluded")
         ref_data = ref_data[:-1]
         calc_data = calc_data[:-1]
-    plot_vector_agreement(ref_data, calc_data, title=title, do_print=do_print)
+    fig = plot_vector_agreement(ref_data, calc_data, title=title, do_print=do_print)
+    return fig
 
 
 def calc_timeseries_agreement(ref_data, ref_time, data, time, exclude_doy366=False, do_print=False):

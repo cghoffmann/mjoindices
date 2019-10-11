@@ -29,6 +29,8 @@ import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.principal_components as pc
 import numpy as np
 
+#FIXME: Some of the evaluation routines do not run anymore
+
 # This example reproduces the original OMI values described in
 # Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M. Weickmann, and M.J. Ventrice, 2014:
 # A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
@@ -38,22 +40,22 @@ import numpy as np
 
 # Download the data file from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc to your local file system and
 # adjust the local path below.
-olr_data_filename = Path(__file__).parents[1] / "tests" / "testdata" / "olr.day.mean.nc"
+olr_data_filename = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "olr.day.mean.nc"
 
 # The following directory should contain the two subdirectories "eof1" and "eof2", which should contain the files
 # downloaded from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and
 # ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ respectively
-originalOMIDataDirname = Path(__file__).parents[1] / "tests" / "testdata" / "OriginalOMI"
+originalOMIDataDirname = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "OriginalOMI"
 
 # Download the original OMI values from https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt to your local file system
 # and adjust the local path below.
-originalOMIPCFile = Path(__file__).parents[1] / "tests" / "testdata" / "OriginalOMI" / "omi.1x.txt"
+originalOMIPCFile = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "OriginalOMI" / "omi.1x.txt"
 
 # Files to store the results:
 # The EOFs
-eofnpzfile = Path(__file__).parent / "example_data" / "EOFs.npz"
+eofnpzfile = Path(__file__).resolve().parent / "example_data" / "EOFs.npz"
 # The PCs
-pctxtfile = Path(__file__).parent / "example_data" / "PCs.txt"
+pctxtfile = Path(__file__).resolve().parent / "example_data" / "PCs.txt"
 
 # ############## Calculation of the EOFs ###################
 
