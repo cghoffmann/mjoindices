@@ -30,7 +30,7 @@ import pytest
 import mjoindices.empirical_orthogonal_functions as eof
 
 # FIXME: Define paths as fixture at a central point
-originalOMIDataDirname = Path(__file__).parent / "testdata" / "OriginalOMI"
+originalOMIDataDirname = Path(__file__).resolve().parent / "testdata" / "OriginalOMI"
 eof1Dirname = originalOMIDataDirname / "eof1"
 eof2Dirname = originalOMIDataDirname / "eof2"
 

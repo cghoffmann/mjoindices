@@ -31,15 +31,15 @@ from src import mjoindices as wkfilter
 
 
 
-olr_data_filename = Path(__file__).parents[1] / "tests" / "testdata" / "olr.day.mean.nc"
+olr_data_filename = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "olr.day.mean.nc"
 
 if not olr_data_filename.is_file():
     raise Exception("OLR data file not available. Expected file: %s" % olr_data_filename)
 
-originalOMIDataDirname = Path(__file__).parents[1] / "tests" / "testdata" / "OriginalOMI"
-preprocessed_olr_file = Path(__file__).parent / "example_data" / "PreprocessedOLR.npz"
+originalOMIDataDirname = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "OriginalOMI"
+preprocessed_olr_file = Path(__file__).resolve().parent / "example_data" / "PreprocessedOLR.npz"
 
-reference_dir = Path(__file__).parents[1] / "tests" / "testdata" / "WKFilterReference" / "lat0degPyIdx36"
+reference_dir = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "WKFilterReference" / "lat0degPyIdx36"
 # FIXME Try to use common OLR data
 #olr_dir = Path("/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering/")
 #raw_olr = loadKiladisBinaryOLRDataTwicePerDay(olr_dir / "olr.2x.7918.b")

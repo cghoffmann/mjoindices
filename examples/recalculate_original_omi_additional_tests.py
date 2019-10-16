@@ -36,20 +36,20 @@ import numpy as np
 
 # Download the data file from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc to your local file system and
 # adjust the local path below.
-olr_data_filename = Path(__file__).parents[1] / "tests" / "testdata" / "olr.day.mean.nc"
+olr_data_filename = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "olr.day.mean.nc"
 if not olr_data_filename.is_file():
     raise Exception("OLR data file not available. Expected file: %s" % olr_data_filename)
 
 # ############## Calculation of the EOFs ###################
 
-originalOMIDataDirname = Path(__file__).parents[1] / "tests" / "testdata" / "OriginalOMI"
-#preprocessed_olr_file = Path(__file__).parent / "example_data" / "PreprocessedOLR.npz"
-#eofDir = Path(__file__).parent / "example_data" / "EOFcalc"
-eofnpzfile = Path(__file__).parent / "example_data" / "EOFs.npz"
-#eofnpzfile_kil = Path(__file__).parent / "example_data" / "EOFs_kil.npz"
-#eofnpzfile_kil_eofs = Path(__file__).parent / "example_data" / "EOFs_kil_eofs.npz"
-#eof50File = Path(__file__).parent / "example_data" / "EOF1.txt"
-#eof50File_kil = Path(__file__).parent / "example_data" / "EOF1_kil.txt"
+originalOMIDataDirname = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "OriginalOMI"
+#preprocessed_olr_file = Path(__file__).resolve().parent / "example_data" / "PreprocessedOLR.npz"
+#eofDir = Path(__file__).resolve().parent / "example_data" / "EOFcalc"
+eofnpzfile = Path(__file__).resolve().parent / "example_data" / "EOFs.npz"
+#eofnpzfile_kil = Path(__file__).resolve().parent / "example_data" / "EOFs_kil.npz"
+#eofnpzfile_kil_eofs = Path(__file__).resolve().parent / "example_data" / "EOFs_kil_eofs.npz"
+#eof50File = Path(__file__).resolve().parent / "example_data" / "EOF1.txt"
+#eof50File_kil = Path(__file__).resolve().parent / "example_data" / "EOF1_kil.txt"
 
 # Load the OLR data
 raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)

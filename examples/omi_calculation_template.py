@@ -7,16 +7,16 @@ import mjoindices.omi.omi_calculator as omi
 import numpy as np
 
 # Directory in which all EOFs are saved as text files
-eofdir = Path(__file__).parent / "data" / "EOFs"
+eofdir = Path(__file__).resolve().parent / "data" / "EOFs"
 # Numpy file, in which EOFs are saved additionally together with statistical information.
-eofnpzfile = Path(__file__).parent / "data" / "EOFs.npz"
+eofnpzfile = Path(__file__).resolve().parent / "data" / "EOFs.npz"
 # Text file in which the PCs are saved.
-pcs_txtfile = Path(__file__).parent / "data" / "PCs.txt"
+pcs_txtfile = Path(__file__).resolve().parent / "data" / "PCs.txt"
 
 # The following directory should contain the two subdirectories "eof1" and "eof2", which should contain the files
 # downloaded from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and
 # ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ respectively
-original_omi_data_dirname = Path(__file__).parents[1] / "tests" / "testdata" / "OriginalOMI"
+original_omi_data_dirname = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "OriginalOMI"
 
 # ### EOF calculation
 # choose a reasonable period to calculate the EOFs.

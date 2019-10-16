@@ -28,7 +28,7 @@ import numpy as np
 
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
 
-testdata_dir = Path(__file__).parent / "testdata"
+testdata_dir = Path(__file__).resolve().parent / "testdata"
 
 @pytest.mark.skip
 def test_filter_MJOCondition_lat0deg():

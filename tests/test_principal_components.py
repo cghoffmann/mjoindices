@@ -28,7 +28,7 @@ import pytest
 
 import mjoindices.principal_components as pc
 
-originalOMIDataDirname = Path(__file__).parent / "testdata" / "OriginalOMI"
+originalOMIDataDirname = Path(__file__).resolve().parent / "testdata" / "OriginalOMI"
 origOMIPCsFilename = originalOMIDataDirname / "omi.1x.txt"
 
 

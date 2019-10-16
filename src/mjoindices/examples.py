@@ -47,8 +47,8 @@ def compare_Recalc_OMI_PCs_OriginalOLROriginalEOFs():
 
     """
 
-    olr_data_filename = Path(__file__).parent / "tests" / "testdata" / "olr.day.mean.nc"
-    originalOMIDataDirname = Path(__file__).parent / "tests" / "testdata" / "OriginalOMI"
+    olr_data_filename = Path(__file__).resolve().parent / "tests" / "testdata" / "olr.day.mean.nc"
+    originalOMIDataDirname = Path(__file__).resolve().parent / "tests" / "testdata" / "OriginalOMI"
     origOMIPCsFilename = originalOMIDataDirname / "omi.1x.txt"
 
     if not olr_data_filename.is_file():
@@ -61,9 +61,9 @@ def compare_Recalc_OMI_PCs_OriginalOLROriginalEOFs():
         warnings.warn(
             "File with the original OMI PCs are missing. Generation of the comparison plot will fail. Expected file: %s" % origOMIPCsFilename)
 
-    resultfile = Path(__file__).parent / "example_data" / "RecalcPCsOrigOLROrigEOF.txt"
+    resultfile = Path(__file__).resolve().parent / "example_data" / "RecalcPCsOrigOLROrigEOF.txt"
     
-    resultfigfile = Path(__file__).parent / "example_data" / "RecalcPCsOrigOLROrigEOF"
+    resultfigfile = Path(__file__).resolve().parent / "example_data" / "RecalcPCsOrigOLROrigEOF"
 
     olrData = olr.load_noaa_interpolated_olr(olr_data_filename)
     target = omi.calculatePCsFromOLRWithOriginalConditions(

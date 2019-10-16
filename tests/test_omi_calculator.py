@@ -32,14 +32,14 @@ import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.evaluation_tools
 import mjoindices.olr_handling as olr
 
-olr_data_filename = Path(__file__).parent / "testdata" /"olr.day.mean.nc"
-originalOMIDataDirname = Path(__file__).parent / "testdata" / "OriginalOMI"
+olr_data_filename = Path(__file__).resolve().parent / "testdata" /"olr.day.mean.nc"
+originalOMIDataDirname = Path(__file__).resolve().parent / "testdata" / "OriginalOMI"
 eof1Dirname = originalOMIDataDirname / "eof1"
 eof2Dirname = originalOMIDataDirname / "eof2"
 origOMIPCsFilename = originalOMIDataDirname / "omi.1x.txt"
-mjoindices_reference_eofs_filename = Path(__file__).parent / "testdata" / "mjoindices_reference" / "EOFs.npz"
-mjoindices_reference_pcs_filename = Path(__file__).parent / "testdata" / "mjoindices_reference" / "PCs.txt"
-original_omi_explained_variance_file = Path(__file__).parent / "testdata" / "OriginalOMI" / "omi_var.txt"
+mjoindices_reference_eofs_filename = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "EOFs.npz"
+mjoindices_reference_pcs_filename = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "PCs.txt"
+original_omi_explained_variance_file = Path(__file__).resolve().parent / "testdata" / "OriginalOMI" / "omi_var.txt"
 
 
 
