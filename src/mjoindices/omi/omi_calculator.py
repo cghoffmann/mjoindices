@@ -45,9 +45,9 @@ import mjoindices.tools as tools
 
 def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: eof.EOFData = None,
                        interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
-                       interpolation_end_doy: int = 316) -> eof.EOFDataForAllDOYs:
+                       interpolation_end_doy: int = 316, strict_leap_year_treatment: bool = True) -> eof.EOFDataForAllDOYs:
     preprocessed_olr = preprocess_olr(olrdata)
-    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation)
+    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation, strict_leap_year_treatment=strict_leap_year_treatment)
     result = post_process_eofs(raw_eofs, sign_doy1reference=sign_doy1reference, interpolate_eofs=interpolate_eofs,
                                interpolation_start_doy=interpolation_start_doy,
                                interpolation_end_doy=interpolation_end_doy)
@@ -62,7 +62,7 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
     return olrdata_filtered
 
 
-def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = "internal") -> eof.EOFDataForAllDOYs:
+def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = "internal", strict_leap_year_treatment: bool = True) -> eof.EOFDataForAllDOYs:
     if implementation == "eofs_package" and not eofs_package_available:
         raise AttributeError("Selected calculation with external eofs package, but package not available. Use "
                              "internal implementation or install eofs package")
@@ -71,9 +71,9 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
     for doy in doys:
         print("Calculationg for DOY %i" % doy)
         if (implementation == "eofs_package"):
-            singleeof = calc_eofs_for_doy_using_eofs_package(olrdata, doy)
+            singleeof = calc_eofs_for_doy_using_eofs_package(olrdata, doy, strict_leap_year_treatment=strict_leap_year_treatment)
         else:
-            singleeof = calc_eofs_for_doy(olrdata, doy)
+            singleeof = calc_eofs_for_doy(olrdata, doy, strict_leap_year_treatment=strict_leap_year_treatment)
         eofs.append(singleeof)
     return eof.EOFDataForAllDOYs(eofs)
 
@@ -88,10 +88,10 @@ def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: eof.EO
     return pp_eofs
 
 
-def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
+def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = True) -> eof.EOFData:
     nlat = olrdata.lat.size
     nlong = olrdata.long.size
-    olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60)
+    olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60, strict_leap_year_treatment=strict_leap_year_treatment)
     ntime = olr_maps_for_doy.shape[0]
     # doyOLR_3dim = self.__olrdata_filtered.returnAverageOLRForIndividualDOY(doy,window_length=60)
     # doyOLR_3dim = np.mean(doyOLR_3dim,axis=0)
@@ -137,11 +137,11 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
                        eigenvalues=L, explained_variances=explainedVariances, no_observations=N)
 
 
-def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int) -> eof.EOFData:
+def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = True) -> eof.EOFData:
     if eofs_package_available:
         nlat = olrdata.lat.size
         nlong = olrdata.long.size
-        olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60)
+        olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60, strict_leap_year_treatment=strict_leap_year_treatment)
 
         ntime = olr_maps_for_doy.shape[0]
         N = ntime

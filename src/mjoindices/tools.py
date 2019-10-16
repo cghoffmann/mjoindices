@@ -46,7 +46,8 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray]) -> typing.Un
     return result
 
 
-def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: int, improved_leap_year_treatmenmt:bool=True) -> typing.Tuple:
+def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: int,
+                             strict_leap_year_treatment: bool=True) -> typing.Tuple:
     """
     Finds the indices in a given array of dates that fit into a particular window of DOYs (days in the year).
     This task sounds trivial, but is a little bit complicated by the appearance of leap years.
@@ -55,13 +56,14 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
     :param center_doy: the center of the wanted window
     :param window_length: the length of the window to both sides in days. The window spans 2*window_length+1 days in
      total.
-    :param improved_leap_year_treatmenmt:
+    :param strict_leap_year_treatmenmt:
     :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.
     """
-    #ToDO: Add description of param imropved...
+    #ToDO: Add description of param strict_leap_year_treatmenmt...
+    #ToDo: Add unit test for strict_leap_year_treatmenmt=FALSE
     doys = calc_day_of_year(dates)
 
-    if improved_leap_year_treatmenmt:
+    if strict_leap_year_treatment:
         center_inds = np.nonzero(doys == center_doy)
 
         # switch from DOYs to real dates to use built-in leap year functionality

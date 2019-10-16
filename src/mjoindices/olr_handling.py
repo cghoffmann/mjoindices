@@ -73,7 +73,7 @@ class OLRData:
         #print(self.__olr_data_cube.shape)
         return np.squeeze(self.olr[cand,:,:])
 
-    def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0) -> np.ndarray:
+    def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0, strict_leap_year_treatment: bool = True) -> np.ndarray:
         """
         Extracts the olr data, which belongs to all doys around one center (center_doy +/- windowlength).
         Keep in mind that the OLR time series might span several years. In this case the center DOy is found more than
@@ -85,7 +85,8 @@ class OLRData:
         covered by the data, one gets 2*window_length + 1 entries per year in the result.
         :return: A matrix: 1. index doys, 2. index lat, 3 index long.
         """
-        inds, doys  = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length)
+        #TODO Add doc for strict_leap_year_treatment
+        inds, doys  = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length, strict_leap_year_treatment=strict_leap_year_treatment)
         return self.olr[inds, :, :]
 
     def save_to_npzfile(self, filename: Path) -> None:

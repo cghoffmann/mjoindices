@@ -79,7 +79,8 @@ orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 # around DOY 300 are replaced by an interpolation see Kiladis, 2014).
 eofs= omi.calc_eofs_from_olr(interpolated_olr,
                              sign_doy1reference=orig_eofs.eofdata_for_doy(1),
-                             interpolate_eofs=True)
+                             interpolate_eofs=True,
+                             strict_leap_year_treatment=True)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ### Some diagnostic plots to evaluate the calculated EOFs
