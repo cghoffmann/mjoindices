@@ -144,66 +144,64 @@ def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-# def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
-#
-#     errors = []
-#
-#     # Non leap years
-#     dates = np.arange("2018-01-01", "2019-12-31", dtype='datetime64[D]')
-#     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, strict_leap_year_treatmenmt=False)
-#     if not target_inds.size == (20*2 + 1) * 2:
-#         errors.append("Length of DOY range covering the middle of the year is wrong")
-#     control_inds = np.concatenate((np.arange(30, 71, 1)-1, np.arange(30, 71, 1) + 365 - 1))
-#     if not np.all(target_inds == control_inds):
-#         errors.append("Indices of DOY range covering the middle of the year are wrong")
-#     control_doys = np.concatenate((np.arange(30, 71, 1), np.arange(30, 71, 1)))
-#     if not np.all(target_doys == control_doys):
-#         errors.append("DOY values of DOY range covering the middle of the year are wrong")
-#
-#     dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
-#     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, strict_leap_year_treatmenmt=False)
-#     if not target_inds.size == 20*2:
-#         errors.append("Length of DOY range covering the ending of the previous year is wrong")
-#     control = np.concatenate((np.arange(356, 366, 1), np.arange(1, 31, 1)))
-#     if not np.all(target_doys == control):
-#         errors.append("DOY range covering the ending of the previous year is wrong")
-#
-#     dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
-#     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, strict_leap_year_treatmenmt=True)
-#     if not target_inds.size == 25 * 2 + 1:
-#         errors.append("Length of DOY range covering the beginning of the next year is wrong")
-#     control = np.concatenate((np.arange(325, 366, 1), np.arange(1, 11, 1)))
-#     if not np.all(target_doys == control):
-#         errors.append("DOY range covering the the beginning of the next year is wrong")
-#
-#     # Leap years
-#     dates = np.arange("2016-01-01", "2017-12-31", dtype='datetime64[D]')
-#     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, strict_leap_year_treatmenmt=True)
-#     if not target_inds.size == (20 * 2 + 1) * 2:
-#         errors.append("Length of DOY range covering the middle of the year is wrong")
-#     control_inds = np.concatenate((np.arange(30, 71, 1) - 1, np.arange(30, 71, 1) + 366 - 1))
-#     if not np.all(target_inds == control_inds):
-#         errors.append("Indices of DOY range covering the middle of the year are wrong")
-#     control_doys = np.concatenate((np.arange(30, 71, 1), np.arange(30, 71, 1)))
-#     if not np.all(target_doys == control_doys):
-#         errors.append("DOY values of DOY range covering the middle of the year are wrong (Leap year test)")
-#
-#     dates = np.arange("2016-06-01", "2017-06-30", dtype='datetime64[D]')
-#     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, strict_leap_year_treatmenmt=True)
-#     if not target_inds.size == 20 * 2 + 1:
-#         errors.append("Length of DOY range covering the ending of the previous year is wrong")
-#     control = np.concatenate((np.arange(356, 367, 1), np.arange(1, 31, 1)))
-#     if not np.all(target_doys == control):
-#         errors.append("DOY range covering the ending of the previous year is wrong (Leap year test)")
-#
-#     dates = np.arange("2016-06-01", "2017-06-30", dtype='datetime64[D]')
-#     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, strict_leap_year_treatmenmt=True)
-#     if not target_inds.size == 25 * 2 + 1:
-#         errors.append("Length of DOY range covering the beginning of the next year is wrong")
-#     control = np.concatenate((np.arange(325, 367, 1), np.arange(1, 10, 1)))
-#     if not np.all(target_doys == control):
-#         errors.append("DOY range covering the the beginning of the next year is wrong (Leap year test)")
-#
-#     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
-#
-# test_find_doy_ranges_in_dates__no_strict_leap_year_treatment()
+def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
+
+    errors = []
+
+    # Non leap years
+    dates = np.arange("2018-01-01", "2019-12-31", dtype='datetime64[D]')
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, strict_leap_year_treatment=False)
+    if not target_inds.size == (20*2 + 1) * 2:
+        errors.append("Length of DOY range covering the middle of the year is wrong")
+    control_inds = np.concatenate((np.arange(30, 71, 1)-1, np.arange(30, 71, 1) + 365 - 1))
+    if not np.all(target_inds == control_inds):
+        errors.append("Indices of DOY range covering the middle of the year are wrong")
+    control_doys = np.concatenate((np.arange(30, 71, 1), np.arange(30, 71, 1)))
+    if not np.all(target_doys == control_doys):
+        errors.append("DOY values of DOY range covering the middle of the year are wrong")
+
+    dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, strict_leap_year_treatment=False)
+    if not target_inds.size == 20*2 +1:
+        errors.append("Length of DOY range covering the ending of the previous year is wrong")
+    control = np.concatenate((np.arange(355, 366, 1), np.arange(1, 31, 1)))
+    if not np.all(target_doys == control):
+        errors.append("DOY range covering the ending of the previous year is wrong")
+
+    dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, strict_leap_year_treatment=False)
+    if not target_inds.size == 25 * 2 + 1:
+        errors.append("Length of DOY range covering the beginning of the next year is wrong")
+    control = np.concatenate((np.arange(325, 366, 1), np.arange(1, 11, 1)))
+    if not np.all(target_doys == control):
+        errors.append("DOY range covering the the beginning of the next year is wrong")
+
+    # Leap years
+    dates = np.arange("2016-01-01", "2017-12-31", dtype='datetime64[D]')
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, strict_leap_year_treatment=False)
+    if not target_inds.size == (20 * 2 + 1) * 2:
+        errors.append("Length of DOY range covering the middle of the year is wrong")
+    control_inds = np.concatenate((np.arange(30, 71, 1) - 1, np.arange(30, 71, 1) + 366 - 1))
+    if not np.all(target_inds == control_inds):
+        errors.append("Indices of DOY range covering the middle of the year are wrong")
+    control_doys = np.concatenate((np.arange(30, 71, 1), np.arange(30, 71, 1)))
+    if not np.all(target_doys == control_doys):
+        errors.append("DOY values of DOY range covering the middle of the year are wrong (Leap year test)")
+
+    dates = np.arange("2016-06-01", "2017-06-30", dtype='datetime64[D]')
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, strict_leap_year_treatment=False)
+    if not target_inds.size == 20 * 2 + 2:
+        errors.append("Length of DOY range covering the ending of the previous year is wrong")
+    control = np.concatenate((np.arange(355, 367, 1), np.arange(1, 31, 1)))
+    if not np.all(target_doys == control):
+        errors.append("DOY range covering the ending of the previous year is wrong (Leap year test)")
+
+    dates = np.arange("2016-06-01", "2017-06-30", dtype='datetime64[D]')
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, strict_leap_year_treatment=False)
+    if not target_inds.size == 25 * 2 + 2:
+        errors.append("Length of DOY range covering the beginning of the next year is wrong")
+    control = np.concatenate((np.arange(325, 367, 1), np.arange(1, 11, 1)))
+    if not np.all(target_doys == control):
+        errors.append("DOY range covering the the beginning of the next year is wrong (Leap year test)")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))

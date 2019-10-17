@@ -82,10 +82,10 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
     else:
         lower_limit = center_doy - window_length
         if lower_limit < 1:
-            lower_limit = lower_limit + 366
+            lower_limit = lower_limit + 365
         upper_limit = center_doy + window_length
-        if upper_limit > 366:
-            upper_limit = upper_limit - 366
+        if upper_limit > 365:
+            upper_limit = upper_limit - 365
 
         if lower_limit <= upper_limit:
             inds_consider = ((doys >= lower_limit) & (doys <= upper_limit))
