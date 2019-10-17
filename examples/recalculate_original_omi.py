@@ -77,10 +77,14 @@ orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 
 # Calculate the eofs. In the postprocessing, the signs of the EOFs are adjusted and the the EOF  in a period
 # around DOY 300 are replaced by an interpolation see Kiladis, 2014).
+# The switch strict_leap_year_treatment has major implications only for the EOPs calculated for DOY 366 and causes only
+# minor differences for the other DOYs. While the results for setting strict_leap_year_treatment=False are closer to the
+# original values, the calculation strict_leap_year_treatment=True is somewhat what stringently implemented using
+# built-in datetime functionality.
 eofs= omi.calc_eofs_from_olr(interpolated_olr,
                              sign_doy1reference=orig_eofs.eofdata_for_doy(1),
                              interpolate_eofs=True,
-                             strict_leap_year_treatment=True)
+                             strict_leap_year_treatment=False)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ### Some diagnostic plots to evaluate the calculated EOFs

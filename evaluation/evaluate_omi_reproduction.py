@@ -62,12 +62,12 @@ pctxtfile = Path(__file__).resolve().parents[1] / "examples" / "example_data" / 
 
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-fig=mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys(eofs, orig_eofs, exclude_doy366=True, do_print=True)
+fig=mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys(eofs, orig_eofs, exclude_doy366=False, do_print=True)
 fig.show()
 
 #doy=21 #among the best agreements
 doy=326 #worst agreement
-fig=mjoindices.evaluation_tools.plot_vector_agreement(orig_eofs.eof1vector_for_doy(doy), eofs.eof1vector_for_doy(doy), title="EOF1 for DOY %i"%doy,do_print=True)
+fig=mjoindices.evaluation_tools.plot_vector_agreement(orig_eofs.eof1vector_for_doy(doy), eofs.eof1vector_for_doy(doy), title="EOF1 for DOY %i" % doy, do_print=True)
 fig.show()
 fig=eof.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy),doy=doy)
 fig.show()
@@ -75,9 +75,9 @@ fig.show()
 # ########## Evaluate explained variance
 orig_explained_variance_1, orig_explained_variance_2 = mjoindices.evaluation_tools.load_omi_explained_variance(original_omi_explained_variance_file)
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
-fig=mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_1, eofs.explained_variance1_for_all_doys(), title="Explained Variance for EOF1", do_print=True, exclude_doy366=True)
+fig=mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_1, eofs.explained_variance1_for_all_doys(), title="Explained Variance for EOF1", do_print=True, exclude_doy366=False)
 fig.show()
-fig=mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_2, eofs.explained_variance2_for_all_doys(), title="Explained Variance for EOF2", do_print=True, exclude_doy366=True)
+fig=mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_2, eofs.explained_variance2_for_all_doys(), title="Explained Variance for EOF2", do_print=True, exclude_doy366=False)
 fig.show()
 
 # ########## Evaluate PCs
