@@ -27,9 +27,8 @@ import mjoindices.olr_handling as olr
 import mjoindices.omi.omi_calculator as omi
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.principal_components as pc
+import mjoindices.evaluation_tools
 import numpy as np
-
-#FIXME: Some of the evaluation routines do not run anymore
 
 # This example reproduces the original OMI values described in
 # Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M. Weickmann, and M.J. Ventrice, 2014:
@@ -84,14 +83,14 @@ orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 eofs= omi.calc_eofs_from_olr(interpolated_olr,
                              sign_doy1reference=orig_eofs.eofdata_for_doy(1),
                              interpolate_eofs=True,
-                             strict_leap_year_treatment=False)
+                             strict_leap_year_treatment=True)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ### Some diagnostic plots to evaluate the calculated EOFs
 # Load precalculated EOFs first
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 # Check correlation with original EOFs
-fig = eof.plot_correlation_with_original_eofs(eofs, orig_eofs)
+fig = mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys (eofs, orig_eofs, exclude_doy366=False, do_print=True)
 fig.savefig("EOFs_CorrelationWithOriginal.png")
 # Check the explained variance by the EOFS. Values are lower than in Kiladis, 2014, which is correct!
 fig = eof.plot_explained_variance_for_all_doys(eofs)
@@ -103,7 +102,7 @@ doy=50
 fig = eof.plot_individual_eof_map(eofs.eofdata_for_doy(doy), doy)
 fig.savefig("EOF_Sample.png")
 # Plot EOF pair in comparison to the original one fpr this DOY
-fig = eof.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy)
+fig = mjoindices.evaluation_tools.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy)
 fig.savefig("EOF_SampleComparison.png")
 # Plot the explained variance for the first 10 EOFs of this DOY to check to drop of explained variance after EOF2
 fig = eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=doy, max_eof_number=10)
@@ -130,6 +129,6 @@ pcs.save_pcs_to_txt_file(pctxtfile)
 # ### Diagnostic plot: Comparison to original PCs
 pcs = pc.load_pcs_from_txt_file(pctxtfile)
 orig_pcs = pc.load_original_pcs_from_txt_file(originalOMIPCFile)
-fig = pc.plot_comparison_orig_calc_pcs(pcs, orig_pcs)
+fig = mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs(pcs, orig_pcs)
 fig.savefig("PCs_TimeSeries.png")
 

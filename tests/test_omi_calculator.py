@@ -167,22 +167,22 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
     tempa, tempb, corr_pc1, diff_mean_pc1, diff_std_pc1, diff_ts_abs_pc1, diff_abs_percent68_pc1, diff_abs_percent95_pc1, diff_abs_percent99_pc1 = mjoindices.evaluation_tools.calc_timeseries_agreement(orig_pcs.pc1, orig_pcs.time, pcs.pc1, pcs.time, exclude_doy366=True, do_print=False)
     if not corr_pc1 > 0.998:
         errors.append("original-validation: Correlation for PC1 timeseries is to too low!")
-    if not diff_std_pc1 < 0.0447:
+    if not diff_std_pc1 < 0.0449:
         errors.append("original-validation: Std.Dev. of the difference of both PC1 timeseries is to too high!")
-    if not diff_abs_percent99_pc1 < 0.1525:
+    if not diff_abs_percent99_pc1 < 0.1523:
         errors.append("original-validation: 99% percentile of the difference of both PC1 timeseries is to too high!")
-    if not diff_abs_percent68_pc1 < 0.0315:
+    if not diff_abs_percent68_pc1 < 0.0319:
         errors.append("original-validation: 68% percentile of the difference of both PC1 timeseries is to too high!")
 
     tempa, tempb, corr_pc2, diff_mean_pc2, diff_std_pc2, diff_ts_abs_pc2, diff_abs_percent68_pc2, diff_abs_percent95_pc2, diff_abs_percent99_pc2 = mjoindices.evaluation_tools.calc_timeseries_agreement(
         orig_pcs.pc2, orig_pcs.time, pcs.pc2, pcs.time, exclude_doy366=True, do_print=False)
-    if not corr_pc2 > 0.997:
+    if not corr_pc2 > 0.998:
         errors.append("original-validation: Correlation for PC2 timeseries is to too low!")
-    if not diff_std_pc2 < 0.0481:
+    if not diff_std_pc2 < 0.0484:
         errors.append("original-validation: Std.Dev. of the difference of both PC2 timeseries is to too high!")
     if not diff_abs_percent99_pc2 < 0.1671:
         errors.append("original-validation: 99% percentile of the difference of both PC2 timeseries is to too high!")
-    if not diff_abs_percent68_pc2 < 0.0349:
+    if not diff_abs_percent68_pc2 < 0.0350:
         errors.append("original-validation: 68% percentile of the difference of both PC2 timeseries is to too high!")
 
 
@@ -193,11 +193,11 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
         orig_strength, orig_pcs.time, strength, pcs.time, exclude_doy366=True, do_print=False)
     if not corr_strength > 0.9998:
         errors.append("original-validation: Correlation for strength timeseries is to too low!")
-    if not diff_std_strength < 0.0104:
+    if not diff_std_strength < 0.0105:
         errors.append("original-validation: Std.Dev. of the difference of both strength timeseries is to too high!")
-    if not diff_abs_percent99_strength < 0.0348:
+    if not diff_abs_percent99_strength < 0.0350:
         errors.append("original-validation: 99% percentile of the difference of both strength timeseries is to too high!")
-    if not diff_abs_percent68_strength < 0.0080:
+    if not diff_abs_percent68_strength < 0.0081:
         errors.append("original-validation: 68% percentile of the difference of both strength timeseries is to too high!")
 
     # Validate PCs against mjoindices own reference (results should be equal)

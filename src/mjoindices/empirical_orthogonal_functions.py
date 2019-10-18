@@ -581,29 +581,6 @@ def doy_list() -> np.array:
     """
     return np.arange(1, 367, 1)
 
-# FIXME: Move to evaluation_tools
-def plot_correlation_with_original_eofs(recalc_eof: EOFDataForAllDOYs, orig_eof: EOFDataForAllDOYs) -> Figure:
-    """
-    Creates a diagnosis plot showing the correlations for all DOYs of between the original EOFs and newly
-    calculated EOF for both, EOF1 and EOF2
-    :param recalc_eof: The object containing the calculated EOFs
-    :param orig_eof: The object containing the ortiginal EOFs
-    :return: Handle to the figure
-    """
-    import mjoindices.evaluation_tools  # only imported here to prevent circular import
-    doys = doy_list()
-    corr1, corr2 = mjoindices.evaluation_tools.calc_correlations_of_eofs_all_doys(orig_eof, recalc_eof)
-    fig = plt.figure("plot_correlation_with_original_eofs", clear=True, figsize=(6, 4), dpi=150)
-    plt.ylim([0, 1.05])
-    plt.xlabel("DOY")
-    plt.ylabel("Correlation")
-    plt.title("Correlation Original-Recalculated EOF")
-    p1, = plt.plot(doys, corr1, label="EOF1")
-    p2, = plt.plot(doys, corr2, label="EOF2")
-    plt.legend(handles=(p1, p2))
-    return fig
-
-
 def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs, include_total_variance:bool = False,
                                          include_no_observations: bool = False) -> Figure:
     """
@@ -690,58 +667,6 @@ def plot_individual_eof_map(eofdata: EOFData, doy: int = None) -> Figure:
     ax.set_xlabel("Longitude [°]")
 
     return fig
-
-# FIXME: Move to evaluation_tools
-def plot_individual_eof_map_comparison(orig_eof: EOFData, compare_eof: EOFData, doy: int=None):
-
-    # TODO: Print correlation values into figure
-    print(np.corrcoef(orig_eof.eof1vector, compare_eof.eof1vector))
-    print(np.corrcoef(orig_eof.eof2vector, compare_eof.eof2vector))
-
-    fig, axs = plt.subplots(2, 3, num="ReproduceOriginalOMIPCs_ExplainedVariance_EOF_Comparison", clear=True,
-                            figsize=(10, 5), dpi=150, sharex=True, sharey=True)
-    plt.subplots_adjust(wspace=0.35, hspace=0.35)
-    if doy is not None:
-        fig.suptitle("EOF Recalculation for DOY %i" % doy)
-
-    ax = axs[0, 0]
-    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map)
-    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
-    ax.set_title("Original EOF1")
-    ax.set_ylabel("Latitude [°]")
-
-    ax = axs[0, 1]
-    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof1map)
-    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
-    ax.set_title("Recalculated EOF1")
-
-    # FIXME: Check that grids are equal
-    ax = axs[0, 2]
-    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map - compare_eof.eof1map)
-    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
-    ax.set_title("Difference 1")
-
-    ax = axs[1, 0]
-    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map)
-    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
-    ax.set_title("Original EOF2")
-    ax.set_ylabel("Latitude [°]")
-    ax.set_xlabel("Longitude [°]")
-
-    ax = axs[1, 1]
-    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof2map)
-    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
-    ax.set_title("Recalculated EOF2")
-    ax.set_xlabel("Longitude [°]")
-
-    ax = axs[1, 2]
-    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map - compare_eof.eof2map)
-    fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
-    ax.set_title("Difference 2")
-    ax.set_xlabel("Longitude [°]")
-
-    return fig
-
 
 def plot_individual_explained_variance_all_eofs(eof:EOFData, doy: int = None, max_eof_number: int = None) -> Figure:
     """

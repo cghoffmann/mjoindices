@@ -4,6 +4,7 @@ import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.principal_components as pc
 import mjoindices.olr_handling as olr
 import mjoindices.omi.omi_calculator as omi
+import mjoindices.evaluation_tools
 import numpy as np
 
 # Directory in which all EOFs are saved as text files
@@ -53,7 +54,7 @@ eofs.save_all_eofs_to_npzfile(eofnpzfile)
 # Load precalculated EOFs first
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 # Check correlation with original EOFs
-eof.plot_correlation_with_original_eofs(eofs, orig_eofs)
+mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys(eofs, orig_eofs)
 # Check the explained variance by the EOFS.
 eof.plot_explained_variance_for_all_doys(eofs)
 
@@ -62,7 +63,7 @@ doy=50
 # Plot EOFs for this DOY
 eof.plot_individual_eof_map(eofs.eofdata_for_doy(doy), doy)
 # Plot EOF pair in comparison to the original one fpr this DOY
-eof.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy)
+mjoindices.evaluation_tools.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy)
 # Plot the explained variance for the first 10 EOFs of this DOY to check to drop of explained variance after EOF2
 eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=doy, max_eof_number=10)
 

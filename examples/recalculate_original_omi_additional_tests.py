@@ -27,6 +27,7 @@ from pathlib import Path
 import mjoindices.olr_handling as olr
 import mjoindices.omi.omi_calculator as omi
 import mjoindices.empirical_orthogonal_functions as eof
+import mjoindices.evaluation_tools
 import numpy as np
 
 # This example reproduces the original OMI values described in
@@ -94,7 +95,7 @@ eof.plot_correlation_with_original_eofs(eofs, orig_eofs)
 eof.plot_explained_variance_for_all_doys(eofs)
 doy=300
 eof.plot_individual_eof_map(eofs.eofdata_for_doy(doy), doy)
-eof.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy)
+mjoindices.evaluation_tools.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy)
 eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=doy, max_eof_number=10)
 
 
