@@ -83,7 +83,9 @@ class OLRData:
         :param center_doy: The center DOY
         :param window_length: The window length in DOYs on both sides of the center DOY. Hence, if the window is fully
         covered by the data, one gets 2*window_length + 1 entries per year in the result.
+        :param strict_leap_year_treatment: See mjoindices.tools.find_doy_ranges_in_dates() for details.
         :return: A matrix: 1. index doys, 2. index lat, 3 index long.
+        seealso:: mjoindices.tools.find_doy_ranges_in_dates() for details.
         """
         #TODO Add doc for strict_leap_year_treatment
         inds, doys  = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length, strict_leap_year_treatment=strict_leap_year_treatment)
