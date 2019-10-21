@@ -72,10 +72,10 @@ orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 # around DOY 300 are replaced by an interpolation see Kiladis, 2014). The periods is somewhat braoder than stated in
 # Kiladis (2014) to achieve good agreement. The reason for this is still unclear.
 eofs= omi.calc_eofs_from_olr(interpolated_olr,
-                             sign_doy1reference = orig_eofs.eofdata_for_doy(1),
+                             sign_doy1reference=orig_eofs.eofdata_for_doy(1),
                              interpolate_eofs=True,
-                             interpolation_start_doy=294,
-                             interpolation_end_doy=315)
+                             interpolation_start_doy=293,
+                             interpolation_end_doy=316)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 
@@ -87,7 +87,7 @@ eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 
 # origeofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-# eofs = omi.post_process_eofs(testeofs, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=294, interpolation_end_doy=315)
+# eofs = omi.post_process_eofs(testeofs, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=293, interpolation_end_doy=316)
 
 # Some diagnostic plots
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
@@ -120,7 +120,7 @@ eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=d
 
 #kileofs = eof.restore_all_eofs_from_npzfile(eofnpzfile_kil)
 #origeofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-#pp_eofs_kil = omi.post_process_eofs(kileofs, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=294, interpolation_end_doy=315)
+#pp_eofs_kil = omi.post_process_eofs(kileofs, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=293, interpolation_end_doy=316)
 
 #eof.plot_correlation_with_original_eofs(pp_eofs_kil, origeofs)
 #eof.plot_explained_variance_for_all_doys(pp_eofs_kil,include_total_variance=True, include_no_observations=True)
@@ -137,6 +137,6 @@ eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=d
 
 #kileofs_eofspackage = eof.restore_all_eofs_from_npzfile(eofnpzfile_kil_eofs)
 #origeofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-#pp_eofs_kil_eofspackage = omi.post_process_eofs(kileofs_eofspackage, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=294, interpolation_end_doy=315)
+#pp_eofs_kil_eofspackage = omi.post_process_eofs(kileofs_eofspackage, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=293, interpolation_end_doy=316)
 #eof.plot_correlation_with_original_eofs(pp_eofs_kil_eofspackage, origeofs)
 #eof.plot_explained_variance_for_all_doys(pp_eofs_kil_eofspackage, include_no_observations=True, include_total_variance=True)
