@@ -141,3 +141,66 @@ def test_save_to_npzfile_restore_from_npzfile(tmp_path):
         errors.append("Longitude incorrect")
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
+
+def test_equality_operator():
+    time = np.arange("2018-01-01", "2018-01-04", dtype='datetime64[D]')
+    lat = np.array([-2.5, 2.5])
+    long = np.array([10, 20, 30, 40])
+    olrmatrix = np.random.rand(3, 2, 4)
+    control = olr.OLRData(olrmatrix, time, lat, long)
+
+    errors = []
+
+    target = olr.OLRData(olrmatrix, time, lat, long)
+    if not target == control:
+        errors.append("equality not detected")
+
+    target = olr.OLRData(olrmatrix + 5., time, lat, long)
+    if target == control:
+        errors.append("inequality of olr not detected")
+
+    target = olr.OLRData(olrmatrix, np.arange("2017-01-01", "2017-01-04", dtype='datetime64[D]'), lat, long)
+    if target == control:
+        errors.append("inequality of time not detected")
+
+    target = olr.OLRData(olrmatrix, time, np.array([-2.7, 2.5]), long)
+    if target == control:
+        errors.append("inequality of lat not detected")
+
+    target = olr.OLRData(olrmatrix, time, lat, np.array([11, 20, 30, 40]))
+    if target == control:
+        errors.append("inequality of long not detected")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_close():
+    time = np.arange("2018-01-01", "2018-01-04", dtype='datetime64[D]')
+    lat = np.array([-2.5, 2.5])
+    long = np.array([10, 20, 30, 40])
+    olrmatrix = np.random.rand(3, 2, 4)
+    control = olr.OLRData(olrmatrix, time, lat, long)
+
+    errors = []
+
+    target = olr.OLRData(olrmatrix, time, lat, long)
+    if not target.close(control):
+        errors.append("equality not detected")
+
+    target = olr.OLRData(olrmatrix + 5., time, lat, long)
+    if target.close(control):
+        errors.append("inequality of olr not detected")
+
+    target = olr.OLRData(olrmatrix, np.arange("2017-01-01", "2017-01-04", dtype='datetime64[D]'), lat, long)
+    if target.close(control):
+        errors.append("inequality of time not detected")
+
+    target = olr.OLRData(olrmatrix, time, np.array([-2.7, 2.5]), long)
+    if target.close(control):
+        errors.append("inequality of lat not detected")
+
+    target = olr.OLRData(olrmatrix, time, lat, np.array([11, 20, 30, 40]))
+    if target.close(control):
+        errors.append("inequality of long not detected")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))

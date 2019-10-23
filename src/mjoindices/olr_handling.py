@@ -65,6 +65,26 @@ class OLRData:
     def long(self):
         return self._long
 
+
+    def __eq__(self, other: "OLRData") -> bool:
+        """Override the default Equals behavior
+        """
+        return (np.all(self.lat == other.lat)
+                and np.all(self.long == other.long)
+                and np.all(self.time == other.time)
+                and np.all(self.olr == other.olr))
+
+
+    def close(self, other: "OLRData") -> bool:
+        """ Checks equality of two OLRData objects, but allows numerical tolerances.
+            :param other: The second OLRData object to compare with the current one
+            :return: Equality of all members considering the default tolerances of numpy.allclose
+        """
+        return (np.allclose(self.lat, other.lat)
+                and np.allclose(self.long, other.long)
+                and np.allclose(self.time.astype("float"), other.time.astype("float")) # allclose does not work with datetime64
+                and np.allclose(self.olr, other.olr))
+
     def get_olr_for_date(self, date):
         #FIXME: Check if date is in time range
         #FIXME: Unit-tested?

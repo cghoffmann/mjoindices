@@ -33,7 +33,7 @@ from scipy.io import FortranFile
 import mjoindices.olr_handling as olr
 
 
-# FIXME Codestyle
+# FIXME: Codestyle
 # FIXME: Documentation
 # FIXME: Unittestsd
 

@@ -27,8 +27,51 @@ import pytest
 import numpy as np
 
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
+import mjoindices.olr_handling as olr
 
 testdata_dir = Path(__file__).resolve().parent / "testdata"
+
+olr_data_filename = Path(__file__).resolve().parent / "testdata" / "olr.day.mean.nc"
+
+reference_file_filterOLRForMJO_EOF_Calculation_lat0 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat0.npz"
+reference_file_filterOLRForMJO_EOF_Calculation_lat5 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat5.npz"
+reference_file_filterOLRForMJO_EOF_Calculation_latmin10 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat-10.npz"
+
+
+
+@pytest.mark.slow
+@pytest.mark.skipif(not olr_data_filename.exists(), reason="OLR data file not available")
+def test_mjoindices_reference_validation_filterOLRForMJO_EOF_Calculation():
+
+    errors = []
+
+    orig_long = np.arange(0., 359.9, 2.5)
+
+    test_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+
+    lat = np.array([0])
+    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    target = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
+    control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_EOF_Calculation_lat0)
+    if not target.close(control):
+        errors.append("Filtered OLR for latitude 0 not identical")
+
+    lat = np.array([5])
+    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    target = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
+    control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_EOF_Calculation_lat5)
+    if not target.close(control):
+        errors.append("Filtered OLR for latitude 5 not identical")
+
+    lat = np.array([-10.])
+    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    target = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
+    control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_EOF_Calculation_latmin10)
+    if not target.close(control):
+        errors.append("Filtered OLR for latitude -10 not identical")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
 
 @pytest.mark.skip
 def test_filter_MJOCondition_lat0deg():
@@ -38,6 +81,8 @@ def test_filter_MJOCondition_lat0deg():
     # raw_olr = loadKiladisBinaryOLRDataTwicePerDay(olr_dir / "olr.2x.7918.b")
     # test_olr = np.squeeze(raw_olr.olr[:, 36, :])
     test_olr = wkfilter.loadKiladisOriginalOLR(reference_dir / "OLROriginal.b")
+
+
 
     validator = wkfilter.WKFilterValidator(test_olr, reference_dir, do_plot=0, atol=1e-8, rtol=100.)
     errors = validator.validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions()
@@ -74,6 +119,33 @@ def check_test_input_OLRData():
     testdata = np.squeeze(kiladis_olr.olr[:, found, :])  # select one latitude
     print(np.mean(testdata - k_inputOLR))
 
+def generateReferenceData():
+
+    orig_long = np.arange(0., 359.9, 2.5)
+
+    test_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+
+    lat = np.array([0])
+    test_olr_part = olr.resample_spatial_grid(test_olr,lat, orig_long)
+    olrdata_filtered = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
+    filename = Path(str(reference_file_filterOLRForMJO_EOF_Calculation_lat0) + ".newcalc")
+    olrdata_filtered.save_to_npzfile(filename)
+
+    lat = np.array([5])
+    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    olrdata_filtered = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
+    filename = Path(str(reference_file_filterOLRForMJO_EOF_Calculation_lat5) + ".newcalc")
+    olrdata_filtered.save_to_npzfile(filename)
+
+    lat = np.array([-10])
+    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    olrdata_filtered = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
+    filename = Path(str(reference_file_filterOLRForMJO_EOF_Calculation_latmin10) + ".newcalc")
+    olrdata_filtered.save_to_npzfile(filename)
+
+
+
 
 #configure_and_run_fortran_code(29)
 #check_test_input_OLRData()
+#generateReferenceData()
