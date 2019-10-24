@@ -22,7 +22,6 @@
 # Contact: christoph.hoffmann@uni-greifswald.de
 
 from pathlib import Path
-from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -422,338 +421,341 @@ class WKFilter:
         # FIXME: Make sure that result is real
         return result
 
-
-class WKFilterValidator:
-
-    def __init__(self, olrdata_to_be_filtered: np.ndarray, reference_data_dir: Path, do_plot=1, atol=0., rtol=0.):
-        self.__olrdata_to_be_filtered = olrdata_to_be_filtered.copy()
-        self.__reference_data_dir = reference_data_dir
-        self.__do_plot = do_plot
-        self.__atol = atol
-        self.__rtol = rtol
-
-    def validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions(self):
-        # kiladis_olr = loadKiladisBinaryOLRDataTwicePerDay(self.__data_exchange_dir + "/olr.2x.7918.b")
-        # testdata = np.squeeze(kiladis_olr.olr[:,0,:]) #select one latitude
-        return self.validate_WKFilter_perform2dimSpectralSmoothing(0.5, 30., 96., 0., 720)
-
-    def validate_WKFilter_perform2dimSpectralSmoothing(self, time_spacing: float, period_min: float, period_max: float,
-                                                       wn_min: float, wn_max: float) -> List:
-        errors = []
-        testfilter = WKFilter()
-        testfilter.perform2dimSpectralSmoothing(self.__olrdata_to_be_filtered, time_spacing, period_min, period_max,
-                                                wn_min, wn_max, do_plot=self.__do_plot, save_debug=1)
-
-        ############## Input OLR
-        reference_inputOLR = loadKiladisOriginalOLR(self.__reference_data_dir / "OLROriginal.b")
-        new_inputOLR = testfilter.DebugInputOLR
-
-        if not np.all(reference_inputOLR == new_inputOLR):
-            errors.append("OLR input into filtering is not equal to reference. Test ist expected to fail.")
-
-        if self.__do_plot:
-            fig, axs = plt.subplots(1, 3, num="WKFilterValidator_InputOLR", clear=True, figsize=(6, 4), dpi=150)
-            fig.suptitle("Input OLR")
-
-            ax = axs[0]
-            c = ax.contourf(reference_inputOLR)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Reference")
-
-            ax = axs[1]
-            c = ax.contourf(new_inputOLR)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Recalculation")
-
-            ax = axs[2]
-            c = ax.contourf(reference_inputOLR - new_inputOLR)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Difference (absolute Units)")
-
-        # ############# Preprocessed OLR
-        reference_preprocessed_olr = loadKiladisPreprocessedOLR(self.__reference_data_dir / "OLRBeforeFFT.b")
-        new_preprocessedOLR = testfilter.DebugPreprocessedOLR
-
-        k_nt = reference_preprocessed_olr.shape[0]
-
-        if not np.all(np.isclose(new_preprocessedOLR[0:k_nt, :], reference_preprocessed_olr, rtol=self.__rtol, atol=self.__atol)):
-            errors.append("Preprocessed OLR is not close to reference")
-
-        if self.__do_plot:
-            fig, axs = plt.subplots(1, 3, num="WKFilterValidator_PreprocessedOLR", clear=True, figsize=(6, 4), dpi=150)
-            fig.suptitle("Preprocessed OLR (zero padding not shown)")
-
-            ax = axs[0]
-            c = ax.contourf(reference_preprocessed_olr)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Reference")
-
-            ax = axs[1]
-            c = ax.contourf(new_preprocessedOLR[0:k_nt, :])
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Recalculation")
-
-            ax = axs[2]
-            c = ax.contourf(reference_preprocessed_olr - new_preprocessedOLR[0:k_nt, :])
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Difference (absolute Units)")
-
-        # ############# Freq Axis
-        reference_freq_axis = loadKiladisFF(self.__reference_data_dir / "ff.b")
-        new_freq_axis = testfilter.DebugFreqAxis
-
-        if not np.all(reference_freq_axis == new_freq_axis):
-            errors.append("Frequency axis is not identical.")
-
-        if self.__do_plot:
-            fig, axs = plt.subplots(1, 3, num="WKFilterValidator_FreqAxis", clear=True, figsize=(6, 4), dpi=150)
-            fig.suptitle("Frequency Axis")
-
-            ax = axs[0]
-            c = ax.plot(reference_freq_axis)
-            ax.set_title("Reference")
-
-            ax = axs[1]
-            c = ax.plot(new_freq_axis)
-            ax.set_title("Recalculation")
-
-            ax = axs[2]
-            c = ax.plot(reference_freq_axis - new_freq_axis)
-            ax.set_title("Difference (absolute Units)")
-
-        # ############# Wavenumber Axis
-        reference_wn_axis = loadKiladisSS(self.__reference_data_dir / "ss.b")
-        new_wn_axis = testfilter.DebugWNAxis
-
-        if not np.all(reference_wn_axis == new_wn_axis):
-            errors.append("Frequency axis is not identical.")
-
-        if self.__do_plot:
-            fig, axs = plt.subplots(1, 3, num="WKFilterValidator_WNAxis", clear=True, figsize=(6, 4), dpi=150)
-            fig.suptitle("Wavenumber Axis")
-
-            ax = axs[0]
-            c = ax.plot(reference_wn_axis)
-            ax.set_title("Reference")
-
-            ax = axs[1]
-            c = ax.plot(new_wn_axis)
-            ax.set_title("Recalculation")
-
-            ax = axs[2]
-            c = ax.plot(reference_wn_axis - new_wn_axis)
-            ax.set_title("Difference (absolute Units)")
-
-        ############## Original Fourier Spectrum
-        reference_origFourierSpectrum = loadKiladisFFT(self.__reference_data_dir / "FFT.b")
-        new_origFourierSpectrum = testfilter.DebugOriginalFourierSpectrum
-
-        if not np.all(np.isclose(new_origFourierSpectrum, reference_origFourierSpectrum, rtol=self.__rtol,
-                                 atol=self.__atol)):
-            errors.append("Fourier Spectrum (unfiltered) is not close to reference")
-
-        if self.__do_plot:
-            fig, axs = plt.subplots(1, 3, num="WKFilterValidator_OrigFourierSpectrum", clear=True, figsize=(6, 4),
-                                    dpi=150)
-            fig.suptitle("Original Fourier Spectrum")
-
-            ax = axs[0]
-            c = ax.contourf(reference_origFourierSpectrum)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Reference")
-
-            ax = axs[1]
-            c = ax.contourf(new_origFourierSpectrum)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Recalculation")
-
-            ax = axs[2]
-            c = ax.contourf(reference_origFourierSpectrum / new_origFourierSpectrum)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Quotient")
-
-        ############## Filtered Fourier Spectrum
-        reference_filteredFourierSpectrum = loadKiladisFFT(self.__reference_data_dir / "FFTfiltered.b")
-        new_filteredFourierSpectrum = testfilter.DebugFilteredFourierSpectrum
-
-        if not np.all(np.isclose(new_filteredFourierSpectrum, reference_filteredFourierSpectrum, rtol=self.__rtol,
-                                 atol=self.__atol)):
-            errors.append("Fourier Spectrum (filtered) is not close to reference")
-
-        if self.__do_plot:
-            fig, axs = plt.subplots(1, 3, num="WKFilterValidator_FilteredFourierSpectrum", clear=True, figsize=(6, 4),
-                                    dpi=150)
-            fig.suptitle("Filtered Fourier Spectrum")
-
-            ax = axs[0]
-            c = ax.contourf(reference_wn_axis, reference_freq_axis, reference_filteredFourierSpectrum)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Reference")
-
-            ax = axs[1]
-            c = ax.contourf(new_wn_axis, new_freq_axis, new_filteredFourierSpectrum)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Recalculation")
-
-            ax = axs[2]
-            c = ax.contourf(reference_wn_axis, reference_freq_axis, new_filteredFourierSpectrum / reference_filteredFourierSpectrum)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Quotient")
-
-            print("Number of elements in filtered Spectrum:", testfilter.DebugNoElementsInFilteredSpectrum)
-
-        ############## Filtered OLR
-        reference_filteredOLR = loadKiladisFilteredOLR(self.__reference_data_dir / "OLRfiltered.b")
-        new_filteredOLR = testfilter.DebugFilterOLR
-
-        if not np.all(np.isclose(new_filteredOLR, reference_filteredOLR, rtol=self.__rtol,
-                                 atol=self.__atol)):
-            errors.append("Filtered OLR is not close to reference")
-
-        if self.__do_plot:
-            fig, axs = plt.subplots(1, 3, num="WKFilterValidator_FilteredOLR", clear=True, figsize=(8, 4), dpi=150)
-
-            ax = axs[0]
-            c = ax.contourf(reference_filteredOLR)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Reference")
-
-            ax = axs[1]
-            c = ax.contourf(new_filteredOLR)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Recalculation")
-
-            ax = axs[2]
-            c = ax.contourf(reference_filteredOLR - new_filteredOLR)
-            fig.colorbar(c, ax=ax)
-            ax.set_title("Difference (absolute Units)")
-        return errors
-
-    ################### Loading procedure for output of Kiladis debug data.
-
-
-def loadKiladisOriginalOLR(filename):
-    nl = 144
-    nt = 28970
-    f = FortranFile(filename, 'r')
-    olr = np.zeros([nt, nl])
-    for i_l in range(0, nl):
-        record1 = np.squeeze(f.read_record('(1,28970)<f4'))
-        olr[:, i_l] = record1
-    return olr
-
-
-def loadKiladisFilteredOLR(filename):
-    f = FortranFile(filename, 'r')
-    record1 = np.squeeze(f.read_record('(28970,144)<complex64'))
-    return record1
-
-
-def loadKiladisPreprocessedOLR(filename):
-    nl = 144
-    nt = 28970
-    f = FortranFile(filename, 'r')
-    olr = np.zeros([nt, nl])
-    for i_l in range(0, nl):
-        record1 = np.squeeze(f.read_record('(1,28970)<f4'))
-        olr[:, i_l] = record1
-    return olr
-
-
-def loadKiladisSS(filename):
-    f = FortranFile(filename, 'r')
-    record1 = np.squeeze(f.read_record('(1,144)<f4'))
-    return record1
-
-
-def loadKiladisFF(filename):
-    f = FortranFile(filename, 'r')
-    record1 = np.squeeze(f.read_record('(1,131072)<f4'))
-    return record1
-
-
-def loadKiladisFFT(filename):
-    f = FortranFile(filename, 'r')
-    record1 = np.squeeze(f.read_record('(131072,144)<complex64'))
-    return record1
-
-
-def loadKiladisBinaryOLRDataTwicePerDay(filename):
-    nt = 28970  # known from execution of kiladis fortran code
-
-    time = np.zeros(nt, dtype='datetime64[m]')
-
-    lat = np.arange(-90, 90.1, 2.5)
-    nlat = lat.size
-    long = np.arange(0, 360, 2.5)
-    nlong = long.size
-
-    olrdata = np.zeros([nt, nlat, nlong], dtype='f4')
-    f = FortranFile(filename, 'r')
-    for i_t in range(0, nt):
-        record1 = np.squeeze(f.read_record('(1,7)<i4'))
-        year = str(record1[0])
-        month = str(record1[1]).zfill(2)
-        day = str(record1[2]).zfill(2)
-        hour = str(record1[3]).zfill(2)
-        date = np.datetime64(year + '-' + month + '-' + day + 'T' + hour + ':00')
-        time[i_t] = date
-        # print(record1)
-        olr_record = f.read_record('(145,73)<f4').reshape(nlat, 145)
-        # ((xx(lon,lat),lon=1,NLON),lat=soutcalc,noutcalc)
-        #        if(i_t == 0):
-        #            print(olr_record.shape)
-        #            print(record1[0])
-        #            print(olr_record[0,:])
-        #            print(olr_record[69,:])
-        olrdata[i_t, :, :] = olr_record[:,
-                             0:nlong]  # the first longitude is repeated at the end in this file, so skip last value
-        # print(i_t, ':', date)
-    f.close()
-    # print(time.shape)
-    result = olr.OLRData(olrdata, time, lat, long[0:nlong])
-    return result
-
-def loadKiladisBinaryOLRDataOncePerDay(filename):
-    nt = 14485  # known from execution of kiladis fortran code
-
-    time = np.zeros(nt, dtype='datetime64[m]')
-
-    lat = np.arange(-90, 90.1, 2.5)
-    nlat = lat.size
-    long = np.arange(0, 360, 2.5)
-    nlong = long.size
-
-    olrdata = np.zeros([nt, nlat, nlong], dtype='f4')
-    f = FortranFile(filename, 'r')
-    for i_t in range(0, nt):
-        record1 = np.squeeze(f.read_record('(1,7)<i4'))
-        year = str(record1[0])
-        month = str(record1[1]).zfill(2)
-        day = str(record1[2]).zfill(2)
-        hour = str(record1[3]).zfill(2)
-        date = np.datetime64(year + '-' + month + '-' + day + 'T' + hour + ':00')
-        time[i_t] = date
-        # print(record1)
-        olr_record = f.read_record('(145,73)<f4').reshape(nlat, 145)
-        # ((xx(lon,lat),lon=1,NLON),lat=soutcalc,noutcalc)
-        #        if(i_t == 0):
-        #            print(olr_record.shape)
-        #            print(record1[0])
-        #            print(olr_record[0,:])
-        #            print(olr_record[69,:])
-        olrdata[i_t, :, :] = olr_record[:,
-                             0:nlong]  # the first longitude is repeated at the end in this file, so skip last value
-        # print(i_t, ':', date)
-    f.close()
-    # print(time.shape)
-    result = olr.OLRData(olrdata, time, lat, long[0:nlong])
-    return result
-
-
-if __name__ == '__main__':
-    # official calidation is done with file Christoph/MJO/MJOIndexRecalculation/ValidateWKFilterWithOriginalFortranCodeOutput.py
-
-    validator = WKFilterValidator(
-        data_exchange_dir="/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering")
-    validator.validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions()
+#FIXME: Remove follwing code
+
+# class WKFilterValidator:
+#
+#     def __init__(self, olrdata_to_be_filtered: np.ndarray, reference_data_dir: Path, do_plot=1, atol=0., rtol=0.):
+#         self.__olrdata_to_be_filtered = olrdata_to_be_filtered.copy()
+#         self.__reference_data_dir = reference_data_dir
+#         self.__do_plot = do_plot
+#         self.__atol = atol
+#         self.__rtol = rtol
+#
+#     def validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions(self):
+#         # kiladis_olr = loadKiladisBinaryOLRDataTwicePerDay(self.__data_exchange_dir + "/olr.2x.7918.b")
+#         # testdata = np.squeeze(kiladis_olr.olr[:,0,:]) #select one latitude
+#         return self.validate_WKFilter_perform2dimSpectralSmoothing(0.5, 30., 96., 0., 720)
+#
+#     def validate_WKFilter_perform2dimSpectralSmoothing(self, time_spacing: float, period_min: float, period_max: float,
+#                                                        wn_min: float, wn_max: float) -> List:
+#         errors = []
+#         testfilter = WKFilter()
+#         testfilter.perform2dimSpectralSmoothing(self.__olrdata_to_be_filtered, time_spacing, period_min, period_max,
+#                                                 wn_min, wn_max, do_plot=self.__do_plot, save_debug=1)
+#
+#         ############## Input OLR
+#         reference_inputOLR = loadKiladisOriginalOLR(self.__reference_data_dir / "OLROriginal.b")
+#         new_inputOLR = testfilter.DebugInputOLR
+#
+#         if not np.all(reference_inputOLR == new_inputOLR):
+#             errors.append("OLR input into filtering is not equal to reference. Test ist expected to fail.")
+#
+#         if self.__do_plot:
+#             fig, axs = plt.subplots(1, 3, num="WKFilterValidator_InputOLR", clear=True, figsize=(6, 4), dpi=150)
+#             fig.suptitle("Input OLR")
+#
+#             ax = axs[0]
+#             c = ax.contourf(reference_inputOLR)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Reference")
+#
+#             ax = axs[1]
+#             c = ax.contourf(new_inputOLR)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Recalculation")
+#
+#             ax = axs[2]
+#             c = ax.contourf(reference_inputOLR - new_inputOLR)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Difference (absolute Units)")
+#             fig.show()
+#
+#         # ############# Preprocessed OLR
+#         reference_preprocessed_olr = loadKiladisPreprocessedOLR(self.__reference_data_dir / "OLRBeforeFFT.b")
+#         new_preprocessedOLR = testfilter.DebugPreprocessedOLR
+#
+#         k_nt = reference_preprocessed_olr.shape[0]
+#
+#         if not np.all(np.isclose(new_preprocessedOLR[0:k_nt, :], reference_preprocessed_olr, rtol=self.__rtol, atol=self.__atol)):
+#             errors.append("Preprocessed OLR is not close to reference")
+#
+#         if self.__do_plot:
+#             fig, axs = plt.subplots(1, 3, num="WKFilterValidator_PreprocessedOLR", clear=True, figsize=(6, 4), dpi=150)
+#             fig.suptitle("Preprocessed OLR (zero padding not shown)")
+#
+#             ax = axs[0]
+#             c = ax.contourf(reference_preprocessed_olr)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Reference")
+#
+#             ax = axs[1]
+#             c = ax.contourf(new_preprocessedOLR[0:k_nt, :])
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Recalculation")
+#
+#             ax = axs[2]
+#             c = ax.contourf(reference_preprocessed_olr - new_preprocessedOLR[0:k_nt, :])
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Difference (absolute Units)")
+#
+#         # ############# Freq Axis
+#         reference_freq_axis = loadKiladisFF(self.__reference_data_dir / "ff.b")
+#         new_freq_axis = testfilter.DebugFreqAxis
+#
+#         if not np.all(reference_freq_axis == new_freq_axis):
+#             errors.append("Frequency axis is not identical.")
+#
+#         if self.__do_plot:
+#             fig, axs = plt.subplots(1, 3, num="WKFilterValidator_FreqAxis", clear=True, figsize=(6, 4), dpi=150)
+#             fig.suptitle("Frequency Axis")
+#
+#             ax = axs[0]
+#             c = ax.plot(reference_freq_axis)
+#             ax.set_title("Reference")
+#
+#             ax = axs[1]
+#             c = ax.plot(new_freq_axis)
+#             ax.set_title("Recalculation")
+#
+#             ax = axs[2]
+#             c = ax.plot(reference_freq_axis - new_freq_axis)
+#             ax.set_title("Difference (absolute Units)")
+#
+#         # ############# Wavenumber Axis
+#         reference_wn_axis = loadKiladisSS(self.__reference_data_dir / "ss.b")
+#         new_wn_axis = testfilter.DebugWNAxis
+#
+#         if not np.all(reference_wn_axis == new_wn_axis):
+#             errors.append("Frequency axis is not identical.")
+#
+#         if self.__do_plot:
+#             fig, axs = plt.subplots(1, 3, num="WKFilterValidator_WNAxis", clear=True, figsize=(6, 4), dpi=150)
+#             fig.suptitle("Wavenumber Axis")
+#
+#             ax = axs[0]
+#             c = ax.plot(reference_wn_axis)
+#             ax.set_title("Reference")
+#
+#             ax = axs[1]
+#             c = ax.plot(new_wn_axis)
+#             ax.set_title("Recalculation")
+#
+#             ax = axs[2]
+#             c = ax.plot(reference_wn_axis - new_wn_axis)
+#             ax.set_title("Difference (absolute Units)")
+#
+#         ############## Original Fourier Spectrum
+#         reference_origFourierSpectrum = loadKiladisFFT(self.__reference_data_dir / "FFT.b")
+#         new_origFourierSpectrum = testfilter.DebugOriginalFourierSpectrum
+#
+#         if not np.all(np.isclose(new_origFourierSpectrum, reference_origFourierSpectrum, rtol=self.__rtol,
+#                                  atol=self.__atol)):
+#             errors.append("Fourier Spectrum (unfiltered) is not close to reference")
+#
+#         if self.__do_plot:
+#             fig, axs = plt.subplots(1, 3, num="WKFilterValidator_OrigFourierSpectrum", clear=True, figsize=(6, 4),
+#                                     dpi=150)
+#             fig.suptitle("Original Fourier Spectrum")
+#
+#             ax = axs[0]
+#             c = ax.contourf(reference_origFourierSpectrum)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Reference")
+#
+#             ax = axs[1]
+#             c = ax.contourf(new_origFourierSpectrum)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Recalculation")
+#
+#             ax = axs[2]
+#             c = ax.contourf(reference_origFourierSpectrum / new_origFourierSpectrum)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Quotient")
+#
+#         ############## Filtered Fourier Spectrum
+#         reference_filteredFourierSpectrum = loadKiladisFFT(self.__reference_data_dir / "FFTfiltered.b")
+#         new_filteredFourierSpectrum = testfilter.DebugFilteredFourierSpectrum
+#
+#         if not np.all(np.isclose(new_filteredFourierSpectrum, reference_filteredFourierSpectrum, rtol=self.__rtol,
+#                                  atol=self.__atol)):
+#             errors.append("Fourier Spectrum (filtered) is not close to reference")
+#
+#         if self.__do_plot:
+#             fig, axs = plt.subplots(1, 3, num="WKFilterValidator_FilteredFourierSpectrum", clear=True, figsize=(6, 4),
+#                                     dpi=150)
+#             fig.suptitle("Filtered Fourier Spectrum")
+#
+#             ax = axs[0]
+#             c = ax.contourf(reference_wn_axis, reference_freq_axis, reference_filteredFourierSpectrum)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Reference")
+#
+#             ax = axs[1]
+#             c = ax.contourf(new_wn_axis, new_freq_axis, new_filteredFourierSpectrum)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Recalculation")
+#
+#             ax = axs[2]
+#             c = ax.contourf(reference_wn_axis, reference_freq_axis, new_filteredFourierSpectrum / reference_filteredFourierSpectrum)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Quotient")
+#
+#             print("Number of elements in filtered Spectrum:", testfilter.DebugNoElementsInFilteredSpectrum)
+#
+#         ############## Filtered OLR
+#         reference_filteredOLR = loadKiladisFilteredOLR(self.__reference_data_dir / "OLRfiltered.b")
+#         new_filteredOLR = testfilter.DebugFilterOLR
+#
+#         if not np.all(np.isclose(new_filteredOLR, reference_filteredOLR, rtol=self.__rtol,
+#                                  atol=self.__atol)):
+#             errors.append("Filtered OLR is not close to reference")
+#
+#         if self.__do_plot:
+#             fig, axs = plt.subplots(1, 3, num="WKFilterValidator_FilteredOLR", clear=True, figsize=(8, 4), dpi=150)
+#
+#             ax = axs[0]
+#             c = ax.contourf(reference_filteredOLR)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Reference")
+#
+#             ax = axs[1]
+#             c = ax.contourf(new_filteredOLR)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Recalculation")
+#
+#             ax = axs[2]
+#             c = ax.contourf(reference_filteredOLR - new_filteredOLR)
+#             fig.colorbar(c, ax=ax)
+#             ax.set_title("Difference (absolute Units)")
+#         return errors
+#
+#     ################### Loading procedure for output of Kiladis debug data.
+#
+#
+# def loadKiladisOriginalOLR(filename):
+#     nl = 144
+#     nt = 28970
+#     f = FortranFile(filename, 'r')
+#     olr = np.zeros([nt, nl])
+#     for i_l in range(0, nl):
+#         record1 = np.squeeze(f.read_record('(1,28970)<f4'))
+#         olr[:, i_l] = record1
+#     return olr
+#
+#
+# def loadKiladisFilteredOLR(filename):
+#     f = FortranFile(filename, 'r')
+#     record1 = np.squeeze(f.read_record('(28970,144)<complex64'))
+#     return record1
+#
+#
+# def loadKiladisPreprocessedOLR(filename):
+#     nl = 144
+#     nt = 28970
+#     f = FortranFile(filename, 'r')
+#     olr = np.zeros([nt, nl])
+#     for i_l in range(0, nl):
+#         record1 = np.squeeze(f.read_record('(1,28970)<f4'))
+#         olr[:, i_l] = record1
+#     return olr
+#
+#
+# def loadKiladisSS(filename):
+#     f = FortranFile(filename, 'r')
+#     record1 = np.squeeze(f.read_record('(1,144)<f4'))
+#     return record1
+#
+#
+# def loadKiladisFF(filename):
+#     f = FortranFile(filename, 'r')
+#     record1 = np.squeeze(f.read_record('(1,131072)<f4'))
+#     return record1
+#
+#
+# def loadKiladisFFT(filename):
+#     f = FortranFile(filename, 'r')
+#     record1 = np.squeeze(f.read_record('(131072,144)<complex64'))
+#     return record1
+#
+# #FIXME: Carefully remove the olr loader functions or integrate into olr_handling
+#
+# def loadKiladisBinaryOLRDataTwicePerDay(filename):
+#     nt = 28970  # known from execution of kiladis fortran code
+#
+#     time = np.zeros(nt, dtype='datetime64[m]')
+#
+#     lat = np.arange(-90, 90.1, 2.5)
+#     nlat = lat.size
+#     long = np.arange(0, 360, 2.5)
+#     nlong = long.size
+#
+#     olrdata = np.zeros([nt, nlat, nlong], dtype='f4')
+#     f = FortranFile(filename, 'r')
+#     for i_t in range(0, nt):
+#         record1 = np.squeeze(f.read_record('(1,7)<i4'))
+#         year = str(record1[0])
+#         month = str(record1[1]).zfill(2)
+#         day = str(record1[2]).zfill(2)
+#         hour = str(record1[3]).zfill(2)
+#         date = np.datetime64(year + '-' + month + '-' + day + 'T' + hour + ':00')
+#         time[i_t] = date
+#         # print(record1)
+#         olr_record = f.read_record('(145,73)<f4').reshape(nlat, 145)
+#         # ((xx(lon,lat),lon=1,NLON),lat=soutcalc,noutcalc)
+#         #        if(i_t == 0):
+#         #            print(olr_record.shape)
+#         #            print(record1[0])
+#         #            print(olr_record[0,:])
+#         #            print(olr_record[69,:])
+#         olrdata[i_t, :, :] = olr_record[:,
+#                              0:nlong]  # the first longitude is repeated at the end in this file, so skip last value
+#         # print(i_t, ':', date)
+#     f.close()
+#     # print(time.shape)
+#     result = olr.OLRData(olrdata, time, lat, long[0:nlong])
+#     return result
+#
+# def loadKiladisBinaryOLRDataOncePerDay(filename):
+#     nt = 14485  # known from execution of kiladis fortran code
+#
+#     time = np.zeros(nt, dtype='datetime64[m]')
+#
+#     lat = np.arange(-90, 90.1, 2.5)
+#     nlat = lat.size
+#     long = np.arange(0, 360, 2.5)
+#     nlong = long.size
+#
+#     olrdata = np.zeros([nt, nlat, nlong], dtype='f4')
+#     f = FortranFile(filename, 'r')
+#     for i_t in range(0, nt):
+#         record1 = np.squeeze(f.read_record('(1,7)<i4'))
+#         year = str(record1[0])
+#         month = str(record1[1]).zfill(2)
+#         day = str(record1[2]).zfill(2)
+#         hour = str(record1[3]).zfill(2)
+#         date = np.datetime64(year + '-' + month + '-' + day + 'T' + hour + ':00')
+#         time[i_t] = date
+#         # print(record1)
+#         olr_record = f.read_record('(145,73)<f4').reshape(nlat, 145)
+#         # ((xx(lon,lat),lon=1,NLON),lat=soutcalc,noutcalc)
+#         #        if(i_t == 0):
+#         #            print(olr_record.shape)
+#         #            print(record1[0])
+#         #            print(olr_record[0,:])
+#         #            print(olr_record[69,:])
+#         olrdata[i_t, :, :] = olr_record[:,
+#                              0:nlong]  # the first longitude is repeated at the end in this file, so skip last value
+#         # print(i_t, ':', date)
+#     f.close()
+#     # print(time.shape)
+#     result = olr.OLRData(olrdata, time, lat, long[0:nlong])
+#     return result
+
+
+# if __name__ == '__main__':
+#     # official calidation is done with file Christoph/MJO/MJOIndexRecalculation/ValidateWKFilterWithOriginalFortranCodeOutput.py
+#
+#     validator = WKFilterValidator(
+#         data_exchange_dir="/home/ch/UPSoftware/Christoph/MJO/MJOIndexRecalculation/GKiladisFiltering")
+#     validator.validate_WKFilter_perform2dimSpectralSmoothing_MJOConditions()
