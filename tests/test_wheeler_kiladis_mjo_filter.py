@@ -38,7 +38,6 @@ reference_file_filterOLRForMJO_EOF_Calculation_lat5 = Path(__file__).resolve().p
 reference_file_filterOLRForMJO_EOF_Calculation_latmin10 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat-10.npz"
 
 
-
 @pytest.mark.slow
 @pytest.mark.skipif(not olr_data_filename.exists(), reason="OLR data file not available")
 def test_mjoindices_reference_validation_filterOLRForMJO_EOF_Calculation():
@@ -73,7 +72,7 @@ def test_mjoindices_reference_validation_filterOLRForMJO_EOF_Calculation():
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-def generateReferenceData():
+def generate_reference_data():
 
     orig_long = np.arange(0., 359.9, 2.5)
 
@@ -98,4 +97,4 @@ def generateReferenceData():
     olrdata_filtered.save_to_npzfile(filename)
 
 
-#generateReferenceData()
+#generate_reference_data()
