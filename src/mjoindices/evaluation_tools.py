@@ -248,6 +248,7 @@ def calc_timeseries_agreement(ref_data, ref_time, data, time, exclude_doy366=Fal
 
     return inds_used, inds_not_used, corr, diff_mean, diff_std, diff_ts, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99
 
+
 def plot_timeseries_agreement(ref_data, ref_time, data, time, title = None, do_print=False):
 
     if do_print:

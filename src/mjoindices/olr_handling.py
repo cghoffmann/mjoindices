@@ -65,7 +65,6 @@ class OLRData:
     def long(self):
         return self._long
 
-
     def __eq__(self, other: "OLRData") -> bool:
         """Override the default Equals behavior
         """
@@ -74,7 +73,6 @@ class OLRData:
                 and np.all(self.time == other.time)
                 and np.all(self.olr == other.olr))
 
-
     def close(self, other: "OLRData") -> bool:
         """ Checks equality of two OLRData objects, but allows numerical tolerances.
             :param other: The second OLRData object to compare with the current one
@@ -82,18 +80,23 @@ class OLRData:
         """
         return (np.allclose(self.lat, other.lat)
                 and np.allclose(self.long, other.long)
-                and np.allclose(self.time.astype("float"), other.time.astype("float")) # allclose does not work with datetime64
+                and np.allclose(self.time.astype("float"), other.time.astype("float"))  # allclose does not work with datetime64
                 and np.allclose(self.olr, other.olr))
 
-    def get_olr_for_date(self, date):
-        #FIXME: Check if date is in time range
-        #FIXME: Unit-tested?
+    def get_olr_for_date(self, date: np.datetime64) -> np.ndarray:
+        """
+        Returns the spatially distributed OLR map for a particular data
+        :param date: The date, which hat to be exactly matched by one of the dates in the time series
+        :return: The OLR data or None if the date is not contained in the OLR time series.
+        """
         cand = self.time == date
-        #print(cand)
-        #print(self.__olr_data_cube.shape)
-        return np.squeeze(self.olr[cand,:,:])
+        if not np.all(cand == False):
+            return np.squeeze(self.olr[cand, :, :])
+        else:
+            return None
 
-    def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0, strict_leap_year_treatment: bool = True) -> np.ndarray:
+    def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0,
+                                         strict_leap_year_treatment: bool = True) -> np.ndarray:
         """
         Extracts the olr data, which belongs to all doys around one center (center_doy +/- windowlength).
         Keep in mind that the OLR time series might span several years. In this case the center DOy is found more than
@@ -107,8 +110,8 @@ class OLRData:
         :return: A matrix: 1. index doys, 2. index lat, 3 index long.
         seealso:: mjoindices.tools.find_doy_ranges_in_dates() for details.
         """
-        #TODO Add doc for strict_leap_year_treatment
-        inds, doys  = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length, strict_leap_year_treatment=strict_leap_year_treatment)
+        inds, doys  = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length,
+                                                     strict_leap_year_treatment=strict_leap_year_treatment)
         return self.olr[inds, :, :]
 
     def save_to_npzfile(self, filename: Path) -> None:
@@ -150,7 +153,7 @@ def resample_spatial_grid(olr: OLRData, target_lat: np.array, target_long: np.ar
         olr_interpol[idx,:,:] = f(target_long, target_lat)
     return OLRData(olr_interpol, olr.time, target_lat, target_long)
 
-#FIXME: doc, unitttest
+#FIXME: doc
 def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime64) -> OLRData:
     windowInds = (olr.time >= start) & (olr.time <= stop)
     return OLRData(olr.olr[windowInds, :, :], olr.time[windowInds], olr.lat, olr.long)
@@ -200,21 +203,25 @@ def restore_from_npzfile(filename: Path) -> OLRData:
         long = data["long"]
     return OLRData(olr, time, lat, long)
 
+
 def plot_olr_map_for_date(olr: OLRData, date: np.datetime64):
     # TODO: Plot underlying map
 
     mapdata = olr.get_olr_for_date(date)
 
-    fig, axs = plt.subplots(1, 1, num="plot_olr_map_for_date", clear=True,
-                            figsize=(10, 5), dpi=150, sharex=True, sharey=True)
-    plt.subplots_adjust(wspace=0.35, hspace=0.35)
+    if mapdata is not None:
+        fig, axs = plt.subplots(1, 1, num="plot_olr_map_for_date", clear=True,
+                                figsize=(10, 5), dpi=150, sharex=True, sharey=True)
+        plt.subplots_adjust(wspace=0.35, hspace=0.35)
 
-    ax = axs
+        ax = axs
 
-    c = ax.contourf(olr.long, olr.lat, mapdata)
-    fig.colorbar(c, ax=ax, label="OLR")
-    ax.set_title("OLR")
-    ax.set_ylabel("Latitude [°]")
-    ax.set_xlabel("Longitude [°]")
+        c = ax.contourf(olr.long, olr.lat, mapdata)
+        fig.colorbar(c, ax=ax, label="OLR")
+        ax.set_title("OLR")
+        ax.set_ylabel("Latitude [°]")
+        ax.set_xlabel("Longitude [°]")
+    else:
+        raise AttributeError("No OLR data found for given date.")
 
     return fig

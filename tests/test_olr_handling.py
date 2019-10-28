@@ -142,6 +142,63 @@ def test_save_to_npzfile_restore_from_npzfile(tmp_path):
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
+def test_get_olr_for_date():
+    time = np.arange("2018-01-01", "2018-01-04", dtype='datetime64[D]')
+    lat = np.array([-2.5, 2.5])
+    long = np.array([10, 20, 30, 40])
+    olrmatrix = np.random.rand(3, 2, 4)
+    testdata = olr.OLRData(olrmatrix, time, lat, long)
+
+    errors = []
+
+    target = testdata.get_olr_for_date(np.datetime64("2018-01-01"))
+    if not np.all(target == np.squeeze(olrmatrix[0, :, :])):
+        errors.append("Returned wrong OLR data for index 0.")
+
+    target = testdata.get_olr_for_date(np.datetime64("2018-01-02"))
+    if not np.all(target == np.squeeze(olrmatrix[1, :, :])):
+        errors.append("Returned wrong OLR data for index 1.")
+
+    target = testdata.get_olr_for_date(np.datetime64("2017-01-01"))
+    print(target)
+    if target is not None:
+        errors.append("Returned wrong OLR data for unknown date.")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_extract_olr_matrix_for_doy_range():
+
+    time = np.arange("2018-01-01", "2018-01-10", dtype='datetime64[D]')
+    lat = np.array([-2.5, 2.5])
+    long = np.array([10, 20, 30, 40])
+    olrmatrix = np.random.rand(9, 2, 4)
+    testdata = olr.OLRData(olrmatrix, time, lat, long)
+
+    errors = []
+
+    target = testdata.extract_olr_matrix_for_doy_range(4, 2, strict_leap_year_treatment=True)
+    if not np.all(target == np.squeeze(olrmatrix[1:6, :, :])):
+        errors.append("Returned wrong OLR data for DOY 4, length 2.")
+
+    target = testdata.extract_olr_matrix_for_doy_range(4, 3, strict_leap_year_treatment=True)
+    if not np.all(target == np.squeeze(olrmatrix[0:7, :, :])):
+        errors.append("Returned wrong OLR data for DOY 4, length 3.")
+
+    # test period of two years (DOY is found twice)
+    time = np.arange("2018-01-01", "2019-01-10", dtype='datetime64[D]')
+    lat = np.array([-2.5, 2.5])
+    long = np.array([10, 20, 30, 40])
+    olrmatrix = np.random.rand(9+365, 2, 4)
+    testdata = olr.OLRData(olrmatrix, time, lat, long)
+    target = testdata.extract_olr_matrix_for_doy_range(4, 2, strict_leap_year_treatment=True)
+    inds = np.concatenate((np.arange(1, 6, 1), np.arange(1, 6, 1) + 365))
+    if not np.all(target == np.squeeze(olrmatrix[inds, :, :])):
+        errors.append("Returned wrong OLR data for DOY 4, length 2 oder 2 years")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
 def test_equality_operator():
     time = np.arange("2018-01-01", "2018-01-04", dtype='datetime64[D]')
     lat = np.array([-2.5, 2.5])
