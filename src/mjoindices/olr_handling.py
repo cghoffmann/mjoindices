@@ -246,6 +246,6 @@ def plot_olr_map_for_date(olr: OLRData, date: np.datetime64):
         ax.set_ylabel("Latitude [°]")
         ax.set_xlabel("Longitude [°]")
     else:
-        raise AttributeError("No OLR data found for given date.")
+        raise ValueError("No OLR data found for given date.")
 
     return fig

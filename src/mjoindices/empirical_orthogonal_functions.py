@@ -56,11 +56,11 @@ class EOFData:
         the data only, so that the computation logic is somewhere else and we keep redundant data here intentionally.
         """
         if not eof1.shape == eof2.shape:
-            raise AttributeError("EOF1 and EOF2 must have the same shape")
+            raise ValueError("EOF1 and EOF2 must have the same shape")
         expected_n = lat.size * long.size
 
         if eof1.size != expected_n or eof2.size != expected_n:
-            raise AttributeError("Number of elements of EOF1 and EOF2 must be identical to lat.size*long.size")
+            raise ValueError("Number of elements of EOF1 and EOF2 must be identical to lat.size*long.size")
 
         self._lat = lat.copy()
         self._long = long.copy()
@@ -70,22 +70,22 @@ class EOFData:
         elif eof1.ndim == 2 and eof2.ndim == 2:
             if not (eof1.shape[0] == lat.size and eof1.shape[1] == long.size and eof2.shape[0] == lat.size and
                     eof2.shape[1]):
-                raise AttributeError("Length of first axis of EOS 1 and 2 must correspond to latitude axis, length of "
+                raise ValueError("Length of first axis of EOS 1 and 2 must correspond to latitude axis, length of "
                                      "second axis to the longitude axis")
             self._eof1 = self.reshape_to_vector(eof1.copy())
             self._eof2 = self.reshape_to_vector(eof2.copy())
         else:
-            raise AttributeError("EOF1 and EOF2 must have a dimension of 1 or 2.")
+            raise ValueError("EOF1 and EOF2 must have a dimension of 1 or 2.")
 
         if eigenvalues is not None:
             if eigenvalues.size != self.eof1vector.size:
-                raise AttributeError("Eigenvalues (if not None) must have same length as the second axis of the EOFs")
+                raise ValueError("Eigenvalues (if not None) must have same length as the second axis of the EOFs")
             self._eigenvalues = eigenvalues.copy()
         else:
             self._eigenvalues = None
         if explained_variances is not None:
             if explained_variances.size != self.eof1vector.size:
-                raise AttributeError("Explained variances (if not None) must have same length as the second axis of "
+                raise ValueError("Explained variances (if not None) must have same length as the second axis of "
                                      "the EOFs")
             self._explained_variances = explained_variances.copy()
         else:
@@ -243,9 +243,9 @@ class EOFData:
         :return: the vector
         """
         if not map.ndim == 2:
-            raise AttributeError("eof_map must have 2 dimensions")
+            raise ValueError("eof_map must have 2 dimensions")
         if not (map.shape[0] == self.lat.size and map.shape[1] == self.long.size):
-            raise AttributeError(
+            raise ValueError(
                 "Length of first dimension of eof_map must correspond to the latitude grid, length of second dimension to the longitude grid")
         return np.reshape(map, self.lat.size * self.long.size)
 
@@ -256,9 +256,9 @@ class EOFData:
         :return: The map. The first index corresponds to the latitude grid, the second to longitude.
         """
         if not vector.ndim == 1:
-            raise AttributeError("Vector must have only 1 dimension.")
+            raise ValueError("Vector must have only 1 dimension.")
         if not vector.size == self.lat.size * self.long.size:
-            raise AttributeError("Vector must have lat.size*long.size elements.")
+            raise ValueError("Vector must have lat.size*long.size elements.")
         # The following transformation has been double-checked graphically by comparing resulting plot to
         # https://www.esrl.noaa.gov/psd/mjo/mjoindex/animation/
         return np.reshape(vector, [self.lat.size, self.long.size])
@@ -289,14 +289,14 @@ class EOFDataForAllDOYs:
 
     def __init__(self, eof_list: typing.List[EOFData]) -> None:
         if len(eof_list) != 366:
-            raise AttributeError("List of EOFs must contain 366 entries")
+            raise ValueError("List of EOFs must contain 366 entries")
         reference_lat = eof_list[0].lat
         reference_long = eof_list[0].long
         for i in range(0, 366):
             if not np.all(eof_list[i].lat == reference_lat):
-                raise AttributeError("All EOFs must have the same latitude grid. Problematic is DOY %i" % i)
+                raise ValueError("All EOFs must have the same latitude grid. Problematic is DOY %i" % i)
             if not np.all(eof_list[i].long == reference_long):
-                raise AttributeError("All EOFs must have the same longitude grid. Problematic is DOY %i" % i)
+                raise ValueError("All EOFs must have the same longitude grid. Problematic is DOY %i" % i)
         # deepcopy eofs so that they cannot be modified accidently from outside after the consistency checks
         self._eof_list = copy.deepcopy(eof_list)
 
@@ -480,15 +480,15 @@ def load_single_eofs_from_txt_file(filename: Path) -> EOFData:
     # Apply some heuristic consistency checks
     if not np.unique(rep_counts).size == 1:
         # All latitudes must have the same number of longitudes
-        raise AttributeError("Lat/Long grid in input file seems to be corrupted 1")
+        raise ValueError("Lat/Long grid in input file seems to be corrupted 1")
     if not np.unique(repetition_idx[0:-1] - repetition_idx[1:]).size == 1:
         # All beginnings of a new lat have to be equally spaced
-        raise AttributeError("Lat/Long grid in input file seems to be corrupted 2")
+        raise ValueError("Lat/Long grid in input file seems to be corrupted 2")
     if not lat.size * long.size == eof1.size:
-        raise AttributeError("Lat/Long grid in input file seems to be corrupted 3")
+        raise ValueError("Lat/Long grid in input file seems to be corrupted 3")
     if not np.all(np.tile(long, lat.size) == full_long):
         # The longitude grid has to be the same for all latitudes
-        raise AttributeError("Lat/Long grid in input file seems to be corrupted 4")
+        raise ValueError("Lat/Long grid in input file seems to be corrupted 4")
 
     return EOFData(lat, long, eof1, eof2)
 

@@ -63,15 +63,15 @@ def test_reshape_to_vector_exceptions():
     target = eof.EOFData(lat, long, eof1, eof2)
 
     errors = []
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target.reshape_to_vector(np.array([1, 2, 3]))
     if "2 dimensions" not in str(e.value):
         errors.append("Check 2 dim failed")
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target.reshape_to_vector(np.array([(1, 2), (3, 4), (5, 6), (7, 8)]))
     if "Length of first dimension" not in str(e.value):
         errors.append("Length check failed")
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target.reshape_to_vector(np.array([(1, 2, 8), (3, 4, 9), (5, 6, 10)]))
     if "Length of first dimension" not in str(e.value):
         errors.append("Length check failed")
@@ -86,11 +86,11 @@ def test_reshape_to_map_exceptions():
     target = eof.EOFData(lat, long, eof1, eof2)
 
     errors = []
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target.reshape_to_map(np.array([(1, 2), (3, 4), (5, 6)]))
     if "only 1 dimension" not in str(e.value):
         errors.append("Check 1 dim failed")
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target.reshape_to_map(np.array([1, 2, 3, 4, 5, 6, 7, 8]))
     if "lat.size*long.size" not in str(e.value):
         errors.append("Length check failed")
@@ -117,6 +117,15 @@ def test_EOFData_basic_properties():
         errors.append("eof1map property not correct")
     if not np.all(target.eof2map == np.array([(10, 20), (30, 40), (50, 60)])):
         errors.append("eof2map property not correct")
+    if target.explained_variance_eof1 is not None:
+        errors.append("Explained variance of EOF1 should be None")
+    if target.explained_variance_eof2 is not None:
+        errors.append("Explained variance of EOF2 should be None")
+    if target.eigenvalue_eof1 is not None:
+        errors.append("Eigenvalue of EOF1 should be None")
+    if target.eigenvalue_eof2 is not None:
+        errors.append("Eigenvalue of EOF2 should be None")
+
 
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
@@ -172,28 +181,28 @@ def test_initialization_exceptions():
 
     eof1 = np.zeros((2, 2, 2))
     eof2 = np.ones((2, 2, 2))
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target = eof.EOFData(lat, long, eof1, eof2)
     if "dimension of 1 or 2" not in str(e.value):
         errors.append("Dimenesion check failed")
 
     eof1 = np.array([1, 2, 3, 4, 5, 6, 7, 8])
     eof2 = np.array([(10, 20), (30, 40), (50, 60), (70, 80)])
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target = eof.EOFData(lat, long, eof1, eof2)
     if "same shape" not in str(e.value):
         errors.append("Check same shape failed")
 
     eof1 = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
     eof2 = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target = eof.EOFData(lat, long, eof1, eof2)
     if "lat.size*long.size" not in str(e.value):
         errors.append("size check failed")
 
     eof1 = np.array([(1, 2), (3, 4), (5, 6), (7, 8)]).T
     eof2 = np.array([(10, 20), (30, 40), (50, 60), (70, 80)]).T
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target = eof.EOFData(lat, long, eof1, eof2)
     if "correspond to latitude axis" not in str(e.value):
         errors.append("axis check failed")
@@ -203,7 +212,7 @@ def test_initialization_exceptions():
     eof1 = np.array([1, 2, 3, 4, 5, 6])
     eof2 = np.array([10, 20, 30, 40, 50, 60])
     eigenvalues = np.array([1.1, 2.2, 3.3, 4.4, 5.5])
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target = eof.EOFData(lat, long, eof1, eof2, eigenvalues=eigenvalues)
     if "Eigenvalues (if not None) must have" not in str(e.value):
         errors.append("Eigenvalue check failed")
@@ -213,7 +222,7 @@ def test_initialization_exceptions():
     eof1 = np.array([1, 2, 3, 4, 5, 6])
     eof2 = np.array([10, 20, 30, 40, 50, 60])
     explained_variances = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
-    with pytest.raises(AttributeError) as e:
+    with pytest.raises(ValueError) as e:
         target = eof.EOFData(lat, long, eof1, eof2, explained_variances=explained_variances)
     if "Explained variances (if not None) must have" not in str(e.value):
         errors.append("Explained Variance check failed")
@@ -352,6 +361,29 @@ def test_save_eofs_to_txt_file_load_eofs_from_txt_file(tmp_path):
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
+def test_load_eofs_from_txt_file_exceptions():
+    errors = []
+
+    filename=Path(__file__).resolve().parent / "testdata" / "eof_reference" / "corrupt_nolong.txt"
+    with pytest.raises(ValueError)as e:
+        target_loaded = eof.load_single_eofs_from_txt_file(filename)
+    if "corrupted 1" not in str(e.value):
+        errors.append("File corrupted 1 check failed")
+
+    filename = Path(__file__).resolve().parent / "testdata" / "eof_reference" / "corrupt_latorder.txt"
+    with pytest.raises(ValueError)as e:
+        target_loaded = eof.load_single_eofs_from_txt_file(filename)
+    if "corrupted 2" not in str(e.value):
+        errors.append("File corrupted 2 check failed")
+
+    filename = Path(__file__).resolve().parent / "testdata" / "eof_reference" / "corrupt_long_wrong.txt"
+    with pytest.raises(ValueError)as e:
+        target_loaded = eof.load_single_eofs_from_txt_file(filename)
+    if "corrupted 4" not in str(e.value):
+        errors.append("File corrupted 4 check failed")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
 
 @pytest.mark.skipif(not eof1Dirname.is_dir(), reason="EOF1 data not available")
 @pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available")
@@ -421,6 +453,54 @@ def test_load_original_eofs_for_doy():
         errors.append("EOF1 of DOY 366 is incorrect (Last position)")
     if not math.isclose(target366.eof2vector[-1], 0.012473147):
         errors.append("EOF2 of DOY 366 is incorrect (Last position)")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_EOFDataForAllDOYs_initialization_exceptions():
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+
+    errors = []
+
+    #one DOY missing
+    eofs = []
+    for doy in range(1, 366):
+        eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
+        eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
+        eofs.append(eof.EOFData(lat, long, eof1, eof2))
+    with pytest.raises(ValueError) as e:
+        target = eof.EOFDataForAllDOYs(eofs)
+    if "contain 366" not in str(e.value):
+        errors.append("Check for 366 DOYs failed.")
+
+    # wrong latitude
+    eofs = []
+    for idx in range(1, 367):
+        eof1 = np.array([1, 2, 3, 4, 5, 6]) * idx
+        eof2 = np.array([10, 20, 30, 40, 50, 60]) * idx
+        corrupt = 1.
+        if idx == 201:
+            corrupt = 3.
+        eofs.append(eof.EOFData(corrupt * lat, long, eof1, eof2))
+    with pytest.raises(ValueError) as e:
+        target = eof.EOFDataForAllDOYs(eofs)
+    if "DOY 200" not in str(e.value):
+        errors.append("Check for same latitudes failed.")
+
+        # wrong longitude
+    eofs = []
+    for idx in range(1, 367):
+        eof1 = np.array([1, 2, 3, 4, 5, 6]) * idx
+        eof2 = np.array([10, 20, 30, 40, 50, 60]) * idx
+        corrupt = 1.
+        if idx == 101:
+            corrupt = 2.
+        eofs.append(eof.EOFData(lat, corrupt * long, eof1, eof2))
+    with pytest.raises(ValueError) as e:
+        target = eof.EOFDataForAllDOYs(eofs)
+    if "DOY 100" not in str(e.value):
+        errors.append("Check for same latitudes failed.")
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
