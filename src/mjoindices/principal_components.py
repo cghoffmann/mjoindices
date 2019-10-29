@@ -42,13 +42,16 @@ class PCData:
         :param pc1: The numpy array containing the values of PC1 (has to be of same length as the time array).
         :param pc2: The numpy array containing the values of PC2 (has to be of same length as the time array).
         """
-        if pc1.size == time.size and pc2.size == time.size:
-            self._time = time.copy()
-            self._pc1 = pc1.copy()
-            self._pc2 = pc2.copy()
-        else:
-            raise ValueError('Length of at least one principal component time series does not fit to length of the '
+        if pc1.size != time.size:
+            raise ValueError('Length of the first PC time series does not fit to the length of the '
                              'time grid')
+        if pc2.size != time.size:
+            raise ValueError('Length of the second PC time series does not fit to the length of the '
+                             'time grid')
+        self._time = time.copy()
+        self._pc1 = pc1.copy()
+        self._pc2 = pc2.copy()
+
 
     @property
     def time(self) -> np.ndarray:

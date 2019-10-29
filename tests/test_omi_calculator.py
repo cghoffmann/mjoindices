@@ -91,7 +91,7 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
     # Calculate EOFs
     raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
     shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
-    interpolated_olr = olr.resample_spatial_grid_to_original(shorter_olr)
+    interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
     # FIXME: Remove in future
     orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
     eofs = omi.calc_eofs_from_olr(interpolated_olr,
@@ -224,7 +224,7 @@ def test_completeOMIReproduction(tmp_path):
         # Calculate EOFs
         raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
         shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
-        interpolated_olr = olr.resample_spatial_grid_to_original(shorter_olr)
+        interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
         # FIXME: Remove in future
         orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
         eofs = omi.calc_eofs_from_olr(interpolated_olr,

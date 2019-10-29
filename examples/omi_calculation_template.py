@@ -34,7 +34,7 @@ shorter_olr = olr.restrict_time_coverage(raw_olr, startDate, endDate)
 # If you want to use other grid, just leave out this step.
 # However, in this case, it is unclear to what extent the resulting index will be comparable to the original
 # OMI dataset. Maybe you want to do a sensitivity study using different grids before.
-interpolated_olr = olr.resample_spatial_grid_to_original(shorter_olr)
+interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
 
 # In order to adjust the signs of the EOFs to fit to the original ones, we need to know the original ones
 # Note that signs switch arbitrarily and are also adjusted in the original approach (Kiladis, 2014).

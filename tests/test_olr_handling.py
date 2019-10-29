@@ -33,7 +33,47 @@ import mjoindices.olr_handling as olr
 olr_data_filename = Path(__file__).resolve().parent / "testdata" / "olr.day.mean.nc"
 
 
-#FIXME: Test basic properties of OLRData
+def test_OLRData_basic_properties():
+
+    time = np.arange("2018-01-01", "2018-01-10", dtype='datetime64[D]')
+    lat = np.array([-2.5, 2.5])
+    long = np.array([10, 20, 30, 40])
+    olrmatrix = np.random.rand(9, 2, 4)
+    target = olr.OLRData(olrmatrix, time, lat, long)
+
+    errors = []
+
+    if not np.all(target.time == time):
+        errors.append("Time property is incorrect.")
+    if not np.all(target.lat == lat):
+        errors.append("Lat property is incorrect.")
+    if not np.all(target.long == long):
+        errors.append("Long property is incorrect.")
+    if not np.all(target.olr == olrmatrix):
+        errors.append("OLR property is incorrect.")
+
+    # Check wrong lengths of grids
+    olrmatrix = np.random.rand(12, 2, 4)
+    with pytest.raises(ValueError) as e:
+        target = olr.OLRData(olrmatrix, time, lat, long)
+    if "first" not in str(e.value):
+        errors.append("Time grid test failed")
+
+    olrmatrix = np.random.rand(9, 3, 4)
+    with pytest.raises(ValueError) as e:
+        target = olr.OLRData(olrmatrix, time, lat, long)
+    if "second" not in str(e.value):
+        errors.append("Lat grid test failed")
+
+    olrmatrix = np.random.rand(9, 2, 3)
+    with pytest.raises(ValueError) as e:
+        target = olr.OLRData(olrmatrix, time, lat, long)
+    if "third" not in str(e.value):
+        errors.append("Long grid test failed")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
 
 @pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available")
 def test_loadNOAAInterpolatedOLR():
@@ -85,7 +125,7 @@ def test_resampleOLRToOriginalSpatialGrid():
     # Basic assumption of the test is, that both grids are identical and only the direction of latitude is reversed.
     # Furthermore, the original grid only covers the tropics between -20 and 20 deg lat.
     origOLR = olr.load_noaa_interpolated_olr(olr_data_filename)
-    target = olr.resample_spatial_grid_to_original(origOLR)
+    target = olr.interpolate_spatial_grid_to_original(origOLR)
     errors = []
     print(origOLR.lat[44:27:-1])
     if not np.all(target.lat == origOLR.lat[44:27:-1]):
@@ -98,24 +138,97 @@ def test_resampleOLRToOriginalSpatialGrid():
         errors.append("OLR data does not match original one in the tropics")
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
-#FIXME: Add spatial resampling test, with a really different grid
-#FIXME: also test resample_spatial_grid
+
+def test_resample_spatial_grid():
+    time = np.arange("2018-01-01", "2018-01-03", dtype='datetime64[D]')
+    lat = np.array([-2.5, 0., 2.5])
+    long = np.array([10., 20., 30., 40.])
+    olrmatrix = np.array([((1., 2., 3., 4.),
+                           (5., 6., 7., 8.),
+                           (9., 10., 11., 12.)),
+                          ((10., 20., 30., 40.),
+                           (50., 60., 70., 80.),
+                           (90., 100., 110., 120.))])
+    testdata = olr.OLRData(olrmatrix, time, lat, long)
+
+    errors = []
+
+    target_lat = np.array([-1.25, 1.25])
+    target_long = np.array([10., 20., 30., 40.])
+    target = olr.interpolate_spatial_grid(testdata, target_lat, target_long)
+    if not target.olr[0, 0, 0] == (1.+5.)/2.:
+        errors.append("Latitude interpolation with longitude constant incorrect (setup 1).")
+    if not target.olr[0, 1, 0] == (5.+9.)/2.:
+        errors.append("Latitude interpolation with longitude constant incorrect (setup 2).")
+    if not target.olr[0, 1, 2] == (7.+11.)/2.:
+        errors.append("Latitude interpolation with longitude constant incorrect (setup 3).")
+    if not target.olr[1, 1, 0] == (50.+90.)/2.:
+        errors.append("Latitude interpolation with longitude constant incorrect (setup 4).")
+
+
+    target_lat =np.array([-2.5, 0., 2.5])
+    target_long = np.array([15., 25., 35.])
+    target = olr.interpolate_spatial_grid(testdata, target_lat, target_long)
+    if not target.olr[0, 0, 0] == (1. + 2.) / 2.:
+        errors.append("Longitude interpolation with latitude constant incorrect (setup 1).")
+    if not target.olr[0, 0, 1] == (2. + 3.) / 2.:
+        errors.append("Longitude interpolation with latitude constant incorrect (setup 2).")
+    if not target.olr[0, 1, 1] == (6. + 7.) / 2.:
+        errors.append("Longitude interpolation with latitude constant incorrect (setup 3).")
+    if not target.olr[1, 0, 1] == (20. + 30.) / 2.:
+        errors.append("Longitude interpolation with latitude constant incorrect (setup 3).")
+
+    target_lat = np.array([-1.25, 1.25])
+    target_long = np.array([15., 25., 35.])
+    target = olr.interpolate_spatial_grid(testdata, target_lat, target_long)
+    if not target.olr[0, 0, 0] == 3.5:
+        errors.append("Simultaneous lat/long interpolation incorrect (setup 1).")
+    if not target.olr[0, 1, 0] == 7.5:
+        errors.append("Simultaneous lat/long interpolation incorrect (setup 2).")
+    if not target.olr[0, 1, 1] == 8.5:
+        errors.append("Simultaneous lat/long interpolation incorrect (setup 2).")
+    if not target.olr[1, 1, 1] == 85:
+        errors.append("Simultaneous lat/long interpolation incorrect (setup 2).")
+
+    target_lat = np.array([-1.25, 1.25])
+    target_long = np.array([15., 25., 35., 45])
+    with pytest.raises(ValueError) as e:
+        target = olr.interpolate_spatial_grid(testdata, target_lat, target_long)
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
 @pytest.mark.skipif(not os.path.isfile(olr_data_filename),
                     reason="OLR data file not available")
 def test_restrict_time_coverage():
     origOLR = olr.load_noaa_interpolated_olr(olr_data_filename)
-    target = olr.restrict_time_coverage(origOLR, np.datetime64("1974-06-01"), np.datetime64("1974-06-03"))
+
     errors = []
-    print(target.time)
-    print(origOLR.time[:3])
+
+    target = olr.restrict_time_coverage(origOLR, np.datetime64("1974-06-01"), np.datetime64("1974-06-03"))
     if not np.all(target.lat == origOLR.lat):
         errors.append("Latitude grid does not match original one")
     if not np.all(target.long == origOLR.long):
         errors.append("Logitude grid does not match original one")
     if not np.all(target.time == origOLR.time[:3]):
         errors.append("Time grid does not match the beginning of the original one")
-    if not np.all(target.olr == origOLR.olr[:3,:,:]):
+    if not np.all(target.olr == origOLR.olr[:3, :, :]):
         errors.append("OLR data does not match the beginning of the original one")
+
+    target = olr.restrict_time_coverage(origOLR, np.datetime64("1974-06-03"), np.datetime64("1974-06-05"))
+    if not np.all(target.lat == origOLR.lat):
+        errors.append("Latitude grid does not match original one")
+    if not np.all(target.long == origOLR.long):
+        errors.append("Logitude grid does not match original one")
+    if not np.all(target.time == origOLR.time[2:5]):
+        errors.append("Time grid does not match the beginning of the original one")
+    if not np.all(target.olr == origOLR.olr[2:5, :, :]):
+        errors.append("OLR data does not match the beginning of the original one")
+
+    # Test period that is not covered by data set.
+    with pytest.raises(ValueError) as e:
+        target = olr.restrict_time_coverage(origOLR, np.datetime64("1973-06-01"), np.datetime64("1973-06-03"))
+
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 

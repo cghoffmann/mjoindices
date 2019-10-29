@@ -64,7 +64,7 @@ raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
 shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
 # Make sure that the spatial sampling resembles the original one (This should not be necessary here, since we use
 # the original data file. Nevertheless, we want to be sure.)
-interpolated_olr = olr.resample_spatial_grid_to_original(shorter_olr)
+interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
 
 # Diagnosis plot of the loaded OLR data
 olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))

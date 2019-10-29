@@ -46,6 +46,19 @@ def test_basic_properties():
     if not np.all(target.time == test_dates):
         errors.append("Time property not correct")
 
+    # Check wrong lengths of grids
+    wrong_pc1 = np.array([0.12345678, 0.33333333])
+    with pytest.raises(ValueError) as e:
+        target = pc.PCData(test_dates, wrong_pc1, test_pc2)
+    if "first" not in str(e.value):
+        errors.append("PC1 grid test failed")
+
+    wrong_pc2 = np.array([0.38462392, 0.44444444])
+    with pytest.raises(ValueError) as e:
+        target = pc.PCData(test_dates, test_pc1, wrong_pc2)
+    if "second" not in str(e.value):
+        errors.append("PC2 grid test failed")
+
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 

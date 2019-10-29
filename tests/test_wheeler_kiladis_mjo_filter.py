@@ -49,21 +49,21 @@ def test_mjoindices_reference_validation_filterOLRForMJO_EOF_Calculation():
     test_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
 
     lat = np.array([0])
-    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
     target = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
     control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_EOF_Calculation_lat0)
     if not target.close(control):
         errors.append("Filtered OLR for latitude 0 not identical")
 
     lat = np.array([5])
-    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
     target = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
     control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_EOF_Calculation_lat5)
     if not target.close(control):
         errors.append("Filtered OLR for latitude 5 not identical")
 
     lat = np.array([-10.])
-    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
     target = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
     control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_EOF_Calculation_latmin10)
     if not target.close(control):
@@ -79,19 +79,19 @@ def generate_reference_data():
     test_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
 
     lat = np.array([0])
-    test_olr_part = olr.resample_spatial_grid(test_olr,lat, orig_long)
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
     olrdata_filtered = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
     filename = Path(str(reference_file_filterOLRForMJO_EOF_Calculation_lat0) + ".newcalc")
     olrdata_filtered.save_to_npzfile(filename)
 
     lat = np.array([5])
-    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
     olrdata_filtered = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
     filename = Path(str(reference_file_filterOLRForMJO_EOF_Calculation_lat5) + ".newcalc")
     olrdata_filtered.save_to_npzfile(filename)
 
     lat = np.array([-10])
-    test_olr_part = olr.resample_spatial_grid(test_olr, lat, orig_long)
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
     olrdata_filtered = wkfilter.filterOLRForMJO_EOF_Calculation(test_olr_part)
     filename = Path(str(reference_file_filterOLRForMJO_EOF_Calculation_latmin10) + ".newcalc")
     olrdata_filtered.save_to_npzfile(filename)

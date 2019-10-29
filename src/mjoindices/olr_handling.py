@@ -41,13 +41,16 @@ Created on Tue Dec  4 14:05:34 2018
 
 class OLRData:
     def __init__(self, olr, time, lat, long):
-        if( olr.shape[0] == time.size):
-            self._olr = olr.copy()
-            self._time = time.copy()
-            self._lat = lat.copy()
-            self._long = long.copy()
-        else:
+        if( olr.shape[0] != time.size):
             raise ValueError('Length of time grid does not fit to first dimension of OLR data cube')
+        if (olr.shape[1] != lat.size):
+            raise ValueError('Length of lat grid does not fit to second dimension of OLR data cube')
+        if (olr.shape[2] != long.size):
+            raise ValueError('Length of long grid does not fit to third dimension of OLR data cube')
+        self._olr = olr.copy()
+        self._time = time.copy()
+        self._lat = lat.copy()
+        self._long = long.copy()
 
     @property
     def olr(self):
@@ -122,8 +125,8 @@ class OLRData:
         np.savez(filename, olr=self.olr, time=self.time, lat=self.lat, long=self.long)
 
 
-def resample_spatial_grid_to_original(olr: OLRData) -> OLRData:
-    """Resamples the data in an OLRData object spatially according to the original OMI EOF grid.
+def interpolate_spatial_grid_to_original(olr: OLRData) -> OLRData:
+    """Interpolates the data in an OLRData object spatially according to the original OMI EOF grid.
 
     Afterwards, the data corresponds to the original spatial calculation grid:
     Latitude: 2.5 deg sampling in the tropics from -20 to 20 deg (20S to 20 N)
@@ -135,11 +138,15 @@ def resample_spatial_grid_to_original(olr: OLRData) -> OLRData:
     # FIXME Combine with definition in empirical_or....py
     orig_lat = np.arange(-20., 20.1, 2.5)
     orig_long = np.arange(0., 359.9, 2.5)
-    return resample_spatial_grid(olr, orig_lat, orig_long)
+    return interpolate_spatial_grid(olr, orig_lat, orig_long)
 
 
-def resample_spatial_grid(olr: OLRData, target_lat: np.array, target_long: np.array) -> OLRData:
-    """ Resamples the OLR data according to the given grids and returns a new OLRData object
+def interpolate_spatial_grid(olr: OLRData, target_lat: np.array, target_long: np.array) -> OLRData:
+    """ Interpolates the OLR data linearly according to the given grids and returns a new OLRData object.
+        No extrapolation will be done. Instead a ValueError is raised.
+
+        Note that no sophisticated resampling is provided here. So, if some kind of averaging etc., is needed, it should
+        be done before building the OLRData object.
 
     :param olr: The OLR data to resample
     :param target_lat: The new latitude grid
@@ -148,15 +155,32 @@ def resample_spatial_grid(olr: OLRData, target_lat: np.array, target_long: np.ar
     """
     no_days = olr.time.size
     olr_interpol = np.empty((no_days, target_lat.size, target_long.size))
-    for idx in range(0,no_days):
-        f = scipy.interpolate.interp2d(olr.long, olr.lat, np.squeeze(olr.olr[idx,:,:]), kind='linear')
-        olr_interpol[idx,:,:] = f(target_long, target_lat)
+    for idx in range(0, no_days):
+        f = scipy.interpolate.interp2d(olr.long, olr.lat, np.squeeze(olr.olr[idx, :, :]), kind='linear', bounds_error=True)
+        olr_interpol[idx, :, :] = f(target_long, target_lat)
     return OLRData(olr_interpol, olr.time, target_lat, target_long)
 
-#FIXME: doc
+
 def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime64) -> OLRData:
-    windowInds = (olr.time >= start) & (olr.time <= stop)
-    return OLRData(olr.olr[windowInds, :, :], olr.time[windowInds], olr.lat, olr.long)
+    """Cuts the OLR time series at the given dates (given dates are included)
+        This is useful when the dataset should be restricted for the EOF calculation.
+        Note that a temporal resampling method is not provided here so far, since the resampling methods,
+        which the user might want to apply are too diverse. Hence it is assumed that the temporal spacing ist already
+        correct (daily averages recommended) and only a restriction of the period is needed for a part of the calculation.
+
+        :param olr: The OLR data to restrict
+        :param start: The beginning of the wanted period of OLR data (included)
+        :param stop: The ending of the wanted period (included).
+        :return: An OLR Data object with restricted temporal coverage
+        :raises: ValueError if no OLR Data is found for the specified period
+    """
+    window_inds = (olr.time >= start) & (olr.time <= stop)
+    if np.all(window_inds == False):
+        raise ValueError("No OLR data within specified period found. Data covers the period from %s to %s."
+                         % (str(olr.time[0]), str(olr.time[-1])))
+    else:
+        return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long)
+
 
 
 def load_noaa_interpolated_olr(filename: Path) -> OLRData:
