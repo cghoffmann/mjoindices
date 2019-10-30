@@ -399,6 +399,9 @@ def test_completeOMIReproduction_eofs_package_strict_leap_year(tmp_path):
     pcs.save_pcs_to_txt_file(pc_temp_file)
 
     # Validate PCs against mjoindices own reference (results should be equal)
+    # Reload pcs instead of using the calculated ones, because the saving routine has truncated some decimals of the
+    # reference values. So do the same with the testing target pcs.
+    pcs = pc.load_pcs_from_txt_file(pc_temp_file)
     mjoindices_reference_pcs = pc.load_pcs_from_txt_file(mjoindices_reference_pcs_filename_strict_eofs)
     if not np.all(mjoindices_reference_pcs.time == pcs.time):
         errors.append("mjoindices-reference-validation: Dates of PCs do not match.")
