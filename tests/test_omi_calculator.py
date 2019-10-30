@@ -25,6 +25,8 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+import importlib
+
 
 import mjoindices.omi.omi_calculator as omi
 import mjoindices.principal_components as pc
@@ -39,6 +41,8 @@ eof2Dirname = originalOMIDataDirname / "eof2"
 origOMIPCsFilename = originalOMIDataDirname / "omi.1x.txt"
 mjoindices_reference_eofs_filename_strict = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "EOFs_strict.npz"
 mjoindices_reference_pcs_filename_strict = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "PCs_strict.txt"
+mjoindices_reference_eofs_filename_strict_eofs = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "EOFs_eofs_package.npz"
+mjoindices_reference_pcs_filename_strict_eofs = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "PCs_eofs_package.txt"
 mjoindices_reference_eofs_filename = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "EOFs.npz"
 mjoindices_reference_pcs_filename = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "PCs.txt"
 original_omi_explained_variance_file = Path(__file__).resolve().parent / "testdata" / "OriginalOMI" / "omi_var.txt"
@@ -53,7 +57,9 @@ setups = [(True, 0.99, 0.99), (False, 0.999, 0.999)]
 @pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available")
 @pytest.mark.skipif(not origOMIPCsFilename.is_file(), reason="Original OMI PCs not available for comparison")
 def test_calculatePCsFromOLRWithOriginalEOFs(useQuickTemporalFilter, expectedCorr1, expectedCorr2):
-
+# This test is quicker than the complete integration tests below. The quality check is very simple and just checks
+# the correlations of the PC time series. Hence, this test in thought the get a first idea and more intensive testing
+# should be done using the tests below.
     orig_omi = pc.load_original_pcs_from_txt_file(origOMIPCsFilename)
     olrData = olr.load_noaa_interpolated_olr(olr_data_filename)
 
@@ -73,8 +79,6 @@ def test_calculatePCsFromOLRWithOriginalEOFs(useQuickTemporalFilter, expectedCor
     corr2 = (np.corrcoef(orig_omi.pc2, target.pc2))[0, 1]
     if not corr2 > expectedCorr2:
         errors.append("Correlation of PC2 too low!")
-
-    # FIXME: Define more test criteria: e.g., max deviation etc.
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
@@ -158,7 +162,7 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
     pc_temp_file = tmp_path / "test_completeOMIReproduction_strict_leap_year_treatment_PCs.txt"
     pcs.save_pcs_to_txt_file(pc_temp_file)
 
-    # Validate PCs against mjoindices own reference (results should be equal)
+    # Validate PCs  against original (results are inexact but close)
     orig_pcs = pc.load_original_pcs_from_txt_file(origOMIPCsFilename)
     # Reload pcs instead of using the calculated ones, because the saving routine has truncated some decimals of the
     # reference values. So do the same with the testing target pcs.
@@ -298,7 +302,7 @@ def test_completeOMIReproduction(tmp_path):
         pc_temp_file = tmp_path / "test_completeOMIReproduction_PCs.txt"
         pcs.save_pcs_to_txt_file(pc_temp_file)
 
-        # Validate PCs against mjoindices own reference (results should be equal)
+        # Validate PCs  against original (results are inexact but close)
         orig_pcs = pc.load_original_pcs_from_txt_file(origOMIPCsFilename)
         # Reload pcs instead of using the calculated ones, because the saving routine has truncated some decimals of the
         # reference values. So do the same with the testing target pcs.
@@ -356,3 +360,67 @@ def test_completeOMIReproduction(tmp_path):
             errors.append("mjoindices-reference-validation: PC2 values do not match.")
 
         assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+eofs_spec = importlib.util.find_spec("eofs")
+@pytest.mark.slow
+@pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available.")
+@pytest.mark.skipif(eofs_spec is None, reason="Optional eofs package is not available.")
+def test_completeOMIReproduction_eofs_package_strict_leap_year(tmp_path):
+
+    errors = []
+
+    # Calculate EOFs
+    raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+    shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
+    interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
+    # FIXME: Remove in future
+    orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
+    eofs = omi.calc_eofs_from_olr(interpolated_olr,
+                                  sign_doy1reference=orig_eofs.eofdata_for_doy(1),
+                                  interpolate_eofs=True,
+                                  strict_leap_year_treatment=True,
+                                  implementation="eofs_package")
+    eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_strict_leap_year_treatment_EOFs.npz")
+
+    # Validate EOFs against mjoindices own reference (results should be equal)
+    mjoindices_reference_eofs = eof.restore_all_eofs_from_npzfile(mjoindices_reference_eofs_filename_strict_eofs)
+    for idx, target_eof in enumerate(eofs.eof_list):
+        if not mjoindices_reference_eofs.eof_list[idx].close(target_eof):
+            errors.append("mjoindices-reference-validation: EOF data at index %i is incorrect" % idx)
+
+    # Calculate PCs
+    raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+    pcs = omi.calculate_pcs_from_olr(raw_olr,
+                                     eofs,
+                                     np.datetime64("1979-01-01"),
+                                     np.datetime64("2018-08-28"),
+                                     useQuickTemporalFilter=False)
+    pc_temp_file = tmp_path / "test_completeOMIReproduction_eofs_package_strict_leap_year_PCs.txt"
+    pcs.save_pcs_to_txt_file(pc_temp_file)
+
+    # Validate PCs against mjoindices own reference (results should be equal)
+    mjoindices_reference_pcs = pc.load_pcs_from_txt_file(mjoindices_reference_pcs_filename_strict_eofs)
+    if not np.all(mjoindices_reference_pcs.time == pcs.time):
+        errors.append("mjoindices-reference-validation: Dates of PCs do not match.")
+    if not np.allclose(mjoindices_reference_pcs.pc1, pcs.pc1):
+        errors.append("mjoindices-reference-validation: PC1 values do not match.")
+    if not np.allclose(mjoindices_reference_pcs.pc2, pcs.pc2):
+        errors.append("mjoindices-reference-validation: PC2 values do not match.")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_preprocess_olr_warning():
+    time = np.arange("2018-01-01", "2018-01-03", dtype='datetime64[D]')
+    lat = np.array([-2.5, 0., 2.5])
+    long = np.array([10., 20., 30., 40.])
+    olrmatrix = np.array([((1., 2., 3., 4.),
+                           (5., 6., 7., 8.),
+                           (9., 10., 11., 12.)),
+                          ((10., 20., 30., 40.),
+                           (50., 60., 70., 80.),
+                           (90., 100., 110., 120.))])
+    olrmatrix *= -1.
+    testdata = olr.OLRData(olrmatrix, time, lat, long)
+    with pytest.warns(UserWarning, match="OLR data apparently given in negative numbers. Here it is assumed that OLR is positive."):
+        target = omi.preprocess_olr(testdata)
