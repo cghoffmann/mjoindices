@@ -37,6 +37,10 @@ reference_file_filterOLRForMJO_EOF_Calculation_lat0 = Path(__file__).resolve().p
 reference_file_filterOLRForMJO_EOF_Calculation_lat5 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat5.npz"
 reference_file_filterOLRForMJO_EOF_Calculation_latmin10 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat-10.npz"
 
+reference_file_filterOLRForMJO_PC_Calculation_lat0 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCCond_lat0.npz"
+reference_file_filterOLRForMJO_PC_Calculation_lat5 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCCond_lat5.npz"
+reference_file_filterOLRForMJO_PC_Calculation_latmin10 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCCond_lat-10.npz"
+
 
 @pytest.mark.slow
 @pytest.mark.skipif(not olr_data_filename.exists(), reason="OLR data file not available")
@@ -72,7 +76,41 @@ def test_mjoindices_reference_validation_filterOLRForMJO_EOF_Calculation():
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-def generate_reference_data():
+@pytest.mark.slow
+@pytest.mark.skipif(not olr_data_filename.exists(), reason="OLR data file not available")
+def test_mjoindices_reference_validation_filterOLRForMJO_PC_Calculation():
+
+    errors = []
+
+    orig_long = np.arange(0., 359.9, 2.5)
+
+    test_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+
+    lat = np.array([0])
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
+    target = wkfilter.filterOLRForMJO_PC_Calculation(test_olr_part)
+    control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_PC_Calculation_lat0)
+    if not target.close(control):
+        errors.append("Filtered OLR for latitude 0 not identical")
+
+    lat = np.array([5])
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
+    target = wkfilter.filterOLRForMJO_PC_Calculation(test_olr_part)
+    control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_PC_Calculation_lat5)
+    if not target.close(control):
+        errors.append("Filtered OLR for latitude 5 not identical")
+
+    lat = np.array([-10])
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
+    target = wkfilter.filterOLRForMJO_PC_Calculation(test_olr_part)
+    control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_PC_Calculation_latmin10)
+    if not target.close(control):
+        errors.append("Filtered OLR for latitude -10 not identical")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def generate_reference_data_for_eof_filter_tests():
 
     orig_long = np.arange(0., 359.9, 2.5)
 
@@ -97,4 +135,31 @@ def generate_reference_data():
     olrdata_filtered.save_to_npzfile(filename)
 
 
-#generate_reference_data()
+def generate_reference_data_for_pc_filter_tests():
+
+    orig_long = np.arange(0., 359.9, 2.5)
+
+    test_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+
+    lat = np.array([0])
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
+    olrdata_filtered = wkfilter.filterOLRForMJO_PC_Calculation(test_olr_part)
+    filename = Path(str(reference_file_filterOLRForMJO_PC_Calculation_lat0) + ".newcalc")
+    olrdata_filtered.save_to_npzfile(filename)
+
+    lat = np.array([5])
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
+    olrdata_filtered = wkfilter.filterOLRForMJO_PC_Calculation(test_olr_part)
+    filename = Path(str(reference_file_filterOLRForMJO_PC_Calculation_lat5) + ".newcalc")
+    olrdata_filtered.save_to_npzfile(filename)
+
+    lat = np.array([-10])
+    test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
+    olrdata_filtered = wkfilter.filterOLRForMJO_PC_Calculation(test_olr_part)
+    filename = Path(str(reference_file_filterOLRForMJO_PC_Calculation_latmin10) + ".newcalc")
+    olrdata_filtered.save_to_npzfile(filename)
+
+
+if __name__ == '__main__':
+    generate_reference_data_for_eof_filter_tests()
+    generate_reference_data_for_pc_filter_tests()

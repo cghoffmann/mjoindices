@@ -38,6 +38,7 @@ import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.olr_handling as olr
 import mjoindices.principal_components as pc
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
+import mjoindices.omi.quick_temporal_filter as qfilter
 import mjoindices.tools as tools
 
 
@@ -291,7 +292,7 @@ def calculate_pcs_from_olr(olrData: olr.OLRData,
     restictedOLRData = olr.restrict_time_coverage(olrData, period_start, period_end)
     resampledOLRData = olr.interpolate_spatial_grid(restictedOLRData, eofdata.lat, eofdata.long)
     if useQuickTemporalFilter:
-        filtered_olr_data = wkfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(resampledOLRData)
+        filtered_olr_data = qfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(resampledOLRData)
     else:
         filtered_olr_data = wkfilter.filterOLRForMJO_PC_Calculation(resampledOLRData)
     raw_pcs = regress_3dim_data_onto_eofs(filtered_olr_data, eofdata)
