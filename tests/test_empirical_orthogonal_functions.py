@@ -561,12 +561,12 @@ def test_EOFDataForAllDOYs_alldoy_getfunctions():
     doys = eof.doy_list()
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
-    explained_variances = np.array([ np.arange(1, doys.size+1, 1)+ 111,
-                                     np.arange(1, doys.size + 1, 1) + 222,
-                                     np.arange(1, doys.size + 1, 1) + 333,
-                                     np.arange(1, doys.size + 1, 1) + 444,
-                                     np.arange(1, doys.size + 1, 1) + 555,
-                                     np.arange(1, doys.size + 1, 1) + 666])
+    explained_variances = np.array([np.arange(1, doys.size+1, 1) + 111,
+                                    np.arange(1, doys.size + 1, 1) + 222,
+                                    np.arange(1, doys.size + 1, 1) + 333,
+                                    np.arange(1, doys.size + 1, 1) + 444,
+                                    np.arange(1, doys.size + 1, 1) + 555,
+                                    np.arange(1, doys.size + 1, 1) + 666])
     eigenvalues = np.array([np.arange(1, doys.size + 1, 1) + 1111,
                             np.arange(1, doys.size + 1, 1) + 2222,
                             np.arange(1, doys.size + 1, 1) + 3333,

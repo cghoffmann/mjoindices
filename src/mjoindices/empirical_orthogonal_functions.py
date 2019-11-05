@@ -571,7 +571,7 @@ def restore_all_eofs_from_npzfile(filename: Path) -> EOFDataForAllDOYs:
         eofs.append(eof)
     return EOFDataForAllDOYs(eofs)
 
-
+# ToDo: Move into tools (move also test)
 def doy_list() -> np.array:
     """
     Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.

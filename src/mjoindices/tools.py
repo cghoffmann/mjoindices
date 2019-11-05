@@ -71,7 +71,6 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
     generally found at all only during leap years.
     :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.
     """
-    #ToDO: Add description of param strict_leap_year_treatmenmt...
     doys = calc_day_of_year(dates)
 
     if strict_leap_year_treatment:

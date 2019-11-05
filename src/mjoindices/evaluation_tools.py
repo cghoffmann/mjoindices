@@ -44,7 +44,7 @@ def compute_vector_difference_quantity(ref_vec, vec, percentage=True):
 
 def calc_vector_agreement(ref_vec, vec, percentage=True, do_print=False):
     if not np.all(ref_vec.size == vec.size):
-        raise AttributeError("Vectors do not have the same lenths.")
+        raise ValueError("Vectors do not have the same lengths.")
     corr = np.corrcoef(ref_vec, vec)[0, 1]
 
     diff_vec = compute_vector_difference_quantity(ref_vec, vec, percentage=percentage)
@@ -52,7 +52,7 @@ def calc_vector_agreement(ref_vec, vec, percentage=True, do_print=False):
     diff_std = np.std(diff_vec)
     diff_abs_percent68 = np.percentile(np.abs(diff_vec), 68.)
     diff_abs_percent95 = np.percentile(np.abs(diff_vec), 95.)
-    diff_abs_percent99 = np.percentile(np.abs(diff_vec), 99.)
+    diff_abs_percent99 = np.percentile(np.abs(diff_vec), 99)
 
     if do_print:
         print("CorrelationCoefficient: %1.4f" % corr)
@@ -67,13 +67,13 @@ def calc_vector_agreement(ref_vec, vec, percentage=True, do_print=False):
 
 def calc_comparison_stats_for_eofs_all_doys(eofs_ref: eof.EOFDataForAllDOYs, eofs: eof.EOFDataForAllDOYs, eof_number, exclude_doy366=False, percentage=False, do_print=False) -> typing.Tuple:
     if eof_number != 1 and eof_number != 2:
-        raise AttributeError("Argument eof_number must be 1 or 2.")
+        raise ValueError("Argument eof_number must be 1 or 2.")
     doys = eof.doy_list()
     if exclude_doy366:
         doys = doys[:-1]
     corr = np.empty(doys.size)
-    diff_mean= np.empty(doys.size)
-    diff_std= np.empty(doys.size)
+    diff_mean = np.empty(doys.size)
+    diff_std = np.empty(doys.size)
     diff_abs_percent68 = np.empty(doys.size)
     diff_abs_percent95 = np.empty(doys.size)
     diff_abs_percent99 = np.empty(doys.size)
@@ -85,7 +85,7 @@ def calc_comparison_stats_for_eofs_all_doys(eofs_ref: eof.EOFDataForAllDOYs, eof
         elif eof_number == 2:
             eof_ref = eofs_ref.eof2vector_for_doy(doy)
             eof_test = eofs.eof2vector_for_doy(doy)
-        corr_single, diff_mean_single, diff_std_single, diff_vec_single, diff_abs_percent68_single, diff_abs_percent95_single, diff_abs_percent99_single = calc_vector_agreement(eof_ref,eof_test,percentage=percentage, do_print=False)
+        corr_single, diff_mean_single, diff_std_single, diff_vec_single, diff_abs_percent68_single, diff_abs_percent95_single, diff_abs_percent99_single = calc_vector_agreement(eof_ref, eof_test, percentage=percentage, do_print=False)
         corr[idx] = corr_single
         diff_mean[idx] = diff_mean_single
         diff_std[idx] = diff_std_single
@@ -209,6 +209,7 @@ def calc_comparison_stats_for_explained_variance(ref_var, calc_var, do_print=Fal
     corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99 = calc_vector_agreement(ref_data, calc_data, percentage=False, do_print=do_print)
     return corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99
 
+
 def plot_comparison_stats_for_explained_variance(ref_var, calc_var, title=None, do_print=False, exclude_doy366=False):
     if do_print:
         print("##########")
@@ -227,7 +228,7 @@ def plot_comparison_stats_for_explained_variance(ref_var, calc_var, title=None, 
 
 def calc_timeseries_agreement(ref_data, ref_time, data, time, exclude_doy366=False, do_print=False):
     if not np.all(ref_time == time):
-        raise AttributeError("Time series do not cover the same periods.")
+        raise ValueError("Time series do not cover the same periods.")
     if exclude_doy366:
         if do_print:
             print("###### DOY 366 excluded")
@@ -249,7 +250,7 @@ def calc_timeseries_agreement(ref_data, ref_time, data, time, exclude_doy366=Fal
     return inds_used, inds_not_used, corr, diff_mean, diff_std, diff_ts, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99
 
 
-def plot_timeseries_agreement(ref_data, ref_time, data, time, title = None, do_print=False):
+def plot_timeseries_agreement(ref_data, ref_time, data, time, title=None, do_print=False):
 
     if do_print:
         print("##########")
