@@ -44,7 +44,7 @@ import mjoindices.tools as tools
 
 # #################EOF calculation
 
-def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: eof.EOFData = None,
+def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: bool = True,
                        interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
                        interpolation_end_doy: int = 316, strict_leap_year_treatment: bool = True) -> eof.EOFDataForAllDOYs:
     preprocessed_olr = preprocess_olr(olrdata)
@@ -79,7 +79,7 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
     return eof.EOFDataForAllDOYs(eofs)
 
 
-def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: eof.EOFData = None,
+def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool = True,
                       interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
                       interpolation_end_doy: int = 316) -> eof.EOFDataForAllDOYs:
     pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
@@ -168,10 +168,12 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int, strict_
 
 
 def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
-                                                   doy1reference: eof.EOFData = None) -> eof.EOFDataForAllDOYs:
+                                                   doy1reference: bool = True) -> eof.EOFDataForAllDOYs:
     switched_eofs = []
-    if doy1reference is not None:
-        corrected_doy1 = _correct_spontaneous_sign_change_of_individual_eof(doy1reference, eofs.eofdata_for_doy(1))
+    if doy1reference is True:
+        reference_path = Path(__file__).resolve().parent / "sign_reference"
+        reference_eofs = eof.load_original_eofs_for_doy(reference_path, 1)
+        corrected_doy1 = _correct_spontaneous_sign_change_of_individual_eof(reference_eofs, eofs.eofdata_for_doy(1))
     else:
         corrected_doy1 = eofs.eofdata_for_doy(1)
     switched_eofs.append(corrected_doy1)

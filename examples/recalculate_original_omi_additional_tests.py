@@ -63,16 +63,11 @@ interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
 # Diagnosis plot of the loaded OLR data
 olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 
-# In order to adjust the signs of the EOFs to fit to the original ones, we need to know the original ones
-# Note that signs switch arbitrarily and are also adjusted in the original approach (Kiladis, 2014).
-# There seems to be no way to deduce this from theory or so
-orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-
 # Calculate the eofs. In the postprocessing, the signs of the EOFs are adjusted and the the EOF  in a period
 # around DOY 300 are replaced by an interpolation see Kiladis, 2014). The periods is somewhat braoder than stated in
 # Kiladis (2014) to achieve good agreement. The reason for this is still unclear.
 eofs= omi.calc_eofs_from_olr(interpolated_olr,
-                             sign_doy1reference=orig_eofs.eofdata_for_doy(1),
+                             sign_doy1reference=True,
                              interpolate_eofs=True,
                              interpolation_start_doy=293,
                              interpolation_end_doy=316)
@@ -90,6 +85,7 @@ eofs.save_all_eofs_to_npzfile(eofnpzfile)
 # eofs = omi.post_process_eofs(testeofs, sign_doy1reference = origeofs.eofdata_for_doy(1), interpolate_eofs=True, interpolation_start_doy=293, interpolation_end_doy=316)
 
 # Some diagnostic plots
+orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 eof.plot_correlation_with_original_eofs(eofs, orig_eofs)
 eof.plot_explained_variance_for_all_doys(eofs)

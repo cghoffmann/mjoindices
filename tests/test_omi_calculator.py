@@ -34,7 +34,7 @@ import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.evaluation_tools
 import mjoindices.olr_handling as olr
 
-olr_data_filename = Path(__file__).resolve().parent / "testdata" /"olr.day.mean.nc"
+olr_data_filename = Path(__file__).resolve().parent / "testdata" / "olr.day.mean.nc"
 originalOMIDataDirname = Path(__file__).resolve().parent / "testdata" / "OriginalOMI"
 eof1Dirname = originalOMIDataDirname / "eof1"
 eof2Dirname = originalOMIDataDirname / "eof2"
@@ -96,10 +96,8 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
     raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
     shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
     interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
-    # FIXME: Remove in future
-    orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
     eofs = omi.calc_eofs_from_olr(interpolated_olr,
-                                  sign_doy1reference=orig_eofs.eofdata_for_doy(1),
+                                  sign_doy1reference=True,
                                   interpolate_eofs=True,
                                   strict_leap_year_treatment=True)
     eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_strict_leap_year_treatment_EOFs.npz")
@@ -229,10 +227,8 @@ def test_completeOMIReproduction(tmp_path):
         raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
         shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
         interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
-        # FIXME: Remove in future
-        orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
         eofs = omi.calc_eofs_from_olr(interpolated_olr,
-                                      sign_doy1reference=orig_eofs.eofdata_for_doy(1),
+                                      sign_doy1reference=True,
                                       interpolate_eofs=True,
                                       strict_leap_year_treatment=False)
         eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_EOFs.npz")
@@ -373,10 +369,8 @@ def test_completeOMIReproduction_eofs_package_strict_leap_year(tmp_path):
     raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
     shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
     interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
-    # FIXME: Remove in future
-    orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
     eofs = omi.calc_eofs_from_olr(interpolated_olr,
-                                  sign_doy1reference=orig_eofs.eofdata_for_doy(1),
+                                  sign_doy1reference=True,
                                   interpolate_eofs=True,
                                   strict_leap_year_treatment=True,
                                   implementation="eofs_package")

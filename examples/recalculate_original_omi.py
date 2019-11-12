@@ -69,11 +69,6 @@ interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
 # Diagnosis plot of the loaded OLR data
 olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 
-# In order to adjust the signs of the EOFs to fit to the original ones, we need to know the original ones
-# Note that signs switch arbitrarily and are also adjusted in the original approach (Kiladis, 2014).
-# This step will probably be replaced in future
-orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
-
 # Calculate the eofs. In the postprocessing, the signs of the EOFs are adjusted and the the EOF  in a period
 # around DOY 300 are replaced by an interpolation see Kiladis, 2014).
 # The switch strict_leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
@@ -82,13 +77,14 @@ orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 # built-in datetime functionality.
 # See documentation of mjoindices.tools.find_doy_ranges_in_dates() for details.
 eofs= omi.calc_eofs_from_olr(interpolated_olr,
-                             sign_doy1reference=orig_eofs.eofdata_for_doy(1),
+                             sign_doy1reference=True,
                              interpolate_eofs=True,
                              strict_leap_year_treatment=True)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ### Some diagnostic plots to evaluate the calculated EOFs
 # Load precalculated EOFs first
+orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 # Check correlation with original EOFs
 fig = mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys (eofs, orig_eofs, exclude_doy366=False, do_print=True)

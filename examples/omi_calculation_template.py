@@ -36,13 +36,8 @@ shorter_olr = olr.restrict_time_coverage(raw_olr, startDate, endDate)
 # OMI dataset. Maybe you want to do a sensitivity study using different grids before.
 interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
 
-# In order to adjust the signs of the EOFs to fit to the original ones, we need to know the original ones
-# Note that signs switch arbitrarily and are also adjusted in the original approach (Kiladis, 2014).
-# This step will probably be replced in future
-orig_eofs = eof.load_all_original_eofs_from_directory(original_omi_data_dirname)
-
 # Calculate the EOFs
-eofs= omi.calc_eofs_from_olr(interpolated_olr, sign_doy1reference = orig_eofs.eofdata_for_doy(1), interpolate_eofs=False)
+eofs= omi.calc_eofs_from_olr(interpolated_olr, sign_doy1reference = True, interpolate_eofs=False)
 
 # Save the EOFs before proceeding
 eofs.save_all_eofs_to_dir(eofdir)
@@ -52,6 +47,7 @@ eofs.save_all_eofs_to_npzfile(eofnpzfile)
 # ### EOF Diagnosis plots
 # ### Some diagnostic plots to evaluate the calculated EOFs
 # Load precalculated EOFs first
+orig_eofs = eof.load_all_original_eofs_from_directory(original_omi_data_dirname)
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 # Check correlation with original EOFs
 mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys(eofs, orig_eofs)
