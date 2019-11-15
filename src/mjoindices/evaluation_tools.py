@@ -149,6 +149,7 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     doys = eof.doy_list()
     if exclude_doy366:
         doys = doys[:-1]
+    xlim=(0, doys[-1])
     corr_1, diff_mean_1, diff_std_1, diff_abs_percent68_1, diff_abs_percent95_1, diff_abs_percent99_1 = calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=1, percentage=False, do_print=do_print)
     corr_2, diff_mean_2, diff_std_2, diff_abs_percent68_2, diff_abs_percent95_2, diff_abs_percent99_2 = calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=2, percentage=False, do_print=do_print)
 
@@ -162,6 +163,7 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     ax.set_title("Correlation")
     p11, = ax.plot(doys, corr_1, label="EOF1", color="blue")
     p12, = ax.plot(doys, corr_2, label="EOF2", color="green")
+    ax.set_xlim(xlim)
     ax.set_ylabel("Correlation")
     fig.legend(handles=[p11, p12])
 
@@ -169,12 +171,14 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     ax.set_title("Mean of differences of EOF vector elements")
     p21, = ax.plot(doys, diff_mean_1, label="EOF1", color="blue")
     p22, = ax.plot(doys, diff_mean_2, label="EOF2", color="green")
+    ax.set_xlim(xlim)
     ax.set_ylabel("Mean [$\mathrm{W/m^2}$]")
 
     ax = axs[2]
     ax.set_title("Standard deviation of differences of EOF vector elements")
     p31, = ax.plot(doys, diff_std_1, label="EOF1", color="blue")
     p32, = ax.plot(doys, diff_std_2, label="EOF2", color="green")
+    ax.set_xlim(xlim)
     ax.set_ylabel("Std.Dev. [$\mathrm{W/m^2}$]")
 
     ax = axs[3]
@@ -185,7 +189,7 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     p34, = ax.plot(doys, diff_abs_percent95_2, label="EOF2", color="green", linestyle="--")
     p35, = ax.plot(doys, diff_abs_percent68_1, label="EOF1", color="blue", linestyle=":")
     p36, = ax.plot(doys, diff_abs_percent68_2, label="EOF2", color="green", linestyle=":")
-    ax.set_xlim((0, 400))
+    ax.set_xlim(xlim)
     ax.set_ylabel("Percent [$\mathrm{W/m^2}$]")
     ax.legend(labels=["99%", "95%", "68%"], handles=[p31, p33, p35],loc="upper right")
     ax.set_xlabel("Day of year")
@@ -212,6 +216,7 @@ def plot_correlation_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     doys = eof.doy_list()
     if exclude_doy366:
         doys = doys[:-1]
+    xlim = (0, doys[-1])
     corr_1, diff_mean_1, diff_std_1, diff_abs_percent68_1, diff_abs_percent95_1, diff_abs_percent99_1 = calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=1, percentage=False, do_print=do_print)
     corr_2, diff_mean_2, diff_std_2, diff_abs_percent68_2, diff_abs_percent95_2, diff_abs_percent99_2 = calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=2, percentage=False, do_print=do_print)
 
@@ -224,6 +229,7 @@ def plot_correlation_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     ax = axs
     p11, = ax.plot(doys, corr_1, label="EOF1", color="blue")
     p12, = ax.plot(doys, corr_2, label="EOF2", color="green")
+    ax.set_xlim(xlim)
     ax.legend(handles=[p11, p12])
     ax.set_xlabel("Day of year")
     ax.set_ylabel("Correlation coefficient")
@@ -420,36 +426,41 @@ def plot_vector_agreement(ref_data, data, title=None, do_print=False):
     return fig
 
 
-def plot_comparison_orig_calc_pcs(calc_pcs: pc.PCData, orig_pcs: pc.PCData, startDate=None, endDate=None):
-    fig, axs = plt.subplots(2, 1, num="ReproduceOriginalOMIPCs_PCs", clear=True, figsize=(8, 6), dpi=150)
-    plt.subplots_adjust(hspace=0.3)
+def plot_comparison_orig_calc_pcs(calc_pcs: pc.PCData,
+                                  orig_pcs: pc.PCData,
+                                  start_date: np.datetime64 = None,
+                                  end_date: np.datetime64 = None):
+    """
+    Plots both PC time series (one in a subplot each) of the recalculation and a reference.
+    The period to plot can be adjusted.
+    :param calc_pcs: The recalculated PC time series
+    :param orig_pcs: Reference PC time series
+    :param start_date: Start of the period to plot. If None, the whole period will be plotted.
+    :param end_date: End of the period to plot. If None, the whole period will be plotted.
+    :return:The figure handle.
+    """
+    fig, axs = plt.subplots(2, 1, num="plot_comparison_orig_calc_pcs", clear=True, figsize=(8, 6), dpi=150)
+    plt.subplots_adjust(hspace=0.4)
     fig.suptitle("PC Recalculation")
 
     ax = axs[0]
-    ax.set_title("PC1")
+    ax.set_title("Principal Component 1")
     p1, = ax.plot(orig_pcs.time, orig_pcs.pc1, label="Original")
     p2, = ax.plot(calc_pcs.time, calc_pcs.pc1, label="Recalculation")
-    if startDate != None and endDate != None:
-        ax.set_xlim((startDate, endDate))
+    if start_date is not None and end_date is not None:
+        ax.set_xlim((start_date, end_date))
+    ax.set_ylabel("PC1 [1]")
     plt.setp(ax.get_xticklabels(), rotation=15, horizontalalignment='right')
-    ax.legend(handles=(p1, p2))
-
-    #corr = (np.corrcoef(orig_pcs.pc1, calc_pcs.pc1))[0, 1]
-    # FIXME: Calculate correlation only for wanted period
-    # FIXME: Check that periods covered by orig_omi and recalc_omi are actually the same
-    #plt.text(0.1, 0.1, "Correlation over complete period: %.3f" % corr, transform=ax.transAxes)
+    fig.legend(handles=(p1, p2))
 
     ax = axs[1]
-    ax.set_title("PC2")
+    ax.set_title("Principal Component 2")
     p3, = ax.plot(orig_pcs.time, orig_pcs.pc2, label="Original")
     p4, = ax.plot(calc_pcs.time, calc_pcs.pc2, label="Recalculation")
-    if startDate is not None and endDate is not None:
-        ax.set_xlim((startDate, endDate))
+    if start_date is not None and end_date is not None:
+        ax.set_xlim((start_date, end_date))
+    ax.set_ylabel("PC2 [1]")
     plt.setp(ax.get_xticklabels(), rotation=15, horizontalalignment="right")
-    ax.legend(handles=(p3, p4))
-
-    #corr = (np.corrcoef(orig_pcs.pc2, calc_pcs.pc2))[0, 1]
-    #plt.text(0.1, 0.1, "Correlation over complete period: %.3f" % corr, transform=ax.transAxes)
 
     return fig
 

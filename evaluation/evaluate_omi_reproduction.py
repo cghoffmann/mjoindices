@@ -88,8 +88,6 @@ fig.show()
 fig.savefig(fig_dir / "EOFComparisonStatistics.png")
 fig.savefig(fig_dir / "EOFComparisonStatistics.pdf")
 
-# fig = eof.plot_explained_variance_for_all_doys(eofs, include_no_observations=True)
-# fig.show()
 #
 # #doy=23 #among the best agreements
 # doy = 218 #worst agreement
@@ -99,6 +97,11 @@ fig.savefig(fig_dir / "EOFComparisonStatistics.pdf")
 # fig.show()
 #
 # # ########## Evaluate explained variance
+fig = eof.plot_explained_variance_for_all_doys(eofs, include_no_observations=False)
+fig.show()
+fig.savefig(fig_dir / "ExplainedVarianceForAllDoys.png")
+fig.savefig(fig_dir / "ExplainedVarianceForAllDoys.pdf")
+
 # orig_explained_variance_1, orig_explained_variance_2 = mjoindices.evaluation_tools.load_omi_explained_variance(original_omi_explained_variance_file)
 # eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 # fig = mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_1, eofs.explained_variance1_for_all_doys(), title="Explained Variance for EOF1", do_print=True, exclude_doy366=setting_exclude_doy_366)
@@ -108,11 +111,17 @@ fig.savefig(fig_dir / "EOFComparisonStatistics.pdf")
 #
 # # ########## Evaluate PCs
 #
-# pcs = pc.load_pcs_from_txt_file(pctxtfile)
-# orig_pcs = pc.load_original_pcs_from_txt_file(originalOMIPCFile)
-#
-# fig = mjoindices.evaluation_tools.plot_timeseries_agreement(orig_pcs.pc1, orig_pcs.time, pcs.pc1, pcs.time, title="PC1", do_print=True)
-# fig.show()
+pcs = pc.load_pcs_from_txt_file(pctxtfile)
+orig_pcs = pc.load_original_pcs_from_txt_file(originalOMIPCFile)
+
+#Plot sample period
+fig = mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs(pcs, orig_pcs, start_date=np.datetime64("2011-01-01"), end_date=np.datetime64("2011-12-31"))
+fig.show()
+fig.savefig(fig_dir / "PCTimeSeriesSample.png")
+fig.savefig(fig_dir / "PCTimeSeriesSample.pdf")
+
+#fig = mjoindices.evaluation_tools.plot_timeseries_agreement(orig_pcs.pc1, orig_pcs.time, pcs.pc1, pcs.time, title="PC1", do_print=True)
+#fig.show()
 # fig = mjoindices.evaluation_tools.plot_timeseries_agreement(orig_pcs.pc2, orig_pcs.time, pcs.pc2, pcs.time, title="PC2", do_print=True)
 # fig.show()
 #

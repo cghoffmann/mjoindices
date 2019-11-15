@@ -602,6 +602,7 @@ def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs, include_total_
         handles.append(p3)
     ax1.set_xlabel("DOY")
     ax1.set_ylabel("Fraction of explained variance")
+    ax1.set_xlim((0, 366))
 
     if include_no_observations:
         ax2 = ax1.twinx()
