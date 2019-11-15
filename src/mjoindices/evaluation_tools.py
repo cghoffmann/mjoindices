@@ -35,14 +35,30 @@ import mjoindices.tools as tools
 #FIXME: typing
 #FIXME: Comments
 
-def compute_vector_difference_quantity(ref_vec, vec, percentage=True):
+
+def compute_vector_difference_quantity(ref_vec: np.ndarray, vec: np.ndarray, percentage: bool = True) -> np.ndarray:
+    """
+    Calculates a standardized difference between two arrays.
+    :param ref_vec: The reference array.
+    :param vec: The array to compare with.
+    :param percentage: If true: calculation results will be in percent of the mean of the absolute reference values.
+    :return:
+    """
     result = vec - ref_vec
     if percentage is True:
         result = result / np.mean(np.abs(ref_vec)) *100
     return result
 
 
-def calc_vector_agreement(ref_vec, vec, percentage=True, do_print=False):
+def calc_vector_agreement(ref_vec: np.ndarray, vec: np.ndarray, percentage: bool = True, do_print: bool = False) -> typing.Tuple:
+    """
+    Calculates extended comparison statistics between two arrays.
+    :param ref_vec: The reference array.
+    :param vec: The array to compare with.
+    :param percentage: If true: calculation results will be in percent of the mean of the absolute reference values.
+    :param do_print: If true, some characteristic values will we printed to the console.
+    :return: A tuple containing values for the following quantities: correlation, mean of the differences, standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.
+    """
     if not np.all(ref_vec.size == vec.size):
         raise ValueError("Vectors do not have the same lengths.")
     corr = np.corrcoef(ref_vec, vec)[0, 1]
@@ -65,7 +81,21 @@ def calc_vector_agreement(ref_vec, vec, percentage=True, do_print=False):
     return corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99
 
 
-def calc_comparison_stats_for_eofs_all_doys(eofs_ref: eof.EOFDataForAllDOYs, eofs: eof.EOFDataForAllDOYs, eof_number, exclude_doy366=False, percentage=False, do_print=False) -> typing.Tuple:
+def calc_comparison_stats_for_eofs_all_doys(eofs_ref: eof.EOFDataForAllDOYs,
+                                            eofs: eof.EOFDataForAllDOYs,
+                                            eof_number,
+                                            exclude_doy366:bool = False,
+                                            percentage: bool=False,
+                                            do_print: bool = False) -> typing.Tuple:
+    """
+    Calculates extended comparison statistics between calculated EOFs and references EOFs.
+    :param recalc_eof: The EOFs to compare.
+    :param orig_eof: The reference eofs.
+    :param exclude_doy366: If true, DOY 366 will be included in the plot (sometimes worse agreement depending on the leap year treatment mode).
+    :param percentage: If true: calculation results will be in percent of the mean of the absolute reference values.
+    :param do_print: If true, some characteristic values will we printed to the console.
+    :return: A tuple containing arrays with 366 or 365 elements each for the following quantities: correlation, mean of the differences, standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.
+    """
     if eof_number != 1 and eof_number != 2:
         raise ValueError("Argument eof_number must be 1 or 2.")
     doys = eof.doy_list()
@@ -102,12 +132,18 @@ def calc_comparison_stats_for_eofs_all_doys(eofs_ref: eof.EOFDataForAllDOYs, eof
     return corr, diff_mean, diff_std, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99
 
 
-def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs, orig_eof: eof.EOFDataForAllDOYs, exclude_doy366=False, do_print=False) -> Figure:
+def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
+                                            orig_eof: eof.EOFDataForAllDOYs,
+                                            exclude_doy366: bool = False,
+                                            do_print: bool = False) -> Figure:
     """
-
-    :param recalc_eof: The object containing the calculated EOFs
-    :param orig_eof: The object containing the ortiginal EOFs
-    :return: Handle to the figure
+    Plots extended comparison statistics between calculated EOFs and references EOFs.
+    Statisctics of the differences will be shown for each DOY (DOY on the abscissa) and for EOF1 and EOF2 with one line each.
+    :param recalc_eof: The EOFs to compare.
+    :param orig_eof: The reference eofs.
+    :param exclude_doy366: If true, DOY 366 will be included in the plot (sometimes worse agreement depending on the leap year treatment mode).
+    :param do_print: If true, some characteristic values will we printed to the console.
+    :return: The figure handle
     """
 
     doys = eof.doy_list()
@@ -117,8 +153,8 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs, o
     corr_2, diff_mean_2, diff_std_2, diff_abs_percent68_2, diff_abs_percent95_2, diff_abs_percent99_2 = calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=2, percentage=False, do_print=do_print)
 
     fig_id = "plot_comparison_stats_for_eofs_all_doys"
-    fig, axs = plt.subplots(4, 1, num=fig_id, clear=True, figsize=(12, 9), dpi=150)
-    plt.subplots_adjust(hspace=0.3)
+    fig, axs = plt.subplots(4, 1, num=fig_id, clear=True, figsize=(9, 9), dpi=150)
+    plt.subplots_adjust(hspace=0.5)
 
     fig.suptitle("Comparison of EOFs for all DOYs")
 
@@ -126,27 +162,76 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs, o
     ax.set_title("Correlation")
     p11, = ax.plot(doys, corr_1, label="EOF1", color="blue")
     p12, = ax.plot(doys, corr_2, label="EOF2", color="green")
+    ax.set_ylabel("Correlation")
+    fig.legend(handles=[p11, p12])
 
     ax = axs[1]
-    ax.set_title("Mean")
+    ax.set_title("Mean of differences of EOF vector elements")
     p21, = ax.plot(doys, diff_mean_1, label="EOF1", color="blue")
     p22, = ax.plot(doys, diff_mean_2, label="EOF2", color="green")
+    ax.set_ylabel("Mean [$\mathrm{W/m^2}$]")
 
     ax = axs[2]
-    ax.set_title("Std Dev")
+    ax.set_title("Standard deviation of differences of EOF vector elements")
     p31, = ax.plot(doys, diff_std_1, label="EOF1", color="blue")
     p32, = ax.plot(doys, diff_std_2, label="EOF2", color="green")
+    ax.set_ylabel("Std.Dev. [$\mathrm{W/m^2}$]")
 
     ax = axs[3]
-    ax.set_title("Percentiles")
-    p31, = ax.plot(doys, diff_abs_percent99_1, label="EOF1", color="blue")
-    p32, = ax.plot(doys, diff_abs_percent99_2, label="EOF2", color="green")
+    ax.set_title("Percentiles of absolute differences of EOF vector elements")
+    p31, = ax.plot(doys, diff_abs_percent99_1, label="99% EOF1", color="blue")
+    p32, = ax.plot(doys, diff_abs_percent99_2, label="99% EOF2", color="green")
     p33, = ax.plot(doys, diff_abs_percent95_1, label="EOF1", color="blue", linestyle="--")
     p34, = ax.plot(doys, diff_abs_percent95_2, label="EOF2", color="green", linestyle="--")
     p35, = ax.plot(doys, diff_abs_percent68_1, label="EOF1", color="blue", linestyle=":")
     p36, = ax.plot(doys, diff_abs_percent68_2, label="EOF2", color="green", linestyle=":")
+    ax.set_xlim((0, 400))
+    ax.set_ylabel("Percent [$\mathrm{W/m^2}$]")
+    ax.legend(labels=["99%", "95%", "68%"], handles=[p31, p33, p35],loc="upper right")
+    ax.set_xlabel("Day of year")
 
     return fig
+
+
+def plot_correlation_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
+                                       orig_eof: eof.EOFDataForAllDOYs,
+                                       exclude_doy366: bool = False,
+                                       do_print: bool = False,
+                                       full_value_range: bool = True) -> Figure:
+    """
+    Plots the correlations between calculated EOFs and references EOFs.
+    Correlations will be shown for each DOY (DOY on the abscissa) and for EOF1 and EOF2 with one line each.
+    :param recalc_eof: The EOFs to compare.
+    :param orig_eof: The reference eofs.
+    :param exclude_doy366: If true, DOY 366 will be included in the plot (sometimes worse correlation depending on the leap year treatment mode).
+    :param do_print: If true, some characteristic values will we printed to the console.
+    :param full_value_range: If true, the ordinate spans the range from 0 to 1 instead of the used value range only.
+    :return: A handle to the figure.
+    """
+
+    doys = eof.doy_list()
+    if exclude_doy366:
+        doys = doys[:-1]
+    corr_1, diff_mean_1, diff_std_1, diff_abs_percent68_1, diff_abs_percent95_1, diff_abs_percent99_1 = calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=1, percentage=False, do_print=do_print)
+    corr_2, diff_mean_2, diff_std_2, diff_abs_percent68_2, diff_abs_percent95_2, diff_abs_percent99_2 = calc_comparison_stats_for_eofs_all_doys(orig_eof, recalc_eof, exclude_doy366=exclude_doy366, eof_number=2, percentage=False, do_print=do_print)
+
+    fig_id = "plot_correlation_for_eofs_all_doys"
+    fig, axs = plt.subplots(1, 1, num=fig_id, clear=True, figsize=(6, 4.5), dpi=150)
+    plt.subplots_adjust(hspace=0.3)
+
+    fig.suptitle("Correlation of EOFs for all DOYs")
+
+    ax = axs
+    p11, = ax.plot(doys, corr_1, label="EOF1", color="blue")
+    p12, = ax.plot(doys, corr_2, label="EOF2", color="green")
+    ax.legend(handles=[p11, p12])
+    ax.set_xlabel("Day of year")
+    ax.set_ylabel("Correlation coefficient")
+    if full_value_range:
+        ax.set_ylim((0, 1.1))
+
+    return fig
+
 
 def plot_individual_eof_map_comparison(orig_eof: eof.EOFData, compare_eof: eof.EOFData, doy: int=None):
 
