@@ -89,12 +89,14 @@ fig.savefig(fig_dir / "EOFComparisonStatistics.png")
 fig.savefig(fig_dir / "EOFComparisonStatistics.pdf")
 
 #
-# doy=23 #among the best agreements
-doy = 218 #worst agreement
+doy=23 #among the best agreements
+#doy = 218 #worst agreement
 # fig = mjoindices.evaluation_tools.plot_vector_agreement(orig_eofs.eof1vector_for_doy(doy), eofs.eof1vector_for_doy(doy), title="EOF1 for DOY %i" % doy, do_print=True)
 # fig.show()
-fig = mjoindices.evaluation_tools.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy),doy=doy)
+fig = mjoindices.evaluation_tools.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy=doy)
 fig.show()
+fig.savefig(fig_dir / ("EOFComparisonMapDOY%i.png"%doy))
+fig.savefig(fig_dir / ("EOFComparisonMapDOY%i.pdf"%doy))
 #
 # # ########## Evaluate explained variance
 fig = eof.plot_explained_variance_for_all_doys(eofs, include_no_observations=False)
