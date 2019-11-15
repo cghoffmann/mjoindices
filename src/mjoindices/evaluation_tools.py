@@ -25,8 +25,8 @@ import typing
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+import matplotlib.cm
 import re
-from scipy.stats import norm
 
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.principal_components as pc
@@ -239,11 +239,14 @@ def plot_correlation_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     return fig
 
 
-def plot_individual_eof_map_comparison(orig_eof: eof.EOFData, compare_eof: eof.EOFData, doy: int=None):
-
-    # TODO: Print correlation values into figure
-    print(np.corrcoef(orig_eof.eof1vector, compare_eof.eof1vector))
-    print(np.corrcoef(orig_eof.eof2vector, compare_eof.eof2vector))
+def plot_individual_eof_map_comparison(orig_eof: eof.EOFData, compare_eof: eof.EOFData, doy: int = None) -> Figure:
+    """
+    Shows the maps of EOFs 1 and 2 and a respective reference together with a map of differences between both.
+    :param orig_eof: The reference EOF data
+    :param compare_eof: The EOFs which should be evaluated
+    :param doy: The DOY, which is evaluated (only used for the figure title)
+    :return: The figure handle.
+    """
 
     fig, axs = plt.subplots(2, 3, num="ReproduceOriginalOMIPCs_ExplainedVariance_EOF_Comparison", clear=True,
                             figsize=(10, 5), dpi=150, sharex=True, sharey=True)
@@ -252,37 +255,37 @@ def plot_individual_eof_map_comparison(orig_eof: eof.EOFData, compare_eof: eof.E
         fig.suptitle("EOF Recalculation for DOY %i" % doy)
 
     ax = axs[0, 0]
-    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map)
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map, levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("Original EOF1")
     ax.set_ylabel("Latitude [°]")
 
     ax = axs[0, 1]
-    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof1map)
+    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof1map, levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("Recalculated EOF1")
 
     # FIXME: Check that grids are equal
     ax = axs[0, 2]
-    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map - compare_eof.eof1map)
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map - compare_eof.eof1map, levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("Difference 1")
 
     ax = axs[1, 0]
-    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map)
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map, levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("Original EOF2")
     ax.set_ylabel("Latitude [°]")
     ax.set_xlabel("Longitude [°]")
 
     ax = axs[1, 1]
-    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof2map)
+    c = ax.contourf(compare_eof.long, compare_eof.lat, compare_eof.eof2map, levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("Recalculated EOF2")
     ax.set_xlabel("Longitude [°]")
 
     ax = axs[1, 2]
-    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map - compare_eof.eof2map)
+    c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map - compare_eof.eof2map, levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("Difference 2")
     ax.set_xlabel("Longitude [°]")

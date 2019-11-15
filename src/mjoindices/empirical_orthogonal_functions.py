@@ -28,6 +28,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+import matplotlib.cm
 
 class EOFData:
     """
@@ -654,14 +655,14 @@ def plot_individual_eof_map(eofdata: EOFData, doy: int = None) -> Figure:
 
     ax = axs[0]
 
-    c = ax.contourf(eofdata.long, eofdata.lat, eofdata.eof1map)
+    c = ax.contourf(eofdata.long, eofdata.lat, eofdata.eof1map, levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("EOF1")
     ax.set_ylabel("Latitude [°]")
     ax.set_xlabel("Longitude [°]")
 
     ax = axs[1]
-    c = ax.contourf(eofdata.long, eofdata.lat, eofdata.eof2map)
+    c = ax.contourf(eofdata.long, eofdata.lat, eofdata.eof2map, levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("EOF2")
     ax.set_ylabel("Latitude [°]")
