@@ -63,8 +63,7 @@ pctxtfile = Path(__file__).resolve().parents[1] / "examples" / "example_data" / 
 fig_dir = Path(__file__).resolve().parents[1] / "examples" / "example_data" / "evaluate_omi_reproduction_plots"
 
 # Decide whether DOY 366 should be included in the evaluation
-setting_exclude_doy_366 = False
-
+setting_exclude_doy_366 = True
 
 # ######## End of settings
 
@@ -91,28 +90,39 @@ fig.savefig(fig_dir / "EOFComparisonStatistics.pdf")
 #
 doy=23 #among the best agreements
 #doy = 218 #worst agreement
-# fig = mjoindices.evaluation_tools.plot_vector_agreement(orig_eofs.eof1vector_for_doy(doy), eofs.eof1vector_for_doy(doy), title="EOF1 for DOY %i" % doy, do_print=True)
-# fig.show()
+fig = mjoindices.evaluation_tools.plot_vector_agreement(orig_eofs.eof1vector_for_doy(doy), eofs.eof1vector_for_doy(doy), title="EOF1 for DOY %i" % doy, do_print=True)
+fig.show()
+fig.savefig(fig_dir / ("EOF1DetailedComparisonDOY%i.png"%doy))
+fig.savefig(fig_dir / ("EOF1DetailedComparisonDOY%i.pdf"%doy))
+fig = mjoindices.evaluation_tools.plot_vector_agreement(orig_eofs.eof2vector_for_doy(doy), eofs.eof2vector_for_doy(doy), title="EOF2 for DOY %i" % doy, do_print=True)
+fig.show()
+fig.savefig(fig_dir / ("EOF2DetailedComparisonDOY%i.png"%doy))
+fig.savefig(fig_dir / ("EOF2DetailedComparisonDOY%i.pdf"%doy))
+
 fig = mjoindices.evaluation_tools.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy=doy)
 fig.show()
 fig.savefig(fig_dir / ("EOFComparisonMapDOY%i.png"%doy))
 fig.savefig(fig_dir / ("EOFComparisonMapDOY%i.pdf"%doy))
-#
+
 # # ########## Evaluate explained variance
 fig = eof.plot_explained_variance_for_all_doys(eofs, include_no_observations=False)
 fig.show()
 fig.savefig(fig_dir / "ExplainedVarianceForAllDoys.png")
 fig.savefig(fig_dir / "ExplainedVarianceForAllDoys.pdf")
 
-# orig_explained_variance_1, orig_explained_variance_2 = mjoindices.evaluation_tools.load_omi_explained_variance(original_omi_explained_variance_file)
-# eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
-# fig = mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_1, eofs.explained_variance1_for_all_doys(), title="Explained Variance for EOF1", do_print=True, exclude_doy366=setting_exclude_doy_366)
-# fig.show()
-# fig = mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_2, eofs.explained_variance2_for_all_doys(), title="Explained Variance for EOF2", do_print=True, exclude_doy366=setting_exclude_doy_366)
-# fig.show()
-#
-# # ########## Evaluate PCs
-#
+orig_explained_variance_1, orig_explained_variance_2 = mjoindices.evaluation_tools.load_omi_explained_variance(original_omi_explained_variance_file)
+eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
+fig = mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_1, eofs.explained_variance1_for_all_doys(), title="Explained Variance for EOF1", do_print=True, exclude_doy366=setting_exclude_doy_366)
+fig.show()
+fig.savefig(fig_dir / "ExplainedVarianceComparison_EOF1.png")
+fig.savefig(fig_dir / "ExplainedVarianceComparison_EOF1.pdf")
+fig = mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance(orig_explained_variance_2, eofs.explained_variance2_for_all_doys(), title="Explained Variance for EOF2", do_print=True, exclude_doy366=setting_exclude_doy_366)
+fig.show()
+fig.savefig(fig_dir / "ExplainedVarianceComparison_EOF2.png")
+fig.savefig(fig_dir / "ExplainedVarianceComparison_EOF2.pdf")
+
+# ########## Evaluate PCs
+
 pcs = pc.load_pcs_from_txt_file(pctxtfile)
 orig_pcs = pc.load_original_pcs_from_txt_file(originalOMIPCFile)
 
@@ -122,15 +132,21 @@ fig.show()
 fig.savefig(fig_dir / "PCTimeSeriesSample.png")
 fig.savefig(fig_dir / "PCTimeSeriesSample.pdf")
 
-#fig = mjoindices.evaluation_tools.plot_timeseries_agreement(orig_pcs.pc1, orig_pcs.time, pcs.pc1, pcs.time, title="PC1", do_print=True)
-#fig.show()
-# fig = mjoindices.evaluation_tools.plot_timeseries_agreement(orig_pcs.pc2, orig_pcs.time, pcs.pc2, pcs.time, title="PC2", do_print=True)
-# fig.show()
-#
-# strength = np.sqrt(np.square(pcs.pc1) + np.square(pcs.pc2))
-# orig_strength = np.sqrt(np.square(orig_pcs.pc1) + np.square(orig_pcs.pc2))
-# fig = mjoindices.evaluation_tools.plot_timeseries_agreement(orig_strength, orig_pcs.time, strength, pcs.time, title="MJO Strength", do_print=True)
-# fig.show()
-#
+fig = mjoindices.evaluation_tools.plot_timeseries_agreement(orig_pcs.pc1, orig_pcs.time, pcs.pc1, pcs.time, title="PC1", do_print=True)
+fig.show()
+fig.savefig(fig_dir / "PC1_Comparison.png")
+fig.savefig(fig_dir / "PC1_Comparison.pdf")
+fig = mjoindices.evaluation_tools.plot_timeseries_agreement(orig_pcs.pc2, orig_pcs.time, pcs.pc2, pcs.time, title="PC2", do_print=True)
+fig.show()
+fig.savefig(fig_dir / "PC2_Comparison.png")
+fig.savefig(fig_dir / "PC2_Comparison.pdf")
+
+strength = np.sqrt(np.square(pcs.pc1) + np.square(pcs.pc2))
+orig_strength = np.sqrt(np.square(orig_pcs.pc1) + np.square(orig_pcs.pc2))
+fig = mjoindices.evaluation_tools.plot_timeseries_agreement(orig_strength, orig_pcs.time, strength, pcs.time, title="MJO Strength", do_print=True)
+fig.show()
+fig.savefig(fig_dir / "MJOStrength_Comparison.png")
+fig.savefig(fig_dir / "MJOStrength_Comparison.pdf")
+
 
 

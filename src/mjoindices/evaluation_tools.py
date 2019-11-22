@@ -292,7 +292,19 @@ def plot_individual_eof_map_comparison(orig_eof: eof.EOFData, compare_eof: eof.E
 
     return fig
 
-def calc_comparison_stats_for_explained_variance(ref_var, calc_var, do_print=False, exclude_doy366=False):
+
+def calc_comparison_stats_for_explained_variance(ref_var: np.ndarray,
+                                                 calc_var: np.ndarray,
+                                                 do_print: bool = False,
+                                                 exclude_doy366: bool = False) -> typing.Tuple:
+    """
+    Calculates the comparison statistics of the explained variances for one EOF.
+    :param ref_var: The reference variances
+    :param calc_var: The variances to compare
+    :param do_print: If True, some statistics values will also be shown in the console.
+    :param exclude_doy366: If True, the data for DOY 366 will not be considered in the statistics
+    :return: A tuple containing values for the following quantities: correlation, mean of the differences, standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.
+    """
     ref_data = ref_var.copy()
     calc_data = calc_var.copy()
     if exclude_doy366:
@@ -304,7 +316,20 @@ def calc_comparison_stats_for_explained_variance(ref_var, calc_var, do_print=Fal
     return corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99
 
 
-def plot_comparison_stats_for_explained_variance(ref_var, calc_var, title=None, do_print=False, exclude_doy366=False):
+def plot_comparison_stats_for_explained_variance(ref_var: np.ndarray,
+                                                 calc_var: np.ndarray,
+                                                 title: str = None,
+                                                 do_print: bool = False,
+                                                 exclude_doy366: bool = False) -> Figure:
+    """
+    Plots the comparison of the explained variances for one EOF.
+    :param ref_var: The reference variances
+    :param calc_var: The variances to compare
+    :param title: A title for the figure.
+    :param do_print: If True, some statistics values will also be shown in the console.
+    :param exclude_doy366: If True, the data for DOY 366 will not be considered in the statistics
+    :return: the figure handle
+    """
     if do_print:
         print("##########")
         if title is not None:
@@ -320,7 +345,18 @@ def plot_comparison_stats_for_explained_variance(ref_var, calc_var, title=None, 
     return fig
 
 
-def calc_timeseries_agreement(ref_data, ref_time, data, time, exclude_doy366=False, do_print=False):
+def calc_timeseries_agreement(ref_data: np.ndarray, ref_time: np.ndarray, data: np.ndarray, time: np.ndarray, exclude_doy366: bool = False, do_print: bool = False) -> typing.Tuple:
+    """
+    Calculates comparison values of 2 time series.
+    :param ref_data: The reference vector.
+    :param ref_time: The time grid of the reference
+    :param data: The vector to validate.
+    :param time: The time grid of the data. It will be checked if this is similar to the time grid of the reference.
+    :param title: A title for the plot. Use this to explain the quantity which is compared on the plot.
+    :param exclude_doy366: If True, the data for DOY 366 will not be considered in the statistics
+    :param do_print: If True, some statistics values will also be shown in the console.
+    :return: A tuple containing values for the following quantities: correlation, mean of the differences, standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.
+    """
     if not np.all(ref_time == time):
         raise ValueError("Time series do not cover the same periods.")
     if exclude_doy366:
@@ -344,8 +380,23 @@ def calc_timeseries_agreement(ref_data, ref_time, data, time, exclude_doy366=Fal
     return inds_used, inds_not_used, corr, diff_mean, diff_std, diff_ts, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99
 
 
-def plot_timeseries_agreement(ref_data, ref_time, data, time, title=None, do_print=False):
-
+def plot_timeseries_agreement(ref_data: np.ndarray,
+                              ref_time: np.ndarray,
+                              data: np.ndarray,
+                              time: np.ndarray,
+                              title: str = None,
+                              do_print: bool = False) -> Figure:
+    """
+    Plot a graphical comparison of 2 time series.
+    Shows 4 subplots with 1) the data, 2) the difference, 3) a scatterplot of the data, and 4) a histogram of the differences.
+    :param ref_data: The reference vector.
+    :param ref_time: The time grid of the reference
+    :param data: The vector to validate.
+    :param time: The time grid of the data. It will be checked if this is similar to the time grid of the reference.
+    :param title: A title for the plot. Use this to explain the quantity which is compared on the plot.
+    :param do_print: If True, some statistics values will also be shown in the console.
+    :return: The figure handle.
+    """
     if do_print:
         print("##########")
         if title is not None:
@@ -369,29 +420,44 @@ def plot_timeseries_agreement(ref_data, ref_time, data, time, title=None, do_pri
     ax.set_title("Time series")
     p11, = ax.plot(time, ref_data, label="Reference")
     p12, = ax.plot(time, data, label="Recalculation")
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Data [units of quantity]")
 
     ax = axs[1, 0]
     ax.set_title("Difference")
     p21, = ax.plot(time, diff_ts_abs_complete, color="red")
     p22, = ax.plot(time[doy_not_366_inds], diff_ts_abs_not366, color="blue")
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Difference [units of quantity]")
 
     ax = axs[0, 1]
     ax.set_title("Scatterplot")
     p31, = ax.plot(ref_data_not366, data_not366, linestyle='None', marker="x", color="blue")
     p32, = ax.plot(ref_data[doy366_inds], data[doy366_inds], linestyle='None', marker="x", color="red")
+    ax.set_xlabel("Reference data [units of quantity]")
+    ax.set_ylabel("Data [units of quantity]")
 
     ax = axs[1, 1]
     (n2, bins2, patches) = ax.hist(diff_ts_abs_not366, bins=100, density=True)
-
+    ax.set_xlabel("Difference [units of quantity]")
+    ax.set_ylabel("Number of occurrences")
     sigma = diff_std_not366
     mu = diff_mean_not366
-    ax.plot(bins2, 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(- (bins2 - mu) ** 2 / (2 * sigma ** 2)), linewidth = 2, color = 'r')
+    ax.plot(bins2, 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(- (bins2 - mu) ** 2 / (2 * sigma ** 2)), linewidth=2, color='r')
 
     return fig
 
 
-def plot_vector_agreement(ref_data, data, title=None, do_print=False):
-
+def plot_vector_agreement(ref_data: np.ndarray, data: np.ndarray, title: str = None, do_print: bool = False) -> Figure:
+    """
+    Plot a graphical comparison of 2 vectors.
+    Shows 4 subplots with 1) the data, 2) the difference, 3) a scatterplot of the data, and 4) a histogram of the differences.
+    :param ref_data: The reference vector.
+    :param data: The vector to validate.
+    :param title: A title for the plot. Use this to explain the quantity which is compared on the plot.
+    :param do_print: If True, some statistics values will also be shown in the console.
+    :return: The figure handle.
+    """
     if do_print:
         print("##########")
         if title is not None:
@@ -410,21 +476,28 @@ def plot_vector_agreement(ref_data, data, title=None, do_print=False):
     ax.set_title("Data")
     p11, = ax.plot(ref_data, label="Reference")
     p12, = ax.plot(data, label="Recalculation")
+    ax.set_xlabel("Position in vector")
+    ax.set_ylabel("Data [units of quantity]")
 
     ax = axs[1, 0]
     ax.set_title("Difference")
-    p21, = ax.plot( diff_vec, color="red")
+    p21, = ax.plot(diff_vec, color="red")
+    ax.set_xlabel("Position in vector")
+    ax.set_ylabel("Difference [units of quantity]")
 
     ax = axs[0, 1]
     ax.set_title("Scatterplot")
     p31, = ax.plot(ref_data, data, linestyle='None', marker="x", color="blue")
+    ax.set_xlabel("Reference data [units of quantity]")
+    ax.set_ylabel("Data [units of quantity]")
 
     ax = axs[1, 1]
     (n2, bins2, patches) = ax.hist(diff_vec, bins=100, density=True)
-
+    ax.set_xlabel("Difference [units of quantity]")
+    ax.set_ylabel("Number of occurrences")
     sigma = diff_std
     mu = diff_mean
-    ax.plot(bins2, 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(- (bins2 - mu) ** 2 / (2 * sigma ** 2)), linewidth = 2, color = 'r')
+    ax.plot(bins2, 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(- (bins2 - mu) ** 2 / (2 * sigma ** 2)), linewidth=2, color='r')
 
     return fig
 
@@ -468,7 +541,12 @@ def plot_comparison_orig_calc_pcs(calc_pcs: pc.PCData,
     return fig
 
 
-def load_omi_explained_variance(filename:str) -> np.ndarray:
+def load_omi_explained_variance(filename: str) -> typing.Tuple:
+    """
+    Loads original explained variance files provided vy Juliana Dias
+    :param filename: the file to load
+    :return: a tuple containing two array, for EOF1 and 2, respectively.
+    """
     c = lambda s: float(re.sub("[ \[;\]]", "", s.decode("utf-8")))
     data = np.genfromtxt(filename, converters={0: c, 1: c}, skip_header=7)
     var1 = data[:, 0]
