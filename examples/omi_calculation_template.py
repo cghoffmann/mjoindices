@@ -55,7 +55,7 @@ mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys(eofs, orig_e
 eof.plot_explained_variance_for_all_doys(eofs)
 
 # Check details of the EOF pair for a particular doy in the following
-doy=50
+doy = 50
 # Plot EOFs for this DOY
 eof.plot_individual_eof_map(eofs.eofdata_for_doy(doy), doy)
 # Plot EOF pair in comparison to the original one fpr this DOY

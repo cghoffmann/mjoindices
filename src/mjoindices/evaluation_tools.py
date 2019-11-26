@@ -32,9 +32,6 @@ import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.principal_components as pc
 import mjoindices.tools as tools
 
-#FIXME: typing
-#FIXME: Comments
-
 
 def compute_vector_difference_quantity(ref_vec: np.ndarray, vec: np.ndarray, percentage: bool = True) -> np.ndarray:
     """

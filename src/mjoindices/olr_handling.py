@@ -27,6 +27,7 @@ from pathlib import Path
 import numpy as np
 import scipy
 import scipy.interpolate
+from matplotlib.figure import Figure
 from scipy.io import netcdf
 import matplotlib.pyplot as plt
 
@@ -228,7 +229,7 @@ def restore_from_npzfile(filename: Path) -> OLRData:
     return OLRData(olr, time, lat, long)
 
 
-def plot_olr_map_for_date(olr: OLRData, date: np.datetime64):
+def plot_olr_map_for_date(olr: OLRData, date: np.datetime64) -> Figure:
     # TODO: Plot underlying map
 
     mapdata = olr.get_olr_for_date(date)
@@ -241,7 +242,7 @@ def plot_olr_map_for_date(olr: OLRData, date: np.datetime64):
         ax = axs
 
         c = ax.contourf(olr.long, olr.lat, mapdata)
-        fig.colorbar(c, ax=ax, label="OLR")
+        fig.colorbar(c, ax=ax, label="OLR [W/m²]")
         ax.set_title("OLR")
         ax.set_ylabel("Latitude [°]")
         ax.set_xlabel("Longitude [°]")

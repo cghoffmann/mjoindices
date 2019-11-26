@@ -60,7 +60,7 @@ pctxtfile = Path(__file__).resolve().parents[1] / "examples" / "example_data" / 
 #
 
 # Directory in which the figures are saved.
-fig_dir = Path(__file__).resolve().parents[1] / "examples" / "example_data" / "evaluate_omi_reproduction_plots"
+fig_dir = Path(__file__).resolve().parent / "omi_reproduction_evaluation_plots"
 
 # Decide whether DOY 366 should be included in the evaluation
 setting_exclude_doy_366 = True
