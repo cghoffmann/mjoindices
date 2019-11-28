@@ -21,10 +21,6 @@
 
 # Contact: christoph.hoffmann@uni-greifswald.de
 
-import math
-import os.path
-from pathlib import Path
-
 import numpy as np
 import numpy.random
 import pytest

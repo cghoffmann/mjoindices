@@ -22,17 +22,18 @@
 # Contact: christoph.hoffmann@uni-greifswald.de
 
 from pathlib import Path
+import os.path
 import pytest
 import numpy as np
 
 import mjoindices.omi.quick_temporal_filter as qfilter
 import mjoindices.olr_handling as olr
 
-olr_data_filename = Path(__file__).resolve().parent / "testdata" / "olr.day.mean.nc"
+olr_data_filename = Path(os.path.abspath('')) / "testdata" / "olr.day.mean.nc"
 
-reference_file_filterOLRForMJO_PCQuick_Calculation_lat0 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCquickCond_lat0.npz"
-reference_file_filterOLRForMJO_PCQuick_Calculation_lat5 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCquickCond_lat5.npz"
-reference_file_filterOLRForMJO_PCQuick_Calculation_latmin10 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCquickCond_lat-10.npz"
+reference_file_filterOLRForMJO_PCQuick_Calculation_lat0 = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCquickCond_lat0.npz"
+reference_file_filterOLRForMJO_PCQuick_Calculation_lat5 = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCquickCond_lat5.npz"
+reference_file_filterOLRForMJO_PCQuick_Calculation_latmin10 = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCquickCond_lat-10.npz"
 
 
 @pytest.mark.slow

@@ -23,6 +23,7 @@
 
 import math
 from pathlib import Path
+import os
 
 import numpy as np
 import pytest
@@ -30,7 +31,7 @@ import pytest
 import mjoindices.empirical_orthogonal_functions as eof
 
 # FIXME: Define paths as fixture at a central point
-originalOMIDataDirname = Path(__file__).resolve().parent / "testdata" / "OriginalOMI"
+originalOMIDataDirname = Path(os.path.abspath('')) / "testdata" / "OriginalOMI"
 eof1Dirname = originalOMIDataDirname / "eof1"
 eof2Dirname = originalOMIDataDirname / "eof2"
 
@@ -364,19 +365,19 @@ def test_save_eofs_to_txt_file_load_eofs_from_txt_file(tmp_path):
 def test_load_eofs_from_txt_file_exceptions():
     errors = []
 
-    filename=Path(__file__).resolve().parent / "testdata" / "eof_reference" / "corrupt_nolong.txt"
+    filename = Path(os.path.abspath('')) / "testdata" / "eof_reference" / "corrupt_nolong.txt"
     with pytest.raises(ValueError)as e:
         target_loaded = eof.load_single_eofs_from_txt_file(filename)
     if "corrupted 1" not in str(e.value):
         errors.append("File corrupted 1 check failed")
 
-    filename = Path(__file__).resolve().parent / "testdata" / "eof_reference" / "corrupt_latorder.txt"
+    filename = Path(os.path.abspath('')) / "testdata" / "eof_reference" / "corrupt_latorder.txt"
     with pytest.raises(ValueError)as e:
         target_loaded = eof.load_single_eofs_from_txt_file(filename)
     if "corrupted 2" not in str(e.value):
         errors.append("File corrupted 2 check failed")
 
-    filename = Path(__file__).resolve().parent / "testdata" / "eof_reference" / "corrupt_long_wrong.txt"
+    filename = Path(os.path.abspath('')) / "testdata" / "eof_reference" / "corrupt_long_wrong.txt"
     with pytest.raises(ValueError)as e:
         target_loaded = eof.load_single_eofs_from_txt_file(filename)
     if "corrupted 4" not in str(e.value):

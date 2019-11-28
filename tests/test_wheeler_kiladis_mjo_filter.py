@@ -25,21 +25,22 @@ import subprocess
 from pathlib import Path
 import pytest
 import numpy as np
+import os.path
 
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
 import mjoindices.olr_handling as olr
 
-testdata_dir = Path(__file__).resolve().parent / "testdata"
+testdata_dir = Path(os.path.abspath('')) / "testdata"
 
-olr_data_filename = Path(__file__).resolve().parent / "testdata" / "olr.day.mean.nc"
+olr_data_filename = Path(os.path.abspath('')) / "testdata" / "olr.day.mean.nc"
 
-reference_file_filterOLRForMJO_EOF_Calculation_lat0 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat0.npz"
-reference_file_filterOLRForMJO_EOF_Calculation_lat5 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat5.npz"
-reference_file_filterOLRForMJO_EOF_Calculation_latmin10 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat-10.npz"
+reference_file_filterOLRForMJO_EOF_Calculation_lat0 = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat0.npz"
+reference_file_filterOLRForMJO_EOF_Calculation_lat5 = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat5.npz"
+reference_file_filterOLRForMJO_EOF_Calculation_latmin10 = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOEOFCond_lat-10.npz"
 
-reference_file_filterOLRForMJO_PC_Calculation_lat0 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCCond_lat0.npz"
-reference_file_filterOLRForMJO_PC_Calculation_lat5 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCCond_lat5.npz"
-reference_file_filterOLRForMJO_PC_Calculation_latmin10 = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCCond_lat-10.npz"
+reference_file_filterOLRForMJO_PC_Calculation_lat0 = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCCond_lat0.npz"
+reference_file_filterOLRForMJO_PC_Calculation_lat5 = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCCond_lat5.npz"
+reference_file_filterOLRForMJO_PC_Calculation_latmin10 = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "olr_ref_filteredForMJOPCCond_lat-10.npz"
 
 
 @pytest.mark.slow

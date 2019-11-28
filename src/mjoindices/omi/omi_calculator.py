@@ -25,6 +25,7 @@
 
 from pathlib import Path
 from typing import Tuple
+import os.path
 
 import numpy as np
 import warnings
@@ -171,7 +172,7 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
                                                    doy1reference: bool = True) -> eof.EOFDataForAllDOYs:
     switched_eofs = []
     if doy1reference is True:
-        reference_path = Path(__file__).resolve().parent / "sign_reference"
+        reference_path = Path(os.path.abspath('')) / "sign_reference"
         reference_eofs = eof.load_original_eofs_for_doy(reference_path, 1)
         corrected_doy1 = _correct_spontaneous_sign_change_of_individual_eof(reference_eofs, eofs.eofdata_for_doy(1))
     else:

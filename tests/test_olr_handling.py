@@ -30,7 +30,7 @@ import pytest
 
 import mjoindices.olr_handling as olr
 
-olr_data_filename = Path(__file__).resolve().parent / "testdata" / "olr.day.mean.nc"
+olr_data_filename = Path(os.path.abspath('')) / "testdata" / "olr.day.mean.nc"
 
 
 def test_OLRData_basic_properties():

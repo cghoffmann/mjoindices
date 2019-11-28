@@ -22,6 +22,7 @@
 # Contact: christoph.hoffmann@uni-greifswald.de
 
 from pathlib import Path
+import os.path
 
 import mjoindices.olr_handling as olr
 import mjoindices.omi.omi_calculator as omi
@@ -39,25 +40,25 @@ import numpy as np
 
 # Download the data file from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc to your local file system and
 # adjust the local path below.
-olr_data_filename = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "olr.day.mean.nc"
+olr_data_filename = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" / "olr.day.mean.nc"
 
 # The following directory should contain the two subdirectories "eof1" and "eof2", which should contain the files
 # downloaded from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and
 # ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ respectively
-originalOMIDataDirname = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "OriginalOMI"
+originalOMIDataDirname = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" / "OriginalOMI"
 
 # Download the original OMI values from https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt to your local file system
 # and adjust the local path below.
-originalOMIPCFile = Path(__file__).resolve().parents[1] / "tests" / "testdata" / "OriginalOMI" / "omi.1x.txt"
+originalOMIPCFile = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" / "OriginalOMI" / "omi.1x.txt"
 
 # Files to store the results:
 # The EOFs
-eofnpzfile = Path(__file__).resolve().parent / "example_data" / "EOFs.npz"
+eofnpzfile = Path(os.path.abspath('')) / "example_data" / "EOFs.npz"
 # The PCs
-pctxtfile = Path(__file__).resolve().parent / "example_data" / "PCs.txt"
+pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
 
 # Directory in which the figures are saved.
-fig_dir = Path(__file__).resolve().parent / "example_data" / "omi_recalc_example_plots"
+fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots"
 
 # ############## Calculation of the EOFs ###################
 

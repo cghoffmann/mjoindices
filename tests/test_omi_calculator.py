@@ -22,6 +22,7 @@
 # Contact: christoph.hoffmann@uni-greifswald.de
 
 from pathlib import Path
+import os.path
 
 import numpy as np
 import pytest
@@ -34,18 +35,18 @@ import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.evaluation_tools
 import mjoindices.olr_handling as olr
 
-olr_data_filename = Path(__file__).resolve().parent / "testdata" / "olr.day.mean.nc"
-originalOMIDataDirname = Path(__file__).resolve().parent / "testdata" / "OriginalOMI"
+olr_data_filename = Path(os.path.abspath('')) / "testdata" / "olr.day.mean.nc"
+originalOMIDataDirname = Path(os.path.abspath('')) / "testdata" / "OriginalOMI"
 eof1Dirname = originalOMIDataDirname / "eof1"
 eof2Dirname = originalOMIDataDirname / "eof2"
 origOMIPCsFilename = originalOMIDataDirname / "omi.1x.txt"
-mjoindices_reference_eofs_filename_strict = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "EOFs_strict.npz"
-mjoindices_reference_pcs_filename_strict = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "PCs_strict.txt"
-mjoindices_reference_eofs_filename_strict_eofs = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "EOFs_eofs_package.npz"
-mjoindices_reference_pcs_filename_strict_eofs = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "PCs_eofs_package.txt"
-mjoindices_reference_eofs_filename = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "EOFs.npz"
-mjoindices_reference_pcs_filename = Path(__file__).resolve().parent / "testdata" / "mjoindices_reference" / "PCs.txt"
-original_omi_explained_variance_file = Path(__file__).resolve().parent / "testdata" / "OriginalOMI" / "omi_var.txt"
+mjoindices_reference_eofs_filename_strict = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs_strict.npz"
+mjoindices_reference_pcs_filename_strict = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs_strict.txt"
+mjoindices_reference_eofs_filename_strict_eofs = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs_eofs_package.npz"
+mjoindices_reference_pcs_filename_strict_eofs = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs_eofs_package.txt"
+mjoindices_reference_eofs_filename = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs.npz"
+mjoindices_reference_pcs_filename = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs.txt"
+original_omi_explained_variance_file = Path(os.path.abspath('')) / "testdata" / "OriginalOMI" / "omi_var.txt"
 
 
 

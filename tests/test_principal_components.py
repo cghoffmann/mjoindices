@@ -25,10 +25,11 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+import os.path
 
 import mjoindices.principal_components as pc
 
-originalOMIDataDirname = Path(__file__).resolve().parent / "testdata" / "OriginalOMI"
+originalOMIDataDirname = Path(os.path.abspath('')) / "testdata" / "OriginalOMI"
 origOMIPCsFilename = originalOMIDataDirname / "omi.1x.txt"
 
 
