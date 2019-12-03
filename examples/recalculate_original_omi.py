@@ -36,6 +36,12 @@ import numpy as np
 # A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
 # Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
 
+# You can modify this example in order to compute OMI data from other OLR datasets
+# (this is probably what you intend if you use this package).
+# For this, you only have to provide your OLR data as a mjoindices.olr_handling.OLRData object and
+# inject it in two lines below.
+
+
 # ################ Settings. Change with respect to your system ###################
 
 # Download the data file from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc to your local file system and
@@ -66,6 +72,7 @@ if not fig_dir.exists():
     fig_dir.mkdir(parents=True, exist_ok=False)
 
 # Load the OLR data
+# This is the first place to inject here your own OLR data, if you want tio compute OMI for a different dataset.
 raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
 # Restrict dataset to the original length for the EOF calculation (Kiladis, 2014)
 shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
@@ -124,6 +131,7 @@ fig.savefig(fig_dir / "EOF_SampleExplainedVariance.png")
 # ############## Calculation of the PCs ##################
 
 # Load the OLR data
+# This is second place to inject here your own OLR data, if you want tio compute OMI for a different dataset.
 olr = olr.load_noaa_interpolated_olr(olr_data_filename)
 # Load EOFs
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)

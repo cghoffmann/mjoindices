@@ -61,7 +61,7 @@ pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
 #
 
 # Directory in which the figures are saved.
-fig_dir = Path(os.path.abspath('')) / "omi_reproduction_evaluation_plots"
+fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_reproduction_evaluation_plots"
 
 # Decide whether DOY 366 should be included in the evaluation
 setting_exclude_doy_366 = True
