@@ -31,6 +31,7 @@ import inspect
 import numpy as np
 import warnings
 import importlib
+import scipy.interpolate
 
 eofs_spec = importlib.util.find_spec("eofs")
 eofs_package_available = eofs_spec is not None
@@ -42,6 +43,8 @@ import mjoindices.principal_components as pc
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
 import mjoindices.omi.quick_temporal_filter as qfilter
 import mjoindices.tools as tools
+
+
 
 
 # #################EOF calculation
@@ -175,13 +178,23 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
     if doy1reference is True:
         reference_path = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))) / "sign_reference"
         reference_eofs = eof.load_original_eofs_for_doy(reference_path, 1)
+        if not np.all(reference_eofs.lat == eofs.lat) or not np.all(reference_eofs.long == eofs.long):
+            warnings.warn("References for the sign of the EOFs for DOY1 have to be interpolated to spatial grid of the target EOFs. Treat results with caution.")
+            f1 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof1map,
+                                            kind='linear', bounds_error=True)
+            eof1map_interpol = f1(eofs.long, eofs.lat)
+            f2 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof2map,
+                                           kind='linear', bounds_error=True)
+            eof2map_interpol = f2(eofs.long, eofs.lat)
+            reference_eofs = eof.EOFData(eofs.lat, eofs.long, eof1map_interpol, eof2map_interpol)
         corrected_doy1 = _correct_spontaneous_sign_change_of_individual_eof(reference_eofs, eofs.eofdata_for_doy(1))
     else:
         corrected_doy1 = eofs.eofdata_for_doy(1)
     switched_eofs.append(corrected_doy1)
     previous_eof = corrected_doy1
     for doy in eof.doy_list()[1:]:
-        print(doy)
+        # FIXME Remove output
+        #print(doy)
         corrected_eof = _correct_spontaneous_sign_change_of_individual_eof(previous_eof, eofs.eofdata_for_doy(doy))
         switched_eofs.append(corrected_eof)
         previous_eof = corrected_eof
@@ -193,14 +206,15 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
             < np.mean(np.abs(
                 target.eof1vector - reference.eof1vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
         eof1_switched = -1 * target.eof1vector
-        print("Sign of EOF1 switched")
+        # FIXME Remove output
+        #print("Sign of EOF1 switched")
     else:
         eof1_switched = target.eof1vector
     if (np.mean(np.abs(target.eof2vector + reference.eof2vector))
             < np.mean(np.abs(
                 target.eof2vector - reference.eof2vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
         eof2_switched = -1 * target.eof2vector
-        print("Sign of EOF2 switched")
+        #print("Sign of EOF2 switched")
     else:
         eof2_switched = target.eof2vector
     return eof.EOFData(target.lat,

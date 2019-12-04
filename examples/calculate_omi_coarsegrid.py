@@ -1,0 +1,132 @@
+# -*- coding: utf-8 -*-
+
+""" """
+
+# Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
+
+# This file is part of mjoindices
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Contact: christoph.hoffmann@uni-greifswald.de
+
+from pathlib import Path
+import os.path
+
+import mjoindices.olr_handling as olr
+import mjoindices.omi.omi_calculator as omi
+import mjoindices.empirical_orthogonal_functions as eof
+import mjoindices.principal_components as pc
+import mjoindices.evaluation_tools
+import numpy as np
+
+# ################ Settings. Change with respect to your system ###################
+
+# Download the data file from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc to your local file system and
+# adjust the local path below.
+olr_data_filename = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" / "olr.day.mean.nc"
+
+# Download the original OMI values from https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt to your local file system
+# and adjust the local path below.
+originalOMIPCFile = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" / "OriginalOMI" / "omi.1x.txt"
+
+# Files to store the results:
+# The EOFs
+eofnpzfile = Path(os.path.abspath('')) / "example_data" / "EOFs_coarsegrid.npz"
+# The PCs
+pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs_coarsegrid.txt"
+
+# Directory in which the figures are saved.
+fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots_coarsegrid"
+
+# ############## Calculation of the EOFs ###################
+
+if not fig_dir.exists():
+    fig_dir.mkdir(parents=True, exist_ok=False)
+
+# Load the OLR data
+# This is the first place to inject here your own OLR data, if you want tio compute OMI for a different dataset.
+raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+# Restrict dataset to the original length for the EOF calculation (Kiladis, 2014)
+shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
+# Make sure that the spatial sampling resembles the original one (This should not be necessary here, since we use
+# the original data file. Nevertheless, we want to be sure.)
+coarse_lat = np.arange(-20., 20.1, 8.0)
+coarse_long = np.arange(0., 359.9, 20.0)
+interpolated_olr = olr.interpolate_spatial_grid(shorter_olr, coarse_lat, coarse_long)
+
+# Diagnosis plot of the loaded OLR data
+fig = olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
+fig.show()
+fig.savefig(fig_dir / "OLR_map.png")
+
+# Calculate the eofs. In the postprocessing, the signs of the EOFs are adjusted and the EOF in a period
+# around DOY 300 are replaced by an interpolation see Kiladis, 2014).
+# The switch strict_leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
+# minor differences for the other DOYs. While the results for setting strict_leap_year_treatment=False are closer to the
+# original values, the calculation strict_leap_year_treatment=True is somewhat more stringently implemented using
+# built-in datetime functionality.
+# See documentation of mjoindices.tools.find_doy_ranges_in_dates() for details.
+eofs = omi.calc_eofs_from_olr(interpolated_olr,
+                             sign_doy1reference=True,
+                             interpolate_eofs=True,
+                             strict_leap_year_treatment=True)
+eofs.save_all_eofs_to_npzfile(eofnpzfile)
+
+# ### Some diagnostic plots to evaluate the calculated EOFs
+# Load precalculated EOFs first
+eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
+# Check correlation with original EOFs
+
+# Check the explained variance by the EOFS. Values are lower than in Kiladis, 2014, which is correct!
+fig = eof.plot_explained_variance_for_all_doys(eofs)
+fig.show()
+fig.savefig(fig_dir / "EOFs_ExplainedVariance.png")
+
+# Check details of the EOF pair for a particular doy in the following
+doy = 50
+# Plot EOFs for this DOY
+fig = eof.plot_individual_eof_map(eofs.eofdata_for_doy(doy), doy)
+fig.show()
+fig.savefig(fig_dir / "EOF_Sample.png")
+# Plot the explained variance for the first 10 EOFs of this DOY to check to drop of explained variance after EOF2
+fig = eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=doy, max_eof_number=10)
+fig.show()
+fig.savefig(fig_dir / "EOF_SampleExplainedVariance.png")
+
+
+# ############## Calculation of the PCs ##################
+
+# Load the OLR data
+# This is second place to inject here your own OLR data, if you want tio compute OMI for a different dataset.
+olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+# Load EOFs
+eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
+
+# Calculate the PCs
+# Restrict calculation to the length of the official OMI time series
+pcs = omi.calculate_pcs_from_olr(olr,
+                                 eofs,
+                                 np.datetime64("1979-01-01"),
+                                 np.datetime64("2018-08-28"),
+                                 useQuickTemporalFilter=False)
+# Save PCs
+pcs.save_pcs_to_txt_file(pctxtfile)
+
+# ### Diagnostic plot: Comparison to original PCs
+pcs = pc.load_pcs_from_txt_file(pctxtfile)
+orig_pcs = pc.load_original_pcs_from_txt_file(originalOMIPCFile)
+fig = mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs(pcs, orig_pcs)
+fig.savefig(fig_dir / "PCs_TimeSeries.png")
+
