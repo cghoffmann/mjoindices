@@ -181,10 +181,10 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
         if not np.all(reference_eofs.lat == eofs.lat) or not np.all(reference_eofs.long == eofs.long):
             warnings.warn("References for the sign of the EOFs for DOY1 have to be interpolated to spatial grid of the target EOFs. Treat results with caution.")
             f1 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof1map,
-                                            kind='linear', bounds_error=True)
+                                            kind='linear')
             eof1map_interpol = f1(eofs.long, eofs.lat)
             f2 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof2map,
-                                           kind='linear', bounds_error=True)
+                                           kind='linear')
             eof2map_interpol = f2(eofs.long, eofs.lat)
             reference_eofs = eof.EOFData(eofs.lat, eofs.long, eof1map_interpol, eof2map_interpol)
         corrected_doy1 = _correct_spontaneous_sign_change_of_individual_eof(reference_eofs, eofs.eofdata_for_doy(1))
