@@ -42,6 +42,8 @@ eof2Dirname = originalOMIDataDirname / "eof2"
 origOMIPCsFilename = originalOMIDataDirname / "omi.1x.txt"
 mjoindices_reference_eofs_filename_strict = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs_strict.npz"
 mjoindices_reference_pcs_filename_strict = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs_strict.txt"
+mjoindices_reference_eofs_filename_coarsegrid = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs_coarsegrid.npz"
+mjoindices_reference_pcs_filename_coarsegrid = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs_coarsegrid.txt"
 mjoindices_reference_eofs_filename_strict_eofs = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs_eofs_package.npz"
 mjoindices_reference_pcs_filename_strict_eofs = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs_eofs_package.txt"
 mjoindices_reference_eofs_filename = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs.npz"
@@ -357,6 +359,53 @@ def test_completeOMIReproduction(tmp_path):
             errors.append("mjoindices-reference-validation: PC2 values do not match.")
 
         assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_completeOMIReproduction_eofs_package_coarsegrid(tmp_path):
+
+    errors = []
+
+    # Calculate EOFs
+    raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+    shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
+    coarse_lat = np.arange(-20., 20.1, 8.0)
+    coarse_long = np.arange(0., 359.9, 20.0)
+    interpolated_olr = olr.interpolate_spatial_grid(shorter_olr, coarse_lat, coarse_long)
+    eofs = omi.calc_eofs_from_olr(interpolated_olr,
+                                  sign_doy1reference=True,
+                                  interpolate_eofs=True,
+                                  strict_leap_year_treatment=True)
+    eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_coarsegrid_EOFs.npz")
+
+    # Validate EOFs against mjoindices own reference (results should be equal)
+    mjoindices_reference_eofs = eof.restore_all_eofs_from_npzfile(mjoindices_reference_eofs_filename_coarsegrid)
+    for idx, target_eof in enumerate(eofs.eof_list):
+        if not mjoindices_reference_eofs.eof_list[idx].close(target_eof):
+            errors.append("mjoindices-reference-validation: EOF data at index %i is incorrect" % idx)
+
+    # Calculate PCs
+    raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+    pcs = omi.calculate_pcs_from_olr(raw_olr,
+                                     eofs,
+                                     np.datetime64("1979-01-01"),
+                                     np.datetime64("2018-08-28"),
+                                     useQuickTemporalFilter=False)
+    pc_temp_file = tmp_path / "test_completeOMIReproduction_coarsegrid_PCs.txt"
+    pcs.save_pcs_to_txt_file(pc_temp_file)
+
+    # Validate PCs against mjoindices own reference (results should be equal)
+    # Reload pcs instead of using the calculated ones, because the saving routine has truncated some decimals of the
+    # reference values. So do the same with the testing target pcs.
+    pcs = pc.load_pcs_from_txt_file(pc_temp_file)
+    mjoindices_reference_pcs = pc.load_pcs_from_txt_file(mjoindices_reference_pcs_filename_coarsegrid)
+    if not np.all(mjoindices_reference_pcs.time == pcs.time):
+        errors.append("mjoindices-reference-validation: Dates of PCs do not match.")
+    if not np.allclose(mjoindices_reference_pcs.pc1, pcs.pc1):
+        errors.append("mjoindices-reference-validation: PC1 values do not match.")
+    if not np.allclose(mjoindices_reference_pcs.pc2, pcs.pc2):
+        errors.append("mjoindices-reference-validation: PC2 values do not match.")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 eofs_spec = importlib.util.find_spec("eofs")
 @pytest.mark.slow

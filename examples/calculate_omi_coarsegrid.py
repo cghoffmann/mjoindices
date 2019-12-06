@@ -31,7 +31,18 @@ import mjoindices.principal_components as pc
 import mjoindices.evaluation_tools
 import numpy as np
 
+# This example reproduces is very similar to the example recalculate_original_omi.py.
+# However, it computes the OMI values on a freely defined spatial grid.
+# While this is generally supported by the package, it is not recommended to choose a
+# spatial grid that differs from the original one, since it is scientifically not clear if the OMI index will have the
+# same characteristics on a different grid.
+# Nevertheless, this example can be used to quickly check the implication of a different grid.
+
 # ################ Settings. Change with respect to your system ###################
+
+# Choose a spatial grid, on which the values are computed.
+coarse_lat = np.arange(-20., 20.1, 8.0)
+coarse_long = np.arange(0., 359.9, 20.0)
 
 # Download the data file from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc to your local file system and
 # adjust the local path below.
@@ -60,10 +71,7 @@ if not fig_dir.exists():
 raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
 # Restrict dataset to the original length for the EOF calculation (Kiladis, 2014)
 shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
-# Make sure that the spatial sampling resembles the original one (This should not be necessary here, since we use
-# the original data file. Nevertheless, we want to be sure.)
-coarse_lat = np.arange(-20., 20.1, 8.0)
-coarse_long = np.arange(0., 359.9, 20.0)
+# This is the line, where the spatial grid is changed.
 interpolated_olr = olr.interpolate_spatial_grid(shorter_olr, coarse_lat, coarse_long)
 
 # Diagnosis plot of the loaded OLR data
