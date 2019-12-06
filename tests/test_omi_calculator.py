@@ -361,7 +361,7 @@ def test_completeOMIReproduction(tmp_path):
         assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-def test_completeOMIReproduction_eofs_package_coarsegrid(tmp_path):
+def test_completeOMIReproduction_coarsegrid(tmp_path):
 
     errors = []
 

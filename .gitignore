@@ -89,6 +89,7 @@ celerybeat-schedule
 .venv
 env/
 venv/
+venv*/
 ENV/
 env.bak/
 venv.bak/
@@ -1212,3 +1213,11 @@ venv.bak/
 /examples/example_data/EOFcalc/eof365.txt
 /examples/example_data/EOFcalc/eof366.txt
 /tests/testdata/OriginalOMI/omi.1x.txt
+/coverage/
+/examples/example_data/omi_recalc_example_plots/
+/examples/example_data/omi_recalc_example_plots_coarsegrid/
+/examples/example_data/omi_reproduction_evaluation_plots/
+/examples/example_data/EOFs.npz
+/examples/example_data/PCs.txt
+/examples/example_data/PCs_coarsegrid.txt
+/examples/example_data/EOFs_coarsegrid.npz
