@@ -26,6 +26,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib.cm
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
 import re
 
 import mjoindices.empirical_orthogonal_functions as eof
