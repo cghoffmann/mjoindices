@@ -70,7 +70,7 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
 
 def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = "internal", strict_leap_year_treatment: bool = True) -> eof.EOFDataForAllDOYs:
     if implementation == "eofs_package" and not eofs_package_available:
-        raise AttributeError("Selected calculation with external eofs package, but package not available. Use "
+        raise ValueError("Selected calculation with external eofs package, but package not available. Use "
                              "internal implementation or install eofs package")
     doys = eof.doy_list()
     eofs = []
@@ -322,9 +322,9 @@ def calculate_pcs_from_olr(olrData: olr.OLRData,
 
 def regress_3dim_data_onto_eofs(data: object, eofdata: eof.EOFDataForAllDOYs) -> pc.PCData:
     if not np.all(data.lat == eofdata.lat):
-        raise AttributeError("Latitude grid of EOFs and OLR is not equal.")
+        raise ValueError("Latitude grid of EOFs and OLR is not equal.")
     if not np.all(data.long == eofdata.long):
-        raise AttributeError("Longitude grid of EOFs and OLR is not equal.")
+        raise ValueError("Longitude grid of EOFs and OLR is not equal.")
     # FIXME: Don't use zeros
     pc1 = np.zeros(data.time.size)
     pc2 = np.zeros(data.time.size)
