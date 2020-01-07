@@ -143,11 +143,13 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
                        eigenvalues=L, explained_variances=explainedVariances, no_observations=N)
 
 
-def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = True) -> eof.EOFData:
+def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
+                                         strict_leap_year_treatment: bool = True) -> eof.EOFData:
     if eofs_package_available:
         nlat = olrdata.lat.size
         nlong = olrdata.long.size
-        olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60, strict_leap_year_treatment=strict_leap_year_treatment)
+        olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60,
+                                                                    strict_leap_year_treatment=strict_leap_year_treatment)
 
         ntime = olr_maps_for_doy.shape[0]
         N = ntime
@@ -174,12 +176,25 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int, strict_
 
 def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
                                                    doy1reference: bool = True) -> eof.EOFDataForAllDOYs:
+    """
+    Switches the sign of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.
+    Note that the sign of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
+    which can be improved using this function. As long as this step is performed before computing the PCs, it will not
+    change the overall result.
+    Generally the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous
+    DOY. The EOFs for DOY 1 are by default aligned with the original calculation from Kiladis (2014), resulting in a
+    an EOF series, which is totally comparable to the original Kiladis calculation. This can be switched of.
+    :param eofs: The EOF series for which the signs are aligned.
+    :param doy1reference: It true, the EOFs of DOY 1 are aligned w.r.t to the original Kiladis (2014) calculation.
+    :return: The EOFs with aligned signs.
+    """
     switched_eofs = []
     if doy1reference is True:
-        reference_path = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))) / "sign_reference"
+        reference_path = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))/ "sign_reference"
         reference_eofs = eof.load_original_eofs_for_doy(reference_path, 1)
         if not np.all(reference_eofs.lat == eofs.lat) or not np.all(reference_eofs.long == eofs.long):
-            warnings.warn("References for the sign of the EOFs for DOY1 have to be interpolated to spatial grid of the target EOFs. Treat results with caution.")
+            warnings.warn("References for the sign of the EOFs for DOY1 have to be interpolated to spatial grid of the"
+                          " target EOFs. Treat results with caution.")
             f1 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof1map,
                                             kind='linear')
             eof1map_interpol = f1(eofs.long, eofs.lat)
@@ -202,19 +217,26 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
 
 
 def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, target=eof.EOFData) -> eof.EOFData:
+    """
+    Switches the sign of a particular pair of EOFs (for a particular DOY) if necessary, so that is aligned with the
+    reference.
+    Note that the sign of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
+    which can be improved using this function. As long as this step is performed before computing the PCs, it will not
+    change the overall result.
+    :param reference: The reference-EOFs. This is usually the EOF pair of the previous DOY.
+    :param target: The EOFs of which the sign is switched
+    :return: the target EOFs with aligned signs.
+    """
     if (np.mean(np.abs(target.eof1vector + reference.eof1vector))
             < np.mean(np.abs(
                 target.eof1vector - reference.eof1vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
         eof1_switched = -1 * target.eof1vector
-        # FIXME Remove output
-        #print("Sign of EOF1 switched")
     else:
         eof1_switched = target.eof1vector
     if (np.mean(np.abs(target.eof2vector + reference.eof2vector))
             < np.mean(np.abs(
                 target.eof2vector - reference.eof2vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
         eof2_switched = -1 * target.eof2vector
-        #print("Sign of EOF2 switched")
     else:
         eof2_switched = target.eof2vector
     return eof.EOFData(target.lat,
@@ -225,14 +247,14 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
                        explained_variances=target.explained_variances,
                        no_observations=target.no_observations)
 
-# FIXME: Check interpolation boundaries everywhere in the project. 293 to 326 is correct
+
 def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 293,
                                   end_doy: int = 316) -> eof.EOFDataForAllDOYs:
     """
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
     This should only rarely be used and has only been implemented to closely reproduce the original OMI values. Here,
     the EOFs have also been replaced by a interpolation according to Kiladis (2014). However, the period stated in
-    Kiladis (2014) of 1 November to 8 November seems to be too short. The author have confirmed that the right
+    Kiladis (2014) of 1 November to 8 November seems to be too short. The authors have confirmed that the right
     interpolation period is from DOY 294 to DOY 315, which is used here as default value.
     ATTENTION: The statistical values like the explained variance are not changed by this routine. So they further on
     represent the original results of the PCA also for the interpolated EOFs.
@@ -241,16 +263,16 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
     element, which will be replaced by the interpolation. Default value corresponds to 31 October.
     :param end_doy:  The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last
     element, which will be replaced by the interpolation. Default value corresponds to 9 November.
-    :return: The complere EOF series with the interpolated values
+    :return: The complete EOF series with the interpolated values
     """
-    # FIXME: Why does correlation not maximize with original Kiladis dates (see and change comment)
     doys = eof.doy_list()
     start_idx = start_doy - 1
     end_idx = end_doy - 1
     eof_len = eofs.lat.size * eofs.long.size
     eofs1 = np.empty((doys.size, eof_len))
     eofs2 = np.empty((doys.size, eof_len))
-    # FIXME: Maybe this could be solved more efficiently by using internal numpy functions for multidimenasional operations
+    # FIXME: Maybe this could be solved more efficiently
+    # by using internal numpy functions for multidimenasional operations
     for (idx, doy) in enumerate(doys):
         eofs1[idx, :] = eofs.eof1vector_for_doy(doy)
         eofs2[idx, :] = eofs.eof2vector_for_doy(doy)
@@ -271,19 +293,6 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
                                              eigenvalues=orig_eof.eigenvalues, no_observations=orig_eof.no_observations)
                                  )
     return eof.EOFDataForAllDOYs(interpolated_eofs)
-
-
-# def switchSignOfEOFs(inputDir, outputdir, file_prefix, eof_number=0):
-#     for doy in range(1, 367):
-#         (eof1_orig_vec, eof2_orig_vec) = MJO.RecalculateOMI.load_OMI_EOFs(inputDir, doy, prefix=file_prefix)
-#         eof1_switched = eof1_orig_vec
-#         eof2_switched = eof2_orig_vec
-#         if eof_number == 1 or eof_number == 0:
-#             eof1_switched = -1 * eof1_orig_vec
-#         if eof_number == 2 or eof_number == 0:
-#             eof2_switched = -1 * eof2_orig_vec
-#         MJO_OMI_EOF_Recalculated.saveSingeEOFVecInKiladisStyle(eof1_switched, 1, outputdir, file_prefix, doy)
-#         MJO_OMI_EOF_Recalculated.saveSingeEOFVecInKiladisStyle(eof2_switched, 2, outputdir, file_prefix, doy)
 
 
 # #################PC Calculation
