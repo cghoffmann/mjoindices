@@ -54,7 +54,7 @@ original_omi_explained_variance_file = Path(os.path.abspath('')) / "testdata" / 
 
 setups = [(True, 0.99, 0.99), (False, 0.999, 0.999)]
 @pytest.mark.slow
-@pytest.mark.parametrize("useQuickTemporalFilter, expectedCorr1, expectedCorr2", setups)
+@pytest.mark.parametrize("use_quick_temporal_filter, expectedCorr1, expectedCorr2", setups)
 @pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available")
 @pytest.mark.skipif(not eof1Dirname.is_dir(), reason="EOF1 data not available")
 @pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available")
@@ -66,9 +66,9 @@ def test_calculatePCsFromOLRWithOriginalEOFs(useQuickTemporalFilter, expectedCor
     orig_omi = pc.load_original_pcs_from_txt_file(origOMIPCsFilename)
     olrData = olr.load_noaa_interpolated_olr(olr_data_filename)
 
-    target = omi.calculatePCsFromOLRWithOriginalConditions(olrData,
-                                                           originalOMIDataDirname,
-                                                           useQuickTemporalFilter=useQuickTemporalFilter)
+    target = omi.calculate_pcs_from_olr_original_conditions(olrData,
+                                                            originalOMIDataDirname,
+                                                            use_quick_temporal_filter=useQuickTemporalFilter)
     errors = []
     if not np.all(target.time == orig_omi.time):
         errors.append("Test is not reasonable, because temporal coverages of original OMI and recalculation do not "
@@ -159,7 +159,7 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
                                      eofs,
                                      np.datetime64("1979-01-01"),
                                      np.datetime64("2018-08-28"),
-                                     useQuickTemporalFilter=False)
+                                     use_quick_temporal_filter=False)
     pc_temp_file = tmp_path / "test_completeOMIReproduction_strict_leap_year_treatment_PCs.txt"
     pcs.save_pcs_to_txt_file(pc_temp_file)
 
@@ -297,7 +297,7 @@ def test_completeOMIReproduction(tmp_path):
                                          eofs,
                                          np.datetime64("1979-01-01"),
                                          np.datetime64("2018-08-28"),
-                                         useQuickTemporalFilter=False)
+                                         use_quick_temporal_filter=False)
         pc_temp_file = tmp_path / "test_completeOMIReproduction_PCs.txt"
         pcs.save_pcs_to_txt_file(pc_temp_file)
 
@@ -389,7 +389,7 @@ def test_completeOMIReproduction_coarsegrid(tmp_path):
                                      eofs,
                                      np.datetime64("1979-01-01"),
                                      np.datetime64("2018-08-28"),
-                                     useQuickTemporalFilter=False)
+                                     use_quick_temporal_filter=False)
     pc_temp_file = tmp_path / "test_completeOMIReproduction_coarsegrid_PCs.txt"
     pcs.save_pcs_to_txt_file(pc_temp_file)
 
@@ -438,7 +438,7 @@ def test_completeOMIReproduction_eofs_package_strict_leap_year(tmp_path):
                                      eofs,
                                      np.datetime64("1979-01-01"),
                                      np.datetime64("2018-08-28"),
-                                     useQuickTemporalFilter=False)
+                                     use_quick_temporal_filter=False)
     pc_temp_file = tmp_path / "test_completeOMIReproduction_eofs_package_strict_leap_year_PCs.txt"
     pcs.save_pcs_to_txt_file(pc_temp_file)
 

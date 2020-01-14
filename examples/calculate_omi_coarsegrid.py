@@ -128,7 +128,7 @@ pcs = omi.calculate_pcs_from_olr(olr,
                                  eofs,
                                  np.datetime64("1979-01-01"),
                                  np.datetime64("2018-08-28"),
-                                 useQuickTemporalFilter=False)
+                                 use_quick_temporal_filter=False)
 # Save PCs
 pcs.save_pcs_to_txt_file(pctxtfile)
 

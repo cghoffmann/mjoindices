@@ -55,20 +55,20 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
     :param dates: The array of dates
     :param center_doy: the center of the wanted window
     :param window_length: the length of the window to both sides in days. The window spans 2*window_length+1 days in
-     total (for exceptions see below).
+        total (for exceptions see below).
     :param strict_leap_year_treatmenmt: distinguishes between 2 different methods of constructing the DOY range window.
-    Setting the switch to False will use a pragmatic implementation in which the start and end of the DOY window is
-    directly computed as distance in units of DOYs.
-    Setting the switch to True will transfer the DOYs to actual calender dates and will calculate the start and end of
-    the window also as calender dates using built-in numpy datetime functions.
-    In the context of the EOF calculation, the setting has major implications only for the EOSs calculated for DOY 366
-    and causes only minor differences for the other DOYs. The results for the setting False are closer to the
-    original values, and approximately the same total number of DOYs covered by the window is found for each center DOY
-    including 366. However, the length of the window is not guaranteed to be 2*window_length+1, but can also be
-    2*window_length+2 if the window crosses the ending of a leap year.
-    The setting True is somewhat more stringently implemented. The window length is always 2*window_length+1, however,
-    the number of DOYs covered by a window is reduces by approximately a factor of 4 for center_doy=366, since a window
-    generally found at all only during leap years.
+        Setting the switch to False will use a pragmatic implementation in which the start and end of the DOY window is
+        directly computed as distance in units of DOYs. Setting the switch to True will transfer the DOYs to actual
+        calender dates and will calculate the start and end of the window also as calender dates using built-in numpy
+        datetime functions. In the context of the EOF calculation, the setting has major implications only for the EOSs
+        calculated for DOY 366 and causes only minor differences for the other DOYs. The results for the setting False
+        are closer to the original values, and approximately the same total number of DOYs covered by the window is
+        found for each center DOY including 366. However, the length of the window is not guaranteed to be
+        2*window_length+1, but can also be 2*window_length+2 if the window crosses the ending of a leap year.
+        The setting True is somewhat more stringently implemented. The window length is always 2*window_length+1,
+        however, the number of DOYs covered by a window is reduces by approximately a factor of 4 for center_doy=366,
+        since a window generally found at all only during leap years.
+
     :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.
     """
     doys = calc_day_of_year(dates)
