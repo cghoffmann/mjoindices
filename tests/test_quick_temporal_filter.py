@@ -48,21 +48,21 @@ def test_mjoindices_reference_validation_filterOLRForMJO_PCQuick_Calculation():
 
     lat = np.array([0])
     test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
-    target = qfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(test_olr_part)
+    target = qfilter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(test_olr_part)
     control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_PCQuick_Calculation_lat0)
     if not target.close(control):
         errors.append("Filtered OLR for latitude 0 not identical")
 
     lat = np.array([5])
     test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
-    target = qfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(test_olr_part)
+    target = qfilter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(test_olr_part)
     control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_PCQuick_Calculation_lat5)
     if not target.close(control):
         errors.append("Filtered OLR for latitude 5 not identical")
 
     lat = np.array([-10])
     test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
-    target = qfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(test_olr_part)
+    target = qfilter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(test_olr_part)
     control = olr.restore_from_npzfile(reference_file_filterOLRForMJO_PCQuick_Calculation_latmin10)
     if not target.close(control):
         errors.append("Filtered OLR for latitude -10 not identical")
@@ -78,19 +78,19 @@ def generate_reference_data_for_pcquick_filter_tests():
 
     lat = np.array([0])
     test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
-    olrdata_filtered = qfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(test_olr_part)
+    olrdata_filtered = qfilter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(test_olr_part)
     filename = Path(str(reference_file_filterOLRForMJO_PCQuick_Calculation_lat0) + ".newcalc")
     olrdata_filtered.save_to_npzfile(filename)
 
     lat = np.array([5])
     test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
-    olrdata_filtered = qfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(test_olr_part)
+    olrdata_filtered = qfilter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(test_olr_part)
     filename = Path(str(reference_file_filterOLRForMJO_PCQuick_Calculation_lat5) + ".newcalc")
     olrdata_filtered.save_to_npzfile(filename)
 
     lat = np.array([-10])
     test_olr_part = olr.interpolate_spatial_grid(test_olr, lat, orig_long)
-    olrdata_filtered = qfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(test_olr_part)
+    olrdata_filtered = qfilter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(test_olr_part)
     filename = Path(str(reference_file_filterOLRForMJO_PCQuick_Calculation_latmin10) + ".newcalc")
     olrdata_filtered.save_to_npzfile(filename)
 

@@ -1,6 +1,16 @@
 # -*- coding: utf-8 -*-
 
-""" """
+"""
+This module provides a simple 1-dim filtering algorithm, which can be used during the PC calculation instead of the
+full 2-dim Wheeler-Kiladis-Filter.
+
+It is not intended that this module is used stand-alone outside of the OMI context,
+since it is only extensively tested for the specific OMI filtering conditions.
+
+Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
+Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.
+
+"""
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
@@ -27,45 +37,48 @@ import scipy.fftpack
 
 import mjoindices.olr_handling as olr
 
-# FIXME: Codestyle
-# FIXME: Constants
 
-def filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(olrdata: olr.OLRData) -> olr.OLRData:
+def filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(olrdata: olr.OLRData) -> olr.OLRData:
     """
     Filters OLR data temporally using a 1d Fourier transform filter.
-    The temporal filtering constants are chosen to meet the values in the description by Kiladis 2014.
-    :param olrdata: The OLRData object containing the original OLR data
-    :return: An OLRData object containing the filtered OLR.
+
+    The temporal filtering constants are chosen to meet the values in the description by Kiladis (2014).
+
+    :param olrdata: The original OLR data
+
+    :return: The filtered OLR.
     """
-    return filterOLRTemporallyWith1DSpectralSmoothing(olrdata, 20., 96.)
+    return filter_olr_temporally_1d_spectral_smoothing(olrdata, 20., 96.)
 
 
-def filterOLRTemporallyWith1DSpectralSmoothing(olrdata: olr.OLRData, period_min: float, period_max: float) -> olr.OLRData:
+def filter_olr_temporally_1d_spectral_smoothing(olrdata: olr.OLRData, period_min: float, period_max: float) -> olr.OLRData:
     """
     Filters OLR data temporally using a 1d Fourier transform filter.
-    The temporal filtering constants are chosen to meet the values in the description by Kiladis 2014.
-    :param olrdata: The OLRData object containing the original OLR data
-    :param period_min: Temporal filter constant: Only greater periods remain in the data.
-    :param period_max: Temporal filter constant: Only lower periods remain in the data.
-    :return: An OLRData object containing the filtered OLR.
+
+    :param olrdata: The original OLR data
+    :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.
+    :param period_max: Temporal filter constant: Only lower periods (in days) remain in the data.
+
+    :return: The filtered OLR.
     """
-    print("Smooth data temporally...")
     filteredOLR = np.empty(olrdata.olr.shape)
     time_spacing = (olrdata.time[1] - olrdata.time[0]).astype('timedelta64[s]') / np.timedelta64(1, 'D')  # time spacing in days
     for idx_lat in range(0, olrdata.olr.shape[1]):
         for idx_lon in range(0, olrdata.olr.shape[2]):
             tempolr = np.squeeze(olrdata.olr[:, idx_lat, idx_lon])
-            filteredOLR[:, idx_lat, idx_lon] = _performSpectralSmoothing(tempolr, time_spacing, period_min, period_max)
+            filteredOLR[:, idx_lat, idx_lon] = _perform_spectral_smoothing(tempolr, time_spacing, period_min, period_max)
     return olr.OLRData(filteredOLR, olrdata.time, olrdata.lat, olrdata.long)
 
 
-def _performSpectralSmoothing(y, dt, lowerCutOff, HigherCutOff):
+def _perform_spectral_smoothing(y, dt, lower_cutoff, higher_cutoff):
     """
     Applies a 1d Fourier Transform filter to the vector y.
+
     :param y: The data to filter
     :param dt: The spacing of the data
-    :param lowerCutOff: Filter constant: Only greater periods (same units as dt) remain in the data.
-    :param HigherCutOff: Filter constant: Only lower periods (same units as dt) remain in the data.
+    :param lower_cutoff: Filter constant: Only greater periods (same units as dt) remain in the data.
+    :param higher_cutoff: Filter constant: Only lower periods (same units as dt) remain in the data.
+
     :return: The filtered vector
     """
     N = y.size
@@ -73,8 +86,7 @@ def _performSpectralSmoothing(y, dt, lowerCutOff, HigherCutOff):
     f = scipy.fftpack.rfftfreq(N, dt)
     P = 1 / f
     w2 = w.copy()
-    w2[P < lowerCutOff] = 0
-    w2[P > HigherCutOff] = 0
+    w2[P < lower_cutoff] = 0
+    w2[P > higher_cutoff] = 0
     y2 = scipy.fftpack.irfft(w2)
     return y2
-

@@ -420,7 +420,7 @@ def calculate_pcs_from_olr(olrdata: olr.OLRData,
     resticted_olr_data = olr.restrict_time_coverage(olrdata, period_start, period_end)
     resampled_olr_data = olr.interpolate_spatial_grid(resticted_olr_data, eofdata.lat, eofdata.long)
     if use_quick_temporal_filter:
-        filtered_olr_data = qfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(resampled_olr_data)
+        filtered_olr_data = qfilter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(resampled_olr_data)
     else:
         filtered_olr_data = wkfilter.filter_olr_for_mjo_pc_calculation(resampled_olr_data)
     raw_pcs = regress_3dim_data_onto_eofs(filtered_olr_data, eofdata)

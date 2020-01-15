@@ -29,6 +29,11 @@ Module mjoindices.omi.wheeler_kiladis_mjo_filter
 .. automodule:: mjoindices.omi.wheeler_kiladis_mjo_filter
    :members:
 
+Module mjoindices.omi.quick_temporal_filter
+===========================================
+.. automodule:: mjoindices.omi.quick_temporal_filter
+   :members:
+
 Module mjoindices.empirical_orthogonal_functions
 ================================================
 .. automodule:: mjoindices.empirical_orthogonal_functions
