@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 
-""" """
+"""
+This module contains the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.
+
+Although implemented generically, it is not intended that this module is used stand-alone outside of the OMI context,
+since it is only extensively tested for the specific OMI filtering conditions.
+
+Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
+Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.
+"""
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
@@ -21,124 +29,135 @@
 
 # Contact: christoph.hoffmann@uni-greifswald.de
 
-from pathlib import Path
-
 import matplotlib.pyplot as plt
 import numpy as np
-
 import mjoindices.olr_handling as olr
 
 
-# FIXME: Codestyle
-# FIXME: Constants
-
-def filterOLRForMJO_PC_Calculation(olrdata: olr.OLRData, do_plot: bool = False):
+def filter_olr_for_mjo_pc_calculation(olrdata: olr.OLRData, do_plot: bool = False):
     """
     Filters OLR data temporally.
+
     The filter algorithm is the same as for the combined temporal and longitudinal filtering,
-    but the longitudinal bandpass filter are defined so broad that effectively no longitudinal filtering is applied.
-    The temporal filtering constants are chosen to meet the values in the description by Kiladis 2014.
-    :param olrdata: The OLRData object containing the original OLR data
-    :param do_plot: If True, Diagnosis plots will be generated.
-    :return: An OLRData object containing the filtered OLR.
+    but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
+    applied.
+    The temporal filtering constants are chosen to meet the values in the description by Kiladis (2014).
+
+    :param olrdata: The original OLR data.
+    :param do_plot: If True, diagnosis plots will be generated.
+
+    :return: The filtered OLR.
     """
-    return filterOLRTemporally(olrdata, 20., 96., do_plot=do_plot)
+    return filter_olr_temporally(olrdata, 20., 96., do_plot=do_plot)
 
 
 # Implicitly tested for special conditions with specific caller functions
-def filterOLRTemporally(olrdata: olr.OLRData, period_min: float, period_max:float, do_plot: bool = False):
+def filter_olr_temporally(olrdata: olr.OLRData, period_min: float, period_max: float, do_plot: bool = False):
     """
     Filters OLR data temporally.
-    The filter algorithm is the same as for the combined temporal and longitudinal filtering,
-    but the longitudinal bandpass filter are defined so broad that effectively no longitudinal filtering is applied.
-    Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.
-    :param olrdata: The OLRData object containing the original OLR data
-    :param period_min: Temporal filter constant: Only greater periods remain in the data.
-    :param period_max: Temporal filter constant: Only lower periods remain in the data.
-    :param do_plot: If True, Diagnosis plots will be generated.
-    :return: An OLRData object containing the filtered OLR.
-    """
-    return filterOLRTemporallyandLongitudinally(olrdata, period_min, period_max, -720., 720, do_plot=do_plot)
 
-def filterOLRForMJO_EOF_Calculation(olrdata: olr.OLRData, do_plot: bool = False) -> olr.OLRData:
+    The filter algorithm is the same as for the combined temporal and longitudinal filtering,
+    but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
+    applied.
+
+    Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.
+
+    :param olrdata: The original OLR data
+    :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.
+    :param period_max: Temporal filter constant: Only lower periods (in days) remain in the data.
+    :param do_plot: If True, diagnosis plots will be generated.
+
+    :return: The filtered OLR.
+    """
+    return filter_olr_temporally_and_longitudinally(olrdata, period_min, period_max, -720., 720, do_plot=do_plot)
+
+
+def filter_olr_for_mjo_eof_calculation(olrdata: olr.OLRData, do_plot: bool = False) -> olr.OLRData:
     """
     Filters OLR data temporally and longitudinally.
-    The filter setup meets the description of Kiladis (2014) for the EOF Calculation
-    :param olrdata: The OLRData object containing the original OLR data
-    :param do_plot: If True, Diagnosis plots will be generated.
-    :return: An OLRData object containing the filtered OLR.
+
+    The filter setup meets the description of Kiladis (2014) for the EOF calculation.
+
+    :param olrdata: The original OLR data
+    :param do_plot: If True, diagnosis plots will be generated.
+
+    :return: The filtered OLR data.
     """
-    return filterOLRTemporallyandLongitudinally(olrdata, 30., 96., 0., 720, do_plot=do_plot)
+    return filter_olr_temporally_and_longitudinally(olrdata, 30., 96., 0., 720, do_plot=do_plot)
 
 
 # Implicitly tested for special conditions with specific caller functions
-def filterOLRTemporallyandLongitudinally(olrdata: olr.OLRData,
-                                         period_min: float,
-                                         period_max: float,
-                                         wn_min: float,
-                                         wn_max: float,
-                                         do_plot: bool=False) -> olr.OLRData:
+def filter_olr_temporally_and_longitudinally(olrdata: olr.OLRData,
+                                             period_min: float,
+                                             period_max: float,
+                                             wn_min: float,
+                                             wn_max: float,
+                                             do_plot: bool=False) -> olr.OLRData:
     """
     Performs a temporal and longitudinal bandpass filtering of the OLR data with configurable filtering thresholds.
+
     Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.
+
     :param olrdata: The original OLR data.
-    :param period_min: Temporal filter constant: Only greater periods remain in the data.
-    :param period_max: Temporal filter constant: Only lower periods remain in the data.
-    :param wn_min: Longitudinal filter constant: Only greater wave numbers remain in the data.
-    :param wn_max:  Longitudinal filter constant: Only lower wave numbers remain in the data.
-    :param do_plot: If True, Diagnosis plots will be generated.
-    :return: An OLRData object containing the filtered OLR.
+    :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.
+    :param period_max: Temporal filter constant: Only lower periods (in days) remain in the data.
+    :param wn_min: Longitudinal filter constant: Only greater wave numbers (in cycles per globe) remain in the data.
+    :param wn_max:  Longitudinal filter constant: Only lower wave numbers (in cycles per globe) remain in the data.
+    :param do_plot: If True, diagnosis plots will be generated.
+
+    :return: The filtered OLR.
     """
     print("Smooth data temporally and longitudally...")
-    # FIXME: Don't use zeros in the follwing
-    filtered_olr = np.zeros(olrdata.olr.shape)
+    filtered_olr = np.empty(olrdata.olr.shape)
 
     for ilat, lat in enumerate(olrdata.lat):
-        print("Calculating for latitude: ", lat)
-        time_spacing = (olrdata.time[1] - olrdata.time[0]).astype('timedelta64[s]') / np.timedelta64(1,
-                                                                                             'D')  # time spacing in days
+        print("Filtering for latitude: ", lat)
+        time_spacing = (olrdata.time[1] - olrdata.time[0]).astype('timedelta64[s]') / np.timedelta64(1, 'D')  # time spacing in days
         dataslice = np.squeeze(olrdata.olr[:, ilat, :])
         wkfilter = WKFilter()
-        filtered_data = wkfilter.perform2dimSpectralSmoothing(dataslice, time_spacing, period_min, period_max, wn_min,
-                                                              wn_max, do_plot=do_plot, save_debug=False)
+        filtered_data = wkfilter.perform_2dim_spectral_filtering(dataslice, time_spacing, period_min, period_max, wn_min,
+                                                                 wn_max, do_plot=do_plot, save_debug=False)
         filtered_olr[:, ilat, :] = filtered_data
 
     return olr.OLRData(filtered_olr, olrdata.time, olrdata.lat, olrdata.long)
 
 
-def detrendTS(ts: np.ndarray) -> np.ndarray:
+def detrend_vector(data: np.ndarray) -> np.ndarray:
     """
-    Removed the trend from the given vector
-    :param ts: The vector to detrend
+    Removes the trend from the given vector.
+
+    :param data: The vector to detrend
+
     :return: The data with removed trend.
     """
-    x = np.arange(0, ts.size, 1)
+    x = np.arange(0, data.size, 1)
     A = np.vstack([x, np.ones(len(x))]).T
-    # FIXME: Remove FutureWarning  `rcond` parameter will change to the default of machine precision times ``max(M, N)``,...  pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
-    m, b = np.linalg.lstsq(A, ts, rcond=-1)[0]
+    m, b = np.linalg.lstsq(A, data, rcond=-1)[0]
 
-    result = ts - (m * x + b)
+    result = data - (m * x + b)
     #    plt.plot(ts)
     #    plt.plot(m*x+b)
     #    plt.plot(result)
     return result
 
 
-def taperTSToZero(ts: np.ndarray, window_length:int) -> np.ndarray:
+def taper_vector_to_zero(data: np.ndarray, window_length: int) -> np.ndarray:
     """
-    Taper the data in the given vector to zero in both the beginning and the ending
-    :param ts: The data to taper.
+    Taper the data in the given vector to zero at both the beginning and the ending.
+
+    :param data: The data to taper.
     :param window_length: The length of the window (measured in vector indices),
-    in which the tapering is applied for the beginning and the ending indipently
+        in which the tapering is applied for the beginning and the ending independently
+
     :return: The tapered data.
     """
     startinds = np.arange(0, window_length, 1)
     endinds = np.arange(-window_length - 1, -1, 1) + 2
 
-    result = ts
+    result = data
     result[0:window_length] = result[0:window_length] * 0.5 * (1 - np.cos(startinds * np.pi / window_length))
-    result[ts.size - window_length:ts.size] = result[ts.size - window_length:ts.size] * 0.5 * (
-                1 - np.cos(endinds * np.pi / window_length))
+    result[data.size - window_length:data.size] = \
+        result[data.size - window_length:data.size] * 0.5 * (1 - np.cos(endinds * np.pi / window_length))
     return result
 
 
@@ -146,8 +165,8 @@ class WKFilter:
     """
     This class contains the major Wheeler-Kiladis-Filtering functionality.
     The functionality is encapsulated in a class because values of intermediate processing steps
-    are saves as class members for debugging purposes.
-    To run the filtering, only the method "perform2dimSpectralSmoothing" has to be executed.
+    are saved as class members for debugging purposes.
+    To run the filtering, only the method :func:`perform_2dim_spectral_filtering` has to be executed.
     """
     def __init__(self):
         self.DebugInputOLR = []
@@ -160,17 +179,17 @@ class WKFilter:
         self.DebugFilteredFourierSpectrum = []
         self.DebugNoElementsInFilteredSpectrum = []
 
-    def perform2dimSpectralSmoothing(self,
-                                     data: np.ndarray,
-                                     time_spacing: float,
-                                     period_min: float,
-                                     period_max:float,
-                                     wn_min: float,
-                                     wn_max: float,
-                                     do_plot: bool = False,
-                                     save_debug: bool = False):
+    def perform_2dim_spectral_filtering(self,
+                                        data: np.ndarray,
+                                        time_spacing: float,
+                                        period_min: float,
+                                        period_max: float,
+                                        wn_min: float,
+                                        wn_max: float,
+                                        do_plot: bool = False,
+                                        save_debug: bool = False) -> np.ndarray:
         """
-        Bandpass-filters OLR data in time- and longitude direction according to
+        Bandpass-filters OLR data in time- and longitude-direction according to
         the original Kiladis algorithm.
 
         Note that the temporal and longitudinal dimension have in principle
@@ -182,7 +201,7 @@ class WKFilter:
         of one globe (so that it is assumed that the data covers exactly one
         globe and only passing the number of longitudes provides already the complete information).
 
-        :param data: numpy.array The OLR data as 2-dim array: first dimension time, second
+        :param data: The OLR data as 2-dim array: first dimension time, second
             dimension longitude, both equally spaced.
             The longitudinal dimension has to cover the full globe.
             The time dimension is further described by the variable
@@ -193,11 +212,14 @@ class WKFilter:
         :param period_max: Maximal period (in days) that remains in the dataset
         :param wn_min: Minimal wavenumber (in cycles per globe) that remains in the dataset
         :param wn_max: Maximal wavenumber (in cycles per globe) that remains in the dataset
-        :param do_plot: If True, Diagnosis plots will be generated.
-        :param save_debug: It true, some variable will be filled with values of intermediate processing for debugging purposes.
+        :param do_plot: If True, diagnosis plots will be generated.
+        :param save_debug: If true, some variables will be filled with values of intermediate processing steps
+            for debugging purposes.
+
+        :return: The filtered data.
         """
 
-        ####################### Process input data #######################
+        # ###################### Process input data #######################
         if save_debug:
             self.DebugInputOLR = np.copy(data)
 
@@ -211,13 +233,13 @@ class WKFilter:
         freq_min = 1 / period_max
         freq_max = 1 / period_min
 
-        ######################### Detrend #################################
+        # ######################## Detrend #################################
         # "orig" refers to the original size in the time dimension in the following, i.e. not the zero-padded version.
         orig_data = data
         orig_nt, nl = orig_data.shape
 
         for idx_l in range(0, nl):
-            orig_data[:, idx_l] = detrendTS(orig_data[:, idx_l])
+            orig_data[:, idx_l] = detrend_vector(orig_data[:, idx_l])
 
         if save_debug:
             self.DebugDetrendedOLR = np.copy(orig_data)
@@ -227,7 +249,7 @@ class WKFilter:
             plt.colorbar()
             plt.title("Detrended Data")
 
-        ######################### Zero Padding ############################
+        # ######################## Zero Padding ############################
         nt = 2 ** 17  # Zero padding for performance and resolution optimization, as well as consistency with origininal Kiladis code
 
         if orig_nt > nt:
@@ -236,23 +258,23 @@ class WKFilter:
         data = np.zeros([nt, nl])
         data[0:orig_nt, :] = orig_data
 
-        ######################### Tapering to zero ########################
+        # ######################## Tapering to zero ########################
         # 10 days tapering according ot Kiladis Code
         # only relevant at beginning of time series as it is zero-padded in the end
         for idx_l in range(0, nl):
-            data[:, idx_l] = taperTSToZero(data[:, idx_l], int(10 * dataperday))
+            data[:, idx_l] = taper_vector_to_zero(data[:, idx_l], int(10 * dataperday))
 
         if save_debug:
             self.DebugPreprocessedOLR = np.copy(data)
 
-        ########################### Forward Fourier transform ############
+        # ########################## Forward Fourier transform ############
         fourier_fft = np.fft.fft2(data)
         # reordering of spectrum is done to be consistent with the original kiladis ordering.
         fourier_fft = np.fft.fftshift(fourier_fft, axes=(0, 1))
         fourier_fft = np.roll(fourier_fft, int(nt / 2), axis=0)
         fourier_fft = np.roll(fourier_fft, int(nl / 2), axis=1)
 
-        ### Calculation of the frequency grid in accordance with Kiladis code
+        # ## Calculation of the frequency grid in accordance with Kiladis code
         freq_axis = np.zeros(nt)
         for i_f in range(0, nt):
             if (i_f <= nt / 2):
@@ -265,10 +287,10 @@ class WKFilter:
         # freq_axis = np.fft.fftshift(freq_axis)
         # freq_axis = np.roll(freq_axis, int(nt/2))
 
-        ### Calculation of the wavenumber grid in accordance with Kiladis code
+        # ## Calculation of the wavenumber grid in accordance with Kiladis code
         wn_axis = np.zeros(nl)
         for i_wn in range(0, nl):
-            if (i_wn <= nl / 2):
+            if i_wn <= nl / 2:
                 wn_axis[i_wn] = -1 * i_wn
                 # note: to have this consistent with the time-dimension, one could write wn_axis[i_wn]= -1*i_wn*dataperglobe/nl
                 # However, since data is required to cover always one globe nl will always be equal to dataperglobe
@@ -301,8 +323,8 @@ class WKFilter:
             plt.colorbar()
             plt.title("Fourier Transformation")
 
-        #################### Filtering of the Fourier Spectrum #############
-        ### name filter boundaries like in Kiladis Fortran Code
+        # ################### Filtering of the Fourier Spectrum #############
+        # ## name filter boundaries like in Kiladis Fortran Code
         f1 = freq_min
         f2 = freq_min
         f3 = freq_max
@@ -312,34 +334,34 @@ class WKFilter:
         s3 = wn_min
         s4 = wn_max
 
-        #### Very similar to original Kiladis Code
+        # ### Very similar to original Kiladis Code
         fourier_fft_filtered = fourier_fft
         count = 0
         for i_f in range(0, int(nt / 2) + 1):
             for i_wn in range(0, nl):
                 ff = freq_axis[i_f]
                 ss = wn_axis[i_wn]
-                if ((ff >= ((ss * (f1 - f2) + f2 * s1 - f1 * s2) / (s1 - s2))) and \
-                        (ff <= ((ss * (f3 - f4) + f4 * s3 - f3 * s4) / (s3 - s4))) and \
-                        (ss >= ((ff * (s3 - s1) - f1 * s3 + f3 * s1) / (f3 - f1))) and \
+                if ((ff >= ((ss * (f1 - f2) + f2 * s1 - f1 * s2) / (s1 - s2))) and
+                        (ff <= ((ss * (f3 - f4) + f4 * s3 - f3 * s4) / (s3 - s4))) and
+                        (ss >= ((ff * (s3 - s1) - f1 * s3 + f3 * s1) / (f3 - f1))) and
                         (ss <= ((ff * (s4 - s2) - f2 * s4 + f4 * s2) / (f4 - f2)))):
                     count = count + 1
                 else:
                     fourier_fft_filtered[i_f, i_wn] = 0
-                    if (i_wn == 0 and i_f == 0):
+                    if i_wn == 0 and i_f == 0:
                         pass
-                    elif (i_wn == 0):
+                    elif i_wn == 0:
                         ind_f = nt - i_f
                         if (ind_f < nt):
                             fourier_fft_filtered[ind_f, i_wn] = 0
-                    elif (i_f == 0):
+                    elif i_f == 0:
                         ind_wn = nl - i_wn
-                        if (ind_wn < nl):
+                        if ind_wn < nl:
                             fourier_fft_filtered[i_f, ind_wn] = 0
                     else:
                         ind_f = nt - i_f
                         ind_wn = nl - i_wn
-                        if (ind_f < nt and ind_wn < nl):
+                        if ind_f < nt and ind_wn < nl:
                             fourier_fft_filtered[ind_f, ind_wn] = 0
         if save_debug:
             self.DebugFilteredFourierSpectrum = np.copy(fourier_fft_filtered)
@@ -352,16 +374,15 @@ class WKFilter:
             plt.title("Filtered Fourier Transformation")
             print("Number of elements in filtered spectrum: ", count)
 
-        ############################# FFT Backward transformation ############
-        ##reorder spectrum back from kiladis ordering to python ordering
+        # ############################ FFT Backward transformation ############
+        # #reorder spectrum back from kiladis ordering to python ordering
         fourier_fft_filtered = np.roll(fourier_fft_filtered, -int(nt / 2), axis=0)
         fourier_fft_filtered = np.roll(fourier_fft_filtered, -int(nl / 2), axis=1)
         fourier_fft_filtered = np.fft.ifftshift(fourier_fft_filtered, axes=(0, 1))
         filtered_olr = np.fft.ifft2(fourier_fft_filtered)
         filtered_olr = np.real(filtered_olr)
 
-        ############################## remove zero padding elements ##########
-        result = np.zeros([orig_nt, nl])
+        # ############################# remove zero padding elements ##########
         result = filtered_olr[0:orig_nt, :]
 
         if save_debug:
@@ -372,5 +393,5 @@ class WKFilter:
             plt.contourf(result)
             plt.colorbar()
             plt.title("Filtered Data")
-        # FIXME: Make sure that result is real
+        # ToDo: Make sure that result is real
         return result

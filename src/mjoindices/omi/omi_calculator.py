@@ -105,7 +105,7 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
     """
     if np.mean(olrdata.olr) < 0:
         warnings.warn("OLR data apparently given in negative numbers. Here it is assumed that OLR is positive.")
-    olrdata_filtered = wkfilter.filterOLRForMJO_EOF_Calculation(olrdata)
+    olrdata_filtered = wkfilter.filter_olr_for_mjo_eof_calculation(olrdata)
     return olrdata_filtered
 
 
@@ -422,7 +422,7 @@ def calculate_pcs_from_olr(olrdata: olr.OLRData,
     if use_quick_temporal_filter:
         filtered_olr_data = qfilter.filterOLRForMJO_PC_CalculationWith1DSpectralSmoothing(resampled_olr_data)
     else:
-        filtered_olr_data = wkfilter.filterOLRForMJO_PC_Calculation(resampled_olr_data)
+        filtered_olr_data = wkfilter.filter_olr_for_mjo_pc_calculation(resampled_olr_data)
     raw_pcs = regress_3dim_data_onto_eofs(filtered_olr_data, eofdata)
     normalization_factor = 1 / np.std(raw_pcs.pc1)
     pc1 = np.multiply(raw_pcs.pc1, normalization_factor)

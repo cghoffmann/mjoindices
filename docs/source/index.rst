@@ -24,6 +24,11 @@ Module mjoindices.omi.omi_calculator
 .. automodule:: mjoindices.omi.omi_calculator
    :members:
 
+Module mjoindices.omi.wheeler_kiladis_mjo_filter
+================================================
+.. automodule:: mjoindices.omi.wheeler_kiladis_mjo_filter
+   :members:
+
 Module mjoindices.empirical_orthogonal_functions
 ================================================
 .. automodule:: mjoindices.empirical_orthogonal_functions
