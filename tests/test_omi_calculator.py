@@ -59,7 +59,7 @@ setups = [(True, 0.99, 0.99), (False, 0.999, 0.999)]
 @pytest.mark.skipif(not eof1Dirname.is_dir(), reason="EOF1 data not available")
 @pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available")
 @pytest.mark.skipif(not origOMIPCsFilename.is_file(), reason="Original OMI PCs not available for comparison")
-def test_calculatePCsFromOLRWithOriginalEOFs(useQuickTemporalFilter, expectedCorr1, expectedCorr2):
+def test_calculatePCsFromOLRWithOriginalEOFs(use_quick_temporal_filter, expectedCorr1, expectedCorr2):
 # This test is quicker than the complete integration tests below. The quality check is very simple and just checks
 # the correlations of the PC time series. Hence, this test in thought the get a first idea and more intensive testing
 # should be done using the tests below.
@@ -68,7 +68,7 @@ def test_calculatePCsFromOLRWithOriginalEOFs(useQuickTemporalFilter, expectedCor
 
     target = omi.calculate_pcs_from_olr_original_conditions(olrData,
                                                             originalOMIDataDirname,
-                                                            use_quick_temporal_filter=useQuickTemporalFilter)
+                                                            use_quick_temporal_filter=use_quick_temporal_filter)
     errors = []
     if not np.all(target.time == orig_omi.time):
         errors.append("Test is not reasonable, because temporal coverages of original OMI and recalculation do not "
