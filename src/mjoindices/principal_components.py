@@ -26,21 +26,24 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 
 class PCData:
     """
     Class as a container for the principal component (PC) data.
+
+    The basic PC computation :func:`mjoindices.omi.omi_calculator.calculate_pcs_from_olr` will return an object of this
+    class as a major result of this package.
+
+    :param time: Array containing the :class:`numpy.datetime64` dates.
+    :param pc1: Array containing the values of PC1 (has to be of same length as the time array).
+    :param pc2: Array containing the values of PC2 (has to be of same length as the time array).
     """
 
-    # FIXME: Check if we need some deepcopy or writable=false here
+    # ToDo: Check if we need some deepcopy or writable=false here
     def __init__(self, time: np.ndarray, pc1: np.ndarray, pc2: np.ndarray) -> None:
-        """Initialization with all necessary variables.
-
-        :param time: The numpy array containing the np.datetime64 dates.
-        :param pc1: The numpy array containing the values of PC1 (has to be of same length as the time array).
-        :param pc2: The numpy array containing the values of PC2 (has to be of same length as the time array).
+        """
+        Initialization with all necessary variables.
         """
         if pc1.size != time.size:
             raise ValueError('Length of the first PC time series does not fit to the length of the '
@@ -52,34 +55,36 @@ class PCData:
         self._pc1 = pc1.copy()
         self._pc2 = pc2.copy()
 
-
     @property
     def time(self) -> np.ndarray:
-        """ The time grid of the PC time series as numpy array of numpy.datetime64 elements.
-        :return: The grid
+        """
+        The time grid of the PC time series as array of :class:`numpy.datetime64` elements.
         """
         return self._time
 
     @property
     def pc1(self) -> np.ndarray:
-        """The time series of the PC1 values
-        :return: The PC1 values
+        """
+        The time series of the PC1 values.
         """
         return self._pc1
 
     @property
     def pc2(self) -> np.ndarray:
-        """The time series of the PC2 values
-        :return: The PC2 values
+        """
+        The time series of the PC2 values.
         """
         return self._pc2
 
-    # FIXME: implement also storing to npz file
+    # ToDo: implement also storing to npz file
     def save_pcs_to_txt_file(self, filename: Path) -> None:
-        """Saves the computed principal components to a .txt file.
+        """
+        Saves the computed PCs to a text file.
 
         Please note that the file format is not exactly that of the original data files. However, a
-        suitable reader is available in this module for both formats.
+        suitable reader is available in this module for both formats
+        (:func:`mjoindices.principal_components.load_pcs_from_txt_file` and
+        :func:`mjoindices.principal_components.load_original_pcs_from_txt_file`).
 
         :param filename: The full filename.
         """
@@ -88,10 +93,13 @@ class PCData:
 
 
 def load_pcs_from_txt_file(filename: Path) -> PCData:
-    """Loads the principal components (PCs) of OMI, which were previously saved with this package.
+    """
+    Loads the PCs of OMI, which were previously saved with this package
+    (:func:`mjoindices.principal_components.PCData.save_pcs_to_txt_file`).
 
-    :param filename: Path to local principal component file
-    :return: A PCData instance containing the values
+    :param filename: Path to the PC file.
+
+    :return: The PC data.
     """
     df = pd.read_csv(filename, sep=',', parse_dates=[0], header=0)
     dates = df.Date.values
@@ -101,14 +109,16 @@ def load_pcs_from_txt_file(filename: Path) -> PCData:
 
 
 def load_original_pcs_from_txt_file(filename: Path) -> PCData:
-    """Loads the principal components (PCs) of OMI, which are stored in the original file format.
-       Particularly the following file can be loaded:
-       https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
+    """
+    Loads the PCs of OMI, which are stored in the original file format.
+    Particularly, the following file can be loaded: https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
 
-       Note that the present software package stores the PCs slightly different (see load_pcs_from_txt_file)
+    Note that the present software package stores the PCs slightly different. Those files can be loaded with
+    :func:`see load_pcs_from_txt_file`.
 
-       :param filename: Path to local principal component file
-       :return:  A PCData instance containing the values
+    :param filename: Path to the PC file.
+
+    :return:  The original PC data.
     """
     my_data = np.genfromtxt(filename)
     dates_temp = []

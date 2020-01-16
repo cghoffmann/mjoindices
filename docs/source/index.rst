@@ -7,39 +7,16 @@ Welcome to mjoindices's documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
+   api/apidoc
+   indices
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
-Module mjoindices.omi.omi_calculator
-====================================
-.. automodule:: mjoindices.omi.omi_calculator
-   :members:
-
-Module mjoindices.omi.wheeler_kiladis_mjo_filter
-================================================
-.. automodule:: mjoindices.omi.wheeler_kiladis_mjo_filter
-   :members:
-
-Module mjoindices.omi.quick_temporal_filter
-===========================================
-.. automodule:: mjoindices.omi.quick_temporal_filter
-   :members:
-
-Module mjoindices.empirical_orthogonal_functions
-================================================
-.. automodule:: mjoindices.empirical_orthogonal_functions
-   :members:
-
-Module mjoindices.tools
-=======================
-.. automodule:: mjoindices.tools
-   :members:
+Important abbreviations
+========================
+* DOY: Day of the Year
+* EOF: Empirical Orthogonal Function
+* OLR: Outgoing long-wave radiation
+* OMI: OLR-based MJO index.
+* PC: Principal Component
