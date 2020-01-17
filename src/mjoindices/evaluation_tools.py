@@ -28,8 +28,6 @@ from matplotlib.figure import Figure
 import matplotlib.cm
 from pandas.plotting import register_matplotlib_converters
 
-import tools
-
 register_matplotlib_converters()
 import re
 

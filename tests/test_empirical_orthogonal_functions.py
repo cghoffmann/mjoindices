@@ -31,7 +31,7 @@ import pytest
 import mjoindices.empirical_orthogonal_functions as eof
 
 # FIXME: Define paths as fixture at a central point
-import tools
+import mjoindices.tools as tools
 
 originalOMIDataDirname = Path(os.path.abspath('')) / "testdata" / "OriginalOMI"
 eof1Dirname = originalOMIDataDirname / "eof1"

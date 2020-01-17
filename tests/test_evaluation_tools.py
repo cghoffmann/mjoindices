@@ -26,9 +26,8 @@ import numpy.random
 import pytest
 
 import mjoindices.evaluation_tools as evalt
-import mjoindices.tools as tools
 import mjoindices.empirical_orthogonal_functions as eof
-import tools
+import mjoindices.tools as tools
 
 
 def test_compute_vector_difference_quantity():
