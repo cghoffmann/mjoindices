@@ -28,6 +28,7 @@ import pytest
 import mjoindices.evaluation_tools as evalt
 import mjoindices.tools as tools
 import mjoindices.empirical_orthogonal_functions as eof
+import tools
 
 
 def test_compute_vector_difference_quantity():
@@ -155,7 +156,7 @@ def test_calc_vector_agreement():
 
 
 def test_calc_comparison_stats_for_eofs_all_doys():
-    doys = eof.doy_list()
+    doys = tools.doy_list()
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
 

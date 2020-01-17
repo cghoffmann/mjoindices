@@ -223,3 +223,8 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
         errors.append("DOY range covering the the beginning of the next year is wrong (Leap year test)")
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+def test_doy_list():
+    target = tools.doy_list()
+    assert np.all(target==np.arange(1, 367, 1))

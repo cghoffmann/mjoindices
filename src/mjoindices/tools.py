@@ -104,3 +104,13 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
         resulting_idxlist = np.nonzero(inds_consider)[0]
 
     return np.asarray(resulting_idxlist), doys[resulting_idxlist]
+
+
+def doy_list() -> np.array:
+    """
+    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.
+    Useful, e.g., as axis for plotting.
+
+    :return: The doy array.
+    """
+    return np.arange(1, 367, 1)

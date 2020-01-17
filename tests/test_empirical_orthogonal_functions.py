@@ -31,6 +31,8 @@ import pytest
 import mjoindices.empirical_orthogonal_functions as eof
 
 # FIXME: Define paths as fixture at a central point
+import tools
+
 originalOMIDataDirname = Path(os.path.abspath('')) / "testdata" / "OriginalOMI"
 eof1Dirname = originalOMIDataDirname / "eof1"
 eof2Dirname = originalOMIDataDirname / "eof2"
@@ -559,7 +561,7 @@ def test_EOFDataForAllDOYs_doy_getfunctions():
 
 
 def test_EOFDataForAllDOYs_alldoy_getfunctions():
-    doys = eof.doy_list()
+    doys = tools.doy_list()
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
     explained_variances = np.array([np.arange(1, doys.size+1, 1) + 111,
@@ -635,7 +637,7 @@ def test_save_all_eofs_to_dir(tmp_path):
 
 def test_save_all_eofs_to_npzfile(tmp_path):
     filename = tmp_path / "test.npz"
-    doys = eof.doy_list()
+    doys = tools.doy_list()
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
     explained_variances = np.array([np.arange(1, doys.size + 1, 1) + 111,
@@ -706,7 +708,3 @@ def test_load_all_original_eofs_from_directory():
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
-
-def test_doy_list():
-    target = eof.doy_list()
-    assert np.all(target==np.arange(1, 367, 1))

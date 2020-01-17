@@ -4,6 +4,7 @@ API documentation (for running calculations)
    :maxdepth: 3
    :caption: Contents:
 
+   olr_handling
    omi_calculator
 
 API documentation (for working with results)

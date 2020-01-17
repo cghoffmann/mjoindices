@@ -54,6 +54,7 @@ import mjoindices.principal_components as pc
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
 import mjoindices.omi.quick_temporal_filter as qfilter
 import mjoindices.tools as tools
+import tools
 
 eofs_spec = importlib.util.find_spec("eofs")
 eofs_package_available = eofs_spec is not None
@@ -128,7 +129,7 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
     if implementation == "eofs_package" and not eofs_package_available:
         raise ValueError("Selected calculation with external eofs package, but package not available. Use "
                          "internal implementation or install eofs package")
-    doys = eof.doy_list()
+    doys = tools.doy_list()
     eofs = []
     for doy in doys:
         print("Calculating EOFs for DOY %i" % doy)
@@ -302,7 +303,7 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
         corrected_doy1 = eofs.eofdata_for_doy(1)
     switched_eofs.append(corrected_doy1)
     previous_eof = corrected_doy1
-    for doy in eof.doy_list()[1:]:
+    for doy in tools.doy_list()[1:]:
         corrected_eof = _correct_spontaneous_sign_change_of_individual_eof(previous_eof, eofs.eofdata_for_doy(doy))
         switched_eofs.append(corrected_eof)
         previous_eof = corrected_eof
@@ -365,7 +366,7 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
 
     :return: The complete EOF series with the interpolated values.
     """
-    doys = eof.doy_list()
+    doys = tools.doy_list()
     start_idx = start_doy - 1
     end_idx = end_doy - 1
     eof_len = eofs.lat.size * eofs.long.size

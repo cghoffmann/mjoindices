@@ -27,6 +27,9 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib.cm
 from pandas.plotting import register_matplotlib_converters
+
+import tools
+
 register_matplotlib_converters()
 import re
 
@@ -97,7 +100,7 @@ def calc_comparison_stats_for_eofs_all_doys(eofs_ref: eof.EOFDataForAllDOYs,
     """
     if eof_number != 1 and eof_number != 2:
         raise ValueError("Argument eof_number must be 1 or 2.")
-    doys = eof.doy_list()
+    doys = tools.doy_list()
     if exclude_doy366:
         doys = doys[:-1]
     corr = np.empty(doys.size)
@@ -145,7 +148,7 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     :return: The figure handle
     """
 
-    doys = eof.doy_list()
+    doys = tools.doy_list()
     if exclude_doy366:
         doys = doys[:-1]
     xlim=(0, doys[-1])
@@ -212,7 +215,7 @@ def plot_correlation_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     :return: A handle to the figure.
     """
 
-    doys = eof.doy_list()
+    doys = tools.doy_list()
     if exclude_doy366:
         doys = doys[:-1]
     xlim = (0, doys[-1])

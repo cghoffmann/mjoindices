@@ -30,6 +30,8 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib.cm
 
+from tools import doy_list
+
 
 class EOFData:
     """
@@ -640,17 +642,6 @@ def restore_all_eofs_from_npzfile(filename: Path) -> EOFDataForAllDOYs:
                       no_observations=no_observations[i])
         eofs.append(eof)
     return EOFDataForAllDOYs(eofs)
-
-
-# ToDo: Move into tools (move also test)
-def doy_list() -> np.array:
-    """
-    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.
-    Useful, e.g., as axis for plotting.
-
-    :return: The doy array.
-    """
-    return np.arange(1, 367, 1)
 
 
 def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs, include_total_variance: bool = False,

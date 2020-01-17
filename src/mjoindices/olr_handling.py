@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-""" """
+"""
+This module provides basic functionality to handle OLR data, which is the basic input for the OMI calculation.
+"""
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
@@ -33,20 +35,29 @@ import matplotlib.pyplot as plt
 
 import mjoindices.tools as tools
 
-"""
-Created on Tue Dec  4 14:05:34 2018
-
-@author: ch
-"""
-
 
 class OLRData:
-    def __init__(self, olr, time, lat, long):
-        if( olr.shape[0] != time.size):
+    """
+    This class serves as a container for spatially distributed and temporally resolved OLR data.
+
+    A filled object of this class has to be provided by the user in order to start the OMI calculation.
+
+    :param olr: The OLR data as a 3-dim array. The three dimensions correspond to time, latitude, and longitude, in this
+        order.
+    :param time: The temporal grid as 1-dim array of :class:`numpy.datetime64` dates.
+    :param lat: The latitude grid as 1-dim array.
+    :param long: The longitude grid as 1-dim array.
+    """
+
+    def __init__(self, olr: np.ndarray, time: np.ndarray, lat: np.ndarray, long: np.ndarray) -> None:
+        """
+        Initialization of basic variables.
+        """
+        if olr.shape[0] != time.size:
             raise ValueError('Length of time grid does not fit to first dimension of OLR data cube')
-        if (olr.shape[1] != lat.size):
+        if olr.shape[1] != lat.size:
             raise ValueError('Length of lat grid does not fit to second dimension of OLR data cube')
-        if (olr.shape[2] != long.size):
+        if olr.shape[2] != long.size:
             raise ValueError('Length of long grid does not fit to third dimension of OLR data cube')
         self._olr = olr.copy()
         self._time = time.copy()
@@ -55,22 +66,36 @@ class OLRData:
 
     @property
     def olr(self):
+        """
+        The OLR data as a 3-dim array. The three dimensions correspond to time, latitude, and longitude, in this
+        order.
+        """
         return self._olr
 
     @property
     def time(self):
+        """
+        The temporal grid as 1-dim array of :class:`numpy.datetime64` dates.
+        """
         return self._time
 
     @property
     def lat(self):
+        """
+        The latitude grid as 1-dim array.
+        """
         return self._lat
 
     @property
     def long(self):
+        """
+        The longitude grid as 1-dim array.
+        """
         return self._long
 
     def __eq__(self, other: "OLRData") -> bool:
-        """Override the default Equals behavior
+        """
+        Override the default Equals behavior
         """
         return (np.all(self.lat == other.lat)
                 and np.all(self.long == other.long)
@@ -78,9 +103,12 @@ class OLRData:
                 and np.all(self.olr == other.olr))
 
     def close(self, other: "OLRData") -> bool:
-        """ Checks equality of two OLRData objects, but allows numerical tolerances.
-            :param other: The second OLRData object to compare with the current one
-            :return: Equality of all members considering the default tolerances of numpy.allclose
+        """
+         Checks equality of two :class:`OLRData` objects, but allows for numerical tolerances.
+
+        :param other: The object to compare with.
+
+        :return: Equality of all members considering the default tolerances of :func:`numpy.allclose`
         """
         return (np.allclose(self.lat, other.lat)
                 and np.allclose(self.long, other.long)
@@ -89,12 +117,15 @@ class OLRData:
 
     def get_olr_for_date(self, date: np.datetime64) -> np.ndarray:
         """
-        Returns the spatially distributed OLR map for a particular data
-        :param date: The date, which hat to be exactly matched by one of the dates in the time series
-        :return: The OLR data or None if the date is not contained in the OLR time series.
+        Returns the spatially distributed OLR map for a particular date.
+
+        :param date: The date, which hat to be exactly matched by one of the dates in the OLR time grid.
+
+        :return: The excerpt of the OLR data as a 2-dim array. The two dimensions correspond to
+            latitude, and longitude, in this order. Returns None if the date is not contained in the OLR time series.
         """
         cand = self.time == date
-        if not np.all(cand == False):
+        if not np.all(cand == False):  # noqa: E712
             return np.squeeze(self.olr[cand, :, :])
         else:
             return None
@@ -102,40 +133,47 @@ class OLRData:
     def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0,
                                          strict_leap_year_treatment: bool = True) -> np.ndarray:
         """
-        Extracts the olr data, which belongs to all doys around one center (center_doy +/- windowlength).
-        Keep in mind that the OLR time series might span several years. In this case the center DOy is found more than
+        Extracts the OLR data, which belongs to all doys around one center (center_doy +/- windowlength).
+
+        Keep in mind that the OLR time series might span several years. In this case the center DOY is found more than
         once and the respective window in considered for each year.
         Example: 3 full years of data, centerdoy = 20, and window_length = 4 results in 3*(2*4+1) = 27 entries in the
         time axis
-        :param center_doy: The center DOY
+
+        :param center_doy: The center DOY of the window.
         :param window_length: The window length in DOYs on both sides of the center DOY. Hence, if the window is fully
-        covered by the data, one gets 2*window_length + 1 entries per year in the result.
-        :param strict_leap_year_treatment: :param strict_leap_year_treatment: see description in
-            :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-        :return: A matrix: 1. index doys, 2. index lat, 3 index long.
-        seealso:: mjoindices.tools.find_doy_ranges_in_dates() for details.
+            covered by the data, one gets 2*window_length + 1 entries per year in the result.
+        :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+
+        :return: The excerpt of the OLR data as a 3-dim array. The three dimensions correspond to
+            time, latitude, and longitude, in this order.
         """
-        inds, doys  = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length,
-                                                     strict_leap_year_treatment=strict_leap_year_treatment)
+        inds, doys = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length,
+                                                    strict_leap_year_treatment=strict_leap_year_treatment)
         return self.olr[inds, :, :]
 
     def save_to_npzfile(self, filename: Path) -> None:
         """
-        Saves the data array contained in the OLRData object to a numpy file
-        :param filename: The full filename
+        Saves the data arrays contained in the OLRData object to a numpy file.
+
+        :param filename: The full filename.
         """
         np.savez(filename, olr=self.olr, time=self.time, lat=self.lat, long=self.long)
 
 
 def interpolate_spatial_grid_to_original(olr: OLRData) -> OLRData:
-    """Interpolates the data in an OLRData object spatially according to the original OMI EOF grid.
+    """
+    Interpolates the OLR data in an :class:`OLRData` object spatially onto the spatial grid, which was used for the
+    original OMI calculation by Kiladis (2014).
 
-    Afterwards, the data corresponds to the original spatial calculation grid:
-    Latitude: 2.5 deg sampling in the tropics from -20 to 20 deg (20S to 20 N)
-    Longitude: Whole globe with 2.5 deg sampling
+    This original grid has the following properties:
 
-    :param olr: The OLRData object
-    :return:  A new OLRData object with the resampled data
+    * Latitude: 2.5 deg sampling in the tropics from -20 to 20 deg (20S to 20 N).
+    * Longitude: Whole globe with 2.5 deg sampling.
+
+    :param olr: The OLR data
+
+    :return:  A new :class:`OLRData` object with the interpolated data.
     """
     # FIXME Combine with definition in empirical_or....py
     orig_lat = np.arange(-20., 20.1, 2.5)
@@ -143,17 +181,21 @@ def interpolate_spatial_grid_to_original(olr: OLRData) -> OLRData:
     return interpolate_spatial_grid(olr, orig_lat, orig_long)
 
 
-def interpolate_spatial_grid(olr: OLRData, target_lat: np.array, target_long: np.array) -> OLRData:
-    """ Interpolates the OLR data linearly according to the given grids and returns a new OLRData object.
-        No extrapolation will be done. Instead a ValueError is raised.
+def interpolate_spatial_grid(olr: OLRData, target_lat: np.ndarray, target_long: np.ndarray) -> OLRData:
+    """
+    Interpolates the OLR data linearly onto the given grids.
 
-        Note that no sophisticated resampling is provided here. So, if some kind of averaging etc., is needed, it should
-        be done before building the OLRData object.
+    No extrapolation will be done. Instead a :py:class:`ValueError` is raised if the data does not cover the target
+    grid.
 
-    :param olr: The OLR data to resample
-    :param target_lat: The new latitude grid
-    :param target_long: the new longitude grid
-    :return: an OLRData object containing the resampled OLR data
+    Note that no sophisticated resampling is provided here. So, if some kind of averaging, etc., is needed, it should
+    be performed by the user himself before injecting the data into the OMI calculation.
+
+    :param olr: The OLR data to resample.
+    :param target_lat: The new latitude grid.
+    :param target_long: The new longitude grid.
+
+    :return: A new :class:`OLRData` object containing the resampled OLR data.
     """
     no_days = olr.time.size
     olr_interpol = np.empty((no_days, target_lat.size, target_long.size))
@@ -164,29 +206,35 @@ def interpolate_spatial_grid(olr: OLRData, target_lat: np.array, target_long: np
 
 
 def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime64) -> OLRData:
-    """Cuts the OLR time series at the given dates (given dates are included)
-        This is useful when the dataset should be restricted for the EOF calculation.
-        Note that a temporal resampling method is not provided here so far, since the resampling methods,
-        which the user might want to apply are too diverse. Hence it is assumed that the temporal spacing ist already
-        correct (daily averages recommended) and only a restriction of the period is needed for a part of the calculation.
+    """
+    Cuts the OLR time series at the given dates (given dates are included).
 
-        :param olr: The OLR data to restrict
-        :param start: The beginning of the wanted period of OLR data (included)
-        :param stop: The ending of the wanted period (included).
-        :return: An OLR Data object with restricted temporal coverage
-        :raises: ValueError if no OLR Data is found for the specified period
+    This is useful when the OLR data should be restricted for the EOF calculation, which is based on a subset.
+    Of course, it can also be used to limit the PC calculation to a specific period.
+
+    Note that a temporal resampling method is not provided here, since the possible resampling methods,
+    which the user might want to apply are too diverse. Hence, it is assumed that the temporal spacing ist already
+    correct (daily averages recommended) and only a restriction of the period is needed before calculation.
+
+    :param olr: The OLR data to restrict.
+    :param start: The beginning of the wanted period of OLR data (included).
+    :param stop: The ending of the wanted period (included).
+
+    :return: A new :class:`OLRData` object with restricted temporal coverage.
+
+    :raises: :py:class:`ValueError` if no OLR Data is found for the specified period
     """
     window_inds = (olr.time >= start) & (olr.time <= stop)
-    if np.all(window_inds == False):
+    if np.all(window_inds == False):  # noqa: E712
         raise ValueError("No OLR data within specified period found. Data covers the period from %s to %s."
                          % (str(olr.time[0]), str(olr.time[-1])))
     else:
         return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long)
 
 
-
 def load_noaa_interpolated_olr(filename: Path) -> OLRData:
-    """Loads the standard OLR data product provided by NOAA
+    """
+    Loads the standard OLR data product provided by NOAA.
 
     The dataset can be obtained from
     ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
@@ -194,20 +242,21 @@ def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     A description is found at
     https://www.esrl.noaa.gov/psd/data/gridded/data.interp_OLR.html
 
-    :param filename: full filename of local copy of OLR data file
-    :return: The OLR data
+    :param filename: Full filename of local copy of OLR data file.
+
+    :return: The OLR data.
     """
     f = netcdf.netcdf_file(str(filename), 'r')
     lat = f.variables['lat'].data.copy()
     lon = f.variables['lon'].data.copy()
     # scaling and offset as given in meta data of nc file
-    olr = f.variables['olr'].data.copy()/100.+327.65
+    olr = f.variables['olr'].data.copy() / 100. + 327.65
     hours_since1800 = f.variables['time'].data.copy()
     f.close()
 
     temptime = []
     for item in hours_since1800:
-        delta = np.timedelta64(int(item/24), 'D')
+        delta = np.timedelta64(int(item / 24), 'D')
         day = np.datetime64('1800-01-01') + delta
         temptime.append(day)
     time = np.array(temptime, dtype=np.datetime64)
@@ -218,9 +267,12 @@ def load_noaa_interpolated_olr(filename: Path) -> OLRData:
 
 def restore_from_npzfile(filename: Path) -> OLRData:
     """
-    Loads an OLRData object from the array in a numpy file.
+    Loads an :class:`OLRData` object from a numpy file, which has been saved with the function
+    :func:`mjoindices.olr_handling.OLRData.save_to_npzfile`
+
     :param filename: The filename to the .npz file.
-    :return: The OLRData object
+
+    :return: The OLR data.
     """
     with np.load(filename) as data:
         olr = data["olr"]
@@ -231,6 +283,15 @@ def restore_from_npzfile(filename: Path) -> OLRData:
 
 
 def plot_olr_map_for_date(olr: OLRData, date: np.datetime64) -> Figure:
+    """
+    Plots a map pf the OLR data for a specific date.
+
+    :param olr: The complete OLR data.
+    :param date: The date for which da OLR data should be plotted
+        (has to be exactly matched by a date of the OLR time grid).
+
+    :return: The handle to the figure.
+    """
     # TODO: Plot underlying map
 
     mapdata = olr.get_olr_for_date(date)
