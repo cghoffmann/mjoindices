@@ -625,8 +625,6 @@ def load_omi_explained_variance(filename: str) -> typing.Tuple:
 
     :return: A tuple containing two arrays, for EOF1 and EOF2, respectively.
     """
-    # c = lambda s: float(re.sub(r"[ \[;\]]", "", s.decode("utf-8")))  # noqa: E731
-    # data = np.genfromtxt(filename, converters={0: c, 1: c}, skip_header=7)
     data = np.genfromtxt(filename,
                          converters={0: _explained_variance_file_converter, 1: _explained_variance_file_converter},
                          skip_header=7)
