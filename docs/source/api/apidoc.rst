@@ -4,8 +4,8 @@ API documentation (for running calculations)
    :maxdepth: 3
    :caption: Contents:
 
-   olr_handling
    omi_calculator
+   olr_handling
 
 API documentation (for working with results)
 ============================================
@@ -16,8 +16,8 @@ API documentation (for working with results)
    principal_components
    empirical_orthogonal_functions
 
-API documentation (additional)
-==============================
+API documentation (minor relevance for users)
+=============================================
 .. toctree::
    :maxdepth: 3
    :caption: Contents:
@@ -25,3 +25,4 @@ API documentation (additional)
    wheeler_kiladis_mjo_filter
    quick_temporal_filter
    tools
+   evaluation_tools
