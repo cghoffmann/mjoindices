@@ -54,7 +54,6 @@ import mjoindices.principal_components as pc
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
 import mjoindices.omi.quick_temporal_filter as qfilter
 import mjoindices.tools as tools
-import tools
 
 eofs_spec = importlib.util.find_spec("eofs")
 eofs_package_available = eofs_spec is not None

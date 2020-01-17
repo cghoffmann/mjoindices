@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib.cm
 
-from tools import doy_list
+from mjoindices.tools import doy_list
 
 
 class EOFData:
