@@ -42,5 +42,6 @@ setup(name='mjoindices',
       author_email="christoph.hoffmann@uni-greifswald.de",
       url="https://github.com/cghoffmann/mjoindices",
       description="Calculation of indices that describe the Madden-Julian-Oscillation (only OMI by now)",
+      long_description_content_type="text/markdown",
       long_description=long_description,
       license="GNU General Public License v3")
