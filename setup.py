@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-""" """
+"""
+Provides information for the installation routines.
+"""
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
@@ -26,7 +28,6 @@ import versioneer
 
 packages=['mjoindices', 'mjoindices.omi']
 
-# FIXME: Enter better long description (relevant for PyPi)
 setup(name='mjoindices',
       packages=packages,
       package_dir={'': 'src'},
@@ -37,5 +38,7 @@ setup(name='mjoindices',
       author_email="christoph.hoffmann@uni-greifswald.de",
       url="https://github.com/cghoffmann/mjoindices",
       description="Calculation of indices that describe the Madden-Julian-Oscillation (only OMI by now)",
-      long_description="Calculation of indices that describe the Madden-Julian-Oscillation (only OMI by now)",
+      long_description="This package is relevant for users of the atmospheric sciences. It provides an implementation of"
+                       "the calculation of the Madden-Julian-Oscillation index OMI according to the description by "
+                       "Kiladis (2014).",
       license="GNU General Public License v3")
