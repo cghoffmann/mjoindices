@@ -25,8 +25,12 @@ Provides information for the installation routines.
 
 from setuptools import setup
 import versioneer
+import os
 
 packages=['mjoindices', 'mjoindices.omi']
+
+with open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r') as f:
+    long_description = f.read()
 
 setup(name='mjoindices',
       packages=packages,
@@ -38,7 +42,5 @@ setup(name='mjoindices',
       author_email="christoph.hoffmann@uni-greifswald.de",
       url="https://github.com/cghoffmann/mjoindices",
       description="Calculation of indices that describe the Madden-Julian-Oscillation (only OMI by now)",
-      long_description="This package is relevant for users of the atmospheric sciences. It provides an implementation of"
-                       "the calculation of the Madden-Julian-Oscillation index OMI according to the description by "
-                       "Kiladis (2014).",
+      long_description=long_description,
       license="GNU General Public License v3")
