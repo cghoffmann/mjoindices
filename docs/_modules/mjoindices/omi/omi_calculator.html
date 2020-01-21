@@ -1,0 +1,736 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <title>mjoindices.omi.omi_calculator &mdash; mjoindices  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link href="../../../_static/css/theme.css" rel="stylesheet" type="text/css" />
+  
+
+  
+
+  
+        <link href="../../../genindex.html" rel="index"
+              title="Index"/>
+        <link href="../../../search.html" rel="search" title="Search"/>
+    <link href="../../../index.html" rel="top" title="mjoindices  documentation"/>
+        <link href="../../index.html" rel="up" title="Module code"/>
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../../../index.html"> mjoindices
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form action="../../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text" />
+    <input name="check_keywords" type="hidden" value="yes" />
+    <input name="area" type="hidden" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html">API documentation (for running calculations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../../index.html">mjoindices</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>mjoindices.omi.omi_calculator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mjoindices.omi.omi_calculator</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This major module provides the execution of the algorithm of the OMI calculation.</span>
+
+<span class="sd">First, the algorithm can be used to compute the empirical orthogonal functions (EOFs), which serve as a new basis for</span>
+<span class="sd">the OLR data. Second, the time-dependent coefficients of the OLR maps w.r.t the EOFs are computed. These coefficients</span>
+<span class="sd">are called the principal components (PCs).</span>
+
+<span class="sd">According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY).</span>
+
+<span class="sd">Basically, only OLR data on a suitable spatial grid is needed. With that, the the OMI EOFs and afterwards the PCs are</span>
+<span class="sd">computed using the functions :func:`calc_eofs_from_olr` and :func:`calculate_pcs_from_olr`, respectively.</span>
+
+<span class="sd">The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.</span>
+<span class="sd">Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.</span>
+<span class="sd">Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.</span>
+
+<span class="c1"># This file is part of mjoindices</span>
+
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+
+<span class="c1"># Contact: christoph.hoffmann@uni-greifswald.de</span>
+
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">scipy.interpolate</span>
+
+<span class="kn">import</span> <span class="nn">mjoindices.empirical_orthogonal_functions</span> <span class="k">as</span> <span class="nn">eof</span>
+<span class="kn">import</span> <span class="nn">mjoindices.olr_handling</span> <span class="k">as</span> <span class="nn">olr</span>
+<span class="kn">import</span> <span class="nn">mjoindices.principal_components</span> <span class="k">as</span> <span class="nn">pc</span>
+<span class="kn">import</span> <span class="nn">mjoindices.omi.wheeler_kiladis_mjo_filter</span> <span class="k">as</span> <span class="nn">wkfilter</span>
+<span class="kn">import</span> <span class="nn">mjoindices.omi.quick_temporal_filter</span> <span class="k">as</span> <span class="nn">qfilter</span>
+<span class="kn">import</span> <span class="nn">mjoindices.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+
+<span class="n">eofs_spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;eofs&quot;</span><span class="p">)</span>
+<span class="n">eofs_package_available</span> <span class="o">=</span> <span class="n">eofs_spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="k">if</span> <span class="n">eofs_package_available</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">eofs.standard</span> <span class="k">as</span> <span class="nn">eofs_package</span>
+
+
+<span class="c1"># #################EOF calculation</span>
+
+<div class="viewcode-block" id="calc_eofs_from_olr"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr">[docs]</a><span class="k">def</span> <span class="nf">calc_eofs_from_olr</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">implementation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span><span class="p">,</span> <span class="n">sign_doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                       <span class="n">interpolate_eofs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">interpolation_start_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">293</span><span class="p">,</span>
+                       <span class="n">interpolation_end_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">316</span><span class="p">,</span> <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    One major function of this module. It performs the complete OMI EOF computation.</span>
+
+<span class="sd">    This function executes consistently the preprocessing (filtering), the actual EOF analysis, and the postprocessing.</span>
+
+<span class="sd">    :param olrdata: The OLR dataset, from which OMI should be calculated. Note that OLR values are assumed to be given</span>
+<span class="sd">        in positive values. The spatial grid of the OLR datasets defines also the spatial grod of the complete OMI</span>
+<span class="sd">        calculation.</span>
+<span class="sd">    :param implementation: See :meth:`calc_eofs_from_preprocessed_olr`.</span>
+<span class="sd">    :param sign_doy1reference: See :meth:`correct_spontaneous_sign_changes_in_eof_series`.</span>
+<span class="sd">    :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.</span>
+<span class="sd">    :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.</span>
+<span class="sd">    :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.</span>
+<span class="sd">    :param strict_leap_year_treatment: See description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">preprocessed_olr</span> <span class="o">=</span> <span class="n">preprocess_olr</span><span class="p">(</span><span class="n">olrdata</span><span class="p">)</span>
+    <span class="n">raw_eofs</span> <span class="o">=</span> <span class="n">calc_eofs_from_preprocessed_olr</span><span class="p">(</span><span class="n">preprocessed_olr</span><span class="p">,</span> <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span> <span class="n">strict_leap_year_treatment</span><span class="o">=</span><span class="n">strict_leap_year_treatment</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">post_process_eofs</span><span class="p">(</span><span class="n">raw_eofs</span><span class="p">,</span> <span class="n">sign_doy1reference</span><span class="o">=</span><span class="n">sign_doy1reference</span><span class="p">,</span> <span class="n">interpolate_eofs</span><span class="o">=</span><span class="n">interpolate_eofs</span><span class="p">,</span>
+                               <span class="n">interpolation_start_doy</span><span class="o">=</span><span class="n">interpolation_start_doy</span><span class="p">,</span>
+                               <span class="n">interpolation_end_doy</span><span class="o">=</span><span class="n">interpolation_end_doy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="preprocess_olr"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.preprocess_olr">[docs]</a><span class="k">def</span> <span class="nf">preprocess_olr</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs the preprocessing of an OLR dataset to make it suitable for the EOF analysis.</span>
+
+<span class="sd">    This is actually a major step of the OMI algorithm and includes the Wheeler-Kiladis-Filtering.</span>
+
+<span class="sd">    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.</span>
+
+<span class="sd">    :param olrdata: The OLR dataset, which should be preprocessed. Note that OLR values are assumed to be given in</span>
+<span class="sd">        positive values.</span>
+
+<span class="sd">    :return: The filtered OLR dataset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">olrdata</span><span class="o">.</span><span class="n">olr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;OLR data apparently given in negative numbers. Here it is assumed that OLR is positive.&quot;</span><span class="p">)</span>
+    <span class="n">olrdata_filtered</span> <span class="o">=</span> <span class="n">wkfilter</span><span class="o">.</span><span class="n">filter_olr_for_mjo_eof_calculation</span><span class="p">(</span><span class="n">olrdata</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">olrdata_filtered</span></div>
+
+
+<div class="viewcode-block" id="calc_eofs_from_preprocessed_olr"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr">[docs]</a><span class="k">def</span> <span class="nf">calc_eofs_from_preprocessed_olr</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">implementation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span><span class="p">,</span>
+                                    <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates a series of EOF pairs: one pair for each DOY.</span>
+
+<span class="sd">    This is based on already preprocessed OLR. Note that it is recommended to use the function</span>
+<span class="sd">    :meth:`calc_eofs_from_olr` to cover the complete algorithm.</span>
+
+<span class="sd">    :param olrdata: the preprocessed OLR data, from which the EOFs are calculated.</span>
+<span class="sd">    :param implementation: Two options are available</span>
+<span class="sd">        # &quot;internal&quot;: Uses the internal implementation of the EOF approach.</span>
+<span class="sd">        # &quot;eofs_package&quot;: Uses the implementation of the external package :py:mod:`eofs`.</span>
+<span class="sd">    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.</span>
+
+<span class="sd">    :return: A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">implementation</span> <span class="o">==</span> <span class="s2">&quot;eofs_package&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">eofs_package_available</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Selected calculation with external eofs package, but package not available. Use &quot;</span>
+                         <span class="s2">&quot;internal implementation or install eofs package&quot;</span><span class="p">)</span>
+    <span class="n">doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">()</span>
+    <span class="n">eofs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doys</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating EOFs for DOY </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">doy</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">implementation</span> <span class="o">==</span> <span class="s2">&quot;eofs_package&quot;</span><span class="p">):</span>
+            <span class="n">singleeof</span> <span class="o">=</span> <span class="n">calc_eofs_for_doy_using_eofs_package</span><span class="p">(</span><span class="n">olrdata</span><span class="p">,</span> <span class="n">doy</span><span class="p">,</span>
+                                                             <span class="n">strict_leap_year_treatment</span><span class="o">=</span><span class="n">strict_leap_year_treatment</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">singleeof</span> <span class="o">=</span> <span class="n">calc_eofs_for_doy</span><span class="p">(</span><span class="n">olrdata</span><span class="p">,</span> <span class="n">doy</span><span class="p">,</span> <span class="n">strict_leap_year_treatment</span><span class="o">=</span><span class="n">strict_leap_year_treatment</span><span class="p">)</span>
+        <span class="n">eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">singleeof</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">eofs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="post_process_eofs"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.post_process_eofs">[docs]</a><span class="k">def</span> <span class="nf">post_process_eofs</span><span class="p">(</span><span class="n">eofdata</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span> <span class="n">sign_doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                      <span class="n">interpolate_eofs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">interpolation_start_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">293</span><span class="p">,</span>
+                      <span class="n">interpolation_end_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">316</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Post processes a series of EOF pairs for all DOYs.</span>
+
+<span class="sd">    Postprocessing includes an alignment of EOF signs and an interpolation of the EOF functions in a given DOY</span>
+<span class="sd">    window. Both steps are part of the original OMI algorithm described by Kiladis (2014).</span>
+
+<span class="sd">    See documentation of  the methods :meth:`correct_spontaneous_sign_changes_in_eof_series` and</span>
+<span class="sd">    :meth:`interpolate_eofs_between_doys` for further information.</span>
+
+<span class="sd">    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.</span>
+
+<span class="sd">    :param eofdata: The EOF series, which should be post processed.</span>
+<span class="sd">    :param sign_doy1reference: See description of :meth:`correct_spontaneous_sign_changes_in_eof_series`.</span>
+<span class="sd">    :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.</span>
+<span class="sd">    :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.</span>
+<span class="sd">    :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.</span>
+
+<span class="sd">    :return: the postprocessed series of EOFs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pp_eofs</span> <span class="o">=</span> <span class="n">correct_spontaneous_sign_changes_in_eof_series</span><span class="p">(</span><span class="n">eofdata</span><span class="p">,</span> <span class="n">doy1reference</span><span class="o">=</span><span class="n">sign_doy1reference</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">interpolate_eofs</span><span class="p">:</span>
+        <span class="n">pp_eofs</span> <span class="o">=</span> <span class="n">interpolate_eofs_between_doys</span><span class="p">(</span><span class="n">pp_eofs</span><span class="p">,</span> <span class="n">start_doy</span><span class="o">=</span><span class="n">interpolation_start_doy</span><span class="p">,</span>
+                                                <span class="n">end_doy</span><span class="o">=</span><span class="n">interpolation_end_doy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pp_eofs</span></div>
+
+
+<div class="viewcode-block" id="calc_eofs_for_doy"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_for_doy">[docs]</a><span class="k">def</span> <span class="nf">calc_eofs_for_doy</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates a pair of EOFs for a particular DOY.</span>
+
+<span class="sd">    An explicit internal implementation of the EOF approach is used.</span>
+
+<span class="sd">    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.</span>
+
+<span class="sd">    :param olrdata: The filtered OLR data to calculate the EOFs from.</span>
+<span class="sd">    :param doy: The DOY for which the EOFs are calculated.</span>
+<span class="sd">    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.</span>
+
+<span class="sd">    :return: An object containing the pair of EOFs together with diagnostic values.</span>
+
+<span class="sd">    .. seealso:: :meth:`calc_eofs_for_doy_using_eofs_package`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nlat</span> <span class="o">=</span> <span class="n">olrdata</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">nlong</span> <span class="o">=</span> <span class="n">olrdata</span><span class="o">.</span><span class="n">long</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">olr_maps_for_doy</span> <span class="o">=</span> <span class="n">olrdata</span><span class="o">.</span><span class="n">extract_olr_matrix_for_doy_range</span><span class="p">(</span><span class="n">doy</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                                                                <span class="n">strict_leap_year_treatment</span><span class="o">=</span><span class="n">strict_leap_year_treatment</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">olr_maps_for_doy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">nlat</span> <span class="o">*</span> <span class="n">nlong</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">olr_maps_for_doy</span><span class="p">,</span> <span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># vector: only one dimension. Length given by original longitude and latitude bins</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>  <span class="c1"># in some references, it is divided by (N-1), however, we follow Kutzbach (1967), in which it is only divided by N. In any case, the result should not differ much.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">R</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Covariance matrix is not symmetric within defined tolerance&quot;</span><span class="p">)</span>
+    <span class="n">L</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">L</span><span class="p">),</span> <span class="mf">0.</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Imaginary part of at least one Eigenvalue greater than expected. Neglecting it anyway&quot;</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">argsort</span><span class="p">()))</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+    <span class="n">total_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">explainedVariances</span> <span class="o">=</span> <span class="n">L</span> <span class="o">/</span> <span class="n">total_var</span>  <span class="c1"># See Kutzbach (1967), Eq 12</span>
+
+    <span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="p">[:,</span> <span class="n">order</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]),</span> <span class="mf">0.</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Imaginary part of one of the first two Eigenvectors greater than expected. Neglecting it anyway&quot;</span><span class="p">)</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
+    <span class="n">eof1_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">eof2_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">E</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">olrdata</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">olrdata</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">eof1_vec</span><span class="p">,</span> <span class="n">eof2_vec</span><span class="p">,</span>
+                       <span class="n">eigenvalues</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">explained_variances</span><span class="o">=</span><span class="n">explainedVariances</span><span class="p">,</span> <span class="n">no_observations</span><span class="o">=</span><span class="n">N</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calc_eofs_for_doy_using_eofs_package"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package">[docs]</a><span class="k">def</span> <span class="nf">calc_eofs_for_doy_using_eofs_package</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                         <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates a pair of EOFs for a particular DOY.</span>
+
+<span class="sd">    The external package :py:mod:`eofs` is used for the core calculation</span>
+
+<span class="sd">    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.</span>
+
+<span class="sd">    :param olrdata: The filtered OLR data to calculate the EOFs from.</span>
+<span class="sd">    :param doy: The DOY for which the EOFs are calculated.</span>
+<span class="sd">    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.</span>
+
+<span class="sd">    :return: An object containing the pair of EOFs together with diagnostic values.</span>
+
+<span class="sd">    .. seealso:: :meth:`calc_eofs_for_doy`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">eofs_package_available</span><span class="p">:</span>
+        <span class="n">nlat</span> <span class="o">=</span> <span class="n">olrdata</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">nlong</span> <span class="o">=</span> <span class="n">olrdata</span><span class="o">.</span><span class="n">long</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">olr_maps_for_doy</span> <span class="o">=</span> <span class="n">olrdata</span><span class="o">.</span><span class="n">extract_olr_matrix_for_doy_range</span><span class="p">(</span><span class="n">doy</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                                                                    <span class="n">strict_leap_year_treatment</span><span class="o">=</span><span class="n">strict_leap_year_treatment</span><span class="p">)</span>
+
+        <span class="n">ntime</span> <span class="o">=</span> <span class="n">olr_maps_for_doy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">ntime</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">nlat</span> <span class="o">*</span> <span class="n">nlong</span>
+        <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">olr_maps_for_doy</span><span class="p">,</span>
+                       <span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># vector: only one dimension. Length given by original longitude and latitude bins</span>
+        <span class="n">solver</span> <span class="o">=</span> <span class="n">eofs_package</span><span class="o">.</span><span class="n">Eof</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="c1"># Todo: Shpuld we care about complex values here?</span>
+        <span class="n">eofs</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">eofs</span><span class="p">(</span><span class="n">neofs</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">explainedVariances</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">varianceFraction</span><span class="p">()</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">eigenvalues</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">L</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">:</span>
+            <span class="c1"># This usually happens if the covariance matrix did not have full rank (e.g. N&lt;M). Missing Eigenvalues</span>
+            <span class="c1"># are 0 and can be simply padded here</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span> <span class="o">-</span> <span class="n">L</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">constant_values</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">explainedVariances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">explainedVariances</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span> <span class="o">-</span> <span class="n">explainedVariances</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+                                        <span class="n">constant_values</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">olrdata</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">olrdata</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eofs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eofs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]),</span>
+                           <span class="n">eigenvalues</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">explained_variances</span><span class="o">=</span><span class="n">explainedVariances</span><span class="p">,</span> <span class="n">no_observations</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ModuleNotFoundError</span><span class="p">(</span><span class="s2">&quot;eofs&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="correct_spontaneous_sign_changes_in_eof_series"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series">[docs]</a><span class="k">def</span> <span class="nf">correct_spontaneous_sign_changes_in_eof_series</span><span class="p">(</span><span class="n">eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
+                                                   <span class="n">doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.</span>
+
+<span class="sd">    Note that the sign of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,</span>
+<span class="sd">    which can be improved using this function. As long as this step is performed before computing the PCs, it will not</span>
+<span class="sd">    change the overall result.</span>
+
+<span class="sd">    Generally, the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous</span>
+<span class="sd">    DOY. The EOFs for DOY 1 are by default aligned with the original calculation by Kiladis (2014), resulting in a</span>
+<span class="sd">    an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off.</span>
+
+<span class="sd">    :param eofs: The EOF series for which the signs should be aligned.</span>
+<span class="sd">    :param doy1reference: If true, the EOFs of DOY 1 are aligned w.r.t to the original Kiladis (2014) calculation.</span>
+
+<span class="sd">    :return: The EOFs with aligned signs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">switched_eofs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">doy1reference</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">reference_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()))))</span> <span class="o">/</span> <span class="s2">&quot;sign_reference&quot;</span>
+        <span class="n">reference_eofs</span> <span class="o">=</span> <span class="n">eof</span><span class="o">.</span><span class="n">load_original_eofs_for_doy</span><span class="p">(</span><span class="n">reference_path</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">reference_eofs</span><span class="o">.</span><span class="n">lat</span> <span class="o">==</span> <span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">reference_eofs</span><span class="o">.</span><span class="n">long</span> <span class="o">==</span> <span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;References for the sign of the EOFs for DOY1 have to be interpolated to spatial grid of the&quot;</span>
+                          <span class="s2">&quot; target EOFs. Treat results with caution.&quot;</span><span class="p">)</span>
+            <span class="n">f1</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">interp2d</span><span class="p">(</span><span class="n">reference_eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">eof1map</span><span class="p">,</span>
+                                            <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+            <span class="n">eof1map_interpol</span> <span class="o">=</span> <span class="n">f1</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span>
+            <span class="n">f2</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">interp2d</span><span class="p">(</span><span class="n">reference_eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">eof2map</span><span class="p">,</span>
+                                            <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+            <span class="n">eof2map_interpol</span> <span class="o">=</span> <span class="n">f2</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span>
+            <span class="n">reference_eofs</span> <span class="o">=</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">eof1map_interpol</span><span class="p">,</span> <span class="n">eof2map_interpol</span><span class="p">)</span>
+        <span class="n">corrected_doy1</span> <span class="o">=</span> <span class="n">_correct_spontaneous_sign_change_of_individual_eof</span><span class="p">(</span><span class="n">reference_eofs</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">corrected_doy1</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">switched_eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corrected_doy1</span><span class="p">)</span>
+    <span class="n">previous_eof</span> <span class="o">=</span> <span class="n">corrected_doy1</span>
+    <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">corrected_eof</span> <span class="o">=</span> <span class="n">_correct_spontaneous_sign_change_of_individual_eof</span><span class="p">(</span><span class="n">previous_eof</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">))</span>
+        <span class="n">switched_eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corrected_eof</span><span class="p">)</span>
+        <span class="n">previous_eof</span> <span class="o">=</span> <span class="n">corrected_eof</span>
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">switched_eofs</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_correct_spontaneous_sign_change_of_individual_eof</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Switches the sign of a particular pair of EOFs (for a particular DOY) if necessary, so that is aligned with the</span>
+<span class="sd">    reference.</span>
+
+<span class="sd">    Note that the signs of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,</span>
+<span class="sd">    which can be improved using this function. As long as this step is performed before computing the PCs, it will not</span>
+<span class="sd">    change the overall result.</span>
+
+<span class="sd">    :param reference: The reference-EOFs. This is usually the EOF pair of the previous DOY.</span>
+<span class="sd">    :param target: The EOFs of which the signs should be switched</span>
+
+<span class="sd">    :return: The target EOFs with aligned signs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span> <span class="o">+</span> <span class="n">reference</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">))</span>
+            <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                <span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span> <span class="o">-</span> <span class="n">reference</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">))):</span>  <span class="c1"># if abs(sum) is lower than abs(diff), than the signs are different...</span>
+        <span class="n">eof1_switched</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">eof1_switched</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">eof2vector</span> <span class="o">+</span> <span class="n">reference</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">))</span>
+            <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                <span class="n">target</span><span class="o">.</span><span class="n">eof2vector</span> <span class="o">-</span> <span class="n">reference</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">))):</span>  <span class="c1"># if abs(sum) is lower than abs(diff), than the signs are different...</span>
+        <span class="n">eof2_switched</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">target</span><span class="o">.</span><span class="n">eof2vector</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">eof2_switched</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">eof2vector</span>
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span>
+                       <span class="n">target</span><span class="o">.</span><span class="n">long</span><span class="p">,</span>
+                       <span class="n">eof1_switched</span><span class="p">,</span>
+                       <span class="n">eof2_switched</span><span class="p">,</span>
+                       <span class="n">eigenvalues</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">eigenvalues</span><span class="p">,</span>
+                       <span class="n">explained_variances</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">explained_variances</span><span class="p">,</span>
+                       <span class="n">no_observations</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">no_observations</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="interpolate_eofs_between_doys"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys">[docs]</a><span class="k">def</span> <span class="nf">interpolate_eofs_between_doys</span><span class="p">(</span><span class="n">eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span> <span class="n">start_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">293</span><span class="p">,</span>
+                                  <span class="n">end_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">316</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.</span>
+
+<span class="sd">    This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,</span>
+<span class="sd">    the EOFs have also been replaced by a interpolation according to Kiladis (2014). However, the period stated in</span>
+<span class="sd">    Kiladis (2014) from 1 November to 8 November is be too short. The authors have confirmed that the right</span>
+<span class="sd">    interpolation period is from DOY 294 to DOY 315, which is used here as default value.</span>
+
+<span class="sd">    ATTENTION: The corresponding statistical values (e.g., the explained variances) are not changed by this routine.</span>
+<span class="sd">    So these values further on represent the original results of the PCA also for the interpolated EOFs.</span>
+
+<span class="sd">    :param eofs: The complete EOF series, in which the interpolation takes place.</span>
+<span class="sd">    :param start_doy: The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first</span>
+<span class="sd">        element, which will be replaced by the interpolation.</span>
+<span class="sd">    :param end_doy:  The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last</span>
+<span class="sd">        element, which will be replaced by the interpolation.</span>
+
+<span class="sd">    :return: The complete EOF series with the interpolated values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">()</span>
+    <span class="n">start_idx</span> <span class="o">=</span> <span class="n">start_doy</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">end_idx</span> <span class="o">=</span> <span class="n">end_doy</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">eof_len</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">eofs1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">eof_len</span><span class="p">))</span>
+    <span class="n">eofs2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">eof_len</span><span class="p">))</span>
+    <span class="c1"># Todo: Maybe this could be solved more efficiently</span>
+    <span class="c1"># by using internal numpy functions for multidimenasional operations</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">doy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">doys</span><span class="p">):</span>
+        <span class="n">eofs1</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eof1vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+        <span class="n">eofs2</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eof2vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">eof_len</span><span class="p">):</span>
+        <span class="n">eofs1</span><span class="p">[</span><span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">end_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">doys</span><span class="p">[</span><span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">end_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                                                        <span class="p">[</span><span class="n">doys</span><span class="p">[</span><span class="n">start_idx</span><span class="p">],</span> <span class="n">doys</span><span class="p">[</span><span class="n">end_idx</span><span class="p">]],</span>
+                                                        <span class="p">[</span><span class="n">eofs1</span><span class="p">[</span><span class="n">start_idx</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">eofs1</span><span class="p">[</span><span class="n">end_idx</span><span class="p">,</span> <span class="n">i</span><span class="p">]])</span>
+        <span class="n">eofs2</span><span class="p">[</span><span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">end_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">doys</span><span class="p">[</span><span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">end_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                                                        <span class="p">[</span><span class="n">doys</span><span class="p">[</span><span class="n">start_idx</span><span class="p">],</span> <span class="n">doys</span><span class="p">[</span><span class="n">end_idx</span><span class="p">]],</span>
+                                                        <span class="p">[</span><span class="n">eofs2</span><span class="p">[</span><span class="n">start_idx</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">eofs2</span><span class="p">[</span><span class="n">end_idx</span><span class="p">,</span> <span class="n">i</span><span class="p">]])</span>
+    <span class="n">interpolated_eofs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">doy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">doys</span><span class="p">):</span>
+        <span class="n">orig_eof</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+        <span class="n">interpolated_eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eofs1</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]),</span>
+                                             <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eofs2</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]),</span>
+                                             <span class="n">explained_variances</span><span class="o">=</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">explained_variances</span><span class="p">,</span>
+                                             <span class="n">eigenvalues</span><span class="o">=</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">eigenvalues</span><span class="p">,</span> <span class="n">no_observations</span><span class="o">=</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">no_observations</span><span class="p">)</span>
+                                 <span class="p">)</span>
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">interpolated_eofs</span><span class="p">)</span></div>
+
+
+<span class="c1"># #################PC Calculation</span>
+
+<div class="viewcode-block" id="calculate_pcs_from_olr"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calculate_pcs_from_olr">[docs]</a><span class="k">def</span> <span class="nf">calculate_pcs_from_olr</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span>
+                           <span class="n">eofdata</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
+                           <span class="n">period_start</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">,</span>
+                           <span class="n">period_end</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">,</span>
+                           <span class="n">use_quick_temporal_filter</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pc</span><span class="o">.</span><span class="n">PCData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This major function computes PCs according to the OMI algorithm based on given OLR data and previously calculated</span>
+<span class="sd">    EOFs.</span>
+
+<span class="sd">    :param olrdata: The OLR dataset. The spatial grid must fit to that of the EOFs</span>
+<span class="sd">    :param eofdata: The previously calculated DOY-dependent EOFs.</span>
+<span class="sd">    :param period_start: the beginning of the period, for which the PCs should be calculated.</span>
+<span class="sd">    :param period_end: the ending of the period, for which the PCs should be calculated.</span>
+<span class="sd">    :param use_quick_temporal_filter: There are two implementations of the temporal filtering: First, the original</span>
+<span class="sd">        Wheeler-Kiladis-Filter, which is closer to the original implementation while being slower (because it is based</span>
+<span class="sd">        on a 2-dim FFT) or a 1-dim FFT Filter. Setting this parameter to True uses the quicker 1-dim implementation. The</span>
+<span class="sd">        results are quite similar.</span>
+
+<span class="sd">    :return: The PC time series.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resticted_olr_data</span> <span class="o">=</span> <span class="n">olr</span><span class="o">.</span><span class="n">restrict_time_coverage</span><span class="p">(</span><span class="n">olrdata</span><span class="p">,</span> <span class="n">period_start</span><span class="p">,</span> <span class="n">period_end</span><span class="p">)</span>
+    <span class="n">resampled_olr_data</span> <span class="o">=</span> <span class="n">olr</span><span class="o">.</span><span class="n">interpolate_spatial_grid</span><span class="p">(</span><span class="n">resticted_olr_data</span><span class="p">,</span> <span class="n">eofdata</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">eofdata</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">use_quick_temporal_filter</span><span class="p">:</span>
+        <span class="n">filtered_olr_data</span> <span class="o">=</span> <span class="n">qfilter</span><span class="o">.</span><span class="n">filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing</span><span class="p">(</span><span class="n">resampled_olr_data</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">filtered_olr_data</span> <span class="o">=</span> <span class="n">wkfilter</span><span class="o">.</span><span class="n">filter_olr_for_mjo_pc_calculation</span><span class="p">(</span><span class="n">resampled_olr_data</span><span class="p">)</span>
+    <span class="n">raw_pcs</span> <span class="o">=</span> <span class="n">regress_3dim_data_onto_eofs</span><span class="p">(</span><span class="n">filtered_olr_data</span><span class="p">,</span> <span class="n">eofdata</span><span class="p">)</span>
+    <span class="n">normalization_factor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">raw_pcs</span><span class="o">.</span><span class="n">pc1</span><span class="p">)</span>
+    <span class="n">pc1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">raw_pcs</span><span class="o">.</span><span class="n">pc1</span><span class="p">,</span> <span class="n">normalization_factor</span><span class="p">)</span>
+    <span class="n">pc2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">raw_pcs</span><span class="o">.</span><span class="n">pc2</span><span class="p">,</span> <span class="n">normalization_factor</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pc</span><span class="o">.</span><span class="n">PCData</span><span class="p">(</span><span class="n">raw_pcs</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pc1</span><span class="p">,</span> <span class="n">pc2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calculate_pcs_from_olr_original_conditions"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calculate_pcs_from_olr_original_conditions">[docs]</a><span class="k">def</span> <span class="nf">calculate_pcs_from_olr_original_conditions</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span>
+                                               <span class="n">original_eof_dirname</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+                                               <span class="n">use_quick_temporal_filter</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pc</span><span class="o">.</span><span class="n">PCData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the OMI PCs for the original period using the original dataset (which have, however, to be provided</span>
+<span class="sd">    by the user himself.</span>
+
+<span class="sd">    :param olrdata: The original OLR data, which can be downloaded from</span>
+<span class="sd">        ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc</span>
+<span class="sd">    :param original_eof_dirname: Path to the original EOFs, which can be downloaded</span>
+<span class="sd">        from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ .</span>
+<span class="sd">        The contents of both remote directories should again be placed into sub directories *eof1* and *eof2*</span>
+<span class="sd">    :param use_quick_temporal_filter: see :func:`calculate_pcs_from_olr`</span>
+
+<span class="sd">    :return: The PCs, which should be similar to the original ones.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">period_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;1979-01-01&quot;</span><span class="p">)</span>
+    <span class="n">period_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;2018-08-28&quot;</span><span class="p">)</span>
+    <span class="n">eofs</span> <span class="o">=</span> <span class="n">eof</span><span class="o">.</span><span class="n">load_all_original_eofs_from_directory</span><span class="p">(</span><span class="n">original_eof_dirname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">calculate_pcs_from_olr</span><span class="p">(</span><span class="n">olrdata</span><span class="p">,</span>
+                                  <span class="n">eofs</span><span class="p">,</span>
+                                  <span class="n">period_start</span><span class="p">,</span>
+                                  <span class="n">period_end</span><span class="p">,</span>
+                                  <span class="n">use_quick_temporal_filter</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="regress_3dim_data_onto_eofs"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.regress_3dim_data_onto_eofs">[docs]</a><span class="k">def</span> <span class="nf">regress_3dim_data_onto_eofs</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">eofdata</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pc</span><span class="o">.</span><span class="n">PCData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Finds time-dependent coefficients w.r.t the DOY-dependent EOF basis for time-dependent spatially resolved data.</span>
+
+<span class="sd">    I.e. it finds the PCs for temporally resolved OLR data. But the function can also be used for other datasets,</span>
+<span class="sd">    as long as those datasets have the same structure like the the class :class:`mjoindices.olr_handling.OLRData`.</span>
+
+<span class="sd">    :param data: The data, for which the coefficients are sought. Should be an object of class</span>
+<span class="sd">        :class:`mjoindices.olr_handling.OLRData` or of similar structure.</span>
+<span class="sd">    :param eofdata: The DOY-dependent pairs of EOFs, like computed by, e.g., :func:`calc_eofs_from_olr`</span>
+
+<span class="sd">    :return: The time-dependent PCs as :class:` mjoindices.principal_components.PCData`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">lat</span> <span class="o">==</span> <span class="n">eofdata</span><span class="o">.</span><span class="n">lat</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Latitude grid of EOFs and OLR is not equal.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">long</span> <span class="o">==</span> <span class="n">eofdata</span><span class="o">.</span><span class="n">long</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Longitude grid of EOFs and OLR is not equal.&quot;</span><span class="p">)</span>
+    <span class="n">pc1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">pc2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">time</span><span class="p">):</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="n">olr_singleday</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_olr_for_date</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+        <span class="n">doy</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">calc_day_of_year</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">pc1_single</span><span class="p">,</span> <span class="n">pc2_single</span><span class="p">)</span> <span class="o">=</span> <span class="n">regress_vector_onto_eofs</span><span class="p">(</span>
+            <span class="n">eofdata</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span><span class="o">.</span><span class="n">reshape_to_vector</span><span class="p">(</span><span class="n">olr_singleday</span><span class="p">),</span>
+            <span class="n">eofdata</span><span class="o">.</span><span class="n">eof1vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">),</span>
+            <span class="n">eofdata</span><span class="o">.</span><span class="n">eof2vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">))</span>
+        <span class="n">pc1</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pc1_single</span>
+        <span class="n">pc2</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pc2_single</span>
+    <span class="k">return</span> <span class="n">pc</span><span class="o">.</span><span class="n">PCData</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">pc1</span><span class="p">,</span> <span class="n">pc2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="regress_vector_onto_eofs"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.regress_vector_onto_eofs">[docs]</a><span class="k">def</span> <span class="nf">regress_vector_onto_eofs</span><span class="p">(</span><span class="n">vector</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">eof1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">eof2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper method that finds the coefficients of the given vector with respect to the given basis of 2 EOFs.</span>
+
+<span class="sd">    The computed coefficients are the PCs in the terminology of the EOF analysis.</span>
+
+<span class="sd">    :param vector: The vector for which the coefficients in the EOF basis should be found.</span>
+<span class="sd">    :param eof1: EOF basis vector 1.</span>
+<span class="sd">    :param eof2: EOF basis vector 2.</span>
+
+<span class="sd">    :return: The two PCs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">eof_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">eof1</span><span class="p">,</span> <span class="n">eof2</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># Alternative implementation 1:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">eof_mat</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">pc1</span><span class="p">,</span> <span class="n">pc2</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">pc1</span><span class="p">,</span> <span class="n">pc2</span></div>
+
+    <span class="c1"># Alternative implementation 2:</span>
+    <span class="c1"># pseudo_inverse = np.linalg.pinv(eof_mat)</span>
+    <span class="c1"># pcs = np.matmul(pseudo_inverse, vector)</span>
+    <span class="c1"># return pcs[0], pcs[1]</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Christoph G. Hoffmann.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script src="../../../_static/jquery.js" type="text/javascript"></script>
+      <script src="../../../_static/underscore.js" type="text/javascript"></script>
+      <script src="../../../_static/doctools.js" type="text/javascript"></script>
+
+  
+
+  
+  
+    <script src="../../../_static/js/theme.js" type="text/javascript"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

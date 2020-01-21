@@ -1,0 +1,855 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <title>mjoindices.evaluation_tools &mdash; mjoindices  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css" />
+  
+
+  
+
+  
+        <link href="../../genindex.html" rel="index"
+              title="Index"/>
+        <link href="../../search.html" rel="search" title="Search"/>
+    <link href="../../index.html" rel="top" title="mjoindices  documentation"/>
+        <link href="../index.html" rel="up" title="Module code"/>
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../../index.html"> mjoindices
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text" />
+    <input name="check_keywords" type="hidden" value="yes" />
+    <input name="area" type="hidden" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html">API documentation (for running calculations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../index.html">mjoindices</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>mjoindices.evaluation_tools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mjoindices.evaluation_tools</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides a bunch of methods that help to evaluate the agreement of the OMI calculation by this package</span>
+<span class="sd">and the original calculation by Kiladis (2014).</span>
+<span class="sd">It is probably not of major relevance for the user of this package.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.</span>
+
+<span class="c1"># This file is part of mjoindices</span>
+
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+
+<span class="c1"># Contact: christoph.hoffmann@uni-greifswald.de</span>
+
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="k">import</span> <span class="n">Figure</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">import</span> <span class="nn">mjoindices.empirical_orthogonal_functions</span> <span class="k">as</span> <span class="nn">eof</span>
+<span class="kn">import</span> <span class="nn">mjoindices.principal_components</span> <span class="k">as</span> <span class="nn">pc</span>
+<span class="kn">import</span> <span class="nn">mjoindices.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+<span class="kn">from</span> <span class="nn">pandas.plotting</span> <span class="k">import</span> <span class="n">register_matplotlib_converters</span>
+
+<span class="n">register_matplotlib_converters</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="compute_vector_difference_quantity"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.compute_vector_difference_quantity">[docs]</a><span class="k">def</span> <span class="nf">compute_vector_difference_quantity</span><span class="p">(</span><span class="n">ref_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">percentage</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates a standardized difference between two vectors.</span>
+
+<span class="sd">    :param ref_vec: The reference vector.</span>
+<span class="sd">    :param vec: The vector to validate.</span>
+<span class="sd">    :param percentage: If true: calculation results will be in percent of the mean of the absolute reference values.</span>
+
+<span class="sd">    :return: A vector containing the difference.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">vec</span> <span class="o">-</span> <span class="n">ref_vec</span>
+    <span class="k">if</span> <span class="n">percentage</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ref_vec</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="calc_vector_agreement"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.calc_vector_agreement">[docs]</a><span class="k">def</span> <span class="nf">calc_vector_agreement</span><span class="p">(</span><span class="n">ref_vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">vec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">percentage</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">do_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates extended comparison statistics between two vectors.</span>
+
+<span class="sd">    :param ref_vec: The reference vector.</span>
+<span class="sd">    :param vec: The vector to validate.</span>
+<span class="sd">    :param percentage: If true: calculation results will be in percent of the mean of the absolute reference values.</span>
+<span class="sd">    :param do_print: If true, some statistical values will we printed to the console.</span>
+
+<span class="sd">    :return: A tuple containing values for the following quantities: correlation, mean of the differences, standard</span>
+<span class="sd">        deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">ref_vec</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">vec</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Vectors do not have the same lengths.&quot;</span><span class="p">)</span>
+    <span class="n">corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">ref_vec</span><span class="p">,</span> <span class="n">vec</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">diff_vec</span> <span class="o">=</span> <span class="n">compute_vector_difference_quantity</span><span class="p">(</span><span class="n">ref_vec</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">percentage</span><span class="o">=</span><span class="n">percentage</span><span class="p">)</span>
+    <span class="n">diff_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diff_vec</span><span class="p">)</span>
+    <span class="n">diff_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">diff_vec</span><span class="p">)</span>
+    <span class="n">diff_abs_percent68</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff_vec</span><span class="p">),</span> <span class="mf">68.</span><span class="p">)</span>
+    <span class="n">diff_abs_percent95</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff_vec</span><span class="p">),</span> <span class="mf">95.</span><span class="p">)</span>
+    <span class="n">diff_abs_percent99</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">diff_vec</span><span class="p">),</span> <span class="mi">99</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">do_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CorrelationCoefficient: </span><span class="si">%1.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">corr</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean of difference: </span><span class="si">%1.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">diff_mean</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stddev. of difference: </span><span class="si">%1.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">diff_std</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;68</span><span class="si">%%</span><span class="s2"> Percentile (abs. value of differences: </span><span class="si">%1.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">diff_abs_percent68</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;95</span><span class="si">%%</span><span class="s2"> Percentile (abs. value of differences: </span><span class="si">%1.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">diff_abs_percent95</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;99</span><span class="si">%%</span><span class="s2"> Percentile (abs. value of differences: </span><span class="si">%1.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">diff_abs_percent99</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">corr</span><span class="p">,</span> <span class="n">diff_mean</span><span class="p">,</span> <span class="n">diff_std</span><span class="p">,</span> <span class="n">diff_vec</span><span class="p">,</span> <span class="n">diff_abs_percent68</span><span class="p">,</span> <span class="n">diff_abs_percent95</span><span class="p">,</span> <span class="n">diff_abs_percent99</span></div>
+
+
+<div class="viewcode-block" id="calc_comparison_stats_for_eofs_all_doys"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys">[docs]</a><span class="k">def</span> <span class="nf">calc_comparison_stats_for_eofs_all_doys</span><span class="p">(</span><span class="n">eofs_ref</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
+                                            <span class="n">eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
+                                            <span class="n">eof_number</span><span class="p">,</span>
+                                            <span class="n">exclude_doy366</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                            <span class="n">percentage</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                            <span class="n">do_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates extended comparison statistics between calculated EOFs and reference EOFs.</span>
+
+<span class="sd">    :param recalc_eof: The EOFs to validate.</span>
+<span class="sd">    :param orig_eof: The reference EOFs.</span>
+<span class="sd">    :param exclude_doy366: If true, DOY 366 will be included in the calculation (sometimes worse agreement depending on</span>
+<span class="sd">        the leap year treatment mode).</span>
+<span class="sd">    :param percentage: If true: calculation results will be in percent of the mean of the absolute reference values.</span>
+<span class="sd">    :param do_print: If true, some characteristic values will we printed to the console.</span>
+
+<span class="sd">    :return: A tuple containing arrays with 366 or 365 elements each for the following quantities: correlation, mean</span>
+<span class="sd">        of the differences, standard deviation of the differences, and percentiles of the absolute differences</span>
+<span class="sd">        for 68%, 95%, and 99%.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">eof_number</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">eof_number</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Argument eof_number must be 1 or 2.&quot;</span><span class="p">)</span>
+    <span class="n">doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exclude_doy366</span><span class="p">:</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">diff_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">diff_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">diff_abs_percent68</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">diff_abs_percent95</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">diff_abs_percent99</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">doy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">doys</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">eof_number</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">eof_ref</span> <span class="o">=</span> <span class="n">eofs_ref</span><span class="o">.</span><span class="n">eof1vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+            <span class="n">eof_test</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eof1vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">eof_number</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">eof_ref</span> <span class="o">=</span> <span class="n">eofs_ref</span><span class="o">.</span><span class="n">eof2vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+            <span class="n">eof_test</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eof2vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">corr_single</span><span class="p">,</span> <span class="n">diff_mean_single</span><span class="p">,</span> <span class="n">diff_std_single</span><span class="p">,</span> <span class="n">diff_vec_single</span><span class="p">,</span> <span class="n">diff_abs_percent68_single</span><span class="p">,</span>
+         <span class="n">diff_abs_percent95_single</span><span class="p">,</span> <span class="n">diff_abs_percent99_single</span><span class="p">)</span> \
+            <span class="o">=</span> <span class="n">calc_vector_agreement</span><span class="p">(</span><span class="n">eof_ref</span><span class="p">,</span> <span class="n">eof_test</span><span class="p">,</span> <span class="n">percentage</span><span class="o">=</span><span class="n">percentage</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">corr</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_single</span>
+        <span class="n">diff_mean</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_mean_single</span>
+        <span class="n">diff_std</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_std_single</span>
+        <span class="n">diff_abs_percent68</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_abs_percent68_single</span>
+        <span class="n">diff_abs_percent95</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_abs_percent95_single</span>
+        <span class="n">diff_abs_percent99</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_abs_percent99_single</span>
+
+    <span class="k">if</span> <span class="n">do_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;########## Summary of EOF comparison for all DOYs (EOF </span><span class="si">%i</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">eof_number</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst Correlation (at DOY </span><span class="si">%i</span><span class="s2">): </span><span class="si">%1.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">doys</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">corr</span><span class="p">)],</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">corr</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst 99</span><span class="si">%%</span><span class="s2"> percentile (at DOY </span><span class="si">%i</span><span class="s2">): </span><span class="si">%1.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">doys</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">diff_abs_percent99</span><span class="p">)],</span>
+                                                            <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">diff_abs_percent99</span><span class="p">)))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Worst 68</span><span class="si">%%</span><span class="s2"> percentile (at DOY </span><span class="si">%i</span><span class="s2">): </span><span class="si">%1.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">doys</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">diff_abs_percent68</span><span class="p">)],</span>
+                                                            <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">diff_abs_percent68</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">corr</span><span class="p">,</span> <span class="n">diff_mean</span><span class="p">,</span> <span class="n">diff_std</span><span class="p">,</span> <span class="n">diff_abs_percent68</span><span class="p">,</span> <span class="n">diff_abs_percent95</span><span class="p">,</span> <span class="n">diff_abs_percent99</span></div>
+
+
+<div class="viewcode-block" id="plot_comparison_stats_for_eofs_all_doys"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys">[docs]</a><span class="k">def</span> <span class="nf">plot_comparison_stats_for_eofs_all_doys</span><span class="p">(</span><span class="n">recalc_eof</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
+                                            <span class="n">orig_eof</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
+                                            <span class="n">exclude_doy366</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                            <span class="n">do_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots extended comparison statistics between calculated EOFs and references EOFs.</span>
+
+<span class="sd">    Statistics of the differences will be shown for each DOY (DOY on the abscissa) and with one line each for EOF1 and</span>
+<span class="sd">    EOF2.</span>
+
+<span class="sd">    :param recalc_eof: The EOFs to compare.</span>
+<span class="sd">    :param orig_eof: The reference eofs.</span>
+<span class="sd">    :param exclude_doy366: If true, DOY 366 will be included in the plot (sometimes worse agreement depending on the</span>
+<span class="sd">        leap year treatment mode).</span>
+<span class="sd">    :param do_print: If true, some characteristic values will we printed to the console.</span>
+
+<span class="sd">    :return: The figure handle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exclude_doy366</span><span class="p">:</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">xlim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">doys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="p">(</span><span class="n">corr_1</span><span class="p">,</span> <span class="n">diff_mean_1</span><span class="p">,</span> <span class="n">diff_std_1</span><span class="p">,</span> <span class="n">diff_abs_percent68_1</span><span class="p">,</span> <span class="n">diff_abs_percent95_1</span><span class="p">,</span> <span class="n">diff_abs_percent99_1</span><span class="p">)</span>\
+        <span class="o">=</span> <span class="n">calc_comparison_stats_for_eofs_all_doys</span><span class="p">(</span><span class="n">orig_eof</span><span class="p">,</span> <span class="n">recalc_eof</span><span class="p">,</span> <span class="n">exclude_doy366</span><span class="o">=</span><span class="n">exclude_doy366</span><span class="p">,</span> <span class="n">eof_number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                  <span class="n">percentage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">corr_2</span><span class="p">,</span> <span class="n">diff_mean_2</span><span class="p">,</span> <span class="n">diff_std_2</span><span class="p">,</span> <span class="n">diff_abs_percent68_2</span><span class="p">,</span> <span class="n">diff_abs_percent95_2</span><span class="p">,</span> <span class="n">diff_abs_percent99_2</span><span class="p">)</span>\
+        <span class="o">=</span> <span class="n">calc_comparison_stats_for_eofs_all_doys</span><span class="p">(</span><span class="n">orig_eof</span><span class="p">,</span> <span class="n">recalc_eof</span><span class="p">,</span> <span class="n">exclude_doy366</span><span class="o">=</span><span class="n">exclude_doy366</span><span class="p">,</span> <span class="n">eof_number</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                                  <span class="n">percentage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+
+    <span class="n">fig_id</span> <span class="o">=</span> <span class="s2">&quot;plot_comparison_stats_for_eofs_all_doys&quot;</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">fig_id</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Comparison of EOFs for all DOYs&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Correlation&quot;</span><span class="p">)</span>
+    <span class="n">p11</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">corr_1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF1&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">p12</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">corr_2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF2&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Correlation&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="p">[</span><span class="n">p11</span><span class="p">,</span> <span class="n">p12</span><span class="p">])</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Mean of differences of EOF vector elements&quot;</span><span class="p">)</span>
+    <span class="n">p21</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_mean_1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF1&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">p22</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_mean_2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF2&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Mean [$\mathrm{W/m^2}$]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Standard deviation of differences of EOF vector elements&quot;</span><span class="p">)</span>
+    <span class="n">p31</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_std_1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF1&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">p32</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_std_2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF2&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Std.Dev. [$\mathrm{W/m^2}$]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Percentiles of absolute differences of EOF vector elements&quot;</span><span class="p">)</span>
+    <span class="n">p31</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_abs_percent99_1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;99</span><span class="si">% E</span><span class="s2">OF1&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">p32</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_abs_percent99_2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;99</span><span class="si">% E</span><span class="s2">OF2&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+    <span class="n">p33</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_abs_percent95_1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF1&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+    <span class="n">p34</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_abs_percent95_2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF2&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">)</span>
+    <span class="n">p35</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_abs_percent68_1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF1&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+    <span class="n">p36</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">diff_abs_percent68_2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF2&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Percent [$\mathrm{W/m^2}$]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;99%&quot;</span><span class="p">,</span> <span class="s2">&quot;95%&quot;</span><span class="p">,</span> <span class="s2">&quot;68%&quot;</span><span class="p">],</span> <span class="n">handles</span><span class="o">=</span><span class="p">[</span><span class="n">p31</span><span class="p">,</span> <span class="n">p33</span><span class="p">,</span> <span class="n">p35</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Day of year&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="plot_correlation_for_eofs_all_doys"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.plot_correlation_for_eofs_all_doys">[docs]</a><span class="k">def</span> <span class="nf">plot_correlation_for_eofs_all_doys</span><span class="p">(</span><span class="n">recalc_eof</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
+                                       <span class="n">orig_eof</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
+                                       <span class="n">exclude_doy366</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                       <span class="n">do_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                       <span class="n">full_value_range</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots the correlations between calculated EOFs and reference EOFs.</span>
+
+<span class="sd">    Correlations will be shown for each DOY (DOY on the abscissa) and with one line each for EOF1 and EOF2.</span>
+
+<span class="sd">    :param recalc_eof: The EOFs to validate.</span>
+<span class="sd">    :param orig_eof: The reference EOFs.</span>
+<span class="sd">    :param exclude_doy366: If False, DOY 366 will be included in the plot (sometimes worse correlation depending on the</span>
+<span class="sd">        leap year treatment mode).</span>
+<span class="sd">    :param do_print: If true, some characteristic values will we printed to the console.</span>
+<span class="sd">    :param full_value_range: If true, the ordinate spans the range from 0 to 1 instead of the used value range only.</span>
+<span class="sd">    :return: A handle to the figure.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exclude_doy366</span><span class="p">:</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">xlim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">doys</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="p">(</span><span class="n">corr_1</span><span class="p">,</span> <span class="n">diff_mean_1</span><span class="p">,</span> <span class="n">diff_std_1</span><span class="p">,</span> <span class="n">diff_abs_percent68_1</span><span class="p">,</span> <span class="n">diff_abs_percent95_1</span><span class="p">,</span> <span class="n">diff_abs_percent99_1</span><span class="p">)</span>\
+        <span class="o">=</span> <span class="n">calc_comparison_stats_for_eofs_all_doys</span><span class="p">(</span><span class="n">orig_eof</span><span class="p">,</span> <span class="n">recalc_eof</span><span class="p">,</span> <span class="n">exclude_doy366</span><span class="o">=</span><span class="n">exclude_doy366</span><span class="p">,</span> <span class="n">eof_number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                  <span class="n">percentage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">corr_2</span><span class="p">,</span> <span class="n">diff_mean_2</span><span class="p">,</span> <span class="n">diff_std_2</span><span class="p">,</span> <span class="n">diff_abs_percent68_2</span><span class="p">,</span> <span class="n">diff_abs_percent95_2</span><span class="p">,</span> <span class="n">diff_abs_percent99_2</span><span class="p">)</span>\
+        <span class="o">=</span> <span class="n">calc_comparison_stats_for_eofs_all_doys</span><span class="p">(</span><span class="n">orig_eof</span><span class="p">,</span> <span class="n">recalc_eof</span><span class="p">,</span> <span class="n">exclude_doy366</span><span class="o">=</span><span class="n">exclude_doy366</span><span class="p">,</span> <span class="n">eof_number</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                                  <span class="n">percentage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+
+    <span class="n">fig_id</span> <span class="o">=</span> <span class="s2">&quot;plot_correlation_for_eofs_all_doys&quot;</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">fig_id</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Correlation of EOFs for all DOYs&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span>
+    <span class="n">p11</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">corr_1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF1&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">p12</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doys</span><span class="p">,</span> <span class="n">corr_2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF2&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="p">[</span><span class="n">p11</span><span class="p">,</span> <span class="n">p12</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Day of year&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Correlation coefficient&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">full_value_range</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="plot_individual_eof_map_comparison"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.plot_individual_eof_map_comparison">[docs]</a><span class="k">def</span> <span class="nf">plot_individual_eof_map_comparison</span><span class="p">(</span><span class="n">orig_eof</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">,</span> <span class="n">compare_eof</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">,</span> <span class="n">doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shows the maps of EOFs 1 and 2 and a respective reference together with a map of differences between both.</span>
+
+<span class="sd">    :param orig_eof: The reference EOF data.</span>
+<span class="sd">    :param compare_eof: The EOF data to validate.</span>
+<span class="sd">    :param doy: The DOY, which is evaluated (only used for the figure title).</span>
+
+<span class="sd">    :return: The figure handle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="s2">&quot;ReproduceOriginalOMIPCs_ExplainedVariance_EOF_Comparison&quot;</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">doy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;EOF Recalculation for DOY </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">doy</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">eof1map</span><span class="p">,</span>
+                    <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;bwr&quot;</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;OLR Anomaly [W/m²]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Original EOF1&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Latitude [°]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">compare_eof</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">compare_eof</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">compare_eof</span><span class="o">.</span><span class="n">eof1map</span><span class="p">,</span>
+                    <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;bwr&quot;</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;OLR Anomaly [W/m²]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Recalculated EOF1&quot;</span><span class="p">)</span>
+
+    <span class="c1"># FIXME: Check that grids are equal</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">eof1map</span> <span class="o">-</span> <span class="n">compare_eof</span><span class="o">.</span><span class="n">eof1map</span><span class="p">,</span>
+                    <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;bwr&quot;</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;OLR Anomaly [W/m²]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Difference 1&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">eof2map</span><span class="p">,</span>
+                    <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;bwr&quot;</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;OLR Anomaly [W/m²]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Original EOF2&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Latitude [°]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Longitude [°]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">compare_eof</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">compare_eof</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">compare_eof</span><span class="o">.</span><span class="n">eof2map</span><span class="p">,</span>
+                    <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;bwr&quot;</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;OLR Anomaly [W/m²]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Recalculated EOF2&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Longitude [°]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">eof2map</span> <span class="o">-</span> <span class="n">compare_eof</span><span class="o">.</span><span class="n">eof2map</span><span class="p">,</span>
+                    <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;bwr&quot;</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;OLR Anomaly [W/m²]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Difference 2&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Longitude [°]&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="calc_comparison_stats_for_explained_variance"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.calc_comparison_stats_for_explained_variance">[docs]</a><span class="k">def</span> <span class="nf">calc_comparison_stats_for_explained_variance</span><span class="p">(</span><span class="n">ref_var</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                 <span class="n">calc_var</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                 <span class="n">do_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                                 <span class="n">exclude_doy366</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the comparison statistics of the explained variances for one EOF and all DOYs.</span>
+
+<span class="sd">    :param ref_var: The reference variances.</span>
+<span class="sd">    :param calc_var: The variances to compare.</span>
+<span class="sd">    :param do_print: If True, some statistical values will also be shown in the console.</span>
+<span class="sd">    :param exclude_doy366: If True, the data for DOY 366 will not be considered in the statistics.</span>
+
+<span class="sd">    :return: A tuple containing values for the following quantities: correlation, mean of the differences,</span>
+<span class="sd">        standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ref_data</span> <span class="o">=</span> <span class="n">ref_var</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">calc_data</span> <span class="o">=</span> <span class="n">calc_var</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exclude_doy366</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">do_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###### DOY 366 excluded&quot;</span><span class="p">)</span>
+        <span class="n">ref_data</span> <span class="o">=</span> <span class="n">ref_data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">calc_data</span> <span class="o">=</span> <span class="n">calc_data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">(</span><span class="n">corr</span><span class="p">,</span> <span class="n">diff_mean</span><span class="p">,</span> <span class="n">diff_std</span><span class="p">,</span> <span class="n">diff_vec</span><span class="p">,</span> <span class="n">diff_abs_percent68</span><span class="p">,</span> <span class="n">diff_abs_percent95</span><span class="p">,</span> <span class="n">diff_abs_percent99</span><span class="p">)</span>\
+        <span class="o">=</span> <span class="n">calc_vector_agreement</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">calc_data</span><span class="p">,</span> <span class="n">percentage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">corr</span><span class="p">,</span> <span class="n">diff_mean</span><span class="p">,</span> <span class="n">diff_std</span><span class="p">,</span> <span class="n">diff_vec</span><span class="p">,</span> <span class="n">diff_abs_percent68</span><span class="p">,</span> <span class="n">diff_abs_percent95</span><span class="p">,</span> <span class="n">diff_abs_percent99</span></div>
+
+
+<div class="viewcode-block" id="plot_comparison_stats_for_explained_variance"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance">[docs]</a><span class="k">def</span> <span class="nf">plot_comparison_stats_for_explained_variance</span><span class="p">(</span><span class="n">ref_var</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                 <span class="n">calc_var</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                 <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                                 <span class="n">do_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                                 <span class="n">exclude_doy366</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots the comparison of the explained variances for one EOF and for all DOYs.</span>
+
+<span class="sd">    :param ref_var: The reference variances.</span>
+<span class="sd">    :param calc_var: The variances to validate.</span>
+<span class="sd">    :param title: A title for the figure.</span>
+<span class="sd">    :param do_print: If True, some statistical values will also be shown in the console.</span>
+<span class="sd">    :param exclude_doy366: If True, the data for DOY 366 will not be considered in the statistics.</span>
+
+<span class="sd">    :return: The figure handle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">do_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##########&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ref_data</span> <span class="o">=</span> <span class="n">ref_var</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">calc_data</span> <span class="o">=</span> <span class="n">calc_var</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exclude_doy366</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">do_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###### DOY 366 excluded&quot;</span><span class="p">)</span>
+        <span class="n">ref_data</span> <span class="o">=</span> <span class="n">ref_data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">calc_data</span> <span class="o">=</span> <span class="n">calc_data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_vector_agreement</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">calc_data</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="calc_timeseries_agreement"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.calc_timeseries_agreement">[docs]</a><span class="k">def</span> <span class="nf">calc_timeseries_agreement</span><span class="p">(</span><span class="n">ref_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                              <span class="n">exclude_doy366</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">do_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates comparison values of two time series.</span>
+
+<span class="sd">    :param ref_data: The reference time series vector.</span>
+<span class="sd">    :param ref_time: The time grid of the reference.</span>
+<span class="sd">    :param data: The time series vector to validate.</span>
+<span class="sd">    :param time: The time grid of the time series to validate. It will be checked if this is similar to the time grid</span>
+<span class="sd">        of the reference.</span>
+<span class="sd">    :param exclude_doy366: If True, the data for DOY 366 will not be considered in the statistics.</span>
+<span class="sd">    :param do_print: If True, some statistical values will also be shown in the console.</span>
+
+<span class="sd">    :return: A tuple containing values for the following quantities: correlation, mean of the differences,</span>
+<span class="sd">        standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">ref_time</span> <span class="o">==</span> <span class="n">time</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Time series do not cover the same periods.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">exclude_doy366</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">do_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;###### DOY 366 excluded&quot;</span><span class="p">)</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">calc_day_of_year</span><span class="p">(</span><span class="n">ref_time</span><span class="p">)</span>
+        <span class="n">inds_used</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">doys</span> <span class="o">!=</span> <span class="mi">366</span><span class="p">)</span>
+        <span class="n">inds_not_used</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">doys</span> <span class="o">==</span> <span class="mi">366</span><span class="p">)</span>
+        <span class="n">calc_ref_data</span> <span class="o">=</span> <span class="n">ref_data</span><span class="p">[</span><span class="n">inds_used</span><span class="p">]</span>
+        <span class="n">calc_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">inds_used</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">do_print</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##### Complete time series&quot;</span><span class="p">)</span>
+        <span class="n">calc_ref_data</span> <span class="o">=</span> <span class="n">ref_data</span>
+        <span class="n">calc_data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="n">inds_used</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">),)</span>
+        <span class="n">inds_not_used</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">),)</span>
+
+    <span class="p">(</span><span class="n">corr</span><span class="p">,</span> <span class="n">diff_mean</span><span class="p">,</span> <span class="n">diff_std</span><span class="p">,</span> <span class="n">diff_ts</span><span class="p">,</span> <span class="n">diff_abs_percent68</span><span class="p">,</span> <span class="n">diff_abs_percent95</span><span class="p">,</span> <span class="n">diff_abs_percent99</span><span class="p">)</span>\
+        <span class="o">=</span> <span class="n">calc_vector_agreement</span><span class="p">(</span><span class="n">calc_ref_data</span><span class="p">,</span> <span class="n">calc_data</span><span class="p">,</span> <span class="n">percentage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">inds_used</span><span class="p">,</span> <span class="n">inds_not_used</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">diff_mean</span><span class="p">,</span> <span class="n">diff_std</span><span class="p">,</span> <span class="n">diff_ts</span><span class="p">,</span> <span class="n">diff_abs_percent68</span><span class="p">,</span> <span class="n">diff_abs_percent95</span><span class="p">,</span>
+            <span class="n">diff_abs_percent99</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_timeseries_agreement"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.plot_timeseries_agreement">[docs]</a><span class="k">def</span> <span class="nf">plot_timeseries_agreement</span><span class="p">(</span><span class="n">ref_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                              <span class="n">ref_time</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                              <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                              <span class="n">time</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                              <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                              <span class="n">do_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots a graphical comparison of 2 time series.</span>
+
+<span class="sd">    Shows 4 subplots with 1) the data, 2) the difference, 3) a scatterplot of the data, and 4) a histogram of the</span>
+<span class="sd">    differences.</span>
+
+<span class="sd">    :param ref_data: The time series reference vector.</span>
+<span class="sd">    :param ref_time: The time grid of the reference.</span>
+<span class="sd">    :param data: The time series vector to validate.</span>
+<span class="sd">    :param time: The time grid of the data to validate. It will be checked if this is similar to the time grid of the reference.</span>
+<span class="sd">    :param title: A title for the plot. Use this to explain the quantity which is compared evaluated with the plot.</span>
+<span class="sd">    :param do_print: If True, some statistical values will also be shown in the console.</span>
+
+<span class="sd">    :return: The figure handle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">do_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##########&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">tempa</span><span class="p">,</span> <span class="n">tempb</span><span class="p">,</span> <span class="n">corr_complete</span><span class="p">,</span> <span class="n">diff_mean_complete</span><span class="p">,</span> <span class="n">diff_std_complete</span><span class="p">,</span> <span class="n">diff_ts_abs_complete</span><span class="p">,</span>
+     <span class="n">diff_abs_percent68_complete</span><span class="p">,</span> <span class="n">diff_abs_percent95_complete</span><span class="p">,</span> <span class="n">diff_abs_percent99_complete</span><span class="p">)</span> \
+        <span class="o">=</span> <span class="n">calc_timeseries_agreement</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">exclude_doy366</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+
+    <span class="p">(</span><span class="n">doy_not_366_inds</span><span class="p">,</span> <span class="n">doy366_inds</span><span class="p">,</span> <span class="n">corr_not366</span><span class="p">,</span> <span class="n">diff_mean_not366</span><span class="p">,</span> <span class="n">diff_std_not366</span><span class="p">,</span> <span class="n">diff_ts_abs_not366</span><span class="p">,</span>
+     <span class="n">diff_abs_percent68_not366</span><span class="p">,</span> <span class="n">diff_abs_percent95_not366</span><span class="p">,</span> <span class="n">diff_abs_percent99_not366</span><span class="p">)</span> \
+        <span class="o">=</span> <span class="n">calc_timeseries_agreement</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">exclude_doy366</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+
+    <span class="n">ref_data_not366</span> <span class="o">=</span> <span class="n">ref_data</span><span class="p">[</span><span class="n">doy_not_366_inds</span><span class="p">]</span>
+    <span class="n">data_not366</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">doy_not_366_inds</span><span class="p">]</span>
+
+    <span class="n">fig_id</span> <span class="o">=</span> <span class="s2">&quot;evaluate_timeseries_agreement&quot;</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig_id</span> <span class="o">=</span> <span class="n">fig_id</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">title</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">fig_id</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Time series&quot;</span><span class="p">)</span>
+    <span class="n">p11</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">ref_data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">)</span>
+    <span class="n">p12</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Recalculation&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Data [units of quantity]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Difference&quot;</span><span class="p">)</span>
+    <span class="n">p21</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">diff_ts_abs_complete</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+    <span class="n">p22</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="n">doy_not_366_inds</span><span class="p">],</span> <span class="n">diff_ts_abs_not366</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Difference [units of quantity]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Scatterplot&quot;</span><span class="p">)</span>
+    <span class="n">p31</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref_data_not366</span><span class="p">,</span> <span class="n">data_not366</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">p32</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref_data</span><span class="p">[</span><span class="n">doy366_inds</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">doy366_inds</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Reference data [units of quantity]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Data [units of quantity]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">bins2</span><span class="p">,</span> <span class="n">patches</span><span class="p">)</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">diff_ts_abs_not366</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Difference [units of quantity]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Number of occurrences&quot;</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">diff_std_not366</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">diff_mean_not366</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bins2</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="p">(</span><span class="n">bins2</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)),</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="plot_vector_agreement"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.plot_vector_agreement">[docs]</a><span class="k">def</span> <span class="nf">plot_vector_agreement</span><span class="p">(</span><span class="n">ref_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">do_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Figure</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot a graphical comparison of 2 vectors.</span>
+
+<span class="sd">    Shows 4 subplots with 1) the data, 2) the difference, 3) a scatterplot of the data, and 4) a histogram of</span>
+<span class="sd">    the differences.</span>
+
+<span class="sd">    :param ref_data: The reference vector.</span>
+<span class="sd">    :param data: The vector to validate.</span>
+<span class="sd">    :param title: A title for the plot. Use this to explain the quantity which is evaluated with the plot.</span>
+<span class="sd">    :param do_print: If True, some statistics values will also be shown in the console.</span>
+
+<span class="sd">    :return: The figure handle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">do_print</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;##########&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">corr</span><span class="p">,</span> <span class="n">diff_mean</span><span class="p">,</span> <span class="n">diff_std</span><span class="p">,</span> <span class="n">diff_vec</span><span class="p">,</span> <span class="n">diff_abs_percent68</span><span class="p">,</span> <span class="n">diff_abs_percent95</span><span class="p">,</span> <span class="n">diff_abs_percent99</span> <span class="o">=</span> \
+        <span class="n">calc_vector_agreement</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">percentage</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">do_print</span><span class="o">=</span><span class="n">do_print</span><span class="p">)</span>
+
+    <span class="n">fig_id</span> <span class="o">=</span> <span class="s2">&quot;evaluate_vector_agreement&quot;</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig_id</span> <span class="o">=</span> <span class="n">fig_id</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">title</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">fig_id</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Data&quot;</span><span class="p">)</span>
+    <span class="n">p11</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">)</span>
+    <span class="n">p12</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Recalculation&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Position in vector&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Data [units of quantity]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Difference&quot;</span><span class="p">)</span>
+    <span class="n">p21</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">diff_vec</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Position in vector&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Difference [units of quantity]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Scatterplot&quot;</span><span class="p">)</span>
+    <span class="n">p31</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Reference data [units of quantity]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Data [units of quantity]&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">bins2</span><span class="p">,</span> <span class="n">patches</span><span class="p">)</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">diff_vec</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Difference [units of quantity]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Number of occurrences&quot;</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">diff_std</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">diff_mean</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bins2</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="p">(</span><span class="n">bins2</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)),</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="plot_comparison_orig_calc_pcs"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs">[docs]</a><span class="k">def</span> <span class="nf">plot_comparison_orig_calc_pcs</span><span class="p">(</span><span class="n">calc_pcs</span><span class="p">:</span> <span class="n">pc</span><span class="o">.</span><span class="n">PCData</span><span class="p">,</span>
+                                  <span class="n">orig_pcs</span><span class="p">:</span> <span class="n">pc</span><span class="o">.</span><span class="n">PCData</span><span class="p">,</span>
+                                  <span class="n">start_date</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                  <span class="n">end_date</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots both PC time series (one in a subplot each) of the recalculation and a reference.</span>
+
+<span class="sd">    The period to plot can be adjusted.</span>
+
+<span class="sd">    :param calc_pcs: The recalculated PC time series.</span>
+<span class="sd">    :param orig_pcs: The reference PC time series.</span>
+<span class="sd">    :param start_date: Start of the period to plot. If None, the whole period will be plotted.</span>
+<span class="sd">    :param end_date: End of the period to plot. If None, the whole period will be plotted.</span>
+
+<span class="sd">    :return: The figure handle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="s2">&quot;plot_comparison_orig_calc_pcs&quot;</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;PC Recalculation&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Principal Component 1&quot;</span><span class="p">)</span>
+    <span class="n">p1</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">orig_pcs</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">orig_pcs</span><span class="o">.</span><span class="n">pc1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Original&quot;</span><span class="p">)</span>
+    <span class="n">p2</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">calc_pcs</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">calc_pcs</span><span class="o">.</span><span class="n">pc1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Recalculation&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;PC1 [1]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">))</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Principal Component 2&quot;</span><span class="p">)</span>
+    <span class="n">p3</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">orig_pcs</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">orig_pcs</span><span class="o">.</span><span class="n">pc2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Original&quot;</span><span class="p">)</span>
+    <span class="n">p4</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">calc_pcs</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">calc_pcs</span><span class="o">.</span><span class="n">pc2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Recalculation&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">end_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;PC2 [1]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<span class="k">def</span> <span class="nf">_explained_variance_file_converter</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[ \[;\]]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)))</span>
+
+
+<div class="viewcode-block" id="load_omi_explained_variance"><a class="viewcode-back" href="../../api/evaluation_tools.html#mjoindices.evaluation_tools.load_omi_explained_variance">[docs]</a><span class="k">def</span> <span class="nf">load_omi_explained_variance</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads original explained variance files provided by Juliana Dias.</span>
+
+<span class="sd">    :param filename: The file to load.</span>
+
+<span class="sd">    :return: A tuple containing two arrays, for EOF1 and EOF2, respectively.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span>
+                         <span class="n">converters</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">_explained_variance_file_converter</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="n">_explained_variance_file_converter</span><span class="p">},</span>
+                         <span class="n">skip_header</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">var1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">var2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">var1</span><span class="p">,</span> <span class="n">var2</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Christoph G. Hoffmann.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script src="../../_static/jquery.js" type="text/javascript"></script>
+      <script src="../../_static/underscore.js" type="text/javascript"></script>
+      <script src="../../_static/doctools.js" type="text/javascript"></script>
+
+  
+
+  
+  
+    <script src="../../_static/js/theme.js" type="text/javascript"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

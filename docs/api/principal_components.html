@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <title>Module mjoindices.principal_components &mdash; mjoindices  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css" />
+  
+
+  
+
+  
+        <link href="../genindex.html" rel="index"
+              title="Index"/>
+        <link href="../search.html" rel="search" title="Search"/>
+    <link href="../index.html" rel="top" title="mjoindices  documentation"/>
+        <link href="apidoc.html" rel="up" title="API documentation (for running calculations)"/>
+        <link href="empirical_orthogonal_functions.html" rel="next" title="Module mjoindices.empirical_orthogonal_functions"/>
+        <link href="olr_handling.html" rel="prev" title="Module mjoindices.olr_handling"/>
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../index.html"> mjoindices
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text" />
+    <input name="check_keywords" type="hidden" value="yes" />
+    <input name="area" type="hidden" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.principal_components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html">Module mjoindices.empirical_orthogonal_functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../index.html">mjoindices</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="apidoc.html">API documentation (for running calculations)</a> &raquo;</li>
+        
+      <li>Module mjoindices.principal_components</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/principal_components.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mjoindices.principal_components">
+<span id="module-mjoindices-principal-components"></span><h1>Module mjoindices.principal_components<a class="headerlink" href="#module-mjoindices.principal_components" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="mjoindices.principal_components.PCData">
+<em class="property">class </em><code class="descclassname">mjoindices.principal_components.</code><code class="descname">PCData</code><span class="sig-paren">(</span><em>time: numpy.ndarray</em>, <em>pc1: numpy.ndarray</em>, <em>pc2: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/mjoindices/principal_components.html#PCData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.PCData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class as a container for the principal component (PC) data.</p>
+<p>The basic PC computation <a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calculate_pcs_from_olr" title="mjoindices.omi.omi_calculator.calculate_pcs_from_olr"><code class="xref py py-func docutils literal"><span class="pre">mjoindices.omi.omi_calculator.calculate_pcs_from_olr()</span></code></a> will return an object of this
+class as a major result of this package.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>time</strong> – Array containing the <code class="xref py py-class docutils literal"><span class="pre">numpy.datetime64</span></code> dates.</li>
+<li><strong>pc1</strong> – Array containing the values of PC1 (has to be of same length as the time array).</li>
+<li><strong>pc2</strong> – Array containing the values of PC2 (has to be of same length as the time array).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="mjoindices.principal_components.PCData.pc1">
+<code class="descname">pc1</code><a class="headerlink" href="#mjoindices.principal_components.PCData.pc1" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time series of the PC1 values.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mjoindices.principal_components.PCData.pc2">
+<code class="descname">pc2</code><a class="headerlink" href="#mjoindices.principal_components.PCData.pc2" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time series of the PC2 values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mjoindices.principal_components.PCData.save_pcs_to_txt_file">
+<code class="descname">save_pcs_to_txt_file</code><span class="sig-paren">(</span><em>filename: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/mjoindices/principal_components.html#PCData.save_pcs_to_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.PCData.save_pcs_to_txt_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the computed PCs to a text file.</p>
+<p>Please note that the file format is not exactly that of the original data files. However, a
+suitable reader is available in this module for both formats
+(<a class="reference internal" href="#mjoindices.principal_components.load_pcs_from_txt_file" title="mjoindices.principal_components.load_pcs_from_txt_file"><code class="xref py py-func docutils literal"><span class="pre">mjoindices.principal_components.load_pcs_from_txt_file()</span></code></a> and
+<a class="reference internal" href="#mjoindices.principal_components.load_original_pcs_from_txt_file" title="mjoindices.principal_components.load_original_pcs_from_txt_file"><code class="xref py py-func docutils literal"><span class="pre">mjoindices.principal_components.load_original_pcs_from_txt_file()</span></code></a>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – The full filename.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mjoindices.principal_components.PCData.time">
+<code class="descname">time</code><a class="headerlink" href="#mjoindices.principal_components.PCData.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time grid of the PC time series as array of <code class="xref py py-class docutils literal"><span class="pre">numpy.datetime64</span></code> elements.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.principal_components.load_original_pcs_from_txt_file">
+<code class="descclassname">mjoindices.principal_components.</code><code class="descname">load_original_pcs_from_txt_file</code><span class="sig-paren">(</span><em>filename: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/principal_components.html#load_original_pcs_from_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.load_original_pcs_from_txt_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the PCs of OMI, which are stored in the original file format.
+Particularly, the following file can be loaded: <a class="reference external" href="https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt">https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt</a></p>
+<p>Note that the present software package stores the PCs slightly different. Those files can be loaded with
+<code class="xref py py-func docutils literal"><span class="pre">see</span> <span class="pre">load_pcs_from_txt_file()</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – Path to the PC file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The original PC data.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.principal_components.load_pcs_from_txt_file">
+<code class="descclassname">mjoindices.principal_components.</code><code class="descname">load_pcs_from_txt_file</code><span class="sig-paren">(</span><em>filename: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/principal_components.html#load_pcs_from_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.load_pcs_from_txt_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the PCs of OMI, which were previously saved with this package
+(<a class="reference internal" href="#mjoindices.principal_components.PCData.save_pcs_to_txt_file" title="mjoindices.principal_components.PCData.save_pcs_to_txt_file"><code class="xref py py-func docutils literal"><span class="pre">mjoindices.principal_components.PCData.save_pcs_to_txt_file()</span></code></a>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – Path to the PC file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The PC data.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+      
+        <a accesskey="n" class="btn btn-neutral float-right" href="empirical_orthogonal_functions.html" rel="next" title="Module mjoindices.empirical_orthogonal_functions">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a accesskey="p" class="btn btn-neutral" href="olr_handling.html" rel="prev" title="Module mjoindices.olr_handling"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Christoph G. Hoffmann.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script src="../_static/jquery.js" type="text/javascript"></script>
+      <script src="../_static/underscore.js" type="text/javascript"></script>
+      <script src="../_static/doctools.js" type="text/javascript"></script>
+
+  
+
+  
+  
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

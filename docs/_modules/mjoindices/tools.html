@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <title>mjoindices.tools &mdash; mjoindices  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css" />
+  
+
+  
+
+  
+        <link href="../../genindex.html" rel="index"
+              title="Index"/>
+        <link href="../../search.html" rel="search" title="Search"/>
+    <link href="../../index.html" rel="top" title="mjoindices  documentation"/>
+        <link href="../index.html" rel="up" title="Module code"/>
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../../index.html"> mjoindices
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text" />
+    <input name="check_keywords" type="hidden" value="yes" />
+    <input name="area" type="hidden" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html">API documentation (for running calculations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../../index.html">mjoindices</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>mjoindices.tools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mjoindices.tools</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+
+<span class="c1"># Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.</span>
+
+<span class="c1"># This file is part of mjoindices</span>
+
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+
+<span class="c1"># Contact: christoph.hoffmann@uni-greifswald.de</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="calc_day_of_year"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.calc_day_of_year">[docs]</a><span class="k">def</span> <span class="nf">calc_day_of_year</span><span class="p">(</span><span class="n">date</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the days of the year (DOYs) for an individual date or an array of dates.</span>
+
+<span class="sd">    :param date: The date (or the dates), given as (NumPy array of) :class:`numpy.datetime64` value(s).</span>
+
+<span class="sd">    :return: the DOY (or the DOYs) as (NumPy array of) int value(s).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">date</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;&lt;M8[ns]&quot;</span><span class="p">:</span>
+            <span class="c1"># work around a bug, which prevents datetime64[ns] from being converted correctly to dt.datetime.</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;datetime64[us]&quot;</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
+        <span class="n">time_fragments</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">time_fragments</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_day_of_year</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="find_doy_ranges_in_dates"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.find_doy_ranges_in_dates">[docs]</a><span class="k">def</span> <span class="nf">find_doy_ranges_in_dates</span><span class="p">(</span><span class="n">dates</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">center_doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                             <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Finds the indices in a given array of dates that fit into a particular window of DOYs.</span>
+
+<span class="sd">    This task sounds trivial, but is a little bit complicated by the appearance of leap years.</span>
+
+<span class="sd">    :param dates: The array of dates as :class:`numpy.datetime64` values.</span>
+<span class="sd">    :param center_doy: The center of the wanted window.</span>
+<span class="sd">    :param window_length: the length of the window to both sides  of the center in days.</span>
+<span class="sd">        The window spans 2*window_length+1 days in total (for exceptions see below).</span>
+<span class="sd">    :param strict_leap_year_treatmenmt: distinguishes between 2 different methods of constructing the DOY range window.</span>
+<span class="sd">        1: Setting the switch to False will use a pragmatic implementation in which the start and end of the DOY window</span>
+<span class="sd">        is directly computed as distance in units of DOYs. 2: Setting the switch to True will transfer the DOYs to</span>
+<span class="sd">        actual calender dates and will calculate the start and end of the window also as calender dates using</span>
+<span class="sd">        built-in numpy datetime functions. In the context of the EOF calculation, the setting has major implications</span>
+<span class="sd">        only for the EOFs calculated for DOY 366 and causes only minor differences for the other DOYs. The results for</span>
+<span class="sd">        the setting False are closer to the original values, and approximately the same total number of calender days</span>
+<span class="sd">        covered by the window is found for each center DOY including 366. However, the length of the window is not</span>
+<span class="sd">        guaranteed to be 2*window_length+1, but can also be 2*window_length+2 if the window crosses the ending of a leap</span>
+<span class="sd">        year. The setting True is somewhat more stringently implemented. The window length is always 2*window_length+1,</span>
+<span class="sd">        however, the number of calender days covered by a window is reduced by approximately a factor of 4 for</span>
+<span class="sd">        center_doy=366, since a window is found only during leap years at all.</span>
+
+<span class="sd">    :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">doys</span> <span class="o">=</span> <span class="n">calc_day_of_year</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">strict_leap_year_treatment</span><span class="p">:</span>
+        <span class="n">center_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">doys</span> <span class="o">==</span> <span class="n">center_doy</span><span class="p">)</span>
+
+        <span class="c1"># switch from DOYs to real dates to use built-in leap year functionality</span>
+        <span class="n">startdates</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="n">center_inds</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="n">window_length</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">)</span>
+        <span class="n">too_early_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">startdates</span> <span class="o">&lt;</span> <span class="n">dates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">startdates</span><span class="p">[</span><span class="n">too_early_inds</span><span class="p">]</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">enddates</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="n">center_inds</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="n">window_length</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">)</span>
+        <span class="n">too_late_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">enddates</span> <span class="o">&gt;</span> <span class="n">dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">enddates</span><span class="p">[</span><span class="n">too_late_inds</span><span class="p">]</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">resulting_idxlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ind</span><span class="p">,</span> <span class="n">startdate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">startdates</span><span class="p">):</span>
+            <span class="n">one_window_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">((</span><span class="n">dates</span> <span class="o">&gt;=</span> <span class="n">startdates</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">dates</span> <span class="o">&lt;=</span> <span class="n">enddates</span><span class="p">[</span><span class="n">ind</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">resulting_idxlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">resulting_idxlist</span><span class="p">,</span> <span class="n">one_window_indices</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lower_limit</span> <span class="o">=</span> <span class="n">center_doy</span> <span class="o">-</span> <span class="n">window_length</span>
+        <span class="k">if</span> <span class="n">lower_limit</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">lower_limit</span> <span class="o">=</span> <span class="n">lower_limit</span> <span class="o">+</span> <span class="mi">365</span>
+        <span class="n">upper_limit</span> <span class="o">=</span> <span class="n">center_doy</span> <span class="o">+</span> <span class="n">window_length</span>
+        <span class="k">if</span> <span class="n">upper_limit</span> <span class="o">&gt;</span> <span class="mi">365</span><span class="p">:</span>
+            <span class="n">upper_limit</span> <span class="o">=</span> <span class="n">upper_limit</span> <span class="o">-</span> <span class="mi">365</span>
+
+        <span class="k">if</span> <span class="n">lower_limit</span> <span class="o">&lt;=</span> <span class="n">upper_limit</span><span class="p">:</span>
+            <span class="n">inds_consider</span> <span class="o">=</span> <span class="p">((</span><span class="n">doys</span> <span class="o">&gt;=</span> <span class="n">lower_limit</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">doys</span> <span class="o">&lt;=</span> <span class="n">upper_limit</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inds_consider</span> <span class="o">=</span> <span class="p">((</span><span class="n">doys</span> <span class="o">&gt;=</span> <span class="n">lower_limit</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">doys</span> <span class="o">&lt;=</span> <span class="n">upper_limit</span><span class="p">))</span>
+        <span class="n">resulting_idxlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">inds_consider</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">resulting_idxlist</span><span class="p">),</span> <span class="n">doys</span><span class="p">[</span><span class="n">resulting_idxlist</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="doy_list"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.doy_list">[docs]</a><span class="k">def</span> <span class="nf">doy_list</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.</span>
+<span class="sd">    Useful, e.g., as axis for plotting.</span>
+
+<span class="sd">    :return: The doy array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">367</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Christoph G. Hoffmann.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script src="../../_static/jquery.js" type="text/javascript"></script>
+      <script src="../../_static/underscore.js" type="text/javascript"></script>
+      <script src="../../_static/doctools.js" type="text/javascript"></script>
+
+  
+
+  
+  
+    <script src="../../_static/js/theme.js" type="text/javascript"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

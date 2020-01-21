@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <title>Module mjoindices.tools &mdash; mjoindices  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css" />
+  
+
+  
+
+  
+        <link href="../genindex.html" rel="index"
+              title="Index"/>
+        <link href="../search.html" rel="search" title="Search"/>
+    <link href="../index.html" rel="top" title="mjoindices  documentation"/>
+        <link href="apidoc.html" rel="up" title="API documentation (for running calculations)"/>
+        <link href="evaluation_tools.html" rel="next" title="Module mjoindices.evaluation_tools"/>
+        <link href="quick_temporal_filter.html" rel="prev" title="Module mjoindices.omi.quick_temporal_filter"/>
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../index.html"> mjoindices
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text" />
+    <input name="check_keywords" type="hidden" value="yes" />
+    <input name="area" type="hidden" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html">Module mjoindices.omi.wheeler_kiladis_mjo_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_temporal_filter.html">Module mjoindices.omi.quick_temporal_filter</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html">Module mjoindices.evaluation_tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../index.html">mjoindices</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="apidoc.html">API documentation (for running calculations)</a> &raquo;</li>
+        
+      <li>Module mjoindices.tools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/tools.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mjoindices.tools">
+<span id="module-mjoindices-tools"></span><h1>Module mjoindices.tools<a class="headerlink" href="#module-mjoindices.tools" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="mjoindices.tools.calc_day_of_year">
+<code class="descclassname">mjoindices.tools.</code><code class="descname">calc_day_of_year</code><span class="sig-paren">(</span><em>date: typing.Union[numpy.datetime64, numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; typing.Union[int, numpy.ndarray]<a class="reference internal" href="../_modules/mjoindices/tools.html#calc_day_of_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.tools.calc_day_of_year" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the days of the year (DOYs) for an individual date or an array of dates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>date</strong> – The date (or the dates), given as (NumPy array of) <code class="xref py py-class docutils literal"><span class="pre">numpy.datetime64</span></code> value(s).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the DOY (or the DOYs) as (NumPy array of) int value(s).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.tools.doy_list">
+<code class="descclassname">mjoindices.tools.</code><code class="descname">doy_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; &lt;built-in function array&gt;<a class="reference internal" href="../_modules/mjoindices/tools.html#doy_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.tools.doy_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.
+Useful, e.g., as axis for plotting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The doy array.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.tools.find_doy_ranges_in_dates">
+<code class="descclassname">mjoindices.tools.</code><code class="descname">find_doy_ranges_in_dates</code><span class="sig-paren">(</span><em>dates: numpy.ndarray</em>, <em>center_doy: int</em>, <em>window_length: int</em>, <em>strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; typing.Tuple<a class="reference internal" href="../_modules/mjoindices/tools.html#find_doy_ranges_in_dates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.tools.find_doy_ranges_in_dates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the indices in a given array of dates that fit into a particular window of DOYs.</p>
+<p>This task sounds trivial, but is a little bit complicated by the appearance of leap years.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dates</strong> – The array of dates as <code class="xref py py-class docutils literal"><span class="pre">numpy.datetime64</span></code> values.</li>
+<li><strong>center_doy</strong> – The center of the wanted window.</li>
+<li><strong>window_length</strong> – the length of the window to both sides  of the center in days.
+The window spans 2*window_length+1 days in total (for exceptions see below).</li>
+<li><strong>strict_leap_year_treatmenmt</strong> – distinguishes between 2 different methods of constructing the DOY range window.
+1: Setting the switch to False will use a pragmatic implementation in which the start and end of the DOY window
+is directly computed as distance in units of DOYs. 2: Setting the switch to True will transfer the DOYs to
+actual calender dates and will calculate the start and end of the window also as calender dates using
+built-in numpy datetime functions. In the context of the EOF calculation, the setting has major implications
+only for the EOFs calculated for DOY 366 and causes only minor differences for the other DOYs. The results for
+the setting False are closer to the original values, and approximately the same total number of calender days
+covered by the window is found for each center DOY including 366. However, the length of the window is not
+guaranteed to be 2*window_length+1, but can also be 2*window_length+2 if the window crosses the ending of a leap
+year. The setting True is somewhat more stringently implemented. The window length is always 2*window_length+1,
+however, the number of calender days covered by a window is reduced by approximately a factor of 4 for
+center_doy=366, since a window is found only during leap years at all.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+      
+        <a accesskey="n" class="btn btn-neutral float-right" href="evaluation_tools.html" rel="next" title="Module mjoindices.evaluation_tools">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a accesskey="p" class="btn btn-neutral" href="quick_temporal_filter.html" rel="prev" title="Module mjoindices.omi.quick_temporal_filter"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Christoph G. Hoffmann.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script src="../_static/jquery.js" type="text/javascript"></script>
+      <script src="../_static/underscore.js" type="text/javascript"></script>
+      <script src="../_static/doctools.js" type="text/javascript"></script>
+
+  
+
+  
+  
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,440 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <title>Module mjoindices.omi.wheeler_kiladis_mjo_filter &mdash; mjoindices  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css" />
+  
+
+  
+
+  
+        <link href="../genindex.html" rel="index"
+              title="Index"/>
+        <link href="../search.html" rel="search" title="Search"/>
+    <link href="../index.html" rel="top" title="mjoindices  documentation"/>
+        <link href="apidoc.html" rel="up" title="API documentation (for running calculations)"/>
+        <link href="quick_temporal_filter.html" rel="next" title="Module mjoindices.omi.quick_temporal_filter"/>
+        <link href="empirical_orthogonal_functions.html" rel="prev" title="Module mjoindices.empirical_orthogonal_functions"/>
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a class="icon icon-home" href="../index.html"> mjoindices
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text" />
+    <input name="check_keywords" type="hidden" value="yes" />
+    <input name="area" type="hidden" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.omi.wheeler_kiladis_mjo_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_temporal_filter.html">Module mjoindices.omi.quick_temporal_filter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">Module mjoindices.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html">Module mjoindices.evaluation_tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="../index.html">mjoindices</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="apidoc.html">API documentation (for running calculations)</a> &raquo;</li>
+        
+      <li>Module mjoindices.omi.wheeler_kiladis_mjo_filter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/wheeler_kiladis_mjo_filter.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mjoindices.omi.wheeler_kiladis_mjo_filter">
+<span id="module-mjoindices-omi-wheeler-kiladis-mjo-filter"></span><h1>Module mjoindices.omi.wheeler_kiladis_mjo_filter<a class="headerlink" href="#module-mjoindices.omi.wheeler_kiladis_mjo_filter" title="Permalink to this headline">¶</a></h1>
+<p>This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.</p>
+<p>Although implemented generically, it is not intended that this module is used stand-alone outside of the OMI context,
+since it is only extensively tested for the specific OMI filtering conditions.</p>
+<p>Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
+Instead, they might probably want to use the module <a class="reference internal" href="omi_calculator.html#module-mjoindices.omi.omi_calculator" title="mjoindices.omi.omi_calculator"><code class="xref py py-mod docutils literal"><span class="pre">mjoindices.omi.omi_calculator</span></code></a> directly.</p>
+<p>The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
+Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
+Mon. Wea. Rev., 142, 1697–1715, <a class="reference external" href="https://doi.org/10.1175/MWR-D-13-00301.1">https://doi.org/10.1175/MWR-D-13-00301.1</a></p>
+<dl class="class">
+<dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter">
+<em class="property">class </em><code class="descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="descname">WKFilter</code><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#WKFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class contains the major Wheeler-Kiladis-Filtering functionality.
+The functionality is encapsulated in a class because values of intermediate processing steps
+are saved as class members for debugging purposes.
+To run the filtering, only the method <a class="reference internal" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering" title="mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering"><code class="xref py py-func docutils literal"><span class="pre">perform_2dim_spectral_filtering()</span></code></a> has to be executed.</p>
+<dl class="method">
+<dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering">
+<code class="descname">perform_2dim_spectral_filtering</code><span class="sig-paren">(</span><em>data: numpy.ndarray</em>, <em>time_spacing: float</em>, <em>period_min: float</em>, <em>period_max: float</em>, <em>wn_min: float</em>, <em>wn_max: float</em>, <em>do_plot: bool = False</em>, <em>save_debug: bool = False</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#WKFilter.perform_2dim_spectral_filtering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bandpass-filters OLR data in time- and longitude-direction according to
+the original Kiladis algorithm.</p>
+<p>Note that the temporal and longitudinal dimension have in principle
+different characteristics, so that they are in detail treated a bit
+differently:
+While the time is evolving into infinity (so that the number of data
+points and the time_spacing variable are needed to calculate the
+full temporal coverage), the longitude is periodic with the periodicity
+of one globe (so that it is assumed that the data covers exactly one
+globe and only passing the number of longitudes provides already the complete information).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> – The OLR data as 2-dim array: first dimension time, second
+dimension longitude, both equally spaced.
+The longitudinal dimension has to cover the full globe.
+The time dimension is further described by the variable
+<cite>time_spacing</cite>.</li>
+<li><strong>time_spacing</strong> – Temporal resolution of the data in days (often 1 or 0.5 (if two
+data points exist per day))</li>
+<li><strong>period_min</strong> – Minimal period (in days) that remains in the dataset</li>
+<li><strong>period_max</strong> – Maximal period (in days) that remains in the dataset</li>
+<li><strong>wn_min</strong> – Minimal wavenumber (in cycles per globe) that remains in the dataset</li>
+<li><strong>wn_max</strong> – Maximal wavenumber (in cycles per globe) that remains in the dataset</li>
+<li><strong>do_plot</strong> – If True, diagnosis plots will be generated.</li>
+<li><strong>save_debug</strong> – If true, some variables will be filled with values of intermediate processing steps
+for debugging purposes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The filtered data.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.detrend_vector">
+<code class="descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="descname">detrend_vector</code><span class="sig-paren">(</span><em>data: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#detrend_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.detrend_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the trend from the given vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – The vector to detrend</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The data with removed trend.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_eof_calculation">
+<code class="descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="descname">filter_olr_for_mjo_eof_calculation</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>do_plot: bool = False</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_for_mjo_eof_calculation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_eof_calculation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters OLR data temporally and longitudinally.</p>
+<p>The filter setup meets the description of Kiladis (2014) for the EOF calculation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>olrdata</strong> – The original OLR data</li>
+<li><strong>do_plot</strong> – If True, diagnosis plots will be generated.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The filtered OLR data.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_pc_calculation">
+<code class="descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="descname">filter_olr_for_mjo_pc_calculation</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>do_plot: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_for_mjo_pc_calculation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_pc_calculation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters OLR data temporally.</p>
+<p>The filter algorithm is the same as for the combined temporal and longitudinal filtering,
+but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
+applied.
+The temporal filtering constants are chosen to meet the values in the description by Kiladis (2014).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>olrdata</strong> – The original OLR data.</li>
+<li><strong>do_plot</strong> – If True, diagnosis plots will be generated.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The filtered OLR.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally">
+<code class="descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="descname">filter_olr_temporally</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>period_min: float</em>, <em>period_max: float</em>, <em>do_plot: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_temporally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters OLR data temporally.</p>
+<p>The filter algorithm is the same as for the combined temporal and longitudinal filtering,
+but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
+applied.</p>
+<p>Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>olrdata</strong> – The original OLR data</li>
+<li><strong>period_min</strong> – Temporal filter constant: Only greater periods (in days) remain in the data.</li>
+<li><strong>period_max</strong> – Temporal filter constant: Only lower periods (in days) remain in the data.</li>
+<li><strong>do_plot</strong> – If True, diagnosis plots will be generated.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The filtered OLR.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally_and_longitudinally">
+<code class="descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="descname">filter_olr_temporally_and_longitudinally</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>period_min: float</em>, <em>period_max: float</em>, <em>wn_min: float</em>, <em>wn_max: float</em>, <em>do_plot: bool = False</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_temporally_and_longitudinally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally_and_longitudinally" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a temporal and longitudinal bandpass filtering of the OLR data with configurable filtering thresholds.</p>
+<p>Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>olrdata</strong> – The original OLR data.</li>
+<li><strong>period_min</strong> – Temporal filter constant: Only greater periods (in days) remain in the data.</li>
+<li><strong>period_max</strong> – Temporal filter constant: Only lower periods (in days) remain in the data.</li>
+<li><strong>wn_min</strong> – Longitudinal filter constant: Only greater wave numbers (in cycles per globe) remain in the data.</li>
+<li><strong>wn_max</strong> – Longitudinal filter constant: Only lower wave numbers (in cycles per globe) remain in the data.</li>
+<li><strong>do_plot</strong> – If True, diagnosis plots will be generated.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The filtered OLR.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.taper_vector_to_zero">
+<code class="descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="descname">taper_vector_to_zero</code><span class="sig-paren">(</span><em>data: numpy.ndarray</em>, <em>window_length: int</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#taper_vector_to_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.taper_vector_to_zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Taper the data in the given vector to zero at both the beginning and the ending.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> – The data to taper.</li>
+<li><strong>window_length</strong> – The length of the window (measured in vector indices),
+in which the tapering is applied for the beginning and the ending independently</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The tapered data.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+      
+        <a accesskey="n" class="btn btn-neutral float-right" href="quick_temporal_filter.html" rel="next" title="Module mjoindices.omi.quick_temporal_filter">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a accesskey="p" class="btn btn-neutral" href="empirical_orthogonal_functions.html" rel="prev" title="Module mjoindices.empirical_orthogonal_functions"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Christoph G. Hoffmann.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script src="../_static/jquery.js" type="text/javascript"></script>
+      <script src="../_static/underscore.js" type="text/javascript"></script>
+      <script src="../_static/doctools.js" type="text/javascript"></script>
+
+  
+
+  
+  
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
