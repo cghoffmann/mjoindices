@@ -17,43 +17,36 @@
   
 
   
+  <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
+  
+    
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js" type="text/javascript"></script>
+        <script src="../_static/jquery.js" type="text/javascript"></script>
+        <script src="../_static/underscore.js" type="text/javascript"></script>
+        <script src="../_static/doctools.js" type="text/javascript"></script>
+        <script src="../_static/language_data.js" type="text/javascript"></script>
+    
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css" />
-  
-
-  
-
-  
-        <link href="../genindex.html" rel="index"
-              title="Index"/>
-        <link href="../search.html" rel="search" title="Search"/>
-    <link href="../index.html" rel="top" title="mjoindices  documentation"/>
-        <link href="apidoc.html" rel="up" title="API documentation (for running calculations)"/>
-        <link href="olr_handling.html" rel="next" title="Module mjoindices.olr_handling"/>
-        <link href="apidoc.html" rel="prev" title="API documentation (for running calculations)"/>
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link href="../_static/css/theme.css" rel="stylesheet" type="text/css" />
+  <link href="../_static/pygments.css" rel="stylesheet" type="text/css" />
+    <link href="../genindex.html" rel="index" title="Index" />
+    <link href="../search.html" rel="search" title="Search" />
+    <link href="olr_handling.html" rel="next" title="Module mjoindices.olr_handling" />
+    <link href="apidoc.html" rel="prev" title="API documentation (for running calculations)" />
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav class="wy-nav-side" data-toggle="wy-nav-shift">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -89,6 +82,8 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.omi.omi_calculator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="olr_handling.html">Module mjoindices.olr_handling</a></li>
@@ -108,7 +103,7 @@
     <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
 
       
-      <nav aria-label="top navigation" class="wy-nav-top" role="navigation">
+      <nav aria-label="top navigation" class="wy-nav-top">
         
           <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
           <a href="../index.html">mjoindices</a>
@@ -116,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -170,178 +166,154 @@ the OLR data. Second, the time-dependent coefficients of the OLR maps w.r.t the 
 are called the principal components (PCs).</p>
 <p>According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY).</p>
 <p>Basically, only OLR data on a suitable spatial grid is needed. With that, the the OMI EOFs and afterwards the PCs are
-computed using the functions <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-func docutils literal"><span class="pre">calc_eofs_from_olr()</span></code></a> and <a class="reference internal" href="#mjoindices.omi.omi_calculator.calculate_pcs_from_olr" title="mjoindices.omi.omi_calculator.calculate_pcs_from_olr"><code class="xref py py-func docutils literal"><span class="pre">calculate_pcs_from_olr()</span></code></a>, respectively.</p>
+computed using the functions <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> and <a class="reference internal" href="#mjoindices.omi.omi_calculator.calculate_pcs_from_olr" title="mjoindices.omi.omi_calculator.calculate_pcs_from_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_pcs_from_olr()</span></code></a>, respectively.</p>
 <p>The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
 Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
 Mon. Wea. Rev., 142, 1697–1715, <a class="reference external" href="https://doi.org/10.1175/MWR-D-13-00301.1">https://doi.org/10.1175/MWR-D-13-00301.1</a></p>
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calc_eofs_for_doy">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">calc_eofs_for_doy</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>doy: int</em>, <em>strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_for_doy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_for_doy</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">doy: int</em>, <em class="sig-param">strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_for_doy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a pair of EOFs for a particular DOY.</p>
 <p>An explicit internal implementation of the EOF approach is used.</p>
-<p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>olrdata</strong> – The filtered OLR data to calculate the EOFs from.</li>
-<li><strong>doy</strong> – The DOY for which the EOFs are calculated.</li>
-<li><strong>strict_leap_year_treatment</strong> – see description in <a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates" title="mjoindices.tools.find_doy_ranges_in_dates"><code class="xref py py-meth docutils literal"><span class="pre">mjoindices.tools.find_doy_ranges_in_dates()</span></code></a>.</li>
+<p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>olrdata</strong> – The filtered OLR data to calculate the EOFs from.</p></li>
+<li><p><strong>doy</strong> – The DOY for which the EOFs are calculated.</p></li>
+<li><p><strong>strict_leap_year_treatment</strong> – see description in <a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates" title="mjoindices.tools.find_doy_ranges_in_dates"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mjoindices.tools.find_doy_ranges_in_dates()</span></code></a>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An object containing the pair of EOFs together with diagnostic values.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object containing the pair of EOFs together with diagnostic values.</p>
+</dd>
+</dl>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package" title="mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package"><code class="xref py py-meth docutils literal"><span class="pre">calc_eofs_for_doy_using_eofs_package()</span></code></a></p>
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package" title="mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_for_doy_using_eofs_package()</span></code></a></p>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">calc_eofs_for_doy_using_eofs_package</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>doy: int</em>, <em>strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_for_doy_using_eofs_package"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_for_doy_using_eofs_package</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">doy: int</em>, <em class="sig-param">strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_for_doy_using_eofs_package"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a pair of EOFs for a particular DOY.</p>
-<p>The external package <code class="xref py py-mod docutils literal"><span class="pre">eofs</span></code> is used for the core calculation</p>
-<p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>olrdata</strong> – The filtered OLR data to calculate the EOFs from.</li>
-<li><strong>doy</strong> – The DOY for which the EOFs are calculated.</li>
-<li><strong>strict_leap_year_treatment</strong> – see description in <a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates" title="mjoindices.tools.find_doy_ranges_in_dates"><code class="xref py py-meth docutils literal"><span class="pre">mjoindices.tools.find_doy_ranges_in_dates()</span></code></a>.</li>
+<p>The external package <code class="xref py py-mod docutils literal notranslate"><span class="pre">eofs</span></code> is used for the core calculation</p>
+<p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>olrdata</strong> – The filtered OLR data to calculate the EOFs from.</p></li>
+<li><p><strong>doy</strong> – The DOY for which the EOFs are calculated.</p></li>
+<li><p><strong>strict_leap_year_treatment</strong> – see description in <a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates" title="mjoindices.tools.find_doy_ranges_in_dates"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mjoindices.tools.find_doy_ranges_in_dates()</span></code></a>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An object containing the pair of EOFs together with diagnostic values.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object containing the pair of EOFs together with diagnostic values.</p>
+</dd>
+</dl>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy" title="mjoindices.omi.omi_calculator.calc_eofs_for_doy"><code class="xref py py-meth docutils literal"><span class="pre">calc_eofs_for_doy()</span></code></a></p>
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy" title="mjoindices.omi.omi_calculator.calc_eofs_for_doy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_for_doy()</span></code></a></p>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calc_eofs_from_olr">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">calc_eofs_from_olr</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>implementation: str = 'internal'</em>, <em>sign_doy1reference: bool = True</em>, <em>interpolate_eofs: bool = False</em>, <em>interpolation_start_doy: int = 293</em>, <em>interpolation_end_doy: int = 316</em>, <em>strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_from_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_from_olr</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">implementation: str = 'internal'</em>, <em class="sig-param">sign_doy1reference: bool = True</em>, <em class="sig-param">interpolate_eofs: bool = False</em>, <em class="sig-param">interpolation_start_doy: int = 293</em>, <em class="sig-param">interpolation_end_doy: int = 316</em>, <em class="sig-param">strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_from_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="Permalink to this definition">¶</a></dt>
 <dd><p>One major function of this module. It performs the complete OMI EOF computation.</p>
 <p>This function executes consistently the preprocessing (filtering), the actual EOF analysis, and the postprocessing.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>olrdata</strong> – The OLR dataset, from which OMI should be calculated. Note that OLR values are assumed to be given
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>olrdata</strong> – The OLR dataset, from which OMI should be calculated. Note that OLR values are assumed to be given
 in positive values. The spatial grid of the OLR datasets defines also the spatial grod of the complete OMI
-calculation.</li>
-<li><strong>implementation</strong> – See <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr"><code class="xref py py-meth docutils literal"><span class="pre">calc_eofs_from_preprocessed_olr()</span></code></a>.</li>
-<li><strong>sign_doy1reference</strong> – See <a class="reference internal" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series"><code class="xref py py-meth docutils literal"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a>.</li>
-<li><strong>interpolate_eofs</strong> – If true, the EOF sub-series between the given DOYs will be interpolated.</li>
-<li><strong>interpolation_start_doy</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal"><span class="pre">interpolate_eofs_between_doys()</span></code></a>.</li>
-<li><strong>interpolation_end_doy</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal"><span class="pre">interpolate_eofs_between_doys()</span></code></a>.</li>
-<li><strong>strict_leap_year_treatment</strong> – See description in <a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates" title="mjoindices.tools.find_doy_ranges_in_dates"><code class="xref py py-meth docutils literal"><span class="pre">mjoindices.tools.find_doy_ranges_in_dates()</span></code></a>.</li>
+calculation.</p></li>
+<li><p><strong>implementation</strong> – See <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_preprocessed_olr()</span></code></a>.</p></li>
+<li><p><strong>sign_doy1reference</strong> – See <a class="reference internal" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series"><code class="xref py py-meth docutils literal notranslate"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a>.</p></li>
+<li><p><strong>interpolate_eofs</strong> – If true, the EOF sub-series between the given DOYs will be interpolated.</p></li>
+<li><p><strong>interpolation_start_doy</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpolate_eofs_between_doys()</span></code></a>.</p></li>
+<li><p><strong>interpolation_end_doy</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpolate_eofs_between_doys()</span></code></a>.</p></li>
+<li><p><strong>strict_leap_year_treatment</strong> – See description in <a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates" title="mjoindices.tools.find_doy_ranges_in_dates"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mjoindices.tools.find_doy_ranges_in_dates()</span></code></a>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">calc_eofs_from_preprocessed_olr</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>implementation: str = 'internal'</em>, <em>strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_from_preprocessed_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_from_preprocessed_olr</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">implementation: str = 'internal'</em>, <em class="sig-param">strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_from_preprocessed_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a series of EOF pairs: one pair for each DOY.</p>
 <p>This is based on already preprocessed OLR. Note that it is recommended to use the function
-<a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>olrdata</strong> – the preprocessed OLR data, from which the EOFs are calculated.</li>
-<li><strong>implementation</strong> – Two options are available
+<a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>olrdata</strong> – the preprocessed OLR data, from which the EOFs are calculated.</p></li>
+<li><p><strong>implementation</strong> – Two options are available
 # “internal”: Uses the internal implementation of the EOF approach.
-# “eofs_package”: Uses the implementation of the external package <code class="xref py py-mod docutils literal"><span class="pre">eofs</span></code>.</li>
-<li><strong>strict_leap_year_treatment</strong> – see description in <a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates" title="mjoindices.tools.find_doy_ranges_in_dates"><code class="xref py py-meth docutils literal"><span class="pre">mjoindices.tools.find_doy_ranges_in_dates()</span></code></a>.</li>
+# “eofs_package”: Uses the implementation of the external package <code class="xref py py-mod docutils literal notranslate"><span class="pre">eofs</span></code>.</p></li>
+<li><p><strong>strict_leap_year_treatment</strong> – see description in <a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates" title="mjoindices.tools.find_doy_ranges_in_dates"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mjoindices.tools.find_doy_ranges_in_dates()</span></code></a>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calculate_pcs_from_olr">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">calculate_pcs_from_olr</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>eofdata: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em>period_start: numpy.datetime64</em>, <em>period_end: numpy.datetime64</em>, <em>use_quick_temporal_filter=False</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calculate_pcs_from_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calculate_pcs_from_olr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calculate_pcs_from_olr</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">eofdata: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em class="sig-param">period_start: numpy.datetime64</em>, <em class="sig-param">period_end: numpy.datetime64</em>, <em class="sig-param">use_quick_temporal_filter=False</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calculate_pcs_from_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calculate_pcs_from_olr" title="Permalink to this definition">¶</a></dt>
 <dd><p>This major function computes PCs according to the OMI algorithm based on given OLR data and previously calculated
 EOFs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>olrdata</strong> – The OLR dataset. The spatial grid must fit to that of the EOFs</li>
-<li><strong>eofdata</strong> – The previously calculated DOY-dependent EOFs.</li>
-<li><strong>period_start</strong> – the beginning of the period, for which the PCs should be calculated.</li>
-<li><strong>period_end</strong> – the ending of the period, for which the PCs should be calculated.</li>
-<li><strong>use_quick_temporal_filter</strong> – There are two implementations of the temporal filtering: First, the original
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>olrdata</strong> – The OLR dataset. The spatial grid must fit to that of the EOFs</p></li>
+<li><p><strong>eofdata</strong> – The previously calculated DOY-dependent EOFs.</p></li>
+<li><p><strong>period_start</strong> – the beginning of the period, for which the PCs should be calculated.</p></li>
+<li><p><strong>period_end</strong> – the ending of the period, for which the PCs should be calculated.</p></li>
+<li><p><strong>use_quick_temporal_filter</strong> – There are two implementations of the temporal filtering: First, the original
 Wheeler-Kiladis-Filter, which is closer to the original implementation while being slower (because it is based
 on a 2-dim FFT) or a 1-dim FFT Filter. Setting this parameter to True uses the quicker 1-dim implementation. The
-results are quite similar.</li>
+results are quite similar.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The PC time series.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The PC time series.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calculate_pcs_from_olr_original_conditions">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">calculate_pcs_from_olr_original_conditions</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em>, <em>original_eof_dirname: pathlib.Path</em>, <em>use_quick_temporal_filter=False</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calculate_pcs_from_olr_original_conditions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calculate_pcs_from_olr_original_conditions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calculate_pcs_from_olr_original_conditions</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">original_eof_dirname: pathlib.Path</em>, <em class="sig-param">use_quick_temporal_filter=False</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calculate_pcs_from_olr_original_conditions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calculate_pcs_from_olr_original_conditions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the OMI PCs for the original period using the original dataset (which have, however, to be provided
 by the user himself.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>olrdata</strong> – The original OLR data, which can be downloaded from
-<a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc">ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc</a></li>
-<li><strong>original_eof_dirname</strong> – Path to the original EOFs, which can be downloaded
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>olrdata</strong> – The original OLR data, which can be downloaded from
+<a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc">ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc</a></p></li>
+<li><p><strong>original_eof_dirname</strong> – Path to the original EOFs, which can be downloaded
 from <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/</a> and <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</a> .
-The contents of both remote directories should again be placed into sub directories <em>eof1</em> and <em>eof2</em></li>
-<li><strong>use_quick_temporal_filter</strong> – see <a class="reference internal" href="#mjoindices.omi.omi_calculator.calculate_pcs_from_olr" title="mjoindices.omi.omi_calculator.calculate_pcs_from_olr"><code class="xref py py-func docutils literal"><span class="pre">calculate_pcs_from_olr()</span></code></a></li>
+The contents of both remote directories should again be placed into sub directories <em>eof1</em> and <em>eof2</em></p></li>
+<li><p><strong>use_quick_temporal_filter</strong> – see <a class="reference internal" href="#mjoindices.omi.omi_calculator.calculate_pcs_from_olr" title="mjoindices.omi.omi_calculator.calculate_pcs_from_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_pcs_from_olr()</span></code></a></p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The PCs, which should be similar to the original ones.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The PCs, which should be similar to the original ones.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">correct_spontaneous_sign_changes_in_eof_series</code><span class="sig-paren">(</span><em>eofs: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em>doy1reference: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#correct_spontaneous_sign_changes_in_eof_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">correct_spontaneous_sign_changes_in_eof_series</code><span class="sig-paren">(</span><em class="sig-param">eofs: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em class="sig-param">doy1reference: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#correct_spontaneous_sign_changes_in_eof_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.</p>
 <p>Note that the sign of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
 which can be improved using this function. As long as this step is performed before computing the PCs, it will not
@@ -349,26 +321,22 @@ change the overall result.</p>
 <p>Generally, the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous
 DOY. The EOFs for DOY 1 are by default aligned with the original calculation by Kiladis (2014), resulting in a
 an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>eofs</strong> – The EOF series for which the signs should be aligned.</li>
-<li><strong>doy1reference</strong> – If true, the EOFs of DOY 1 are aligned w.r.t to the original Kiladis (2014) calculation.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eofs</strong> – The EOF series for which the signs should be aligned.</p></li>
+<li><p><strong>doy1reference</strong> – If true, the EOFs of DOY 1 are aligned w.r.t to the original Kiladis (2014) calculation.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The EOFs with aligned signs.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The EOFs with aligned signs.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">interpolate_eofs_between_doys</code><span class="sig-paren">(</span><em>eofs: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em>start_doy: int = 293</em>, <em>end_doy: int = 316</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#interpolate_eofs_between_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">interpolate_eofs_between_doys</code><span class="sig-paren">(</span><em class="sig-param">eofs: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em class="sig-param">start_doy: int = 293</em>, <em class="sig-param">end_doy: int = 316</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#interpolate_eofs_between_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.</p>
 <p>This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,
 the EOFs have also been replaced by a interpolation according to Kiladis (2014). However, the period stated in
@@ -376,128 +344,108 @@ Kiladis (2014) from 1 November to 8 November is be too short. The authors have c
 interpolation period is from DOY 294 to DOY 315, which is used here as default value.</p>
 <p>ATTENTION: The corresponding statistical values (e.g., the explained variances) are not changed by this routine.
 So these values further on represent the original results of the PCA also for the interpolated EOFs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>eofs</strong> – The complete EOF series, in which the interpolation takes place.</li>
-<li><strong>start_doy</strong> – The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first
-element, which will be replaced by the interpolation.</li>
-<li><strong>end_doy</strong> – The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last
-element, which will be replaced by the interpolation.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eofs</strong> – The complete EOF series, in which the interpolation takes place.</p></li>
+<li><p><strong>start_doy</strong> – The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first
+element, which will be replaced by the interpolation.</p></li>
+<li><p><strong>end_doy</strong> – The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last
+element, which will be replaced by the interpolation.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The complete EOF series with the interpolated values.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The complete EOF series with the interpolated values.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.post_process_eofs">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">post_process_eofs</code><span class="sig-paren">(</span><em>eofdata: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em>sign_doy1reference: bool = True</em>, <em>interpolate_eofs: bool = False</em>, <em>interpolation_start_doy: int = 293</em>, <em>interpolation_end_doy: int = 316</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#post_process_eofs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.post_process_eofs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">post_process_eofs</code><span class="sig-paren">(</span><em class="sig-param">eofdata: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em class="sig-param">sign_doy1reference: bool = True</em>, <em class="sig-param">interpolate_eofs: bool = False</em>, <em class="sig-param">interpolation_start_doy: int = 293</em>, <em class="sig-param">interpolation_end_doy: int = 316</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#post_process_eofs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.post_process_eofs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Post processes a series of EOF pairs for all DOYs.</p>
 <p>Postprocessing includes an alignment of EOF signs and an interpolation of the EOF functions in a given DOY
 window. Both steps are part of the original OMI algorithm described by Kiladis (2014).</p>
-<p>See documentation of  the methods <a class="reference internal" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series"><code class="xref py py-meth docutils literal"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a> and
-<a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal"><span class="pre">interpolate_eofs_between_doys()</span></code></a> for further information.</p>
-<p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>eofdata</strong> – The EOF series, which should be post processed.</li>
-<li><strong>sign_doy1reference</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series"><code class="xref py py-meth docutils literal"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a>.</li>
-<li><strong>interpolate_eofs</strong> – If true, the EOF sub-series between the given DOYs will be interpolated.</li>
-<li><strong>interpolation_start_doy</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal"><span class="pre">interpolate_eofs_between_doys()</span></code></a>.</li>
-<li><strong>interpolation_end_doy</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal"><span class="pre">interpolate_eofs_between_doys()</span></code></a>.</li>
+<p>See documentation of  the methods <a class="reference internal" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series"><code class="xref py py-meth docutils literal notranslate"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a> and
+<a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpolate_eofs_between_doys()</span></code></a> for further information.</p>
+<p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eofdata</strong> – The EOF series, which should be post processed.</p></li>
+<li><p><strong>sign_doy1reference</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series"><code class="xref py py-meth docutils literal notranslate"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a>.</p></li>
+<li><p><strong>interpolate_eofs</strong> – If true, the EOF sub-series between the given DOYs will be interpolated.</p></li>
+<li><p><strong>interpolation_start_doy</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpolate_eofs_between_doys()</span></code></a>.</p></li>
+<li><p><strong>interpolation_end_doy</strong> – See description of <a class="reference internal" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="mjoindices.omi.omi_calculator.interpolate_eofs_between_doys"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interpolate_eofs_between_doys()</span></code></a>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the postprocessed series of EOFs</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the postprocessed series of EOFs</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.preprocess_olr">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">preprocess_olr</code><span class="sig-paren">(</span><em>olrdata: mjoindices.olr_handling.OLRData</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#preprocess_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.preprocess_olr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">preprocess_olr</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#preprocess_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.preprocess_olr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the preprocessing of an OLR dataset to make it suitable for the EOF analysis.</p>
 <p>This is actually a major step of the OMI algorithm and includes the Wheeler-Kiladis-Filtering.</p>
-<p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>olrdata</strong> – The OLR dataset, which should be preprocessed. Note that OLR values are assumed to be given in
-positive values.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The filtered OLR dataset.</td>
-</tr>
-</tbody>
-</table>
+<p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>olrdata</strong> – The OLR dataset, which should be preprocessed. Note that OLR values are assumed to be given in
+positive values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The filtered OLR dataset.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.regress_3dim_data_onto_eofs">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">regress_3dim_data_onto_eofs</code><span class="sig-paren">(</span><em>data: object</em>, <em>eofdata: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#regress_3dim_data_onto_eofs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.regress_3dim_data_onto_eofs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">regress_3dim_data_onto_eofs</code><span class="sig-paren">(</span><em class="sig-param">data: object</em>, <em class="sig-param">eofdata: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#regress_3dim_data_onto_eofs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.regress_3dim_data_onto_eofs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds time-dependent coefficients w.r.t the DOY-dependent EOF basis for time-dependent spatially resolved data.</p>
 <p>I.e. it finds the PCs for temporally resolved OLR data. But the function can also be used for other datasets,
-as long as those datasets have the same structure like the the class <a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><code class="xref py py-class docutils literal"><span class="pre">mjoindices.olr_handling.OLRData</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> – The data, for which the coefficients are sought. Should be an object of class
-<a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><code class="xref py py-class docutils literal"><span class="pre">mjoindices.olr_handling.OLRData</span></code></a> or of similar structure.</li>
-<li><strong>eofdata</strong> – The DOY-dependent pairs of EOFs, like computed by, e.g., <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-func docutils literal"><span class="pre">calc_eofs_from_olr()</span></code></a></li>
+as long as those datasets have the same structure like the the class <a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><code class="xref py py-class docutils literal notranslate"><span class="pre">mjoindices.olr_handling.OLRData</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The data, for which the coefficients are sought. Should be an object of class
+<a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><code class="xref py py-class docutils literal notranslate"><span class="pre">mjoindices.olr_handling.OLRData</span></code></a> or of similar structure.</p></li>
+<li><p><strong>eofdata</strong> – The DOY-dependent pairs of EOFs, like computed by, e.g., <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a></p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The time-dependent PCs as :class:` mjoindices.principal_components.PCData`</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The time-dependent PCs as :class:` mjoindices.principal_components.PCData`</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.regress_vector_onto_eofs">
-<code class="descclassname">mjoindices.omi.omi_calculator.</code><code class="descname">regress_vector_onto_eofs</code><span class="sig-paren">(</span><em>vector: numpy.ndarray</em>, <em>eof1: numpy.ndarray</em>, <em>eof2: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; typing.Tuple[float, float]<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#regress_vector_onto_eofs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.regress_vector_onto_eofs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">regress_vector_onto_eofs</code><span class="sig-paren">(</span><em class="sig-param">vector: numpy.ndarray</em>, <em class="sig-param">eof1: numpy.ndarray</em>, <em class="sig-param">eof2: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; Tuple[float, float]<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#regress_vector_onto_eofs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.regress_vector_onto_eofs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper method that finds the coefficients of the given vector with respect to the given basis of 2 EOFs.</p>
 <p>The computed coefficients are the PCs in the terminology of the EOF analysis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>vector</strong> – The vector for which the coefficients in the EOF basis should be found.</li>
-<li><strong>eof1</strong> – EOF basis vector 1.</li>
-<li><strong>eof2</strong> – EOF basis vector 2.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector</strong> – The vector for which the coefficients in the EOF basis should be found.</p></li>
+<li><p><strong>eof1</strong> – EOF basis vector 1.</p></li>
+<li><p><strong>eof2</strong> – EOF basis vector 2.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The two PCs.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The two PCs.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -506,7 +454,7 @@ as long as those datasets have the same structure like the the class <a class="r
         <a accesskey="n" class="btn btn-neutral float-right" href="olr_handling.html" rel="next" title="Module mjoindices.olr_handling">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a accesskey="p" class="btn btn-neutral" href="apidoc.html" rel="prev" title="API documentation (for running calculations)"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a accesskey="p" class="btn btn-neutral float-left" href="apidoc.html" rel="prev" title="API documentation (for running calculations)"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -515,11 +463,11 @@ as long as those datasets have the same structure like the the class <a class="r
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Christoph G. Hoffmann.
+        &copy; Copyright 2020, Christoph G. Hoffmann
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -532,36 +480,27 @@ as long as those datasets have the same structure like the the class <a class="r
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script src="../_static/jquery.js" type="text/javascript"></script>
-      <script src="../_static/underscore.js" type="text/javascript"></script>
-      <script src="../_static/doctools.js" type="text/javascript"></script>
-
-  
-
-  
-  
-    <script src="../_static/js/theme.js" type="text/javascript"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
    
 
 </body>

@@ -37,6 +37,11 @@ Download the source, move into the directory containing the file setup.py and ru
 
     python3 setup.py install
     
+API documentation
+-----------------
+The API documantation is found on [GitHub Pages](https://cghoffmann.github.io/mjoindices/index.html) and in the docs
+folder of the [source](https://github.com/cghoffmann/mjoindices/tree/master/docs).
+    
 Getting started / examples
 --------------------------
 After you have installed mjoindices, you can download an
