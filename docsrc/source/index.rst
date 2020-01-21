@@ -10,6 +10,7 @@ Welcome to mjoindices's documentation!
    :maxdepth: 3
    :caption: Contents:
 
+   quickstart
    api/apidoc
    indices
 

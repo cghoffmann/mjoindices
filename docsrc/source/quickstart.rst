@@ -1,0 +1,5 @@
+----------
+Quickstart
+----------
+
+.. mdinclude:: ../../README.md

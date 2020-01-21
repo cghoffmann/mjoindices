@@ -14,15 +14,15 @@ implementation is currently limited to the OMI algorithm.
 
 Citation
 --------
-If you use this software package, you can currently cite the [Zenodo DOI](http://dx.doi.org/10.5281/zenodo.3613753). 
+If you use this software package, you can currently cite the [Zenodo DOI](http://dx.doi.org/10.5281/zenodo.3613752). 
 It is planned to publish a peer-reviewed software meta paper in the near-future. Please ask us for the status of this 
 paper, if you use mjoindices in published research. 
 The OMI algorithm itself is described in [Kiladis (2014)](https://doi.org/10.1175/MWR-D-13-00301.1), but please don't 
-forget to also cite the software description.
+forget to also cite the software package, which is an independent development.
 
 Requirements
 ------------
-mjoindices is written for Python 3 and depends on the packages NumPy, Pandas, SciPy, and MatPlotLib. It runs on Linux
+mjoindices is written for Python 3 and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
 and Windows. Other operating systems have not been tested. 
 
 Installation
@@ -42,12 +42,12 @@ Getting started / examples
 After you have installed mjoindices, you can download an
 [example](https://github.com/cghoffmann/mjoindices/tree/master/examples) from the source. 
 
-* recalculate_original_omi.py: After downloading some data files, which are mentioned in the source documentation of the 
-example, you can run this example to recalculate the original OMI values. Furthermore, you can use this example as
-a template to calculate OMI values with your own OLR data. In order to do that, only two parts of the code have to be 
-changed, which are also marked in the code documentation.
+* recalculate_original_omi.py: After downloading some data files, which are mentioned and linked in the source
+documentation of the example, you can run this example to recalculate the original OMI values. Furthermore, you can use 
+this example as a template to calculate OMI values with your own OLR data. In order to do that, only two parts of the 
+code have to be changed, which are also marked in the code documentation.
 
-* evaluate_omi_reproduction.py: After you have run recalculate_original_omi.py and saved the results, you can check the 
-reproduction quality by using this script. It will show detailed comparison plots.
+* evaluate_omi_reproduction.py: After you have run recalculate_original_omi.py (which saves the results), you can check 
+the reproduction quality by using this script. It will show detailed comparison plots.
 
 Both files are also available as Jupyter notebook files.
