@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  <title>Quickstart &mdash; mjoindices  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script src="_static/js/modernizr.min.js" type="text/javascript"></script>
+  
+    
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js" type="text/javascript"></script>
+        <script src="_static/jquery.js" type="text/javascript"></script>
+        <script src="_static/underscore.js" type="text/javascript"></script>
+        <script src="_static/doctools.js" type="text/javascript"></script>
+        <script src="_static/language_data.js" type="text/javascript"></script>
+    
+    <script src="_static/js/theme.js" type="text/javascript"></script>
+
+    
+
+  
+  <link href="_static/css/theme.css" rel="stylesheet" type="text/css" />
+  <link href="_static/pygments.css" rel="stylesheet" type="text/css" />
+    <link href="genindex.html" rel="index" title="Index" />
+    <link href="search.html" rel="search" title="Search" />
+    <link href="api/apidoc.html" rel="next" title="API documentation (for running calculations)" />
+    <link href="index.html" rel="prev" title="Welcome to mjoindices’s documentation!" />
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a class="icon icon-home" href="index.html"> mjoindices
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+    <input name="q" placeholder="Search docs" type="text" />
+    <input name="check_keywords" type="hidden" value="yes" />
+    <input name="area" type="hidden" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#citation">Citation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-documentation">API documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-started-examples">Getting started / examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/apidoc.html">API documentation (for running calculations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indices.html">Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+      
+      <nav aria-label="top navigation" class="wy-nav-top">
+        
+          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <a href="index.html">mjoindices</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-label="breadcrumbs navigation" role="navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Quickstart</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">
+<h2>mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index<a class="headerlink" href="#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index" title="Permalink to this headline">¶</a></h2>
+<a class="reference external image-reference" href="https://zenodo.org/badge/latestdoi/197774253"><img alt="DOI" src="https://zenodo.org/badge/197774253.svg" /></a>
+<div class="section" id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
+<p>mjoindices is a Python package relevant for users of the atmospheric sciences. It provides functionality to compute an
+index of the Madden-Julian-Oscillation (MJO), particularly the OLR-based MJO index (OMI).</p>
+<p>Whereas the package name has been chosen to indicate that further MJO indices should be included in future, the
+implementation is currently limited to the OMI algorithm.</p>
+</div>
+<div class="section" id="citation">
+<h3>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h3>
+<p>If you use this software package, you can currently cite the <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">Zenodo DOI</a>.
+It is planned to publish a peer-reviewed software meta paper in the near-future. Please ask us for the status of this
+paper, if you use mjoindices in published research.
+The OMI algorithm itself is described in <a class="reference external" href="https://doi.org/10.1175/MWR-D-13-00301.1">Kiladis (2014)</a>, but please don’t
+forget to also cite the software package, which is an independent development.</p>
+</div>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>mjoindices is written for Python 3 and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
+and Windows. Other operating systems have not been tested.</p>
+</div>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>mjoindices in available in the <a class="reference external" href="https://pypi.org/">Python Package Index (PyPI)</a>. It can be installed using,
+e.g., pip.</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip3 install mjoindices
+</pre></div>
+</div>
+<p>It can also be installed from the source, which is available on <a class="reference external" href="https://github.com/cghoffmann/mjoindices">GitHub</a>.
+Download the source, move into the directory containing the file setup.py and run</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>python3 setup.py install
+</pre></div>
+</div>
+</div>
+<div class="section" id="api-documentation">
+<h3>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h3>
+<p>The API documantation is found on <a class="reference external" href="https://cghoffmann.github.io/mjoindices/index.html">GitHub Pages</a> and in the docs
+folder of the <a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/docs">source</a>.</p>
+</div>
+<div class="section" id="getting-started-examples">
+<h3>Getting started / examples<a class="headerlink" href="#getting-started-examples" title="Permalink to this headline">¶</a></h3>
+<p>After you have installed mjoindices, you can download an
+<a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/examples">example</a> from the source.</p>
+<ul class="simple">
+<li><p>recalculate_original_omi.py: After downloading some data files, which are mentioned and linked in the source
+documentation of the example, you can run this example to recalculate the original OMI values. Furthermore, you can use
+this example as a template to calculate OMI values with your own OLR data. In order to do that, only two parts of the
+code have to be changed, which are also marked in the code documentation.</p></li>
+<li><p>evaluate_omi_reproduction.py: After you have run recalculate_original_omi.py (which saves the results), you can check
+the reproduction quality by using this script. It will show detailed comparison plots.</p></li>
+</ul>
+<p>Both files are also available as Jupyter notebook files.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+      
+        <a accesskey="n" class="btn btn-neutral float-right" href="api/apidoc.html" rel="next" title="API documentation (for running calculations)">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a accesskey="p" class="btn btn-neutral float-left" href="index.html" rel="prev" title="Welcome to mjoindices’s documentation!"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Christoph G. Hoffmann
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+
+    
+   
+
+</body>
+</html>
