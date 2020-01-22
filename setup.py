@@ -35,6 +35,8 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r') as f:
 setup(name='mjoindices',
       packages=packages,
       package_dir={'': 'src'},
+#      package_data={'mjoindices': ['./src/mjoindices/omi/sign_reference/eof1/eof001.txt','./src/mjoindices/omi/sign_reference/eof2/eof001.txt'], },
+      include_package_data=True,
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
       install_requires=['numpy', 'pandas', 'pytest', 'scipy', 'matplotlib'],

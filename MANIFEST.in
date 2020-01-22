@@ -1,7 +1,7 @@
 include LICENSE
 
 include versioneer.py
-include ./src/mjoindices/_version.py
-include ./src/mjoindices/omi/sign_reference/eof1/eof001.txt
-include ./src/mjoindices/omi/sign_reference/eof2/eof001.txt
+include src/mjoindices/_version.py
+include src/mjoindices/omi/sign_reference/eof1/eof001.txt
+include src/mjoindices/omi/sign_reference/eof2/eof001.txt
 
