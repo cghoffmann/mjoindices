@@ -39,20 +39,45 @@ Download the source, move into the directory containing the file setup.py and ru
     
 API documentation
 -----------------
-The API documantation is found on [GitHub Pages](https://cghoffmann.github.io/mjoindices/index.html) and in the docs
+The API documentation is found on [GitHub Pages](https://cghoffmann.github.io/mjoindices/index.html) and in the docs
 folder of the [source](https://github.com/cghoffmann/mjoindices/tree/master/docs).
     
 Getting started / examples
 --------------------------
 After you have installed mjoindices, you can download an
-[example](https://github.com/cghoffmann/mjoindices/tree/master/examples) from the source. 
+[example](https://github.com/cghoffmann/mjoindices/tree/master/examples) from the source, which consists of two files: 
 
 * recalculate_original_omi.py: After downloading some data files, which are mentioned and linked in the source
-documentation of the example, you can run this example to recalculate the original OMI values. Furthermore, you can use 
-this example as a template to calculate OMI values with your own OLR data. In order to do that, only two parts of the 
-code have to be changed, which are also marked in the code documentation.
+documentation of the example, you can run this example to recalculate the original OMI values. The script will save
+the computed Empirical Orthogonal Functions (EOFs) and the Principal Components (PCs) in two individual files, which
+can also be configured in the source code. In addition, it will save a few plots into a directory, which can
+also be configured in the source. These plots show the agreement with the original OMI values (slight deviations are 
+expected due to numerical differences. This will be detailed in the corresponding software meta paper).
 
-* evaluate_omi_reproduction.py: After you have run recalculate_original_omi.py (which saves the results), you can check 
-the reproduction quality by using this script. It will show detailed comparison plots.
+    Note that you can use this example also as a template to calculate OMI values with your own OLR data. 
+In order to do that, you have to adapt only two parts of the code, which are also marked in the code documentation.
+
+    Note also that this script may run for one or two hours on common personal computer systems.
+
+* evaluate_omi_reproduction.py: This script produces more detailed comparison plots and saves them into a directory.
+The script recalculate_original_omi.py has to be run before, as the evaluation script is based on the saved results.
+As for recalculate_original_omi.py, some file and directory names have to be adapted in the beginning of the code.
 
 Both files are also available as Jupyter notebook files.
+
+Automated testing
+-----------------
+After you have installed mjoindices, you can also download
+[unit and integration tests](https://github.com/cghoffmann/mjoindices/tree/master/tests) from the source to check
+your installation with pytest.
+
+* Download the complete test directory to you local file system.
+
+* Download some external input and reference data files. Which files have to be downloaded and where they have to be
+placed is described in a separate [Readme file](https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README).
+
+* Move into your local test directory and run
+
+        pytest
+        
+Note that the tests may run for a few hours on a common personal computer.

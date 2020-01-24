@@ -90,6 +90,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#api-documentation">API documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getting-started-examples">Getting started / examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automated-testing">Automated testing</a></li>
 </ul>
 </li>
 </ul>
@@ -202,22 +203,50 @@ Download the source, move into the directory containing the file setup.py and ru
 </div>
 <div class="section" id="api-documentation">
 <h3>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h3>
-<p>The API documantation is found on <a class="reference external" href="https://cghoffmann.github.io/mjoindices/index.html">GitHub Pages</a> and in the docs
+<p>The API documentation is found on <a class="reference external" href="https://cghoffmann.github.io/mjoindices/index.html">GitHub Pages</a> and in the docs
 folder of the <a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/docs">source</a>.</p>
 </div>
 <div class="section" id="getting-started-examples">
 <h3>Getting started / examples<a class="headerlink" href="#getting-started-examples" title="Permalink to this headline">¶</a></h3>
 <p>After you have installed mjoindices, you can download an
-<a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/examples">example</a> from the source.</p>
-<ul class="simple">
+<a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/examples">example</a> from the source, which consists of two files:</p>
+<ul>
 <li><p>recalculate_original_omi.py: After downloading some data files, which are mentioned and linked in the source
-documentation of the example, you can run this example to recalculate the original OMI values. Furthermore, you can use
-this example as a template to calculate OMI values with your own OLR data. In order to do that, only two parts of the
-code have to be changed, which are also marked in the code documentation.</p></li>
-<li><p>evaluate_omi_reproduction.py: After you have run recalculate_original_omi.py (which saves the results), you can check
-the reproduction quality by using this script. It will show detailed comparison plots.</p></li>
+documentation of the example, you can run this example to recalculate the original OMI values. The script will save
+the computed Empirical Orthogonal Functions (EOFs) and the Principal Components (PCs) in two individual files, which
+can also be configured in the source code. In addition, it will save a few plots into a directory, which can
+also be configured in the source. These plots show the agreement with the original OMI values (slight deviations are
+expected due to numerical differences. This will be detailed in the corresponding software meta paper).</p>
+<blockquote>
+<div><p>Note that you can use this example also as a template to calculate OMI values with your own OLR data.</p>
+</div></blockquote>
+<p>In order to do that, you have to adapt only two parts of the code, which are also marked in the code documentation.</p>
+<blockquote>
+<div><p>Note also that this script may run for one or two hours on common personal computer systems.</p>
+</div></blockquote>
+</li>
+<li><p>evaluate_omi_reproduction.py: This script produces more detailed comparison plots and saves them into a directory.
+The script recalculate_original_omi.py has to be run before, as the evaluation script is based on the saved results.
+As for recalculate_original_omi.py, some file and directory names have to be adapted in the beginning of the code.</p></li>
 </ul>
 <p>Both files are also available as Jupyter notebook files.</p>
+</div>
+<div class="section" id="automated-testing">
+<h3>Automated testing<a class="headerlink" href="#automated-testing" title="Permalink to this headline">¶</a></h3>
+<p>After you have installed mjoindices, you can also download
+<a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/tests">unit and integration tests</a> from the source to check
+your installation with pytest.</p>
+<ul>
+<li><p>Download the complete test directory to you local file system.</p></li>
+<li><p>Download some external input and reference data files. Which files have to be downloaded and where they have to be
+placed is described in a separate <a class="reference external" href="https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README">Readme file</a>.</p></li>
+<li><p>Move into your local test directory and run</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pytest
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Note that the tests may run for a few hours on a common personal computer.</p>
 </div>
 </div>
 </div>

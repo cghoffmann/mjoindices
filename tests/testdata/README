@@ -1,8 +1,8 @@
-The following files and directories should be added to be able to run all tests:
+The following files and directories should be added into the directory tests/testdata to be able to run all tests:
 
--olr.day.mean.nc from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
+- ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc directly into the tests/testdata/olr.day.mean.nc.
 
--OriginalOMI/eof1/eof***.txt from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/
--OriginalOMI/eof2/eof***.txt from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/
+- All files from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ into the subdirectory tests/testdata/OriginalOMI/eof1/
+- All files from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ into the subdirectory tests/testdata/OriginalOMI/eof2/
 
--OriginalOMI/omi.1x.txt (Version that ends on August 28, 2018) from https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
+- https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt (Current version that ends on August 28, 2018) into tests/testdata/OriginalOMI/omi.1x.txt
