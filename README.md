@@ -14,7 +14,7 @@ implementation is currently limited to the OMI algorithm.
 
 Citation
 --------
-If you use this software package, you can currently cite the [Zenodo DOI](http://dx.doi.org/10.5281/zenodo.3613752). 
+If you use this software package, you should currently cite at least the [Zenodo DOI](http://dx.doi.org/10.5281/zenodo.3613752). 
 It is planned to publish a peer-reviewed software meta paper in the near-future. Please ask us for the status of this 
 paper, if you use mjoindices in published research. 
 The OMI algorithm itself is described in [Kiladis (2014)](https://doi.org/10.1175/MWR-D-13-00301.1), but please don't 
