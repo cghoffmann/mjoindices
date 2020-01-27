@@ -18,6 +18,7 @@ Important abbreviations
 ========================
 * DOY: Day of the Year
 * EOF: Empirical Orthogonal Function
+* MJO: Madden-Julian Oscillation
 * OLR: Outgoing long-wave radiation
 * OMI: OLR-based MJO index.
 * PC: Principal Component

@@ -133,7 +133,7 @@ class OLRData:
     def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0,
                                          strict_leap_year_treatment: bool = True) -> np.ndarray:
         """
-        Extracts the OLR data, which belongs to all doys around one center (center_doy +/- windowlength).
+        Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).
 
         Keep in mind that the OLR time series might span several years. In this case the center DOY is found more than
         once and the respective window in considered for each year.
@@ -168,8 +168,8 @@ def interpolate_spatial_grid_to_original(olr: OLRData) -> OLRData:
 
     This original grid has the following properties:
 
-    * Latitude: 2.5 deg sampling in the tropics from -20 to 20 deg (20S to 20 N).
-    * Longitude: Whole globe with 2.5 deg sampling.
+    * Latitude: 2.5 deg-sampling in the tropics from -20 to 20 deg (20 S to 20 N).
+    * Longitude: Whole globe with 2.5 deg-sampling.
 
     :param olr: The OLR data
 
@@ -242,7 +242,7 @@ def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     A description is found at
     https://www.esrl.noaa.gov/psd/data/gridded/data.interp_OLR.html
 
-    :param filename: Full filename of local copy of OLR data file.
+    :param filename: Full filename of a local copy of OLR data file.
 
     :return: The OLR data.
     """

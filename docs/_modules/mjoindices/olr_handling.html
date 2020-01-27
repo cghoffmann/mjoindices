@@ -283,7 +283,7 @@
 <div class="viewcode-block" id="OLRData.extract_olr_matrix_for_doy_range"><a class="viewcode-back" href="../../api/olr_handling.html#mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range">[docs]</a>    <span class="k">def</span> <span class="nf">extract_olr_matrix_for_doy_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center_doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                                          <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Extracts the OLR data, which belongs to all doys around one center (center_doy +/- windowlength).</span>
+<span class="sd">        Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).</span>
 
 <span class="sd">        Keep in mind that the OLR time series might span several years. In this case the center DOY is found more than</span>
 <span class="sd">        once and the respective window in considered for each year.</span>
@@ -318,8 +318,8 @@
 
 <span class="sd">    This original grid has the following properties:</span>
 
-<span class="sd">    * Latitude: 2.5 deg sampling in the tropics from -20 to 20 deg (20S to 20 N).</span>
-<span class="sd">    * Longitude: Whole globe with 2.5 deg sampling.</span>
+<span class="sd">    * Latitude: 2.5 deg-sampling in the tropics from -20 to 20 deg (20 S to 20 N).</span>
+<span class="sd">    * Longitude: Whole globe with 2.5 deg-sampling.</span>
 
 <span class="sd">    :param olr: The OLR data</span>
 
@@ -392,7 +392,7 @@
 <span class="sd">    A description is found at</span>
 <span class="sd">    https://www.esrl.noaa.gov/psd/data/gridded/data.interp_OLR.html</span>
 
-<span class="sd">    :param filename: Full filename of local copy of OLR data file.</span>
+<span class="sd">    :param filename: Full filename of a local copy of OLR data file.</span>
 
 <span class="sd">    :return: The OLR data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

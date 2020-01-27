@@ -27,19 +27,19 @@ and Windows. Other operating systems have not been tested.
 
 Installation
 ------------
-mjoindices in available in the [Python Package Index (PyPI)](https://pypi.org/). It can be installed using, 
+mjoindices is available in the [Python Package Index (PyPI)](https://pypi.org/project/mjoindices/). It can be installed using, 
 e.g., pip.
     
     pip3 install mjoindices
     
-It can also be installed from the source, which is available on [GitHub](https://github.com/cghoffmann/mjoindices). 
+It can also be installed from the source, which is available on [Zenodo](http://dx.doi.org/10.5281/zenodo.3613752) and [GitHub](https://github.com/cghoffmann/mjoindices). 
 Download the source, move into the directory containing the file setup.py and run
 
     python3 setup.py install
     
 API documentation
 -----------------
-The API documentation is found on [GitHub Pages](https://cghoffmann.github.io/mjoindices/index.html) and in the docs
+The API documentation is found on [GitHub Pages](https://cghoffmann.github.io/mjoindices/index.html) and also in the docs
 folder of the [source](https://github.com/cghoffmann/mjoindices/tree/master/docs).
     
 Getting started / examples
@@ -69,15 +69,14 @@ Automated testing
 -----------------
 After you have installed mjoindices, you can also download
 [unit and integration tests](https://github.com/cghoffmann/mjoindices/tree/master/tests) from the source to check
-your installation with pytest.
+your installation using pytest.
 
 * Download the complete test directory to you local file system.
 
-* Download some external input and reference data files. Which files have to be downloaded and where they have to be
-placed is described in a separate [Readme file](https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README).
+* Download some external input and reference data files. The files to be downloaded are described in a separate [Readme file](https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README).
 
 * Move into your local test directory and run
 
         pytest
-        
+
 Note that the tests may run for a few hours on a common personal computer.

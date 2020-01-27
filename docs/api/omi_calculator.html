@@ -83,7 +83,6 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.omi.omi_calculator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="olr_handling.html">Module mjoindices.olr_handling</a></li>
@@ -227,7 +226,7 @@ Mon. Wea. Rev., 142, 1697–1715, <a class="reference external" href="https://do
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>olrdata</strong> – The OLR dataset, from which OMI should be calculated. Note that OLR values are assumed to be given
-in positive values. The spatial grid of the OLR datasets defines also the spatial grod of the complete OMI
+in positive values. The spatial grid of the OLR datasets defines also the spatial grid of the complete OMI
 calculation.</p></li>
 <li><p><strong>implementation</strong> – See <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_preprocessed_olr()</span></code></a>.</p></li>
 <li><p><strong>sign_doy1reference</strong> – See <a class="reference internal" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series"><code class="xref py py-meth docutils literal notranslate"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a>.</p></li>
@@ -253,9 +252,8 @@ calculation.</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>olrdata</strong> – the preprocessed OLR data, from which the EOFs are calculated.</p></li>
-<li><p><strong>implementation</strong> – Two options are available
-# “internal”: Uses the internal implementation of the EOF approach.
-# “eofs_package”: Uses the implementation of the external package <code class="xref py py-mod docutils literal notranslate"><span class="pre">eofs</span></code>.</p></li>
+<li><p><strong>implementation</strong> – Two options are available: First, “internal”: uses the internal implementation of the EOF
+approach. Second, “eofs_package”: Uses the implementation of the external package <code class="xref py py-mod docutils literal notranslate"><span class="pre">eofs</span></code>.</p></li>
 <li><p><strong>strict_leap_year_treatment</strong> – see description in <a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates" title="mjoindices.tools.find_doy_ranges_in_dates"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mjoindices.tools.find_doy_ranges_in_dates()</span></code></a>.</p></li>
 </ul>
 </dd>
@@ -292,8 +290,8 @@ results are quite similar.</p></li>
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calculate_pcs_from_olr_original_conditions">
 <code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calculate_pcs_from_olr_original_conditions</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">original_eof_dirname: pathlib.Path</em>, <em class="sig-param">use_quick_temporal_filter=False</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calculate_pcs_from_olr_original_conditions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calculate_pcs_from_olr_original_conditions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the OMI PCs for the original period using the original dataset (which have, however, to be provided
-by the user himself.</p>
+<dd><p>Calculates the OMI PCs for the original period using the original dataset (which has, however, to be provided
+by the user himself).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -339,8 +337,8 @@ an EOF series, which is totally comparable to the original Kiladis (2014) calcul
 <code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">interpolate_eofs_between_doys</code><span class="sig-paren">(</span><em class="sig-param">eofs: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em class="sig-param">start_doy: int = 293</em>, <em class="sig-param">end_doy: int = 316</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#interpolate_eofs_between_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.interpolate_eofs_between_doys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.</p>
 <p>This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,
-the EOFs have also been replaced by a interpolation according to Kiladis (2014). However, the period stated in
-Kiladis (2014) from 1 November to 8 November is be too short. The authors have confirmed that the right
+the EOFs have also been replaced by an interpolation according to Kiladis (2014). However, the period stated in
+Kiladis (2014) from 1 November to 8 November is too short. The authors have confirmed that the right
 interpolation period is from DOY 294 to DOY 315, which is used here as default value.</p>
 <p>ATTENTION: The corresponding statistical values (e.g., the explained variances) are not changed by this routine.
 So these values further on represent the original results of the PCA also for the interpolated EOFs.</p>
@@ -417,7 +415,7 @@ as long as those datasets have the same structure like the the class <a class="r
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The time-dependent PCs as :class:` mjoindices.principal_components.PCData`</p>
+<dd class="field-even"><p>The time-dependent PCs as <a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData" title="mjoindices.principal_components.PCData"><code class="xref py py-class docutils literal notranslate"><span class="pre">mjoindices.principal_components.PCData</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

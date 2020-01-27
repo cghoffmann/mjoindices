@@ -177,7 +177,7 @@ implementation is currently limited to the OMI algorithm.</p>
 </div>
 <div class="section" id="citation">
 <h3>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h3>
-<p>If you use this software package, you can currently cite the <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">Zenodo DOI</a>.
+<p>If you use this software package, you should currently cite at least the <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">Zenodo DOI</a>.
 It is planned to publish a peer-reviewed software meta paper in the near-future. Please ask us for the status of this
 paper, if you use mjoindices in published research.
 The OMI algorithm itself is described in <a class="reference external" href="https://doi.org/10.1175/MWR-D-13-00301.1">Kiladis (2014)</a>, but please don’t
@@ -185,17 +185,17 @@ forget to also cite the software package, which is an independent development.</
 </div>
 <div class="section" id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
-<p>mjoindices is written for Python 3 and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
+<p>mjoindices is written for Python 3 (version &gt; 3.6) and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
 and Windows. Other operating systems have not been tested.</p>
 </div>
 <div class="section" id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
-<p>mjoindices in available in the <a class="reference external" href="https://pypi.org/">Python Package Index (PyPI)</a>. It can be installed using,
+<p>mjoindices is available in the <a class="reference external" href="https://pypi.org/project/mjoindices/">Python Package Index (PyPI)</a>. It can be installed using,
 e.g., pip.</p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip3 install mjoindices
 </pre></div>
 </div>
-<p>It can also be installed from the source, which is available on <a class="reference external" href="https://github.com/cghoffmann/mjoindices">GitHub</a>.
+<p>It can also be installed from the source, which is available on <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">Zenodo</a> and <a class="reference external" href="https://github.com/cghoffmann/mjoindices">GitHub</a>.
 Download the source, move into the directory containing the file setup.py and run</p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>python3 setup.py install
 </pre></div>
@@ -203,7 +203,7 @@ Download the source, move into the directory containing the file setup.py and ru
 </div>
 <div class="section" id="api-documentation">
 <h3>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h3>
-<p>The API documentation is found on <a class="reference external" href="https://cghoffmann.github.io/mjoindices/index.html">GitHub Pages</a> and in the docs
+<p>The API documentation is found on <a class="reference external" href="https://cghoffmann.github.io/mjoindices/index.html">GitHub Pages</a> and also in the docs
 folder of the <a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/docs">source</a>.</p>
 </div>
 <div class="section" id="getting-started-examples">
@@ -235,11 +235,10 @@ As for recalculate_original_omi.py, some file and directory names have to be ada
 <h3>Automated testing<a class="headerlink" href="#automated-testing" title="Permalink to this headline">¶</a></h3>
 <p>After you have installed mjoindices, you can also download
 <a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/tests">unit and integration tests</a> from the source to check
-your installation with pytest.</p>
+your installation using pytest.</p>
 <ul>
 <li><p>Download the complete test directory to you local file system.</p></li>
-<li><p>Download some external input and reference data files. Which files have to be downloaded and where they have to be
-placed is described in a separate <a class="reference external" href="https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README">Readme file</a>.</p></li>
+<li><p>Download some external input and reference data files. The files to be downloaded are described in a separate <a class="reference external" href="https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README">Readme file</a>.</p></li>
 <li><p>Move into your local test directory and run</p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pytest
 </pre></div>

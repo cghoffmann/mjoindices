@@ -111,7 +111,7 @@ def filter_olr_temporally_and_longitudinally(olrdata: olr.OLRData,
 
     :return: The filtered OLR.
     """
-    print("Smooth data temporally and longitudally...")
+    print("Smooth data temporally and longitudinally...")
     filtered_olr = np.empty(olrdata.olr.shape)
 
     for ilat, lat in enumerate(olrdata.lat):

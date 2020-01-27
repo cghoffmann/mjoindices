@@ -83,7 +83,6 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="omi_calculator.html">Module mjoindices.omi.omi_calculator</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.olr_handling</a></li>
@@ -196,7 +195,7 @@ order.</p></li>
 <dl class="method">
 <dt id="mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range">
 <code class="sig-name descname">extract_olr_matrix_for_doy_range</code><span class="sig-paren">(</span><em class="sig-param">center_doy: int</em>, <em class="sig-param">window_length: int = 0</em>, <em class="sig-param">strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.extract_olr_matrix_for_doy_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extracts the OLR data, which belongs to all doys around one center (center_doy +/- windowlength).</p>
+<dd><p>Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).</p>
 <p>Keep in mind that the OLR time series might span several years. In this case the center DOY is found more than
 once and the respective window in considered for each year.
 Example: 3 full years of data, centerdoy = 20, and window_length = 4 results in 3*(2*4+1) = 27 entries in the
@@ -299,8 +298,8 @@ be performed by the user himself before injecting the data into the OMI calculat
 original OMI calculation by Kiladis (2014).</p>
 <p>This original grid has the following properties:</p>
 <ul class="simple">
-<li><p>Latitude: 2.5 deg sampling in the tropics from -20 to 20 deg (20S to 20 N).</p></li>
-<li><p>Longitude: Whole globe with 2.5 deg sampling.</p></li>
+<li><p>Latitude: 2.5 deg-sampling in the tropics from -20 to 20 deg (20 S to 20 N).</p></li>
+<li><p>Longitude: Whole globe with 2.5 deg-sampling.</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -322,7 +321,7 @@ original OMI calculation by Kiladis (2014).</p>
 <a class="reference external" href="https://www.esrl.noaa.gov/psd/data/gridded/data.interp_OLR.html">https://www.esrl.noaa.gov/psd/data/gridded/data.interp_OLR.html</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – Full filename of local copy of OLR data file.</p>
+<dd class="field-odd"><p><strong>filename</strong> – Full filename of a local copy of OLR data file.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The OLR data.</p>

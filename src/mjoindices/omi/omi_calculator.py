@@ -72,7 +72,7 @@ def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", s
     This function executes consistently the preprocessing (filtering), the actual EOF analysis, and the postprocessing.
 
     :param olrdata: The OLR dataset, from which OMI should be calculated. Note that OLR values are assumed to be given
-        in positive values. The spatial grid of the OLR datasets defines also the spatial grod of the complete OMI
+        in positive values. The spatial grid of the OLR datasets defines also the spatial grid of the complete OMI
         calculation.
     :param implementation: See :meth:`calc_eofs_from_preprocessed_olr`.
     :param sign_doy1reference: See :meth:`correct_spontaneous_sign_changes_in_eof_series`.
@@ -118,9 +118,8 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
     :meth:`calc_eofs_from_olr` to cover the complete algorithm.
 
     :param olrdata: the preprocessed OLR data, from which the EOFs are calculated.
-    :param implementation: Two options are available
-        # "internal": Uses the internal implementation of the EOF approach.
-        # "eofs_package": Uses the implementation of the external package :py:mod:`eofs`.
+    :param implementation: Two options are available: First, "internal": uses the internal implementation of the EOF
+        approach. Second, "eofs_package": Uses the implementation of the external package :py:mod:`eofs`.
     :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
 
     :return: A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.
@@ -350,8 +349,8 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
 
     This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,
-    the EOFs have also been replaced by a interpolation according to Kiladis (2014). However, the period stated in
-    Kiladis (2014) from 1 November to 8 November is be too short. The authors have confirmed that the right
+    the EOFs have also been replaced by an interpolation according to Kiladis (2014). However, the period stated in
+    Kiladis (2014) from 1 November to 8 November is too short. The authors have confirmed that the right
     interpolation period is from DOY 294 to DOY 315, which is used here as default value.
 
     ATTENTION: The corresponding statistical values (e.g., the explained variances) are not changed by this routine.
@@ -434,8 +433,8 @@ def calculate_pcs_from_olr_original_conditions(olrdata: olr.OLRData,
                                                original_eof_dirname: Path,
                                                use_quick_temporal_filter=False) -> pc.PCData:
     """
-    Calculates the OMI PCs for the original period using the original dataset (which have, however, to be provided
-    by the user himself.
+    Calculates the OMI PCs for the original period using the original dataset (which has, however, to be provided
+    by the user himself).
 
     :param olrdata: The original OLR data, which can be downloaded from
         ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
@@ -467,7 +466,7 @@ def regress_3dim_data_onto_eofs(data: object, eofdata: eof.EOFDataForAllDOYs) ->
         :class:`mjoindices.olr_handling.OLRData` or of similar structure.
     :param eofdata: The DOY-dependent pairs of EOFs, like computed by, e.g., :func:`calc_eofs_from_olr`
 
-    :return: The time-dependent PCs as :class:` mjoindices.principal_components.PCData`
+    :return: The time-dependent PCs as :class:`mjoindices.principal_components.PCData`
     """
     if not np.all(data.lat == eofdata.lat):
         raise ValueError("Latitude grid of EOFs and OLR is not equal.")

@@ -222,7 +222,7 @@
 <span class="sd">    This function executes consistently the preprocessing (filtering), the actual EOF analysis, and the postprocessing.</span>
 
 <span class="sd">    :param olrdata: The OLR dataset, from which OMI should be calculated. Note that OLR values are assumed to be given</span>
-<span class="sd">        in positive values. The spatial grid of the OLR datasets defines also the spatial grod of the complete OMI</span>
+<span class="sd">        in positive values. The spatial grid of the OLR datasets defines also the spatial grid of the complete OMI</span>
 <span class="sd">        calculation.</span>
 <span class="sd">    :param implementation: See :meth:`calc_eofs_from_preprocessed_olr`.</span>
 <span class="sd">    :param sign_doy1reference: See :meth:`correct_spontaneous_sign_changes_in_eof_series`.</span>
@@ -268,9 +268,8 @@
 <span class="sd">    :meth:`calc_eofs_from_olr` to cover the complete algorithm.</span>
 
 <span class="sd">    :param olrdata: the preprocessed OLR data, from which the EOFs are calculated.</span>
-<span class="sd">    :param implementation: Two options are available</span>
-<span class="sd">        # &quot;internal&quot;: Uses the internal implementation of the EOF approach.</span>
-<span class="sd">        # &quot;eofs_package&quot;: Uses the implementation of the external package :py:mod:`eofs`.</span>
+<span class="sd">    :param implementation: Two options are available: First, &quot;internal&quot;: uses the internal implementation of the EOF</span>
+<span class="sd">        approach. Second, &quot;eofs_package&quot;: Uses the implementation of the external package :py:mod:`eofs`.</span>
 <span class="sd">    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.</span>
 
 <span class="sd">    :return: A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.</span>
@@ -500,8 +499,8 @@
 <span class="sd">    Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.</span>
 
 <span class="sd">    This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,</span>
-<span class="sd">    the EOFs have also been replaced by a interpolation according to Kiladis (2014). However, the period stated in</span>
-<span class="sd">    Kiladis (2014) from 1 November to 8 November is be too short. The authors have confirmed that the right</span>
+<span class="sd">    the EOFs have also been replaced by an interpolation according to Kiladis (2014). However, the period stated in</span>
+<span class="sd">    Kiladis (2014) from 1 November to 8 November is too short. The authors have confirmed that the right</span>
 <span class="sd">    interpolation period is from DOY 294 to DOY 315, which is used here as default value.</span>
 
 <span class="sd">    ATTENTION: The corresponding statistical values (e.g., the explained variances) are not changed by this routine.</span>
@@ -584,8 +583,8 @@
                                                <span class="n">original_eof_dirname</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
                                                <span class="n">use_quick_temporal_filter</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pc</span><span class="o">.</span><span class="n">PCData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates the OMI PCs for the original period using the original dataset (which have, however, to be provided</span>
-<span class="sd">    by the user himself.</span>
+<span class="sd">    Calculates the OMI PCs for the original period using the original dataset (which has, however, to be provided</span>
+<span class="sd">    by the user himself).</span>
 
 <span class="sd">    :param olrdata: The original OLR data, which can be downloaded from</span>
 <span class="sd">        ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc</span>
@@ -617,7 +616,7 @@
 <span class="sd">        :class:`mjoindices.olr_handling.OLRData` or of similar structure.</span>
 <span class="sd">    :param eofdata: The DOY-dependent pairs of EOFs, like computed by, e.g., :func:`calc_eofs_from_olr`</span>
 
-<span class="sd">    :return: The time-dependent PCs as :class:` mjoindices.principal_components.PCData`</span>
+<span class="sd">    :return: The time-dependent PCs as :class:`mjoindices.principal_components.PCData`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">lat</span> <span class="o">==</span> <span class="n">eofdata</span><span class="o">.</span><span class="n">lat</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Latitude grid of EOFs and OLR is not equal.&quot;</span><span class="p">)</span>
