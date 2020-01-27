@@ -22,7 +22,7 @@ forget to also cite the software package, which is an independent development.
 
 Requirements
 ------------
-mjoindices is written for Python 3 and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
+mjoindices is written for Python 3 (version > 3.6) and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
 and Windows. Other operating systems have not been tested. 
 
 Installation
