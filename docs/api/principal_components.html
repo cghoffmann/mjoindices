@@ -83,7 +83,6 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.principal_components</a></li>
@@ -160,6 +159,7 @@
             
   <div class="section" id="module-mjoindices.principal_components">
 <span id="module-mjoindices-principal-components"></span><h1>Module mjoindices.principal_components<a class="headerlink" href="#module-mjoindices.principal_components" title="Permalink to this headline">¶</a></h1>
+<p>This module provides basic functionality to handle PC data, which is a basic output of the OMI calculation.</p>
 <dl class="class">
 <dt id="mjoindices.principal_components.PCData">
 <em class="property">class </em><code class="sig-prename descclassname">mjoindices.principal_components.</code><code class="sig-name descname">PCData</code><span class="sig-paren">(</span><em class="sig-param">time: numpy.ndarray</em>, <em class="sig-param">pc1: numpy.ndarray</em>, <em class="sig-param">pc2: numpy.ndarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/principal_components.html#PCData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.PCData" title="Permalink to this definition">¶</a></dt>
@@ -216,7 +216,7 @@ suitable reader is available in this module for both formats
 <dd><p>Loads the PCs of OMI, which are stored in the original file format.
 Particularly, the following file can be loaded: <a class="reference external" href="https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt">https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt</a></p>
 <p>Note that the present software package stores the PCs slightly different. Those files can be loaded with
-<code class="xref py py-func docutils literal notranslate"><span class="pre">see</span> <span class="pre">load_pcs_from_txt_file()</span></code>.</p>
+<a class="reference internal" href="#mjoindices.principal_components.load_pcs_from_txt_file" title="mjoindices.principal_components.load_pcs_from_txt_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_pcs_from_txt_file()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>filename</strong> – Path to the PC file.</p>

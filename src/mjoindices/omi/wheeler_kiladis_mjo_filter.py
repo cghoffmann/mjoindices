@@ -3,7 +3,7 @@
 """
 This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.
 
-Although implemented generically, it is not intended that this module is used stand-alone outside of the OMI context,
+Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,
 since it is only extensively tested for the specific OMI filtering conditions.
 
 Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
@@ -211,11 +211,11 @@ class WKFilter:
             The time dimension is further described by the variable
             `time_spacing`.
         :param time_spacing: Temporal resolution of the data in days (often 1 or 0.5 (if two
-            data points exist per day))
-        :param period_min: Minimal period (in days) that remains in the dataset
-        :param period_max: Maximal period (in days) that remains in the dataset
-        :param wn_min: Minimal wavenumber (in cycles per globe) that remains in the dataset
-        :param wn_max: Maximal wavenumber (in cycles per globe) that remains in the dataset
+            data points exist per day)).
+        :param period_min: Minimal period (in days) that remains in the dataset.
+        :param period_max: Maximal period (in days) that remains in the dataset.
+        :param wn_min: Minimal wavenumber (in cycles per globe) that remains in the dataset.
+        :param wn_max: Maximal wavenumber (in cycles per globe) that remains in the dataset.
         :param do_plot: If True, diagnosis plots will be generated.
         :param save_debug: If true, some variables will be filled with values of intermediate processing steps
             for debugging purposes.

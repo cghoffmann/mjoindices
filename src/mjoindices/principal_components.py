@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""" """
+""" This module provides basic functionality to handle PC data, which is a basic output of the OMI calculation. """
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
@@ -114,7 +114,7 @@ def load_original_pcs_from_txt_file(filename: Path) -> PCData:
     Particularly, the following file can be loaded: https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
 
     Note that the present software package stores the PCs slightly different. Those files can be loaded with
-    :func:`see load_pcs_from_txt_file`.
+    :func:`load_pcs_from_txt_file`.
 
     :param filename: Path to the PC file.
 

@@ -83,7 +83,6 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a><ul class="current">
@@ -163,7 +162,7 @@
   <div class="section" id="module-mjoindices.omi.wheeler_kiladis_mjo_filter">
 <span id="module-mjoindices-omi-wheeler-kiladis-mjo-filter"></span><h1>Module mjoindices.omi.wheeler_kiladis_mjo_filter<a class="headerlink" href="#module-mjoindices.omi.wheeler_kiladis_mjo_filter" title="Permalink to this headline">¶</a></h1>
 <p>This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.</p>
-<p>Although implemented generically, it is not intended that this module is used stand-alone outside of the OMI context,
+<p>Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,
 since it is only extensively tested for the specific OMI filtering conditions.</p>
 <p>Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
 Instead, they might probably want to use the module <a class="reference internal" href="omi_calculator.html#module-mjoindices.omi.omi_calculator" title="mjoindices.omi.omi_calculator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator</span></code></a> directly.</p>
@@ -199,11 +198,11 @@ The longitudinal dimension has to cover the full globe.
 The time dimension is further described by the variable
 <cite>time_spacing</cite>.</p></li>
 <li><p><strong>time_spacing</strong> – Temporal resolution of the data in days (often 1 or 0.5 (if two
-data points exist per day))</p></li>
-<li><p><strong>period_min</strong> – Minimal period (in days) that remains in the dataset</p></li>
-<li><p><strong>period_max</strong> – Maximal period (in days) that remains in the dataset</p></li>
-<li><p><strong>wn_min</strong> – Minimal wavenumber (in cycles per globe) that remains in the dataset</p></li>
-<li><p><strong>wn_max</strong> – Maximal wavenumber (in cycles per globe) that remains in the dataset</p></li>
+data points exist per day)).</p></li>
+<li><p><strong>period_min</strong> – Minimal period (in days) that remains in the dataset.</p></li>
+<li><p><strong>period_max</strong> – Maximal period (in days) that remains in the dataset.</p></li>
+<li><p><strong>wn_min</strong> – Minimal wavenumber (in cycles per globe) that remains in the dataset.</p></li>
+<li><p><strong>wn_max</strong> – Maximal wavenumber (in cycles per globe) that remains in the dataset.</p></li>
 <li><p><strong>do_plot</strong> – If True, diagnosis plots will be generated.</p></li>
 <li><p><strong>save_debug</strong> – If true, some variables will be filled with values of intermediate processing steps
 for debugging purposes.</p></li>

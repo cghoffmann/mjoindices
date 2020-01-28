@@ -150,7 +150,7 @@
   <h1>Source code for mjoindices.empirical_orthogonal_functions</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot; This module provides basic functionality to handle EOF data, which is a basic output of the OMI calculation. &quot;&quot;&quot;</span>
 
 <span class="c1"># Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.</span>
 
@@ -192,15 +192,16 @@
 <span class="sd">    :param eof1: Values of the first EOF. Can either be a 1-dim vector with</span>
 <span class="sd">        lat.size*long.size elements (Start with all values of the first latitude, then all values of the second</span>
 <span class="sd">        latitude, etc.) or a 2-dim map with the first index representing the latitude axis and the second index</span>
-<span class="sd">        representing longitude.</span>
+<span class="sd">        representing longitude axis.</span>
 <span class="sd">    :param eof2: Values of the second EOF. Structure similar to *eof1*</span>
-<span class="sd">    :param explained_variances: Fraction of data variance that is explained by each EOF for all EOFs. May be None.</span>
+<span class="sd">    :param explained_variances: Fraction of data variance that is explained by each EOF (for all EOFs and not only the</span>
+<span class="sd">        first two EOFs). May be None.</span>
 <span class="sd">    :param eigenvalues: Eigenvalue corresponding to each EOF. May be None.</span>
 <span class="sd">    :param no_observations: The number of observations that went into the EOF calculation. May be None.</span>
 
-<span class="sd">    Note that the explained variances are not independent from the eigenvalues. However, this class is meant to store</span>
-<span class="sd">    the data only and we keep redundant data here intentionally to be able to have all computation rules together at</span>
-<span class="sd">    another location.</span>
+<span class="sd">    Note that the explained variances are not independent from the eigenvalues. However, this class is meant to only</span>
+<span class="sd">    store the data. Hence, we store redundant data here intentionally to be able to have all computation rules together</span>
+<span class="sd">    in another location.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">long</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">eof1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">eof2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -340,7 +341,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">explained_variance_eof2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        the explained variance of EOF2 as fraction between 0 and 1.</span>
+<span class="sd">        The explained variance of EOF2 as fraction between 0 and 1.</span>
 
 <span class="sd">        :return: The variance. Might be None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -399,7 +400,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">no_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The number of observations that went into the calculation of the EOFs</span>
+<span class="sd">        The number of observations that went into the calculation of the EOFs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_observations</span>
 
@@ -632,7 +633,7 @@
 <span class="sd">        values, use the function :func:`save_all_eofs_to_npzfile`.</span>
 
 <span class="sd">        :param dirname: The directory, where the files will be saved into.</span>
-<span class="sd">        :param create_dir: If True, the directory (and parent directories) will be created, if is does not exist.</span>
+<span class="sd">        :param create_dir: If True, the directory (and parent directories) will be created, if not existing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">dirname</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">create_dir</span><span class="p">:</span>
             <span class="n">dirname</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -671,7 +672,7 @@
 
 <div class="viewcode-block" id="load_single_eofs_from_txt_file"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file">[docs]</a><span class="k">def</span> <span class="nf">load_single_eofs_from_txt_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EOFData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads a pair of EOFs, which was previously saved with this package (function :func:`EOFData.save_eofs_to_txt_file`)</span>
+<span class="sd">    Loads a pair of EOFs, which was previously saved with this package (function :func:`EOFData.save_eofs_to_txt_file`).</span>
 
 <span class="sd">    :param filename: Path to the  EOF file.</span>
 
@@ -708,8 +709,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads the EOF values for the first 2 EOFs from the original file format.</span>
 
-<span class="sd">    Note that since in the original treatment the EOFs are represented as pure vectors, so that a connection to the</span>
-<span class="sd">    individual locations on a world map is not obvious without any further knowledge. the corresponding grid is here</span>
+<span class="sd">    Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the</span>
+<span class="sd">    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here</span>
 <span class="sd">    inserted hardcodedly.</span>
 
 <span class="sd">    The original EOFs are found here: ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and</span>
@@ -754,6 +755,10 @@
 
 <span class="sd">    The original EOFs are found here: ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and</span>
 <span class="sd">    ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</span>
+
+<span class="sd">    Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the</span>
+<span class="sd">    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here</span>
+<span class="sd">    inserted hardcodedly.</span>
 
 <span class="sd">    :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.</span>
 <span class="sd">        This path should contain the sub directories *eof1* and *eof2*, in which the 366 files each are located:</span>
@@ -856,7 +861,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots a pair of original EOFs, which are loaded from a directory, in two maps.</span>
 
-<span class="sd">    :param path: the directory with the EOF data (see :func:`load_original_eofs_for_doy` for details).</span>
+<span class="sd">    :param path: The directory with the EOF data (see :func:`load_original_eofs_for_doy` for details).</span>
 <span class="sd">    :param doy: The corresponding DOY. Only used to display it in the title.</span>
 
 <span class="sd">    :return: Handle to the figure.</span>
@@ -869,7 +874,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots a pair of EOFs, which are loaded from a file, in two maps.</span>
 
-<span class="sd">    :param filename: the file with the EOF data.</span>
+<span class="sd">    :param filename: The file with the EOF data.</span>
 <span class="sd">    :param doy: The corresponding DOY. Only used to display it in the title.</span>
 
 <span class="sd">    :return: Handle to the figure.</span>

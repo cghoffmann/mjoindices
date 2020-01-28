@@ -153,7 +153,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.</span>
 
-<span class="sd">Although implemented generically, it is not intended that this module is used stand-alone outside of the OMI context,</span>
+<span class="sd">Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,</span>
 <span class="sd">since it is only extensively tested for the specific OMI filtering conditions.</span>
 
 <span class="sd">Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.</span>
@@ -261,7 +261,7 @@
 
 <span class="sd">    :return: The filtered OLR.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Smooth data temporally and longitudally...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Smooth data temporally and longitudinally...&quot;</span><span class="p">)</span>
     <span class="n">filtered_olr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">olrdata</span><span class="o">.</span><span class="n">olr</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ilat</span><span class="p">,</span> <span class="n">lat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">olrdata</span><span class="o">.</span><span class="n">lat</span><span class="p">):</span>
@@ -361,11 +361,11 @@
 <span class="sd">            The time dimension is further described by the variable</span>
 <span class="sd">            `time_spacing`.</span>
 <span class="sd">        :param time_spacing: Temporal resolution of the data in days (often 1 or 0.5 (if two</span>
-<span class="sd">            data points exist per day))</span>
-<span class="sd">        :param period_min: Minimal period (in days) that remains in the dataset</span>
-<span class="sd">        :param period_max: Maximal period (in days) that remains in the dataset</span>
-<span class="sd">        :param wn_min: Minimal wavenumber (in cycles per globe) that remains in the dataset</span>
-<span class="sd">        :param wn_max: Maximal wavenumber (in cycles per globe) that remains in the dataset</span>
+<span class="sd">            data points exist per day)).</span>
+<span class="sd">        :param period_min: Minimal period (in days) that remains in the dataset.</span>
+<span class="sd">        :param period_max: Maximal period (in days) that remains in the dataset.</span>
+<span class="sd">        :param wn_min: Minimal wavenumber (in cycles per globe) that remains in the dataset.</span>
+<span class="sd">        :param wn_max: Maximal wavenumber (in cycles per globe) that remains in the dataset.</span>
 <span class="sd">        :param do_plot: If True, diagnosis plots will be generated.</span>
 <span class="sd">        :param save_debug: If true, some variables will be filled with values of intermediate processing steps</span>
 <span class="sd">            for debugging purposes.</span>

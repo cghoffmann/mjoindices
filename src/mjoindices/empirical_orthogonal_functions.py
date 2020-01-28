@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""" """
+""" This module provides basic functionality to handle EOF data, which is a basic output of the OMI calculation. """
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
@@ -42,15 +42,16 @@ class EOFData:
     :param eof1: Values of the first EOF. Can either be a 1-dim vector with
         lat.size*long.size elements (Start with all values of the first latitude, then all values of the second
         latitude, etc.) or a 2-dim map with the first index representing the latitude axis and the second index
-        representing longitude.
+        representing longitude axis.
     :param eof2: Values of the second EOF. Structure similar to *eof1*
-    :param explained_variances: Fraction of data variance that is explained by each EOF for all EOFs. May be None.
+    :param explained_variances: Fraction of data variance that is explained by each EOF (for all EOFs and not only the
+        first two EOFs). May be None.
     :param eigenvalues: Eigenvalue corresponding to each EOF. May be None.
     :param no_observations: The number of observations that went into the EOF calculation. May be None.
 
-    Note that the explained variances are not independent from the eigenvalues. However, this class is meant to store
-    the data only and we keep redundant data here intentionally to be able to have all computation rules together at
-    another location.
+    Note that the explained variances are not independent from the eigenvalues. However, this class is meant to only
+    store the data. Hence, we store redundant data here intentionally to be able to have all computation rules together
+    in another location.
     """
 
     def __init__(self, lat: np.ndarray, long: np.ndarray, eof1: np.ndarray, eof2: np.ndarray,
@@ -190,7 +191,7 @@ class EOFData:
     @property
     def explained_variance_eof2(self) -> float:
         """
-        the explained variance of EOF2 as fraction between 0 and 1.
+        The explained variance of EOF2 as fraction between 0 and 1.
 
         :return: The variance. Might be None.
         """
@@ -249,7 +250,7 @@ class EOFData:
     @property
     def no_observations(self) -> int:
         """
-        The number of observations that went into the calculation of the EOFs
+        The number of observations that went into the calculation of the EOFs.
         """
         return self._no_observations
 
@@ -482,7 +483,7 @@ class EOFDataForAllDOYs:
         values, use the function :func:`save_all_eofs_to_npzfile`.
 
         :param dirname: The directory, where the files will be saved into.
-        :param create_dir: If True, the directory (and parent directories) will be created, if is does not exist.
+        :param create_dir: If True, the directory (and parent directories) will be created, if not existing.
         """
         if not dirname.exists() and create_dir:
             dirname.mkdir(parents=True, exist_ok=False)
@@ -521,7 +522,7 @@ class EOFDataForAllDOYs:
 
 def load_single_eofs_from_txt_file(filename: Path) -> EOFData:
     """
-    Loads a pair of EOFs, which was previously saved with this package (function :func:`EOFData.save_eofs_to_txt_file`)
+    Loads a pair of EOFs, which was previously saved with this package (function :func:`EOFData.save_eofs_to_txt_file`).
 
     :param filename: Path to the  EOF file.
 
@@ -558,8 +559,8 @@ def load_original_eofs_for_doy(dirname: Path, doy: int) -> EOFData:
     """
     Loads the EOF values for the first 2 EOFs from the original file format.
 
-    Note that since in the original treatment the EOFs are represented as pure vectors, so that a connection to the
-    individual locations on a world map is not obvious without any further knowledge. the corresponding grid is here
+    Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the
+    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here
     inserted hardcodedly.
 
     The original EOFs are found here: ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and
@@ -604,6 +605,10 @@ def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
 
     The original EOFs are found here: ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and
     ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/
+
+    Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the
+    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here
+    inserted hardcodedly.
 
     :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.
         This path should contain the sub directories *eof1* and *eof2*, in which the 366 files each are located:
@@ -706,7 +711,7 @@ def plot_original_individual_eof_map(path, doy: int) -> Figure:
     """
     Plots a pair of original EOFs, which are loaded from a directory, in two maps.
 
-    :param path: the directory with the EOF data (see :func:`load_original_eofs_for_doy` for details).
+    :param path: The directory with the EOF data (see :func:`load_original_eofs_for_doy` for details).
     :param doy: The corresponding DOY. Only used to display it in the title.
 
     :return: Handle to the figure.
@@ -719,7 +724,7 @@ def plot_individual_eof_map_from_file(filename, doy: int) -> Figure:
     """
     Plots a pair of EOFs, which are loaded from a file, in two maps.
 
-    :param filename: the file with the EOF data.
+    :param filename: The file with the EOF data.
     :param doy: The corresponding DOY. Only used to display it in the title.
 
     :return: Handle to the figure.

@@ -101,10 +101,10 @@ def calc_comparison_stats_for_eofs_all_doys(eofs_ref: eof.EOFDataForAllDOYs,
 
     :param recalc_eof: The EOFs to validate.
     :param orig_eof: The reference EOFs.
-    :param exclude_doy366: If true, DOY 366 will be included in the calculation (sometimes worse agreement depending on
+    :param exclude_doy366: If True, DOY 366 will be included in the calculation (sometimes worse agreement depending on
         the leap year treatment mode).
-    :param percentage: If true: calculation results will be in percent of the mean of the absolute reference values.
-    :param do_print: If true, some characteristic values will we printed to the console.
+    :param percentage: If True: calculation results will be in percent of the mean of the absolute reference values.
+    :param do_print: If True, some characteristic values will we printed to the console.
 
     :return: A tuple containing arrays with 366 or 365 elements each for the following quantities: correlation, mean
         of the differences, standard deviation of the differences, and percentiles of the absolute differences
@@ -162,9 +162,9 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
 
     :param recalc_eof: The EOFs to compare.
     :param orig_eof: The reference eofs.
-    :param exclude_doy366: If true, DOY 366 will be included in the plot (sometimes worse agreement depending on the
+    :param exclude_doy366: If True, DOY 366 will be included in the plot (sometimes worse agreement depending on the
         leap year treatment mode).
-    :param do_print: If true, some characteristic values will we printed to the console.
+    :param do_print: If True, some characteristic values will we printed to the console.
 
     :return: The figure handle
     """
@@ -238,8 +238,8 @@ def plot_correlation_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     :param orig_eof: The reference EOFs.
     :param exclude_doy366: If False, DOY 366 will be included in the plot (sometimes worse correlation depending on the
         leap year treatment mode).
-    :param do_print: If true, some characteristic values will we printed to the console.
-    :param full_value_range: If true, the ordinate spans the range from 0 to 1 instead of the used value range only.
+    :param do_print: If True, some characteristic values will we printed to the console.
+    :param full_value_range: If True, the ordinate spans the range from 0 to 1 instead of the used value range only.
     :return: A handle to the figure.
     """
 

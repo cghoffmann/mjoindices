@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""" """
+""" This module provides basic helper routines for the OMI calculation"""
 
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
