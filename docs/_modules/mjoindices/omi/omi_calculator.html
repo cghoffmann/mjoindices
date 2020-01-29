@@ -150,24 +150,6 @@
   <h1>Source code for mjoindices.omi.omi_calculator</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This major module provides the execution of the algorithm of the OMI calculation.</span>
-
-<span class="sd">First, the algorithm can be used to compute the empirical orthogonal functions (EOFs), which serve as a new basis for</span>
-<span class="sd">the OLR data. Second, the time-dependent coefficients of the OLR maps w.r.t the EOFs are computed. These coefficients</span>
-<span class="sd">are called the principal components (PCs).</span>
-
-<span class="sd">According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY).</span>
-
-<span class="sd">Basically, only OLR data on a suitable spatial grid is needed. With that, the the OMI EOFs and afterwards the PCs are</span>
-<span class="sd">computed using the functions :func:`calc_eofs_from_olr` and :func:`calculate_pcs_from_olr`, respectively.</span>
-
-<span class="sd">The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.</span>
-<span class="sd">Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.</span>
-<span class="sd">Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-
 <span class="c1"># Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.</span>
 
 <span class="c1"># This file is part of mjoindices</span>
@@ -187,6 +169,23 @@
 
 <span class="c1"># Contact: christoph.hoffmann@uni-greifswald.de</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This major module provides the execution of the algorithm of the OMI calculation.</span>
+
+<span class="sd">First, the algorithm can be used to compute the empirical orthogonal functions (EOFs), which serve as a new basis for</span>
+<span class="sd">the OLR data. Second, the time-dependent coefficients of the OLR maps w.r.t the EOFs are computed. These coefficients</span>
+<span class="sd">are called the principal components (PCs).</span>
+
+<span class="sd">According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY).</span>
+
+<span class="sd">Basically, only OLR data on a suitable spatial grid is needed. With that, the the OMI EOFs and afterwards the PCs are</span>
+<span class="sd">computed using the functions :func:`calc_eofs_from_olr` and :func:`calculate_pcs_from_olr`, respectively.</span>
+
+<span class="sd">The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.</span>
+<span class="sd">Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.</span>
+<span class="sd">Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>

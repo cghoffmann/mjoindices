@@ -150,18 +150,6 @@
   <h1>Source code for mjoindices.omi.quick_temporal_filter</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This module provides a simple 1-dim filtering algorithm, which can be used during the PC calculation instead of the</span>
-<span class="sd">full 2-dim Wheeler-Kiladis-Filter.</span>
-
-<span class="sd">It is not intended to use this module stand-alone outside of the OMI context, since it is only extensively tested</span>
-<span class="sd">for the specific OMI filtering conditions.</span>
-
-<span class="sd">Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.</span>
-<span class="sd">Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-
 <span class="c1"># Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.</span>
 
 <span class="c1"># This file is part of mjoindices</span>
@@ -180,6 +168,17 @@
 <span class="c1"># along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
 
 <span class="c1"># Contact: christoph.hoffmann@uni-greifswald.de</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides a simple 1-dim filtering algorithm, which can be used during the PC calculation instead of the</span>
+<span class="sd">full 2-dim Wheeler-Kiladis-Filter.</span>
+
+<span class="sd">It is not intended to use this module stand-alone outside of the OMI context, since it is only extensively tested</span>
+<span class="sd">for the specific OMI filtering conditions.</span>
+
+<span class="sd">Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.</span>
+<span class="sd">Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span>

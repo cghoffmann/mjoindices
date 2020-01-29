@@ -83,7 +83,6 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a><ul class="current">
@@ -174,10 +173,10 @@ It is probably not of major relevance for the user of this package.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>recalc_eof</strong> – The EOFs to validate.</p></li>
 <li><p><strong>orig_eof</strong> – The reference EOFs.</p></li>
-<li><p><strong>exclude_doy366</strong> – If true, DOY 366 will be included in the calculation (sometimes worse agreement depending on
+<li><p><strong>exclude_doy366</strong> – If True, DOY 366 will be included in the calculation (sometimes worse agreement depending on
 the leap year treatment mode).</p></li>
-<li><p><strong>percentage</strong> – If true: calculation results will be in percent of the mean of the absolute reference values.</p></li>
-<li><p><strong>do_print</strong> – If true, some characteristic values will we printed to the console.</p></li>
+<li><p><strong>percentage</strong> – If True: calculation results will be in percent of the mean of the absolute reference values.</p></li>
+<li><p><strong>do_print</strong> – If True, some characteristic values will we printed to the console.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -314,9 +313,9 @@ EOF2.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>recalc_eof</strong> – The EOFs to compare.</p></li>
 <li><p><strong>orig_eof</strong> – The reference eofs.</p></li>
-<li><p><strong>exclude_doy366</strong> – If true, DOY 366 will be included in the plot (sometimes worse agreement depending on the
+<li><p><strong>exclude_doy366</strong> – If True, DOY 366 will be included in the plot (sometimes worse agreement depending on the
 leap year treatment mode).</p></li>
-<li><p><strong>do_print</strong> – If true, some characteristic values will we printed to the console.</p></li>
+<li><p><strong>do_print</strong> – If True, some characteristic values will we printed to the console.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -357,8 +356,8 @@ leap year treatment mode).</p></li>
 <li><p><strong>orig_eof</strong> – The reference EOFs.</p></li>
 <li><p><strong>exclude_doy366</strong> – If False, DOY 366 will be included in the plot (sometimes worse correlation depending on the
 leap year treatment mode).</p></li>
-<li><p><strong>do_print</strong> – If true, some characteristic values will we printed to the console.</p></li>
-<li><p><strong>full_value_range</strong> – If true, the ordinate spans the range from 0 to 1 instead of the used value range only.</p></li>
+<li><p><strong>do_print</strong> – If True, some characteristic values will we printed to the console.</p></li>
+<li><p><strong>full_value_range</strong> – If True, the ordinate spans the range from 0 to 1 instead of the used value range only.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

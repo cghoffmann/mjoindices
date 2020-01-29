@@ -1,23 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-This major module provides the execution of the algorithm of the OMI calculation.
-
-First, the algorithm can be used to compute the empirical orthogonal functions (EOFs), which serve as a new basis for
-the OLR data. Second, the time-dependent coefficients of the OLR maps w.r.t the EOFs are computed. These coefficients
-are called the principal components (PCs).
-
-According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY).
-
-Basically, only OLR data on a suitable spatial grid is needed. With that, the the OMI EOFs and afterwards the PCs are
-computed using the functions :func:`calc_eofs_from_olr` and :func:`calculate_pcs_from_olr`, respectively.
-
-The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
-Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
-Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
-
-"""
-
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
 # This file is part of mjoindices
@@ -37,6 +19,23 @@ Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
 
 # Contact: christoph.hoffmann@uni-greifswald.de
 
+"""
+This major module provides the execution of the algorithm of the OMI calculation.
+
+First, the algorithm can be used to compute the empirical orthogonal functions (EOFs), which serve as a new basis for
+the OLR data. Second, the time-dependent coefficients of the OLR maps w.r.t the EOFs are computed. These coefficients
+are called the principal components (PCs).
+
+According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY).
+
+Basically, only OLR data on a suitable spatial grid is needed. With that, the the OMI EOFs and afterwards the PCs are
+computed using the functions :func:`calc_eofs_from_olr` and :func:`calculate_pcs_from_olr`, respectively.
+
+The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
+Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
+Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
+
+"""
 
 from pathlib import Path
 from typing import Tuple

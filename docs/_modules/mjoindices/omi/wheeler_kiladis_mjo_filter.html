@@ -150,20 +150,6 @@
   <h1>Source code for mjoindices.omi.wheeler_kiladis_mjo_filter</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.</span>
-
-<span class="sd">Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,</span>
-<span class="sd">since it is only extensively tested for the specific OMI filtering conditions.</span>
-
-<span class="sd">Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.</span>
-<span class="sd">Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.</span>
-
-<span class="sd">The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.</span>
-<span class="sd">Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.</span>
-<span class="sd">Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
 <span class="c1"># Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.</span>
 
 <span class="c1"># This file is part of mjoindices</span>
@@ -182,6 +168,20 @@
 <span class="c1"># along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
 
 <span class="c1"># Contact: christoph.hoffmann@uni-greifswald.de</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.</span>
+
+<span class="sd">Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,</span>
+<span class="sd">since it is only extensively tested for the specific OMI filtering conditions.</span>
+
+<span class="sd">Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.</span>
+<span class="sd">Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.</span>
+
+<span class="sd">The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.</span>
+<span class="sd">Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.</span>
+<span class="sd">Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>

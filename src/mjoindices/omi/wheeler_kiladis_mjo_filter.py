@@ -1,19 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.
-
-Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,
-since it is only extensively tested for the specific OMI filtering conditions.
-
-Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
-Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.
-
-The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
-Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
-Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
-"""
-
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
 # This file is part of mjoindices
@@ -32,6 +18,20 @@ Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Contact: christoph.hoffmann@uni-greifswald.de
+
+"""
+This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.
+
+Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,
+since it is only extensively tested for the specific OMI filtering conditions.
+
+Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
+Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.
+
+The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
+Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
+Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
+"""
 
 import matplotlib.pyplot as plt
 import numpy as np

@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-This module provides a bunch of methods that help to evaluate the agreement of the OMI calculation by this package
-and the original calculation by Kiladis (2014).
-It is probably not of major relevance for the user of this package.
-"""
-
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
 # This file is part of mjoindices
@@ -24,6 +18,12 @@ It is probably not of major relevance for the user of this package.
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Contact: christoph.hoffmann@uni-greifswald.de
+
+"""
+This module provides a bunch of methods that help to evaluate the agreement of the OMI calculation by this package
+and the original calculation by Kiladis (2014).
+It is probably not of major relevance for the user of this package.
+"""
 
 import typing
 import numpy as np

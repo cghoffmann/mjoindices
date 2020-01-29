@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-This module provides basic functionality to handle OLR data, which is the basic input for the OMI calculation.
-"""
-
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
 # This file is part of mjoindices
@@ -23,6 +19,9 @@ This module provides basic functionality to handle OLR data, which is the basic 
 
 # Contact: christoph.hoffmann@uni-greifswald.de
 
+"""
+This module provides basic functionality to handle OLR data, which is the basic input for the OMI calculation.
+"""
 
 from pathlib import Path
 

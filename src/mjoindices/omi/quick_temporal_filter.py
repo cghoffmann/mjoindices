@@ -1,17 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-This module provides a simple 1-dim filtering algorithm, which can be used during the PC calculation instead of the
-full 2-dim Wheeler-Kiladis-Filter.
-
-It is not intended to use this module stand-alone outside of the OMI context, since it is only extensively tested
-for the specific OMI filtering conditions.
-
-Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
-Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.
-
-"""
-
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
 # This file is part of mjoindices
@@ -30,6 +18,17 @@ Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Contact: christoph.hoffmann@uni-greifswald.de
+
+"""
+This module provides a simple 1-dim filtering algorithm, which can be used during the PC calculation instead of the
+full 2-dim Wheeler-Kiladis-Filter.
+
+It is not intended to use this module stand-alone outside of the OMI context, since it is only extensively tested
+for the specific OMI filtering conditions.
+
+Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
+Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.
+"""
 
 import numpy as np
 import scipy

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-""" This module provides basic functionality to handle EOF data, which is a basic output of the OMI calculation. """
-
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
 # This file is part of mjoindices
@@ -20,6 +18,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Contact: christoph.hoffmann@uni-greifswald.de
+
+""" This module provides basic functionality to handle EOF data, which is a basic output of the OMI calculation. """
 
 import copy
 import typing
