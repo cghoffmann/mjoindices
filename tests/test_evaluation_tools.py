@@ -44,7 +44,7 @@ def test_compute_vector_difference_quantity():
         errors.append("Absolute differences incorrect.")
 
     target = evalt.compute_vector_difference_quantity(signal, data, percentage=True)
-    if not np.allclose(target, noise*100):
+    if not np.allclose(target, noise * 100):
         errors.append("Absolute differences incorrect.")
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
@@ -73,20 +73,20 @@ def test_calc_vector_agreement():
     if not np.isclose(diff_std, 1.0031438836641624):
         errors.append("Mean value of differences not correct (absolute values).")
 
-    if not np.isclose(diff_abs_percent68, 0.9990298365839766): # approximately like stddev
+    if not np.isclose(diff_abs_percent68, 0.9990298365839766):  # approximately like stddev
         errors.append("68% percentile not correct (absolute values).")
 
-    if not np.isclose(diff_abs_percent95, 1.961966296714916): # approximately like 2*stddev
+    if not np.isclose(diff_abs_percent95, 1.961966296714916):  # approximately like 2*stddev
         errors.append("95% percentile not correct (absolute values).")
 
-    if not np.isclose(diff_abs_percent99, 2.5952045271622053): # smaller than 3*stddev, since 3*stddev corresponds to 99.9%
+    if not np.isclose(diff_abs_percent99, 2.5952045271622053):  # smaller than 3*stddev, since 3*stddev corresponds to 99.9%
         errors.append("99% percentile not correct (absolute values).")
 
     # now deviations normalized with mean of reference (which is exactly 1) and multiplied by 100.
-    corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99 = evalt.calc_vector_agreement(
-            signal, data, percentage=True, do_print=False)
+    corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99 \
+        = evalt.calc_vector_agreement(signal, data, percentage=True, do_print=False)
 
-    if not np.allclose(diff_vec, noise*100):
+    if not np.allclose(diff_vec, noise * 100):
         errors.append("Vector of differences not correct (relative values).")
 
     if not np.isclose(diff_mean, -0.3529403152115213):
@@ -120,7 +120,7 @@ def test_calc_vector_agreement():
     if not np.isclose(diff_mean, 0.500672176427001):
         errors.append("Mean value of differences not correct (uniform distribution).")
 
-    if not np.isclose(diff_std, 0.2889275424927285): #std dev of standard uniform distribution = sqrt(1/12*(1-0)) = sqrt(1/12)
+    if not np.isclose(diff_std, 0.2889275424927285):  # std dev of standard uniform distribution = sqrt(1/12*(1-0)) = sqrt(1/12)
         errors.append("Mean value of differences not correct (uniform distribution).")
 
     if not np.isclose(diff_abs_percent68, 0.681562679012755):  # approximately like stddev
@@ -135,8 +135,8 @@ def test_calc_vector_agreement():
     n = 1000
     signal = np.arange(n)
     data = signal
-    corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99 = evalt.calc_vector_agreement(
-            signal, data, percentage=False, do_print=False)
+    corr, diff_mean, diff_std, diff_vec, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99 = \
+        evalt.calc_vector_agreement(signal, data, percentage=False, do_print=False)
     if not corr == 1:
         errors.append("Correlation incorrect.")
 
@@ -175,9 +175,9 @@ def test_calc_comparison_stats_for_eofs_all_doys():
     reference = eof.EOFDataForAllDOYs(eofs_reference)
     data = eof.EOFDataForAllDOYs(eofs_data)
 
-    corr, diff_mean, diff_std, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99 = evalt.calc_comparison_stats_for_eofs_all_doys(reference, data,
-                                                1, exclude_doy366=False, percentage=False,
-                                                do_print=False)
+    corr, diff_mean, diff_std, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99 = \
+        evalt.calc_comparison_stats_for_eofs_all_doys(reference, data, 1, exclude_doy366=False, percentage=False,
+                                                      do_print=False)
 
     if not (np.allclose(corr[:2], 1) and np.allclose(corr[3:], 1)):
         errors.append("EOF1: Correlations wrong")
@@ -259,7 +259,7 @@ def test_calc_timeseries_agreement():
     if not np.isclose(diff_mean, -0.016998885708167304):
         errors.append("Mean value of differences not correct.")
 
-    if not np.isclose(diff_std, 1.011669296908716): #std dev of standard uniform distribution = sqrt(1/12*(1-0)) = sqrt(1/12)
+    if not np.isclose(diff_std, 1.011669296908716):  # std dev of standard uniform distribution = sqrt(1/12*(1-0)) = sqrt(1/12)
         errors.append("Mean value of differences not correct.")
 
     if not np.isclose(diff_abs_percent68, 1.0021767602961196):  # approximately like stddev

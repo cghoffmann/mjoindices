@@ -159,8 +159,3 @@ def generate_reference_data_for_pc_filter_tests():
     olrdata_filtered = wkfilter.filter_olr_for_mjo_pc_calculation(test_olr_part)
     filename = Path(str(reference_file_filterOLRForMJO_PC_Calculation_latmin10) + ".newcalc")
     olrdata_filtered.save_to_npzfile(filename)
-
-
-if __name__ == '__main__':
-    generate_reference_data_for_eof_filter_tests()
-    generate_reference_data_for_pc_filter_tests()

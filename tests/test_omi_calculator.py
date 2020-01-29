@@ -51,18 +51,17 @@ mjoindices_reference_pcs_filename = Path(os.path.abspath('')) / "testdata" / "mj
 original_omi_explained_variance_file = Path(os.path.abspath('')) / "testdata" / "OriginalOMI" / "omi_var.txt"
 
 
-
 setups = [(True, 0.99, 0.99), (False, 0.999, 0.999)]
-@pytest.mark.slow
+@pytest.mark.slow  # noqa: E302
 @pytest.mark.parametrize("use_quick_temporal_filter, expectedCorr1, expectedCorr2", setups)
 @pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available")
 @pytest.mark.skipif(not eof1Dirname.is_dir(), reason="EOF1 data not available")
 @pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available")
 @pytest.mark.skipif(not origOMIPCsFilename.is_file(), reason="Original OMI PCs not available for comparison")
 def test_calculatePCsFromOLRWithOriginalEOFs(use_quick_temporal_filter, expectedCorr1, expectedCorr2):
-# This test is quicker than the complete integration tests below. The quality check is very simple and just checks
-# the correlations of the PC time series. Hence, this test in thought the get a first idea and more intensive testing
-# should be done using the tests below.
+    # This test is quicker than the complete integration tests below. The quality check is very simple and just checks
+    # the correlations of the PC time series. Hence, this test in thought the get a first idea and more intensive testing
+    # should be done using the tests below.
     orig_omi = pc.load_original_pcs_from_txt_file(origOMIPCsFilename)
     olrData = olr.load_noaa_interpolated_olr(olr_data_filename)
 
@@ -108,7 +107,7 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
     # Validate EOFs against original (results are inexact but close)
     orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 
-    corr_1, diff_mean_1, diff_std_1, diff_abs_percent68_1, diff_abs_percent95_1, diff_abs_percent99_1 = mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys(orig_eofs, eofs, 1,  exclude_doy366=True, percentage=False, do_print=False)
+    corr_1, diff_mean_1, diff_std_1, diff_abs_percent68_1, diff_abs_percent95_1, diff_abs_percent99_1 = mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys(orig_eofs, eofs, 1, exclude_doy366=True, percentage=False, do_print=False)
     if not np.all(corr_1 > 0.994):
         errors.append("original-validation: Correlation for EOF1 at least for one DOY too low!")
     if not np.all(diff_abs_percent99_1 < 0.0084):
@@ -116,7 +115,7 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
     if not np.all(diff_abs_percent68_1 < 0.0018):
         errors.append("original-validation: 68% percentile for EOF1 at least for one DOY too high!")
 
-    corr_2, diff_mean_2, diff_std_2, diff_abs_percent68_2, diff_abs_percent95_2, diff_abs_percent99_2 = mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys(orig_eofs, eofs, 2,  exclude_doy366=True, percentage=False, do_print=False)
+    corr_2, diff_mean_2, diff_std_2, diff_abs_percent68_2, diff_abs_percent95_2, diff_abs_percent99_2 = mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys(orig_eofs, eofs, 2, exclude_doy366=True, percentage=False, do_print=False)
     if not np.all(corr_2 > 0.993):
         errors.append("original-validation: Correlation for EOF2 at least for one DOY too low!")
     if not np.all(diff_abs_percent99_2 < 0.0065):
@@ -189,7 +188,6 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
         errors.append("original-validation: 99% percentile of the difference of both PC2 timeseries is to too high!")
     if not diff_abs_percent68_pc2 < 0.0350:
         errors.append("original-validation: 68% percentile of the difference of both PC2 timeseries is to too high!")
-
 
     strength = np.sqrt(np.square(pcs.pc1) + np.square(pcs.pc2))
     orig_strength = np.sqrt(np.square(orig_pcs.pc1) + np.square(orig_pcs.pc2))

@@ -41,7 +41,7 @@ def test_calc_day_of_year_scalar():
 
     date = np.datetime64("2019-02-28")
     target = tools.calc_day_of_year(date)
-    if not target == 31+28:
+    if not target == 31 + 28:
         errors.append("Error in DOY calc for %s" % str(date))
 
     date = np.datetime64("2019-12-31")
@@ -49,7 +49,7 @@ def test_calc_day_of_year_scalar():
     if not target == 365:
         errors.append("Error in DOY calc for %s" % str(date))
 
-    #test leap year
+    # test leap year
     date = np.datetime64("2020-02-29")
     target = tools.calc_day_of_year(date)
     if not target == 31 + 29:
@@ -79,7 +79,7 @@ def test_calc_day_of_year_scalar():
 def test_calc_day_of_year_array():
 
     errors = []
-    dates = np.array([np.datetime64("2019-01-01"),np.datetime64("2019-01-02"),np.datetime64("2019-01-03")])
+    dates = np.array([np.datetime64("2019-01-01"), np.datetime64("2019-01-02"), np.datetime64("2019-01-03")])
     target = tools.calc_day_of_year(dates)
     if not np.all(target == np.array([1, 2, 3])):
         errors.append("Error in DOY calc for array")
@@ -106,9 +106,9 @@ def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
     # Non leap years
     dates = np.arange("2018-01-01", "2019-12-31", dtype='datetime64[D]')
     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20)
-    if not target_inds.size == (20*2 + 1) * 2:
+    if not target_inds.size == (20 * 2 + 1) * 2:
         errors.append("Length of DOY range covering the middle of the year is wrong")
-    control_inds = np.concatenate((np.arange(30, 71, 1)-1, np.arange(30, 71, 1) + 365 - 1))
+    control_inds = np.concatenate((np.arange(30, 71, 1) - 1, np.arange(30, 71, 1) + 365 - 1))
     if not np.all(target_inds == control_inds):
         errors.append("Indices of DOY range covering the middle of the year are wrong")
     control_doys = np.concatenate((np.arange(30, 71, 1), np.arange(30, 71, 1)))
@@ -117,7 +117,7 @@ def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
 
     dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20)
-    if not target_inds.size == 20*2 + 1:
+    if not target_inds.size == 20 * 2 + 1:
         errors.append("Length of DOY range covering the ending of the previous year is wrong")
     control = np.concatenate((np.arange(355, 366, 1), np.arange(1, 31, 1)))
     if not np.all(target_doys == control):
@@ -169,9 +169,9 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
     # Non leap years
     dates = np.arange("2018-01-01", "2019-12-31", dtype='datetime64[D]')
     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, strict_leap_year_treatment=False)
-    if not target_inds.size == (20*2 + 1) * 2:
+    if not target_inds.size == (20 * 2 + 1) * 2:
         errors.append("Length of DOY range covering the middle of the year is wrong")
-    control_inds = np.concatenate((np.arange(30, 71, 1)-1, np.arange(30, 71, 1) + 365 - 1))
+    control_inds = np.concatenate((np.arange(30, 71, 1) - 1, np.arange(30, 71, 1) + 365 - 1))
     if not np.all(target_inds == control_inds):
         errors.append("Indices of DOY range covering the middle of the year are wrong")
     control_doys = np.concatenate((np.arange(30, 71, 1), np.arange(30, 71, 1)))
@@ -180,7 +180,7 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
 
     dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
     target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, strict_leap_year_treatment=False)
-    if not target_inds.size == 20*2 +1:
+    if not target_inds.size == 20 * 2 + 1:
         errors.append("Length of DOY range covering the ending of the previous year is wrong")
     control = np.concatenate((np.arange(355, 366, 1), np.arange(1, 31, 1)))
     if not np.all(target_doys == control):
@@ -227,4 +227,4 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
 
 def test_doy_list():
     target = tools.doy_list()
-    assert np.all(target==np.arange(1, 367, 1))
+    assert np.all(target == np.arange(1, 367, 1))

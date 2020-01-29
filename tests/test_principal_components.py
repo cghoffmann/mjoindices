@@ -67,7 +67,7 @@ def test_save_pcs_to_txt_file_and_load_pcs_from_txt_file(tmp_path):
     filename = tmp_path / "test_save_pcs_to_txt_file.txt"
     test_pc1 = np.array([0.12345678, 0.33333333, 0.555555555])
     test_pc2 = np.array([0.38462392, 0.44444444, 0.666666666])
-    test_dates= np.array([np.datetime64("2019-06-10"),np.datetime64("2019-06-11"),np.datetime64("2019-06-12")])
+    test_dates = np.array([np.datetime64("2019-06-10"), np.datetime64("2019-06-11"), np.datetime64("2019-06-12")])
     testPC = pc.PCData(test_dates, test_pc1, test_pc2)
     testPC.save_pcs_to_txt_file(filename)
 

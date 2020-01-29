@@ -78,7 +78,6 @@ class PCData:
         """
         return self._pc2
 
-    # ToDo: implement also storing to npz file
     def save_pcs_to_txt_file(self, filename: Path) -> None:
         """
         Saves the computed PCs to a text file.

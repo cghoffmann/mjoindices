@@ -74,7 +74,6 @@ def test_OLRData_basic_properties():
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
-
 @pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available")
 def test_loadNOAAInterpolatedOLR():
     errors = []
@@ -85,7 +84,7 @@ def test_loadNOAAInterpolatedOLR():
     # changes when file is updated
     if not target.time[0] == np.datetime64("1974-06-01"):
         errors.append("First date does not match")
-    if not ((target.time[1] - target.time[0]).astype('timedelta64[D]')/np.timedelta64(1,"D")) == 1:
+    if not ((target.time[1] - target.time[0]).astype('timedelta64[D]') / np.timedelta64(1, "D")) == 1:
         errors.append("Temporal spacing does not match 1 day")
 
     # Check latitude grid
@@ -109,7 +108,7 @@ def test_loadNOAAInterpolatedOLR():
     # Check OLR Data
     # OLR samples extracted from file using Panoply viewer, which directly
     # applies scaling and offset values
-    if not math.isclose(target.olr[0,0,0], 205.450):
+    if not math.isclose(target.olr[0, 0, 0], 205.450):
         errors.append("First OLR sample value does not match")
     if not math.isclose(target.olr[0, 3, 0], 207.860):
         errors.append("Second OLR sample value does not match")
@@ -156,17 +155,16 @@ def test_resample_spatial_grid():
     target_lat = np.array([-1.25, 1.25])
     target_long = np.array([10., 20., 30., 40.])
     target = olr.interpolate_spatial_grid(testdata, target_lat, target_long)
-    if not target.olr[0, 0, 0] == (1.+5.)/2.:
+    if not target.olr[0, 0, 0] == (1. + 5.) / 2.:
         errors.append("Latitude interpolation with longitude constant incorrect (setup 1).")
-    if not target.olr[0, 1, 0] == (5.+9.)/2.:
+    if not target.olr[0, 1, 0] == (5. + 9.) / 2.:
         errors.append("Latitude interpolation with longitude constant incorrect (setup 2).")
-    if not target.olr[0, 1, 2] == (7.+11.)/2.:
+    if not target.olr[0, 1, 2] == (7. + 11.) / 2.:
         errors.append("Latitude interpolation with longitude constant incorrect (setup 3).")
-    if not target.olr[1, 1, 0] == (50.+90.)/2.:
+    if not target.olr[1, 1, 0] == (50. + 90.) / 2.:
         errors.append("Latitude interpolation with longitude constant incorrect (setup 4).")
 
-
-    target_lat =np.array([-2.5, 0., 2.5])
+    target_lat = np.array([-2.5, 0., 2.5])
     target_long = np.array([15., 25., 35.])
     target = olr.interpolate_spatial_grid(testdata, target_lat, target_long)
     if not target.olr[0, 0, 0] == (1. + 2.) / 2.:
@@ -235,9 +233,9 @@ def test_restrict_time_coverage():
 def test_save_to_npzfile_restore_from_npzfile(tmp_path):
     filename = tmp_path / "OLRSaveTest.npz"
     time = np.arange("2018-01-01", "2018-01-04", dtype='datetime64[D]')
-    lat= np.array([-2.5, 2.5])
+    lat = np.array([-2.5, 2.5])
     long = np.array([10, 20, 30, 40])
-    olrmatrix=np.random.rand(3, 2, 4)
+    olrmatrix = np.random.rand(3, 2, 4)
     testdata = olr.OLRData(olrmatrix, time, lat, long)
     testdata.save_to_npzfile(filename)
 
@@ -302,7 +300,7 @@ def test_extract_olr_matrix_for_doy_range():
     time = np.arange("2018-01-01", "2019-01-10", dtype='datetime64[D]')
     lat = np.array([-2.5, 2.5])
     long = np.array([10, 20, 30, 40])
-    olrmatrix = np.random.rand(9+365, 2, 4)
+    olrmatrix = np.random.rand(9 + 365, 2, 4)
     testdata = olr.OLRData(olrmatrix, time, lat, long)
     target = testdata.extract_olr_matrix_for_doy_range(4, 2, strict_leap_year_treatment=True)
     inds = np.concatenate((np.arange(1, 6, 1), np.arange(1, 6, 1) + 365))

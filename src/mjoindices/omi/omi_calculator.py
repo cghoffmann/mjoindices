@@ -246,7 +246,7 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
         F = np.reshape(olr_maps_for_doy,
                        [N, M]).T  # vector: only one dimension. Length given by original longitude and latitude bins
         solver = eofs_package.Eof(F.T)
-        # Todo: Shpuld we care about complex values here?
+        # Todo: Should we care about complex values here?
         eofs = solver.eofs(neofs=2)
         explainedVariances = solver.varianceFraction()
         L = solver.eigenvalues()

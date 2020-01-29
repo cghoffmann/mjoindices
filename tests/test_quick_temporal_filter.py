@@ -93,7 +93,3 @@ def generate_reference_data_for_pcquick_filter_tests():
     olrdata_filtered = qfilter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(test_olr_part)
     filename = Path(str(reference_file_filterOLRForMJO_PCQuick_Calculation_latmin10) + ".newcalc")
     olrdata_filtered.save_to_npzfile(filename)
-
-
-if __name__ == '__main__':
-    generate_reference_data_for_pcquick_filter_tests()
