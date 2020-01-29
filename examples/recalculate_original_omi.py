@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-""" """
-
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
 # This file is part of mjoindices
@@ -21,6 +19,21 @@
 
 # Contact: christoph.hoffmann@uni-greifswald.de
 
+"""
+This example reproduces the original OMI values described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler,
+S.N. Tulich, K. Kikuchi, K.M. Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices
+for Tracking the MJO. Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
+
+The script may run for about 2 hours on common desktop computers.
+
+You can modify this example in order to compute OMI data from other OLR datasets (this is probably what you intend if
+you use this package).  For this, you only have to provide your OLR data as a mjoindices.olr_handling.OLRData object and
+use this object as replacement for the original data in two lines, which is mentioned in the comments below.
+
+This example also produces some diagnostic plots. More evaluation can be done afterwards with the script
+evaluate_omi_reproduction.py.
+"""
+
 from pathlib import Path
 import os.path
 
@@ -31,17 +44,6 @@ import mjoindices.principal_components as pc
 import mjoindices.evaluation_tools
 import numpy as np
 
-# This example reproduces the original OMI values described in
-# Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M. Weickmann, and M.J. Ventrice, 2014:
-# A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
-# Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
-
-# You can modify this example in order to compute OMI data from other OLR datasets
-# (this is probably what you intend if you use this package).
-# For this, you only have to provide your OLR data as a mjoindices.olr_handling.OLRData object and
-# inject it in two lines below.
-
-
 # ################ Settings. Change with respect to your system ###################
 
 # Download the data file from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc to your local file system and
@@ -50,29 +52,31 @@ olr_data_filename = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" 
 
 # The following directory should contain the two subdirectories "eof1" and "eof2", which should contain the files
 # downloaded from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and
-# ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ respectively
+# ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ , respectively
 originalOMIDataDirname = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" / "OriginalOMI"
 
 # Download the original OMI values from https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt to your local file system
 # and adjust the local path below.
 originalOMIPCFile = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" / "OriginalOMI" / "omi.1x.txt"
 
-# Files to store the results:
+# Files in which the results are saved. Adjust according to your system.
+
 # The EOFs
 eofnpzfile = Path(os.path.abspath('')) / "example_data" / "EOFs.npz"
 # The PCs
 pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
-
 # Directory in which the figures are saved.
 fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots"
+
+# ############## There should be no need to change anything below (except you intend to use different OLR data as input.)
 
 # ############## Calculation of the EOFs ###################
 
 if not fig_dir.exists():
     fig_dir.mkdir(parents=True, exist_ok=False)
 
-# Load the OLR data
-# This is the first place to inject here your own OLR data, if you want tio compute OMI for a different dataset.
+# Load the OLR data.
+# This is the first line to replace to use your own OLR data, if you want to compute OMI for a different dataset.
 raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
 # Restrict dataset to the original length for the EOF calculation (Kiladis, 2014)
 shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
@@ -85,8 +89,8 @@ fig = olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 fig.show()
 fig.savefig(fig_dir / "OLR_map.png")
 
-# Calculate the eofs. In the postprocessing, the signs of the EOFs are adjusted and the EOF in a period
-# around DOY 300 are replaced by an interpolation see Kiladis, 2014).
+# Calculate the EOFs. In the postprocessing, the signs of the EOFs are adjusted and the EOFs in a period
+# around DOY 300 are replaced by an interpolation see Kiladis (2014).
 # The switch strict_leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
 # minor differences for the other DOYs. While the results for setting strict_leap_year_treatment=False are closer to the
 # original values, the calculation strict_leap_year_treatment=True is somewhat more stringently implemented using
@@ -98,8 +102,8 @@ eofs = omi.calc_eofs_from_olr(interpolated_olr,
                              strict_leap_year_treatment=True)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
-# ### Some diagnostic plots to evaluate the calculated EOFs
-# Load precalculated EOFs first
+# ### Some diagnostic plots to evaluate the calculated EOFs.
+# Load precalculated EOFs first.
 orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 # Check correlation with original EOFs
@@ -107,22 +111,22 @@ fig = mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys (eofs,
 fig.show()
 fig.savefig(fig_dir / "EOFs_CorrelationWithOriginal.png")
 
-# Check the explained variance by the EOFS. Values are lower than in Kiladis, 2014, which is correct!
+# Check the variance explained by the EOFs. Values are by a factor of 2 lower than in Kiladis (2014), which is correct!
 fig = eof.plot_explained_variance_for_all_doys(eofs)
 fig.show()
 fig.savefig(fig_dir / "EOFs_ExplainedVariance.png")
 
-# Check details of the EOF pair for a particular doy in the following
+# Check details of the EOF pair for a particular DOY in the following.
 doy = 50
-# Plot EOFs for this DOY
+# Plot EOFs for this DOY.
 fig = eof.plot_individual_eof_map(eofs.eofdata_for_doy(doy), doy)
 fig.show()
 fig.savefig(fig_dir / "EOF_Sample.png")
-# Plot EOF pair in comparison to the original one fpr this DOY
+# Plot EOF pair in comparison to the original one for this DOY.
 fig = mjoindices.evaluation_tools.plot_individual_eof_map_comparison(orig_eofs.eofdata_for_doy(doy), eofs.eofdata_for_doy(doy), doy)
 fig.show()
 fig.savefig(fig_dir / "EOF_SampleComparison.png")
-# Plot the explained variance for the first 10 EOFs of this DOY to check to drop of explained variance after EOF2
+# Plot the explained variance for the first 10 EOFs of this DOY to check the drop of explained variance after EOF2.
 fig = eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=doy, max_eof_number=10)
 fig.show()
 fig.savefig(fig_dir / "EOF_SampleExplainedVariance.png")
@@ -130,23 +134,23 @@ fig.savefig(fig_dir / "EOF_SampleExplainedVariance.png")
 
 # ############## Calculation of the PCs ##################
 
-# Load the OLR data
-# This is second place to inject here your own OLR data, if you want tio compute OMI for a different dataset.
+# Load the OLR data.
+# This is second line to replace to use your own OLR data, if you want to compute OMI for a different dataset.
 olr = olr.load_noaa_interpolated_olr(olr_data_filename)
-# Load EOFs
+# Load EOFs.
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 
-# Calculate the PCs
-# Restrict calculation to the length of the official OMI time series
+# Calculate the PCs.
+# Restrict calculation to the length of the official OMI time series.
 pcs = omi.calculate_pcs_from_olr(olr,
                                  eofs,
                                  np.datetime64("1979-01-01"),
                                  np.datetime64("2018-08-28"),
                                  use_quick_temporal_filter=False)
-# Save PCs
+# Save PCs to a file.
 pcs.save_pcs_to_txt_file(pctxtfile)
 
-# ### Diagnostic plot: Comparison to original PCs
+# ### Diagnostic plot: Comparison to original PCs.
 pcs = pc.load_pcs_from_txt_file(pctxtfile)
 orig_pcs = pc.load_original_pcs_from_txt_file(originalOMIPCFile)
 fig = mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs(pcs, orig_pcs)

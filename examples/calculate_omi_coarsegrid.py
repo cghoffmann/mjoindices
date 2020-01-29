@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-""" """
-
 # Copyright (C) 2019 Christoph G. Hoffmann. All rights reserved.
 
 # This file is part of mjoindices
@@ -21,6 +19,15 @@
 
 # Contact: christoph.hoffmann@uni-greifswald.de
 
+"""
+This example is very similar to the example recalculate_original_omi.py.
+However, it computes the OMI values on a freely defined spatial grid.
+While this is generally supported by the package, it is not recommended to choose a
+spatial grid that differs from the original one, since it is scientifically not clear if the OMI index will have the
+same characteristics on a different grid.
+Nevertheless, this example can be used to quickly check the implication of a different grid.
+"""
+
 from pathlib import Path
 import os.path
 
@@ -30,13 +37,6 @@ import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.principal_components as pc
 import mjoindices.evaluation_tools
 import numpy as np
-
-# This example reproduces is very similar to the example recalculate_original_omi.py.
-# However, it computes the OMI values on a freely defined spatial grid.
-# While this is generally supported by the package, it is not recommended to choose a
-# spatial grid that differs from the original one, since it is scientifically not clear if the OMI index will have the
-# same characteristics on a different grid.
-# Nevertheless, this example can be used to quickly check the implication of a different grid.
 
 # ################ Settings. Change with respect to your system ###################
 
@@ -66,15 +66,16 @@ fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots
 if not fig_dir.exists():
     fig_dir.mkdir(parents=True, exist_ok=False)
 
-# Load the OLR data
-# This is the first place to inject here your own OLR data, if you want tio compute OMI for a different dataset.
+# Load the OLR data.
+# This is the first place to insert your own OLR data, if you want to compute OMI for a different dataset.
 raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
-# Restrict dataset to the original length for the EOF calculation (Kiladis, 2014)
+# Restrict dataset to the original length for the EOF calculation (Kiladis, 2014).
 shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
+
 # This is the line, where the spatial grid is changed.
 interpolated_olr = olr.interpolate_spatial_grid(shorter_olr, coarse_lat, coarse_long)
 
-# Diagnosis plot of the loaded OLR data
+# Diagnosis plot of the loaded OLR data.
 fig = olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 fig.show()
 fig.savefig(fig_dir / "OLR_map.png")
@@ -92,23 +93,23 @@ eofs = omi.calc_eofs_from_olr(interpolated_olr,
                              strict_leap_year_treatment=True)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
-# ### Some diagnostic plots to evaluate the calculated EOFs
-# Load precalculated EOFs first
+# ### Some diagnostic plots to evaluate the calculated EOFs.
+# Load precalculated EOFs first.
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
-# Check correlation with original EOFs
 
-# Check the explained variance by the EOFS. Values are lower than in Kiladis, 2014, which is correct!
+# Check the explained variance by the EOFs. Values are lower by about a factor of 2 than in Kiladis (2014),
+# which is correct!
 fig = eof.plot_explained_variance_for_all_doys(eofs)
 fig.show()
 fig.savefig(fig_dir / "EOFs_ExplainedVariance.png")
 
-# Check details of the EOF pair for a particular doy in the following
+# Check details of the EOF pair for a particular DOY in the following.
 doy = 50
-# Plot EOFs for this DOY
+# Plot EOFs for this DOY.
 fig = eof.plot_individual_eof_map(eofs.eofdata_for_doy(doy), doy)
 fig.show()
 fig.savefig(fig_dir / "EOF_Sample.png")
-# Plot the explained variance for the first 10 EOFs of this DOY to check to drop of explained variance after EOF2
+# Plot the explained variance for the first 10 EOFs of this DOY to check the drop of explained variances after EOF2.
 fig = eof.plot_individual_explained_variance_all_eofs(eofs.eofdata_for_doy(doy), doy=doy, max_eof_number=10)
 fig.show()
 fig.savefig(fig_dir / "EOF_SampleExplainedVariance.png")
@@ -116,23 +117,23 @@ fig.savefig(fig_dir / "EOF_SampleExplainedVariance.png")
 
 # ############## Calculation of the PCs ##################
 
-# Load the OLR data
-# This is second place to inject here your own OLR data, if you want tio compute OMI for a different dataset.
+# Load the OLR data.
+# This is the second place to insert your own OLR data, if you want to compute OMI for a different dataset.
 olr = olr.load_noaa_interpolated_olr(olr_data_filename)
 # Load EOFs
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 
-# Calculate the PCs
-# Restrict calculation to the length of the official OMI time series
+# Calculate the PCs.
+# Restrict calculation to the length of the official OMI time series.
 pcs = omi.calculate_pcs_from_olr(olr,
                                  eofs,
                                  np.datetime64("1979-01-01"),
                                  np.datetime64("2018-08-28"),
                                  use_quick_temporal_filter=False)
-# Save PCs
+# Save PCs.
 pcs.save_pcs_to_txt_file(pctxtfile)
 
-# ### Diagnostic plot: Comparison to original PCs
+# ### Diagnostic plot: Comparison to original PCs.
 pcs = pc.load_pcs_from_txt_file(pctxtfile)
 orig_pcs = pc.load_original_pcs_from_txt_file(originalOMIPCFile)
 fig = mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs(pcs, orig_pcs)
