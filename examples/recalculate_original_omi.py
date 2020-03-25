@@ -99,7 +99,7 @@ fig.savefig(fig_dir / "OLR_map.png")
 eofs = omi.calc_eofs_from_olr(interpolated_olr,
                              sign_doy1reference=True,
                              interpolate_eofs=True,
-                             strict_leap_year_treatment=True)
+                             strict_leap_year_treatment=False)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ### Some diagnostic plots to evaluate the calculated EOFs.

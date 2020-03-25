@@ -51,7 +51,7 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray]) -> typing.Un
 
 
 def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: int,
-                             strict_leap_year_treatment: bool=True) -> typing.Tuple:
+                             strict_leap_year_treatment: bool=False) -> typing.Tuple:
     """
     Finds the indices in a given array of dates that fit into a particular window of DOYs.
 
@@ -72,7 +72,9 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
         guaranteed to be 2*window_length+1, but can also be 2*window_length+2 if the window crosses the ending of a leap
         year. The setting True is somewhat more stringently implemented. The window length is always 2*window_length+1,
         however, the number of calender days covered by a window is reduced by approximately a factor of 4 for
-        center_doy=366, since a window is found only during leap years at all.
+        center_doy=366, since a window is found only during leap years at all, which might cause the EOF to differ quite
+        a lot from those of DOY 365 and DOY 1, which is not wanted. Because of that the recommended setting
+        is the default value False.
 
     :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.
     """

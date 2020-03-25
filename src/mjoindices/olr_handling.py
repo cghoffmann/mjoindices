@@ -130,7 +130,7 @@ class OLRData:
             return None
 
     def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0,
-                                         strict_leap_year_treatment: bool = True) -> np.ndarray:
+                                         strict_leap_year_treatment: bool = False) -> np.ndarray:
         """
         Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).
 

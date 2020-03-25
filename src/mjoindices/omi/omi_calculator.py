@@ -64,7 +64,7 @@ if eofs_package_available:
 
 def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: bool = True,
                        interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
-                       interpolation_end_doy: int = 316, strict_leap_year_treatment: bool = True) -> eof.EOFDataForAllDOYs:
+                       interpolation_end_doy: int = 316, strict_leap_year_treatment: bool = False) -> eof.EOFDataForAllDOYs:
     """
     One major function of this module. It performs the complete OMI EOF computation.
 
@@ -109,7 +109,7 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
 
 
 def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = "internal",
-                                    strict_leap_year_treatment: bool = True) -> eof.EOFDataForAllDOYs:
+                                    strict_leap_year_treatment: bool = False) -> eof.EOFDataForAllDOYs:
     """
     Calculates a series of EOF pairs: one pair for each DOY.
 
@@ -168,7 +168,7 @@ def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool =
     return pp_eofs
 
 
-def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = True) -> eof.EOFData:
+def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = False) -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
@@ -217,7 +217,7 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
 
 
 def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
-                                         strict_leap_year_treatment: bool = True) -> eof.EOFData:
+                                         strict_leap_year_treatment: bool = False) -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
@@ -264,7 +264,7 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
 
 
 def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
-                                                   doy1reference: bool = True) -> eof.EOFDataForAllDOYs:
+                                                   doy1reference: bool = False) -> eof.EOFDataForAllDOYs:
     """
     Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.
 
