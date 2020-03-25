@@ -459,6 +459,20 @@ def plot_timeseries_agreement(ref_data: np.ndarray,
         print("##########")
         if title is not None:
             print(title)
+
+    if not (time[0] == ref_time[0]) or not (time[-1] == ref_time[-1]):
+        (time_intersect, data_ind, ref_data_ind) = np.intersect1d(time, ref_time, return_indices=True)
+        if time_intersect.size == 0:
+            raise ValueError("Provided time series to plot do not overlap.")
+        if not np.all(np.diff(time_intersect) == np.diff(time_intersect)[0]):
+            raise ValueError("Combined time grid of both time series to plot is not equidistant.")
+        time = time_intersect
+        data = data[data_ind]
+        ref_time = time_intersect
+        ref_data = ref_data[ref_data_ind]
+        print("Provided time series do not cover the same period. Restricted compared range to overlapping period; from {0} to {1}"
+              .format(str(time[0]), str(time[-1])))
+
     (tempa, tempb, corr_complete, diff_mean_complete, diff_std_complete, diff_ts_abs_complete,
      diff_abs_percent68_complete, diff_abs_percent95_complete, diff_abs_percent99_complete) \
         = calc_timeseries_agreement(ref_data, ref_time, data, time, exclude_doy366=False, do_print=do_print)
