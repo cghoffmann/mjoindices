@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>mjoindices.omi.omi_calculator &mdash; mjoindices  documentation</title>
   
@@ -17,24 +17,24 @@
   
 
   
-  <script src="../../../_static/js/modernizr.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
   
     
-      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js" type="text/javascript"></script>
-        <script src="../../../_static/jquery.js" type="text/javascript"></script>
-        <script src="../../../_static/underscore.js" type="text/javascript"></script>
-        <script src="../../../_static/doctools.js" type="text/javascript"></script>
-        <script src="../../../_static/language_data.js" type="text/javascript"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
     
-    <script src="../../../_static/js/theme.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
 
   
-  <link href="../../../_static/css/theme.css" rel="stylesheet" type="text/css" />
-  <link href="../../../_static/pygments.css" rel="stylesheet" type="text/css" />
-    <link href="../../../genindex.html" rel="index" title="Index" />
-    <link href="../../../search.html" rel="search" title="Search" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -42,13 +42,13 @@
    
   <div class="wy-grid-for-nav">
     
-    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
           
 
           
-            <a class="icon icon-home" href="../../../index.html"> mjoindices
+            <a href="../../../index.html" class="icon icon-home"> mjoindices
           
 
           
@@ -61,17 +61,17 @@
 
           
 <div role="search">
-  <form action="../../../search.html" class="wy-form" id="rtd-search-form" method="get">
-    <input name="q" placeholder="Search docs" type="text" />
-    <input name="check_keywords" type="hidden" value="yes" />
-    <input name="area" type="hidden" value="default" />
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
   </form>
 </div>
 
           
         </div>
 
-        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
             
@@ -93,12 +93,12 @@
       </div>
     </nav>
 
-    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav aria-label="top navigation" class="wy-nav-top">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
-          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">mjoindices</a>
         
       </nav>
@@ -124,7 +124,7 @@
 
 
 
-<div aria-label="breadcrumbs navigation" role="navigation">
+<div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
@@ -144,7 +144,7 @@
   
   <hr/>
 </div>
-          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
   <h1>Source code for mjoindices.omi.omi_calculator</h1><div class="highlight"><pre>
@@ -214,7 +214,7 @@
 
 <div class="viewcode-block" id="calc_eofs_from_olr"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr">[docs]</a><span class="k">def</span> <span class="nf">calc_eofs_from_olr</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">implementation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span><span class="p">,</span> <span class="n">sign_doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                        <span class="n">interpolate_eofs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">interpolation_start_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">293</span><span class="p">,</span>
-                       <span class="n">interpolation_end_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">316</span><span class="p">,</span> <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+                       <span class="n">interpolation_end_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">316</span><span class="p">,</span> <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    One major function of this module. It performs the complete OMI EOF computation.</span>
 
@@ -259,7 +259,7 @@
 
 
 <div class="viewcode-block" id="calc_eofs_from_preprocessed_olr"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr">[docs]</a><span class="k">def</span> <span class="nf">calc_eofs_from_preprocessed_olr</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">implementation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span><span class="p">,</span>
-                                    <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+                                    <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates a series of EOF pairs: one pair for each DOY.</span>
 
@@ -318,7 +318,7 @@
     <span class="k">return</span> <span class="n">pp_eofs</span></div>
 
 
-<div class="viewcode-block" id="calc_eofs_for_doy"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_for_doy">[docs]</a><span class="k">def</span> <span class="nf">calc_eofs_for_doy</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">:</span>
+<div class="viewcode-block" id="calc_eofs_for_doy"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_for_doy">[docs]</a><span class="k">def</span> <span class="nf">calc_eofs_for_doy</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates a pair of EOFs for a particular DOY.</span>
 
@@ -367,7 +367,7 @@
 
 
 <div class="viewcode-block" id="calc_eofs_for_doy_using_eofs_package"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package">[docs]</a><span class="k">def</span> <span class="nf">calc_eofs_for_doy_using_eofs_package</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                                         <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">:</span>
+                                         <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates a pair of EOFs for a particular DOY.</span>
 
@@ -414,7 +414,7 @@
 
 
 <div class="viewcode-block" id="correct_spontaneous_sign_changes_in_eof_series"><a class="viewcode-back" href="../../../api/omi_calculator.html#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series">[docs]</a><span class="k">def</span> <span class="nf">correct_spontaneous_sign_changes_in_eof_series</span><span class="p">(</span><span class="n">eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
-                                                   <span class="n">doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+                                                   <span class="n">doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.</span>
 

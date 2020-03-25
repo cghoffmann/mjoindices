@@ -319,7 +319,7 @@ var Search = {
     for (var prefix in objects) {
       for (var name in objects[prefix]) {
         var fullname = (prefix ? prefix + '.' : '') + name;
-        var fullnameLower = fullname.toLowerCase();
+        var fullnameLower = fullname.toLowerCase()
         if (fullnameLower.indexOf(object) > -1) {
           var score = 0;
           var parts = fullnameLower.split('.');
@@ -414,7 +414,7 @@ var Search = {
       $u.each(_o, function(o) {
         var _files = o.files;
         if (_files === undefined)
-          return;
+          return
 
         if (_files.length === undefined)
           _files = [_files];
@@ -445,7 +445,7 @@ var Search = {
 
       // check if all requirements are matched
       var filteredTermCount = // as search terms with length < 3 are discarded: ignore
-        searchterms.filter(function(term){return term.length > 2}).length;
+        searchterms.filter(function(term){return term.length > 2}).length
       if (
         fileMap[file].length != searchterms.length &&
         fileMap[file].length != filteredTermCount

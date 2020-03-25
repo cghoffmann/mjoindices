@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Module mjoindices.omi.omi_calculator &mdash; mjoindices  documentation</title>
   
@@ -17,26 +17,26 @@
   
 
   
-  <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js" type="text/javascript"></script>
-        <script src="../_static/jquery.js" type="text/javascript"></script>
-        <script src="../_static/underscore.js" type="text/javascript"></script>
-        <script src="../_static/doctools.js" type="text/javascript"></script>
-        <script src="../_static/language_data.js" type="text/javascript"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
-    <script src="../_static/js/theme.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
 
   
-  <link href="../_static/css/theme.css" rel="stylesheet" type="text/css" />
-  <link href="../_static/pygments.css" rel="stylesheet" type="text/css" />
-    <link href="../genindex.html" rel="index" title="Index" />
-    <link href="../search.html" rel="search" title="Search" />
-    <link href="olr_handling.html" rel="next" title="Module mjoindices.olr_handling" />
-    <link href="apidoc.html" rel="prev" title="API documentation (for running calculations)" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Module mjoindices.olr_handling" href="olr_handling.html" />
+    <link rel="prev" title="API documentation (for running calculations)" href="apidoc.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -44,13 +44,13 @@
    
   <div class="wy-grid-for-nav">
     
-    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
           
 
           
-            <a class="icon icon-home" href="../index.html"> mjoindices
+            <a href="../index.html" class="icon icon-home"> mjoindices
           
 
           
@@ -63,17 +63,17 @@
 
           
 <div role="search">
-  <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
-    <input name="q" placeholder="Search docs" type="text" />
-    <input name="check_keywords" type="hidden" value="yes" />
-    <input name="area" type="hidden" value="default" />
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
   </form>
 </div>
 
           
         </div>
 
-        <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
             
@@ -99,12 +99,12 @@
       </div>
     </nav>
 
-    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav aria-label="top navigation" class="wy-nav-top">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
-          <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mjoindices</a>
         
       </nav>
@@ -130,7 +130,7 @@
 
 
 
-<div aria-label="breadcrumbs navigation" role="navigation">
+<div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
@@ -154,7 +154,7 @@
   
   <hr/>
 </div>
-          <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
   <div class="section" id="module-mjoindices.omi.omi_calculator">
@@ -171,7 +171,7 @@ Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based In
 Mon. Wea. Rev., 142, 1697–1715, <a class="reference external" href="https://doi.org/10.1175/MWR-D-13-00301.1">https://doi.org/10.1175/MWR-D-13-00301.1</a></p>
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calc_eofs_for_doy">
-<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_for_doy</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">doy: int</em>, <em class="sig-param">strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_for_doy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_for_doy</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">doy: int</em>, <em class="sig-param">strict_leap_year_treatment: bool = False</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_for_doy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a pair of EOFs for a particular DOY.</p>
 <p>An explicit internal implementation of the EOF approach is used.</p>
 <p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
@@ -195,7 +195,7 @@ Mon. Wea. Rev., 142, 1697–1715, <a class="reference external" href="https://do
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package">
-<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_for_doy_using_eofs_package</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">doy: int</em>, <em class="sig-param">strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_for_doy_using_eofs_package"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_for_doy_using_eofs_package</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">doy: int</em>, <em class="sig-param">strict_leap_year_treatment: bool = False</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFData<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_for_doy_using_eofs_package"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a pair of EOFs for a particular DOY.</p>
 <p>The external package <code class="xref py py-mod docutils literal notranslate"><span class="pre">eofs</span></code> is used for the core calculation</p>
 <p>Note that it is recommended to use the function <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
@@ -219,7 +219,7 @@ Mon. Wea. Rev., 142, 1697–1715, <a class="reference external" href="https://do
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calc_eofs_from_olr">
-<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_from_olr</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">implementation: str = 'internal'</em>, <em class="sig-param">sign_doy1reference: bool = True</em>, <em class="sig-param">interpolate_eofs: bool = False</em>, <em class="sig-param">interpolation_start_doy: int = 293</em>, <em class="sig-param">interpolation_end_doy: int = 316</em>, <em class="sig-param">strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_from_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_from_olr</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">implementation: str = 'internal'</em>, <em class="sig-param">sign_doy1reference: bool = True</em>, <em class="sig-param">interpolate_eofs: bool = False</em>, <em class="sig-param">interpolation_start_doy: int = 293</em>, <em class="sig-param">interpolation_end_doy: int = 316</em>, <em class="sig-param">strict_leap_year_treatment: bool = False</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_from_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="Permalink to this definition">¶</a></dt>
 <dd><p>One major function of this module. It performs the complete OMI EOF computation.</p>
 <p>This function executes consistently the preprocessing (filtering), the actual EOF analysis, and the postprocessing.</p>
 <dl class="field-list simple">
@@ -244,7 +244,7 @@ calculation.</p></li>
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr">
-<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_from_preprocessed_olr</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">implementation: str = 'internal'</em>, <em class="sig-param">strict_leap_year_treatment: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_from_preprocessed_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">calc_eofs_from_preprocessed_olr</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">implementation: str = 'internal'</em>, <em class="sig-param">strict_leap_year_treatment: bool = False</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#calc_eofs_from_preprocessed_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a series of EOF pairs: one pair for each DOY.</p>
 <p>This is based on already preprocessed OLR. Note that it is recommended to use the function
 <a class="reference internal" href="#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover the complete algorithm.</p>
@@ -311,7 +311,7 @@ The contents of both remote directories should again be placed into sub director
 
 <dl class="function">
 <dt id="mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series">
-<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">correct_spontaneous_sign_changes_in_eof_series</code><span class="sig-paren">(</span><em class="sig-param">eofs: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em class="sig-param">doy1reference: bool = True</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#correct_spontaneous_sign_changes_in_eof_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.omi_calculator.</code><code class="sig-name descname">correct_spontaneous_sign_changes_in_eof_series</code><span class="sig-paren">(</span><em class="sig-param">eofs: mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</em>, <em class="sig-param">doy1reference: bool = False</em><span class="sig-paren">)</span> &#x2192; mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs<a class="reference internal" href="../_modules/mjoindices/omi/omi_calculator.html#correct_spontaneous_sign_changes_in_eof_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.omi_calculator.correct_spontaneous_sign_changes_in_eof_series" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.</p>
 <p>Note that the sign of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
 which can be improved using this function. As long as this step is performed before computing the PCs, it will not
@@ -447,12 +447,12 @@ as long as those datasets have the same structure like the the class <a class="r
           </div>
           <footer>
   
-    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a accesskey="n" class="btn btn-neutral float-right" href="olr_handling.html" rel="next" title="Module mjoindices.olr_handling">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="olr_handling.html" class="btn btn-neutral float-right" title="Module mjoindices.olr_handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a accesskey="p" class="btn btn-neutral float-left" href="apidoc.html" rel="prev" title="API documentation (for running calculations)"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="apidoc.html" class="btn btn-neutral float-left" title="API documentation (for running calculations)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
