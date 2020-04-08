@@ -358,7 +358,11 @@ def test_completeOMIReproduction(tmp_path):
 
         assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
-
+@pytest.mark.slow
+@pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available.")
+@pytest.mark.skipif(not eof1Dirname.is_dir(), reason="EOF1 data not available not available for comparison.")
+@pytest.mark.skipif(not eof2Dirname.is_dir(), reason="EOF2 data not available not available for comparison.")
+@pytest.mark.skipif(not origOMIPCsFilename.is_file(), reason="Original OMI PCs not available for comparison.")
 def test_completeOMIReproduction_coarsegrid(tmp_path):
 
     errors = []
