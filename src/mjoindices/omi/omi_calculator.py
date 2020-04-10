@@ -285,7 +285,10 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
     if doy1reference is True:
         reference_path = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))) / "sign_reference"
         reference_eofs = eof.load_original_eofs_for_doy(reference_path, 1)
-        if not np.all(reference_eofs.lat == eofs.lat) or not np.all(reference_eofs.long == eofs.long):
+        if not reference_eofs.lat.size == eofs.lat.size \
+                or not reference_eofs.long.size == eofs.long.size \
+                or not np.all(reference_eofs.lat == eofs.lat) \
+                or not np.all(reference_eofs.long == eofs.long):
             warnings.warn("References for the sign of the EOFs for DOY1 have to be interpolated to spatial grid of the"
                           " target EOFs. Treat results with caution.")
             f1 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof1map,
