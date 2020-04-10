@@ -1,8 +1,16 @@
-The following files and directories should be added into the directory tests/testdata to be able to run all tests:
+Some of the tests need input and reference data to be executable. This concerns particularly the integration tests,
+which recalculate a complete OMI time series and compare the results with the original values.
 
-- ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc directly into the tests/testdata/olr.day.mean.nc.
+The input and reference datasets are not included in the software package, but can be downloaded separately from Zenodo:
+https://doi.org/10.5281/zenodo.3746562
 
-- All files from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ into the subdirectory tests/testdata/OriginalOMI/eof1/
-- All files from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ into the subdirectory tests/testdata/OriginalOMI/eof2/
+Download and extract one of the files found there and copy the contents into the local test/testdata directory,
+so that it has additionally the following contents afterwards:
+tests/testdata/olr.day.mean.nc
+tests/testdata/OriginalOMI/eof1/eof*.txt
+tests/testdata/OriginalOMI/eof2/eof*.txt
+tests/testdata/OriginalOMI/omi.1x.txt
+tests/testdata/OriginalOMI/omi_var.txt
 
-- https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt (Current version that ends on August 28, 2018) into tests/testdata/OriginalOMI/omi.1x.txt
+Note that it is not reliable to perform the tests with respective files directly downloaded from the website of NOAA,
+since those files might be changed, whereas the recalculation depends on a particular snapshot.
