@@ -46,10 +46,14 @@ coarse_long = np.arange(0., 359.9, 20.0)
 
 # Download the data file from ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc to your local file system and
 # adjust the local path below.
+# Note: If you have set up the test suite using the reference data package (https://doi.org/10.5281/zenodo.3746562) and
+# if you have kept the original directory structure, the following default setting should directly work.
 olr_data_filename = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" / "olr.day.mean.nc"
 
 # Download the original OMI values from https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt to your local file system
 # and adjust the local path below.
+# Note: If you have set up the test suite using the reference data package (https://doi.org/10.5281/zenodo.3746562) and
+# if you have kept the original directory structure, the following default setting should directly work.
 originalOMIPCFile = Path(os.path.abspath('')).parents[0] / "tests" / "testdata" / "OriginalOMI" / "omi.1x.txt"
 
 # Files to store the results:

@@ -31,6 +31,7 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib.cm
 import re
+import warnings
 
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.principal_components as pc
@@ -470,8 +471,11 @@ def plot_timeseries_agreement(ref_data: np.ndarray,
         data = data[data_ind]
         ref_time = time_intersect
         ref_data = ref_data[ref_data_ind]
-        print("Provided time series do not cover the same period. Restricted compared range to overlapping period; from {0} to {1}"
-              .format(str(time[0]), str(time[-1])))
+        message = ("The provided time series do not cover the same period.\nThe compared range was restricted to the "
+                   "overlapping period from {0} to {1}.\nStronger differences may occur at least at the end of the "
+                   "compared period, since the temporal filtering worked on different samples."
+                   .format(str(time[0]), str(time[-1])))
+        warnings.warn(message)
 
     (tempa, tempb, corr_complete, diff_mean_complete, diff_std_complete, diff_ts_abs_complete,
      diff_abs_percent68_complete, diff_abs_percent95_complete, diff_abs_percent99_complete) \
