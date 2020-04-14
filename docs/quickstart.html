@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -192,12 +192,12 @@ and Windows. Other operating systems have not been tested.</p>
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
 <p>mjoindices is available in the <a class="reference external" href="https://pypi.org/project/mjoindices/">Python Package Index (PyPI)</a>. It can be installed using,
 e.g., pip.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip3 install mjoindices
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">mjoindices</span>
 </pre></div>
 </div>
 <p>It can also be installed from the source, which is available on <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">Zenodo</a> and <a class="reference external" href="https://github.com/cghoffmann/mjoindices">GitHub</a>.
 Download the source, move into the directory containing the file setup.py and run</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>python3 setup.py install
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 </div>
@@ -238,9 +238,9 @@ As for recalculate_original_omi.py, some file and directory names have to be ada
 your installation using pytest.</p>
 <ul>
 <li><p>Download the complete test directory to you local file system.</p></li>
-<li><p>Download some external input and reference data files. The files to be downloaded are described in a separate <a class="reference external" href="https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README">Readme file</a>.</p></li>
+<li><p>Download some external input and reference data files from  <a class="reference external" href="https://doi.org/10.5281/zenodo.3746562">Zenodo</a>. Details are given in a separate <a class="reference external" href="https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README">Readme file</a>.</p></li>
 <li><p>Move into your local test directory and run</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pytest
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span>
 </pre></div>
 </div>
 </li>

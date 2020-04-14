@@ -73,9 +73,7 @@ your installation using pytest.
 
 * Download the complete test directory to you local file system.
 
-* Download some external input and reference data files from 
-  [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate
-  [Readme file](https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README).
+* Download some external input and reference data files from  [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README). 
 
 * Move into your local test directory and run
 

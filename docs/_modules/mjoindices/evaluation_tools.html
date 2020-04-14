@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -181,6 +181,7 @@
 <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
 <span class="kn">import</span> <span class="nn">matplotlib.cm</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">mjoindices.empirical_orthogonal_functions</span> <span class="k">as</span> <span class="nn">eof</span>
 <span class="kn">import</span> <span class="nn">mjoindices.principal_components</span> <span class="k">as</span> <span class="nn">pc</span>
@@ -620,8 +621,11 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data_ind</span><span class="p">]</span>
         <span class="n">ref_time</span> <span class="o">=</span> <span class="n">time_intersect</span>
         <span class="n">ref_data</span> <span class="o">=</span> <span class="n">ref_data</span><span class="p">[</span><span class="n">ref_data_ind</span><span class="p">]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Provided time series do not cover the same period. Restricted compared range to overlapping period; from </span><span class="si">{0}</span><span class="s2"> to </span><span class="si">{1}</span><span class="s2">&quot;</span>
-              <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;The provided time series do not cover the same period.</span><span class="se">\n</span><span class="s2">The compared range was restricted to the &quot;</span>
+                   <span class="s2">&quot;overlapping period from </span><span class="si">{0}</span><span class="s2"> to </span><span class="si">{1}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">Stronger differences may occur at least at the end of the &quot;</span>
+                   <span class="s2">&quot;compared period, since the temporal filtering worked on different samples.&quot;</span>
+                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
     <span class="p">(</span><span class="n">tempa</span><span class="p">,</span> <span class="n">tempb</span><span class="p">,</span> <span class="n">corr_complete</span><span class="p">,</span> <span class="n">diff_mean_complete</span><span class="p">,</span> <span class="n">diff_std_complete</span><span class="p">,</span> <span class="n">diff_ts_abs_complete</span><span class="p">,</span>
      <span class="n">diff_abs_percent68_complete</span><span class="p">,</span> <span class="n">diff_abs_percent95_complete</span><span class="p">,</span> <span class="n">diff_abs_percent99_complete</span><span class="p">)</span> \
