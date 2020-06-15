@@ -116,6 +116,7 @@ venv.bak/
 /venv3.6/
 /out.txt
 /examples/example_data/EOFcalc/
+/examples/example_data/OriginalOMI/
 /coverage/
 /examples/example_data/omi_recalc_example_plots/
 /examples/example_data/omi_recalc_example_plots_coarsegrid/
