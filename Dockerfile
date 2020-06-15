@@ -1,3 +1,3 @@
-FROM alpine:3
+FROM continuumio/miniconda
 
-RUN echo "Basic test"
+RUN pip --version
