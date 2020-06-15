@@ -6,7 +6,7 @@ RUN python ./setup.py install
 
 WORKDIR tests/testdata
 
-RUN wget https://zenodo.org/record/3746563/files/omi_reference_data.tar.gz
+RUN wget -q https://zenodo.org/record/3746563/files/omi_reference_data.tar.gz
 
 RUN tar -xf omi_reference_data.tar.gz
 
