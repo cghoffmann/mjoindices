@@ -200,7 +200,7 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
     if not np.allclose(np.imag(L), 0.):
         warnings.warn("Imaginary part of at least one Eigenvalue greater than expected. Neglecting it anyway")
     L = np.real(L)
-    order = (np.flip(L.argsort()))
+    order = (np.flip(L.argsort(), axis=None))
     L = L[order]
     total_var = np.sum(L)
     explainedVariances = L / total_var  # See Kutzbach (1967), Eq 12
