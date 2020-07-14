@@ -4,7 +4,11 @@ COPY . .
 
 RUN conda install notebook
 
+RUN conda install matplotlib
+
 RUN python ./setup.py install
+
+# RUN conda list
 
 WORKDIR tests/testdata
 
@@ -14,7 +18,7 @@ RUN tar -xf omi_reference_data.tar.gz
 
 WORKDIR ..
 
-RUN pytest test_empirical_orthogonal_functions.py test_evaluation_tools.py test_olr_handling.py test_principal_components.py test_tools.py
+RUN pytest
 
 WORKDIR ..
 
