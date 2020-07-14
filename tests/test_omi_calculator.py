@@ -28,7 +28,6 @@ import numpy as np
 import pytest
 import importlib
 
-
 import mjoindices.omi.omi_calculator as omi
 import mjoindices.principal_components as pc
 import mjoindices.empirical_orthogonal_functions as eof
@@ -50,6 +49,22 @@ mjoindices_reference_eofs_filename = Path(os.path.abspath('')) / "testdata" / "m
 mjoindices_reference_pcs_filename = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs.txt"
 original_omi_explained_variance_file = Path(os.path.abspath('')) / "testdata" / "OriginalOMI" / "omi_var.txt"
 
+@pytest.mark.filterwarnings("ignore:References for the sign of the EOFs for DOY1 have to be interpolated")
+def test_if_refdata_isfound_for_correct_spontaneous_sign_changes_in_eof_series():
+    lat = np.array([-10., 0., 10.])
+    long = np.array([0., 5.])
+    eofs = []
+    for doy in range(1, 367):
+        eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
+        eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
+        eofs.append(eof.EOFData(lat, long, eof1, eof2))
+    eofs = eof.EOFDataForAllDOYs(eofs)
+
+    try:
+        target = omi.correct_spontaneous_sign_changes_in_eof_series(eofs, True)
+    except OSError:
+        pytest.fail("Function failed with OS Error, hence the reference data has probably not been found, which points "
+                    "to an installation problem of the package: ".format(OSError))
 
 setups = [(True, 0.99, 0.99), (False, 0.999, 0.999)]
 @pytest.mark.slow  # noqa: E302
