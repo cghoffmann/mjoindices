@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -167,9 +167,9 @@ full 2-dim Wheeler-Kiladis-Filter.</p>
 for the specific OMI filtering conditions.</p>
 <p>Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
 Instead, they might probably want to use the module <a class="reference internal" href="omi_calculator.html#module-mjoindices.omi.omi_calculator" title="mjoindices.omi.omi_calculator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator</span></code></a> directly.</p>
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing">
-<code class="sig-prename descclassname">mjoindices.omi.quick_temporal_filter.</code><code class="sig-name descname">filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olrdata</span><span class="p">:</span> <span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a><a class="reference internal" href="../_modules/mjoindices/omi/quick_temporal_filter.html#filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.quick_temporal_filter.</code><code class="sig-name descname">filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/omi/quick_temporal_filter.html#filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters OLR data temporally using a 1d Fourier transform filter.</p>
 <p>The temporal filtering constants are chosen to meet the values in the description by Kiladis (2014).</p>
 <dl class="field-list simple">
@@ -182,9 +182,9 @@ Instead, they might probably want to use the module <a class="reference internal
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.omi.quick_temporal_filter.filter_olr_temporally_1d_spectral_smoothing">
-<code class="sig-prename descclassname">mjoindices.omi.quick_temporal_filter.</code><code class="sig-name descname">filter_olr_temporally_1d_spectral_smoothing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olrdata</span><span class="p">:</span> <span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em>, <em class="sig-param"><span class="n">period_min</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">period_max</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a><a class="reference internal" href="../_modules/mjoindices/omi/quick_temporal_filter.html#filter_olr_temporally_1d_spectral_smoothing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.quick_temporal_filter.filter_olr_temporally_1d_spectral_smoothing" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.quick_temporal_filter.</code><code class="sig-name descname">filter_olr_temporally_1d_spectral_smoothing</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">period_min: float</em>, <em class="sig-param">period_max: float</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/omi/quick_temporal_filter.html#filter_olr_temporally_1d_spectral_smoothing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.quick_temporal_filter.filter_olr_temporally_1d_spectral_smoothing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters OLR data temporally using a 1d Fourier transform filter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

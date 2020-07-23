@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -162,9 +162,9 @@
   <div class="section" id="module-mjoindices.tools">
 <span id="module-mjoindices-tools"></span><h1>Module mjoindices.tools<a class="headerlink" href="#module-mjoindices.tools" title="Permalink to this headline">¶</a></h1>
 <p>This module provides basic helper routines for the OMI calculation</p>
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.tools.calc_day_of_year">
-<code class="sig-prename descclassname">mjoindices.tools.</code><code class="sig-name descname">calc_day_of_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>numpy.datetime64<span class="p">, </span>numpy.ndarray<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a><span class="p">, </span>numpy.ndarray<span class="p">]</span><a class="reference internal" href="../_modules/mjoindices/tools.html#calc_day_of_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.tools.calc_day_of_year" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.tools.</code><code class="sig-name descname">calc_day_of_year</code><span class="sig-paren">(</span><em class="sig-param">date: Union[numpy.datetime64, numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; Union[int, numpy.ndarray]<a class="reference internal" href="../_modules/mjoindices/tools.html#calc_day_of_year"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.tools.calc_day_of_year" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the days of the year (DOYs) for an individual date or an array of dates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -176,7 +176,7 @@
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.tools.doy_list">
 <code class="sig-prename descclassname">mjoindices.tools.</code><code class="sig-name descname">doy_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; numpy.array<a class="reference internal" href="../_modules/mjoindices/tools.html#doy_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.tools.doy_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.
@@ -188,9 +188,9 @@ Useful, e.g., as axis for plotting.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.tools.find_doy_ranges_in_dates">
-<code class="sig-prename descclassname">mjoindices.tools.</code><code class="sig-name descname">find_doy_ranges_in_dates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dates</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">center_doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">window_length</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Tuple<a class="reference internal" href="../_modules/mjoindices/tools.html#find_doy_ranges_in_dates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.tools.find_doy_ranges_in_dates" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.tools.</code><code class="sig-name descname">find_doy_ranges_in_dates</code><span class="sig-paren">(</span><em class="sig-param">dates: numpy.ndarray</em>, <em class="sig-param">center_doy: int</em>, <em class="sig-param">window_length: int</em>, <em class="sig-param">strict_leap_year_treatment: bool = False</em><span class="sig-paren">)</span> &#x2192; Tuple<a class="reference internal" href="../_modules/mjoindices/tools.html#find_doy_ranges_in_dates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.tools.find_doy_ranges_in_dates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the indices in a given array of dates that fit into a particular window of DOYs.</p>
 <p>This task sounds trivial, but is a little bit complicated by the appearance of leap years.</p>
 <dl class="field-list simple">

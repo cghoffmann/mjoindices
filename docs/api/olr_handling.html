@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -160,9 +160,9 @@
   <div class="section" id="module-mjoindices.olr_handling">
 <span id="module-mjoindices-olr-handling"></span><h1>Module mjoindices.olr_handling<a class="headerlink" href="#module-mjoindices.olr_handling" title="Permalink to this headline">¶</a></h1>
 <p>This module provides basic functionality to handle OLR data, which is the basic input for the OMI calculation.</p>
-<dl class="py class">
+<dl class="class">
 <dt id="mjoindices.olr_handling.OLRData">
-<em class="property">class </em><code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">OLRData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olr</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">time</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">lat</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">long</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">OLRData</code><span class="sig-paren">(</span><em class="sig-param">olr: numpy.ndarray</em>, <em class="sig-param">time: numpy.ndarray</em>, <em class="sig-param">lat: numpy.ndarray</em>, <em class="sig-param">long: numpy.ndarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class serves as a container for spatially distributed and temporally resolved OLR data.</p>
 <p>A filled object of this class has to be provided by the user in order to start the OMI calculation.</p>
 <dl class="field-list simple">
@@ -176,9 +176,9 @@ order.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
+<dl class="method">
 <dt id="mjoindices.olr_handling.OLRData.close">
-<code class="sig-name descname">close</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.close" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><em class="sig-param">other: mjoindices.olr_handling.OLRData</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.close" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>Checks equality of two <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><code class="xref py py-class docutils literal notranslate"><span class="pre">OLRData</span></code></a> objects, but allows for numerical tolerances.</p>
 </div></blockquote>
@@ -192,9 +192,9 @@ order.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range">
-<code class="sig-name descname">extract_olr_matrix_for_doy_range</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">center_doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em>, <em class="sig-param"><span class="n">window_length</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.extract_olr_matrix_for_doy_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extract_olr_matrix_for_doy_range</code><span class="sig-paren">(</span><em class="sig-param">center_doy: int</em>, <em class="sig-param">window_length: int = 0</em>, <em class="sig-param">strict_leap_year_treatment: bool = False</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.extract_olr_matrix_for_doy_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).</p>
 <p>Keep in mind that the OLR time series might span several years. In this case the center DOY is found more than
 once and the respective window in considered for each year.
@@ -216,9 +216,9 @@ time, latitude, and longitude, in this order.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="mjoindices.olr_handling.OLRData.get_olr_for_date">
-<code class="sig-name descname">get_olr_for_date</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">numpy.datetime64</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.get_olr_for_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.get_olr_for_date" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_olr_for_date</code><span class="sig-paren">(</span><em class="sig-param">date: numpy.datetime64</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.get_olr_for_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.get_olr_for_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the spatially distributed OLR map for a particular date.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -231,28 +231,28 @@ latitude, and longitude, in this order. Returns None if the date is not containe
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="mjoindices.olr_handling.OLRData.lat">
 <em class="property">property </em><code class="sig-name descname">lat</code><a class="headerlink" href="#mjoindices.olr_handling.OLRData.lat" title="Permalink to this definition">¶</a></dt>
 <dd><p>The latitude grid as 1-dim array.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="mjoindices.olr_handling.OLRData.long">
 <em class="property">property </em><code class="sig-name descname">long</code><a class="headerlink" href="#mjoindices.olr_handling.OLRData.long" title="Permalink to this definition">¶</a></dt>
 <dd><p>The longitude grid as 1-dim array.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="mjoindices.olr_handling.OLRData.olr">
 <em class="property">property </em><code class="sig-name descname">olr</code><a class="headerlink" href="#mjoindices.olr_handling.OLRData.olr" title="Permalink to this definition">¶</a></dt>
 <dd><p>The OLR data as a 3-dim array. The three dimensions correspond to time, latitude, and longitude, in this
 order.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="mjoindices.olr_handling.OLRData.save_to_npzfile">
-<code class="sig-name descname">save_to_npzfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.8)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.save_to_npzfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.save_to_npzfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_to_npzfile</code><span class="sig-paren">(</span><em class="sig-param">filename: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.save_to_npzfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.save_to_npzfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the data arrays contained in the OLRData object to a numpy file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -261,7 +261,7 @@ order.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="mjoindices.olr_handling.OLRData.time">
 <em class="property">property </em><code class="sig-name descname">time</code><a class="headerlink" href="#mjoindices.olr_handling.OLRData.time" title="Permalink to this definition">¶</a></dt>
 <dd><p>The temporal grid as 1-dim array of <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.datetime64</span></code> dates.</p>
@@ -269,9 +269,9 @@ order.</p>
 
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.olr_handling.interpolate_spatial_grid">
-<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">interpolate_spatial_grid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olr</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em>, <em class="sig-param"><span class="n">target_lat</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">target_long</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#interpolate_spatial_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.interpolate_spatial_grid" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">interpolate_spatial_grid</code><span class="sig-paren">(</span><em class="sig-param">olr: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">target_lat: numpy.ndarray</em>, <em class="sig-param">target_long: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#interpolate_spatial_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.interpolate_spatial_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolates the OLR data linearly onto the given grids.</p>
 <p>No extrapolation will be done. Instead a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a> is raised if the data does not cover the target
 grid.</p>
@@ -291,9 +291,9 @@ be performed by the user himself before injecting the data into the OMI calculat
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.olr_handling.interpolate_spatial_grid_to_original">
-<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">interpolate_spatial_grid_to_original</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olr</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#interpolate_spatial_grid_to_original"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.interpolate_spatial_grid_to_original" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">interpolate_spatial_grid_to_original</code><span class="sig-paren">(</span><em class="sig-param">olr: mjoindices.olr_handling.OLRData</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#interpolate_spatial_grid_to_original"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.interpolate_spatial_grid_to_original" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interpolates the OLR data in an <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><code class="xref py py-class docutils literal notranslate"><span class="pre">OLRData</span></code></a> object spatially onto the spatial grid, which was used for the
 original OMI calculation by Kiladis (2014).</p>
 <p>This original grid has the following properties:</p>
@@ -311,9 +311,9 @@ original OMI calculation by Kiladis (2014).</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.olr_handling.load_noaa_interpolated_olr">
-<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">load_noaa_interpolated_olr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.8)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#load_noaa_interpolated_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.load_noaa_interpolated_olr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">load_noaa_interpolated_olr</code><span class="sig-paren">(</span><em class="sig-param">filename: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#load_noaa_interpolated_olr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.load_noaa_interpolated_olr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the standard OLR data product provided by NOAA.</p>
 <p>The dataset can be obtained from
 <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc">ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc</a></p>
@@ -329,9 +329,9 @@ original OMI calculation by Kiladis (2014).</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.olr_handling.plot_olr_map_for_date">
-<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">plot_olr_map_for_date</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olr</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em>, <em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">numpy.datetime64</span></em><span class="sig-paren">)</span> &#x2192; matplotlib.figure.Figure<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#plot_olr_map_for_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.plot_olr_map_for_date" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">plot_olr_map_for_date</code><span class="sig-paren">(</span><em class="sig-param">olr: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">date: numpy.datetime64</em><span class="sig-paren">)</span> &#x2192; matplotlib.figure.Figure<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#plot_olr_map_for_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.plot_olr_map_for_date" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a map pf the OLR data for a specific date.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -347,9 +347,9 @@ original OMI calculation by Kiladis (2014).</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.olr_handling.restore_from_npzfile">
-<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">restore_from_npzfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.8)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#restore_from_npzfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.restore_from_npzfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">restore_from_npzfile</code><span class="sig-paren">(</span><em class="sig-param">filename: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#restore_from_npzfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.restore_from_npzfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads an <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><code class="xref py py-class docutils literal notranslate"><span class="pre">OLRData</span></code></a> object from a numpy file, which has been saved with the function
 <a class="reference internal" href="#mjoindices.olr_handling.OLRData.save_to_npzfile" title="mjoindices.olr_handling.OLRData.save_to_npzfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.olr_handling.OLRData.save_to_npzfile()</span></code></a></p>
 <dl class="field-list simple">
@@ -362,9 +362,9 @@ original OMI calculation by Kiladis (2014).</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.olr_handling.restrict_time_coverage">
-<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">restrict_time_coverage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olr</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em>, <em class="sig-param"><span class="n">start</span><span class="p">:</span> <span class="n">numpy.datetime64</span></em>, <em class="sig-param"><span class="n">stop</span><span class="p">:</span> <span class="n">numpy.datetime64</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#restrict_time_coverage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.restrict_time_coverage" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.olr_handling.</code><code class="sig-name descname">restrict_time_coverage</code><span class="sig-paren">(</span><em class="sig-param">olr: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">start: numpy.datetime64</em>, <em class="sig-param">stop: numpy.datetime64</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/olr_handling.html#restrict_time_coverage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.olr_handling.restrict_time_coverage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cuts the OLR time series at the given dates (given dates are included).</p>
 <p>This is useful when the OLR data should be restricted for the EOF calculation, which is based on a subset.
 Of course, it can also be used to limit the PC calculation to a specific period.</p>

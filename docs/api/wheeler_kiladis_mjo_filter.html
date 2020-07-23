@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -169,16 +169,16 @@ Instead, they might probably want to use the module <a class="reference internal
 <p>The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
 Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
 Mon. Wea. Rev., 142, 1697–1715, <a class="reference external" href="https://doi.org/10.1175/MWR-D-13-00301.1">https://doi.org/10.1175/MWR-D-13-00301.1</a></p>
-<dl class="py class">
+<dl class="class">
 <dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter">
 <em class="property">class </em><code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">WKFilter</code><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#WKFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class contains the major Wheeler-Kiladis-Filtering functionality.
 The functionality is encapsulated in a class because values of intermediate processing steps
 are saved as class members for debugging purposes.
 To run the filtering, only the method <a class="reference internal" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering" title="mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering"><code class="xref py py-func docutils literal notranslate"><span class="pre">perform_2dim_spectral_filtering()</span></code></a> has to be executed.</p>
-<dl class="py method">
+<dl class="method">
 <dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering">
-<code class="sig-name descname">perform_2dim_spectral_filtering</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">time_spacing</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">period_min</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">period_max</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">wn_min</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">wn_max</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">do_plot</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">save_debug</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#WKFilter.perform_2dim_spectral_filtering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">perform_2dim_spectral_filtering</code><span class="sig-paren">(</span><em class="sig-param">data: numpy.ndarray</em>, <em class="sig-param">time_spacing: float</em>, <em class="sig-param">period_min: float</em>, <em class="sig-param">period_max: float</em>, <em class="sig-param">wn_min: float</em>, <em class="sig-param">wn_max: float</em>, <em class="sig-param">do_plot: bool = False</em>, <em class="sig-param">save_debug: bool = False</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#WKFilter.perform_2dim_spectral_filtering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bandpass-filters OLR data in time- and longitude-direction according to
 the original Kiladis algorithm.</p>
 <p>Note that the temporal and longitudinal dimension have in principle
@@ -216,9 +216,9 @@ for debugging purposes.</p></li>
 
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.detrend_vector">
-<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">detrend_vector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#detrend_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.detrend_vector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">detrend_vector</code><span class="sig-paren">(</span><em class="sig-param">data: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#detrend_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.detrend_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes the trend from the given vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -230,9 +230,9 @@ for debugging purposes.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_eof_calculation">
-<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">filter_olr_for_mjo_eof_calculation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olrdata</span><span class="p">:</span> <span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em>, <em class="sig-param"><span class="n">do_plot</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_for_mjo_eof_calculation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_eof_calculation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">filter_olr_for_mjo_eof_calculation</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">do_plot: bool = False</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_for_mjo_eof_calculation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_eof_calculation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters OLR data temporally and longitudinally.</p>
 <p>The filter setup meets the description of Kiladis (2014) for the EOF calculation.</p>
 <dl class="field-list simple">
@@ -248,9 +248,9 @@ for debugging purposes.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_pc_calculation">
-<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">filter_olr_for_mjo_pc_calculation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olrdata</span><span class="p">:</span> <span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em>, <em class="sig-param"><span class="n">do_plot</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_for_mjo_pc_calculation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_pc_calculation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">filter_olr_for_mjo_pc_calculation</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">do_plot: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_for_mjo_pc_calculation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_pc_calculation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters OLR data temporally.</p>
 <p>The filter algorithm is the same as for the combined temporal and longitudinal filtering,
 but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
@@ -269,9 +269,9 @@ The temporal filtering constants are chosen to meet the values in the descriptio
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally">
-<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">filter_olr_temporally</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olrdata</span><span class="p">:</span> <span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em>, <em class="sig-param"><span class="n">period_min</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">period_max</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">do_plot</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_temporally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">filter_olr_temporally</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">period_min: float</em>, <em class="sig-param">period_max: float</em>, <em class="sig-param">do_plot: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_temporally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters OLR data temporally.</p>
 <p>The filter algorithm is the same as for the combined temporal and longitudinal filtering,
 but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
@@ -292,9 +292,9 @@ applied.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally_and_longitudinally">
-<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">filter_olr_temporally_and_longitudinally</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">olrdata</span><span class="p">:</span> <span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a></span></em>, <em class="sig-param"><span class="n">period_min</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">period_max</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">wn_min</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">wn_max</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">do_plot</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData">mjoindices.olr_handling.OLRData</a><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_temporally_and_longitudinally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally_and_longitudinally" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">filter_olr_temporally_and_longitudinally</code><span class="sig-paren">(</span><em class="sig-param">olrdata: mjoindices.olr_handling.OLRData</em>, <em class="sig-param">period_min: float</em>, <em class="sig-param">period_max: float</em>, <em class="sig-param">wn_min: float</em>, <em class="sig-param">wn_max: float</em>, <em class="sig-param">do_plot: bool = False</em><span class="sig-paren">)</span> &#x2192; mjoindices.olr_handling.OLRData<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_temporally_and_longitudinally"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally_and_longitudinally" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a temporal and longitudinal bandpass filtering of the OLR data with configurable filtering thresholds.</p>
 <p>Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.</p>
 <dl class="field-list simple">
@@ -314,9 +314,9 @@ applied.</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="mjoindices.omi.wheeler_kiladis_mjo_filter.taper_vector_to_zero">
-<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">taper_vector_to_zero</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">window_length</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#taper_vector_to_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.taper_vector_to_zero" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.omi.wheeler_kiladis_mjo_filter.</code><code class="sig-name descname">taper_vector_to_zero</code><span class="sig-paren">(</span><em class="sig-param">data: numpy.ndarray</em>, <em class="sig-param">window_length: int</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#taper_vector_to_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.taper_vector_to_zero" title="Permalink to this definition">¶</a></dt>
 <dd><p>Taper the data in the given vector to zero at both the beginning and the ending.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
