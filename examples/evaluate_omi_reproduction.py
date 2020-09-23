@@ -73,7 +73,7 @@ pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
 fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_reproduction_evaluation_plots"
 
 # Decide whether DOY 366 should be included in the evaluation or not.
-setting_exclude_doy_366 = True
+setting_exclude_doy_366 = False
 
 # ######## End of settings (There should be no need to change anything below)
 

@@ -218,7 +218,7 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
     p35, = ax.plot(doys, diff_abs_percent68_1, label="EOF1", color="blue", linestyle=":")
     p36, = ax.plot(doys, diff_abs_percent68_2, label="EOF2", color="green", linestyle=":")
     ax.set_xlim(xlim)
-    ax.set_ylabel(r"Percent [$\mathrm{W/m^2}$]")
+    ax.set_ylabel(r"Percentiles [$\mathrm{W/m^2}$]")
     ax.legend(labels=["99%", "95%", "68%"], handles=[p31, p33, p35], loc="upper right")
     ax.set_xlabel("Day of year")
 
@@ -307,7 +307,7 @@ def plot_individual_eof_map_comparison(orig_eof: eof.EOFData, compare_eof: eof.E
     # FIXME: Check that grids are equal
     ax = axs[0, 2]
     c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof1map - compare_eof.eof1map,
-                    levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
+                    levels=100, cmap=matplotlib.cm.get_cmap("Purples"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("Difference 1")
 
@@ -328,7 +328,7 @@ def plot_individual_eof_map_comparison(orig_eof: eof.EOFData, compare_eof: eof.E
 
     ax = axs[1, 2]
     c = ax.contourf(orig_eof.long, orig_eof.lat, orig_eof.eof2map - compare_eof.eof2map,
-                    levels=np.arange(-0.1, 0.11, 0.01), cmap=matplotlib.cm.get_cmap("bwr"))
+                    levels=100, cmap=matplotlib.cm.get_cmap("Purples"))
     fig.colorbar(c, ax=ax, label="OLR Anomaly [W/m²]")
     ax.set_title("Difference 2")
     ax.set_xlabel("Longitude [°]")
