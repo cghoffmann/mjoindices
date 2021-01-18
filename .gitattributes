@@ -1,1 +1,2 @@
 ./src/mjoindices/_version.py export-subst
+src/mjoindices/_version.py export-subst
