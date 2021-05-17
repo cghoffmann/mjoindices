@@ -1,6 +1,7 @@
 mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index
 =====================================================================================
 
+[![DOI (paper)](https://img.shields.io/badge/DOI%20%28paper%29-10.5334%2Fjors.122-blue.svg)](https://doi.org/10.5334/jors.331)
 [![DOI](https://zenodo.org/badge/197774253.svg)](https://zenodo.org/badge/latestdoi/197774253)
 
 Overview
@@ -12,13 +13,12 @@ index of the Madden-Julian-Oscillation (MJO), particularly the OLR-based MJO ind
 Whereas the package name has been chosen to indicate that further MJO indices should be included in future, the 
 implementation is currently limited to the OMI algorithm.
 
+A scientific description of the packge is found in [Hoffmann et al. (2021)](https://doi.org/10.5334/jors.331) .
+
 Citation
 --------
-If you use this software package, you should currently cite at least the [Zenodo DOI](http://dx.doi.org/10.5281/zenodo.3613752). 
-It is planned to publish a peer-reviewed software meta paper in the near-future. Please ask us for the status of this 
-paper, if you use mjoindices in published research. 
-The OMI algorithm itself is described in [Kiladis (2014)](https://doi.org/10.1175/MWR-D-13-00301.1), but please don't 
-forget to also cite the software package, which is an independent development.
+If you use mjoindices in published research, please cite the correspondig paper [Hoffmann et al. (2021)](https://doi.org/10.5334/jors.331) .
+In addition, you can also cite the [Zenodo DOI](http://dx.doi.org/10.5281/zenodo.3613752) .
 
 Requirements
 ------------
