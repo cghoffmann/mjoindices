@@ -17,10 +17,11 @@ A scientific description of the packge is found in [Hoffmann et al. (2021)](http
 
 Citation
 --------
-If you use mjoindices in published research, please cite the correspondig paper [Hoffmann et al. (2021)](https://doi.org/10.5334/jors.331):
-Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021. A Python Package to Calculate the OLR-Based Index of the Madden- Julian-Oscillation (OMI) in Climate Science and Weather Forecasting. Journal of Open Research Software, 9(1), p.9. DOI: http://doi.org/10.5334/jors.331
+If you use mjoindices in published research, please cite the correspondig paper: Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021.
+A Python Package to Calculate the OLR-Based Index of the Madden- Julian-Oscillation (OMI) in Climate Science and Weather Forecasting. 
+Journal of Open Research Software, 9(1), p.9. DOI: http://doi.org/10.5334/jors.331
 
-In addition, you can also cite the [Zenodo DOI](http://dx.doi.org/10.5281/zenodo.3613752).
+In addition, you can also cite the Zenodo DOI http://dx.doi.org/10.5281/zenodo.3613752.
 
 Requirements
 ------------
