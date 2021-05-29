@@ -24,6 +24,13 @@ This example reproduces the original OMI values described in Kiladis, G.N., J. D
 S.N. Tulich, K. Kikuchi, K.M. Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices
 for Tracking the MJO. Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
 
+A scientific description of the software package used by this example (mjoindices) is found in
+Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021: A Python Package to Calculate the
+OLR-Based Index of the Madden-Julian-Oscillation (OMI) in Climate Science and Weather Forecasting.
+Journal of Open Research Software, 9(1), p.9. DOI: https://doi.org/10.5334/jors.331
+
+We kindly ask you to cite both papers if you use computed results in your scientific publications.
+
 The script may run for about 2 hours on common desktop computers.
 
 You can modify this example in order to compute OMI data from other OLR datasets (this is probably what you intend if
