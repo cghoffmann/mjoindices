@@ -21,11 +21,14 @@
 - python3 setup.py sdist bdist_wheel
 
 # GitHub
+- Create Release from new tag
 - Attach package files to release
-
-# Zenodo
-- Wait for Zenodo to find new GitHub release(?)
-- Change Metainformation
 
 # PyPi
 - python3 -m twine upload dist/*
+- Username: __token__
+
+# Zenodo
+- Wait for Zenodo to find new GitHub release
+- Change Metainformation: Link to Journal, ORCID, Title...
+
