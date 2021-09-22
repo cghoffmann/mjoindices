@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -180,6 +180,7 @@
 <span class="kn">import</span> <span class="nn">scipy.interpolate</span>
 <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
 <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">netcdf</span>
+<span class="kn">import</span> <span class="nn">netCDF4</span> <span class="k">as</span> <span class="nn">netcdf4</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="kn">import</span> <span class="nn">mjoindices.tools</span> <span class="k">as</span> <span class="nn">tools</span>
@@ -383,9 +384,16 @@
 
 <div class="viewcode-block" id="load_noaa_interpolated_olr"><a class="viewcode-back" href="../../api/olr_handling.html#mjoindices.olr_handling.load_noaa_interpolated_olr">[docs]</a><span class="k">def</span> <span class="nf">load_noaa_interpolated_olr</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OLRData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads the standard OLR data product provided by NOAA.</span>
+<span class="sd">    Loads the standard OLR data product provided by NOAA in NetCDF3 format.</span>
+<span class="sd">    This is mainly used to load the OLR files originally used for the OMI calculation some years ago.</span>
 
-<span class="sd">    The dataset can be obtained from</span>
+<span class="sd">    ATTENTION: Note that the file format has apparently been changed by NOAA from NetCDF3 to NetCDF4 sometime</span>
+<span class="sd">    between the years 2019 and 2021. If you are using a recent download of the data an experience problems</span>
+<span class="sd">    with this loader method, you should use :func:`load_noaa_interpolated_olr_netcdf4` instead.</span>
+
+<span class="sd">    The original OLR data file is contained in the reference data package found at: https://doi.org/10.5281/zenodo.3746562</span>
+
+<span class="sd">    The current dataset can be obtained from</span>
 <span class="sd">    ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc</span>
 
 <span class="sd">    A description is found at</span>
@@ -401,6 +409,42 @@
     <span class="c1"># scaling and offset as given in meta data of nc file</span>
     <span class="n">olr</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;olr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="o">/</span> <span class="mf">100.</span> <span class="o">+</span> <span class="mf">327.65</span>
     <span class="n">hours_since1800</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">temptime</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">hours_since1800</span><span class="p">:</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">item</span> <span class="o">/</span> <span class="mi">24</span><span class="p">),</span> <span class="s1">&#39;D&#39;</span><span class="p">)</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;1800-01-01&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">delta</span>
+        <span class="n">temptime</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temptime</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">OLRData</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">olr</span><span class="p">),</span> <span class="n">time</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="load_noaa_interpolated_olr_netcdf4"><a class="viewcode-back" href="../../api/olr_handling.html#mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4">[docs]</a><span class="k">def</span> <span class="nf">load_noaa_interpolated_olr_netcdf4</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OLRData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads the standard OLR data product provided by NOAA in NetCDF4 format.</span>
+
+<span class="sd">    ATTENTION: Whereas NetCDF4 seems to be the format of the recent NOAA OLR data files, the files originally used some</span>
+<span class="sd">    years ago where saved in NetCDF3. So, if you are going to load the original files for reference purposes, you should</span>
+<span class="sd">    use the loader function :func:`load_noaa_interpolated_olr` instead.</span>
+
+<span class="sd">    The dataset can be obtained from</span>
+<span class="sd">    ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc</span>
+
+<span class="sd">    A description is found at</span>
+<span class="sd">    https://www.esrl.noaa.gov/psd/data/gridded/data.interp_OLR.html</span>
+
+<span class="sd">    :param filename: Full filename of a local copy of OLR data file.</span>
+
+<span class="sd">    :return: The OLR data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">netcdf4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">][:]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">][:]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">olr</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;olr&#39;</span><span class="p">][:]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">hours_since1800</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">][:]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">temptime</span> <span class="o">=</span> <span class="p">[]</span>

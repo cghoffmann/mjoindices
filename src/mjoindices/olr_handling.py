@@ -278,7 +278,7 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
 
     ATTENTION: Whereas NetCDF4 seems to be the format of the recent NOAA OLR data files, the files originally used some
     years ago where saved in NetCDF3. So, if you are going to load the original files for reference purposes, you should
-    use the loader function :func:`load_noaa_interpolated_olr instead`.
+    use the loader function :func:`load_noaa_interpolated_olr` instead.
 
     The dataset can be obtained from
     ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc

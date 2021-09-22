@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -167,6 +167,7 @@
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">
 <h2>mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index<a class="headerlink" href="#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index" title="Permalink to this headline">¶</a></h2>
+<a class="reference external image-reference" href="https://doi.org/10.5334/jors.331"><img alt="DOI (paper)" src="https://img.shields.io/badge/DOI%20%28paper%29-10.5334%2Fjors.331-blue.svg" /></a>
 <a class="reference external image-reference" href="https://zenodo.org/badge/latestdoi/197774253"><img alt="DOI" src="https://zenodo.org/badge/197774253.svg" /></a>
 <div class="section" id="overview">
 <h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
@@ -174,14 +175,14 @@
 index of the Madden-Julian-Oscillation (MJO), particularly the OLR-based MJO index (OMI).</p>
 <p>Whereas the package name has been chosen to indicate that further MJO indices should be included in future, the
 implementation is currently limited to the OMI algorithm.</p>
+<p>A scientific description of the packge is found in <a class="reference external" href="https://doi.org/10.5334/jors.331">Hoffmann et al. (2021)</a>.</p>
 </div>
 <div class="section" id="citation">
 <h3>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h3>
-<p>If you use this software package, you should currently cite at least the <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">Zenodo DOI</a>.
-It is planned to publish a peer-reviewed software meta paper in the near-future. Please ask us for the status of this
-paper, if you use mjoindices in published research.
-The OMI algorithm itself is described in <a class="reference external" href="https://doi.org/10.1175/MWR-D-13-00301.1">Kiladis (2014)</a>, but please don’t
-forget to also cite the software package, which is an independent development.</p>
+<p>If you use mjoindices in published research, please cite the correspondig paper: Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021.
+A Python Package to Calculate the OLR-Based Index of the Madden- Julian-Oscillation (OMI) in Climate Science and Weather Forecasting.
+Journal of Open Research Software, 9(1), p.9. DOI: <a class="reference external" href="http://doi.org/10.5334/jors.331">http://doi.org/10.5334/jors.331</a></p>
+<p>In addition, you can also cite the Zenodo DOI <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">http://dx.doi.org/10.5281/zenodo.3613752</a>.</p>
 </div>
 <div class="section" id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
@@ -192,12 +193,12 @@ and Windows. Other operating systems have not been tested.</p>
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
 <p>mjoindices is available in the <a class="reference external" href="https://pypi.org/project/mjoindices/">Python Package Index (PyPI)</a>. It can be installed using,
 e.g., pip.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pip3 install mjoindices
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">mjoindices</span>
 </pre></div>
 </div>
 <p>It can also be installed from the source, which is available on <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">Zenodo</a> and <a class="reference external" href="https://github.com/cghoffmann/mjoindices">GitHub</a>.
 Download the source, move into the directory containing the file setup.py and run</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>python3 setup.py install
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 </div>
@@ -240,7 +241,7 @@ your installation using pytest.</p>
 <li><p>Download the complete test directory to you local file system.</p></li>
 <li><p>Download some external input and reference data files from  <a class="reference external" href="https://doi.org/10.5281/zenodo.3746562">Zenodo</a>. Details are given in a separate <a class="reference external" href="https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README">Readme file</a>.</p></li>
 <li><p>Move into your local test directory and run</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>pytest
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span>
 </pre></div>
 </div>
 </li>

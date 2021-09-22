@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -160,11 +160,11 @@
   <div class="section" id="module-mjoindices.principal_components">
 <span id="module-mjoindices-principal-components"></span><h1>Module mjoindices.principal_components<a class="headerlink" href="#module-mjoindices.principal_components" title="Permalink to this headline">¶</a></h1>
 <p>This module provides basic functionality to handle PC data, which is a basic output of the OMI calculation.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="mjoindices.principal_components.PCData">
-<em class="property">class </em><code class="sig-prename descclassname">mjoindices.principal_components.</code><code class="sig-name descname">PCData</code><span class="sig-paren">(</span><em class="sig-param">time: numpy.ndarray</em>, <em class="sig-param">pc1: numpy.ndarray</em>, <em class="sig-param">pc2: numpy.ndarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/principal_components.html#PCData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.PCData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mjoindices.principal_components.</code><code class="sig-name descname">PCData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">pc1</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">pc2</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/principal_components.html#PCData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.PCData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class as a container for the principal component (PC) data.</p>
-<p>The basic PC computation <a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calculate_pcs_from_olr" title="mjoindices.omi.omi_calculator.calculate_pcs_from_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator.calculate_pcs_from_olr()</span></code></a> will return an object of this
+<p>The basic PC computation <code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator.calculate_pcs_from_olr()</span></code> will return an object of this
 class as a major result of this package.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -175,21 +175,21 @@ class as a major result of this package.</p>
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="mjoindices.principal_components.PCData.pc1">
 <em class="property">property </em><code class="sig-name descname">pc1</code><a class="headerlink" href="#mjoindices.principal_components.PCData.pc1" title="Permalink to this definition">¶</a></dt>
 <dd><p>The time series of the PC1 values.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="mjoindices.principal_components.PCData.pc2">
 <em class="property">property </em><code class="sig-name descname">pc2</code><a class="headerlink" href="#mjoindices.principal_components.PCData.pc2" title="Permalink to this definition">¶</a></dt>
 <dd><p>The time series of the PC2 values.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="mjoindices.principal_components.PCData.save_pcs_to_txt_file">
-<code class="sig-name descname">save_pcs_to_txt_file</code><span class="sig-paren">(</span><em class="sig-param">filename: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/mjoindices/principal_components.html#PCData.save_pcs_to_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.PCData.save_pcs_to_txt_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_pcs_to_txt_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="../_modules/mjoindices/principal_components.html#PCData.save_pcs_to_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.PCData.save_pcs_to_txt_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the computed PCs to a text file.</p>
 <p>Please note that the file format is not exactly that of the original data files. However, a
 suitable reader is available in this module for both formats
@@ -202,7 +202,7 @@ suitable reader is available in this module for both formats
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="mjoindices.principal_components.PCData.time">
 <em class="property">property </em><code class="sig-name descname">time</code><a class="headerlink" href="#mjoindices.principal_components.PCData.time" title="Permalink to this definition">¶</a></dt>
 <dd><p>The time grid of the PC time series as array of <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.datetime64</span></code> elements.</p>
@@ -210,9 +210,9 @@ suitable reader is available in this module for both formats
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="mjoindices.principal_components.load_original_pcs_from_txt_file">
-<code class="sig-prename descclassname">mjoindices.principal_components.</code><code class="sig-name descname">load_original_pcs_from_txt_file</code><span class="sig-paren">(</span><em class="sig-param">filename: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/principal_components.html#load_original_pcs_from_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.load_original_pcs_from_txt_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.principal_components.</code><code class="sig-name descname">load_original_pcs_from_txt_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.principal_components.PCData" title="mjoindices.principal_components.PCData">mjoindices.principal_components.PCData</a><a class="reference internal" href="../_modules/mjoindices/principal_components.html#load_original_pcs_from_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.load_original_pcs_from_txt_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the PCs of OMI, which are stored in the original file format.
 Particularly, the following file can be loaded: <a class="reference external" href="https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt">https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt</a></p>
 <p>Note that the present software package stores the PCs slightly different. Those files can be loaded with
@@ -227,9 +227,9 @@ Particularly, the following file can be loaded: <a class="reference external" hr
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="mjoindices.principal_components.load_pcs_from_txt_file">
-<code class="sig-prename descclassname">mjoindices.principal_components.</code><code class="sig-name descname">load_pcs_from_txt_file</code><span class="sig-paren">(</span><em class="sig-param">filename: pathlib.Path</em><span class="sig-paren">)</span> &#x2192; mjoindices.principal_components.PCData<a class="reference internal" href="../_modules/mjoindices/principal_components.html#load_pcs_from_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.load_pcs_from_txt_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mjoindices.principal_components.</code><code class="sig-name descname">load_pcs_from_txt_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.principal_components.PCData" title="mjoindices.principal_components.PCData">mjoindices.principal_components.PCData</a><a class="reference internal" href="../_modules/mjoindices/principal_components.html#load_pcs_from_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.principal_components.load_pcs_from_txt_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the PCs of OMI, which were previously saved with this package
 (<a class="reference internal" href="#mjoindices.principal_components.PCData.save_pcs_to_txt_file" title="mjoindices.principal_components.PCData.save_pcs_to_txt_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.principal_components.PCData.save_pcs_to_txt_file()</span></code></a>).</p>
 <dl class="field-list simple">
