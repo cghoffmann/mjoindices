@@ -31,6 +31,8 @@ import pytest
 import mjoindices.olr_handling as olr
 
 olr_data_filename = Path(os.path.abspath('')) / "testdata" / "olr.day.mean.nc"
+olr_data_netcdf4_filename = Path(os.path.abspath('')) / "testdata" / "olr.day.mean_netcdf4.nc"
+
 
 
 def test_OLRData_basic_properties():
@@ -116,6 +118,51 @@ def test_loadNOAAInterpolatedOLR():
         errors.append("Third OLR sample value does not match")
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+
+@pytest.mark.skipif(not olr_data_netcdf4_filename.is_file(), reason="OLR data file in NetCDF4 is not available")
+def test_loadNOAAInterpolatedOLRNetCDF4():
+    errors = []
+    target = olr.load_noaa_interpolated_olr_netcdf4(olr_data_netcdf4_filename)
+
+    # Check time grid
+    # Period always starts on 1974/06/01, whereas the ending date
+    # changes when file is updated
+    if not target.time[0] == np.datetime64("1974-06-01"):
+        errors.append("First date does not match")
+    if not ((target.time[1] - target.time[0]).astype('timedelta64[D]') / np.timedelta64(1, "D")) == 1:
+        errors.append("Temporal spacing does not match 1 day")
+
+    # Check latitude grid
+    if not target.lat[0] == 90:
+        errors.append("First latitude entry does not match.")
+    if not target.lat[3] == 82.5:
+        errors.append("Forth latitude entry does not match.")
+    if not target.lat[-1] == -90:
+        errors.append("Last latitude entry does not match.")
+    if not (target.lat[0] - target.lat[1]) == 2.5:
+        errors.append("Latitudinal spacing does not meet the expectation")
+
+    # Check longitude grid
+    if not target.long[0] == 0:
+        errors.append("First longitude entry does not match.")
+    if not target.long[-1] == 357.5:
+        errors.append("Last longitude entry does not match.")
+    if not target.long[1] - target.long[0] == 2.5:
+        errors.append("Longitudinal spacing does not meet the expectation")
+
+    # Check OLR Data
+    # OLR samples extracted from file using Panoply viewer, which directly
+    # applies scaling and offset values
+    if not np.isclose(target.olr[0, 0, 0], 205.450):
+        errors.append("First OLR sample value does not match")
+    if not np.isclose(target.olr[0, 3, 0], 207.860):
+        errors.append("Second OLR sample value does not match")
+    if not np.isclose(target.olr[4, 3, 15], 216.700):
+        errors.append("Third OLR sample value does not match")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
 
 
 @pytest.mark.skipif(not os.path.isfile(olr_data_filename),

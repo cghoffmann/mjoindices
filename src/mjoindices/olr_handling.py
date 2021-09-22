@@ -30,6 +30,7 @@ import scipy
 import scipy.interpolate
 from matplotlib.figure import Figure
 from scipy.io import netcdf
+import netCDF4 as netcdf4
 import matplotlib.pyplot as plt
 
 import mjoindices.tools as tools
@@ -233,9 +234,16 @@ def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime
 
 def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     """
-    Loads the standard OLR data product provided by NOAA.
+    Loads the standard OLR data product provided by NOAA in NetCDF3 format.
+    This is mainly used to load the OLR files originally used for the OMI calculation some years ago.
 
-    The dataset can be obtained from
+    ATTENTION: Note that the file format has apparently been changed by NOAA from NetCDF3 to NetCDF4 sometime
+    between the years 2019 and 2021. If you are using a recent download of the data an experience problems
+    with this loader method, you should use :func:`load_noaa_interpolated_olr_netcdf4` instead.
+
+    The original OLR data file is contained in the reference data package found at: https://doi.org/10.5281/zenodo.3746562
+
+    The current dataset can be obtained from
     ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
 
     A description is found at
@@ -251,6 +259,42 @@ def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     # scaling and offset as given in meta data of nc file
     olr = f.variables['olr'].data.copy() / 100. + 327.65
     hours_since1800 = f.variables['time'].data.copy()
+    f.close()
+
+    temptime = []
+    for item in hours_since1800:
+        delta = np.timedelta64(int(item / 24), 'D')
+        day = np.datetime64('1800-01-01') + delta
+        temptime.append(day)
+    time = np.array(temptime, dtype=np.datetime64)
+    result = OLRData(np.squeeze(olr), time, lat, lon)
+
+    return result
+
+
+def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
+    """
+    Loads the standard OLR data product provided by NOAA in NetCDF4 format.
+
+    ATTENTION: Whereas NetCDF4 seems to be the format of the recent NOAA OLR data files, the files originally used some
+    years ago where saved in NetCDF3. So, if you are going to load the original files for reference purposes, you should
+    use the loader function :func:`load_noaa_interpolated_olr instead`.
+
+    The dataset can be obtained from
+    ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
+
+    A description is found at
+    https://www.esrl.noaa.gov/psd/data/gridded/data.interp_OLR.html
+
+    :param filename: Full filename of a local copy of OLR data file.
+
+    :return: The OLR data.
+    """
+    f = netcdf4.Dataset(filename, "r")
+    lat = f.variables['lat'][:].data.copy()
+    lon = f.variables['lon'][:].data.copy()
+    olr = f.variables['olr'][:].data.copy()
+    hours_since1800 = f.variables['time'][:].data.copy()
     f.close()
 
     temptime = []

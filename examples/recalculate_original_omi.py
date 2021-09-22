@@ -81,7 +81,8 @@ pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
 # Directory in which the figures are saved.
 fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots"
 
-# ############## There should be no need to change anything below (except you intend to use different OLR data as input.)
+# ############## There should be no need to change anything below (except you intend to use different OLR data as input
+# or you are experiencing problems with the NOAA OLR file NetCDF version.)
 
 # ############## Calculation of the EOFs ###################
 
@@ -91,6 +92,11 @@ if not fig_dir.exists():
 # Load the OLR data.
 # This is the first line to replace to use your own OLR data, if you want to compute OMI for a different dataset.
 raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+# ATTENTION: Note that the file format has apparently been changed by NOAA from NetCDF3 to NetCDF4 sometime
+# between the years 2019 and 2021. If you are using a recent download of the data an experience problems
+# with the previous loader method, you should use the following line instead:
+# raw_olr = olr.load_noaa_interpolated_olr_netcdf4(olr_data_filename)
+
 # Restrict dataset to the original length for the EOF calculation (Kiladis, 2014)
 shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
 # Make sure that the spatial sampling resembles the original one (This should not be necessary here, since we use
