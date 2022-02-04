@@ -317,7 +317,7 @@ class EOFData:
 
 class EOFDataForAllDOYs:
     """
-    This class serves as a container for a series of EOF pairs, which covers all 366 DOYs and provides some overall
+    This class serves as a container for a series of EOF pairs, which covers all 365 DOYs and provides some overall
     statistical quantities.
 
     The basic EOF computation :func:`mjoindices.omi.omi_calculator.calc_eofs_from_olr` will return an object of this
@@ -325,7 +325,7 @@ class EOFDataForAllDOYs:
 
     The individual EOF pairs are represented by :class:`EOFData` objects.
 
-    :param eof_list: A list with the 366 :class:`EOFData` objects.
+    :param eof_list: A list with the 365 :class:`EOFData` objects.
     """
 
     def __init__(self, eof_list: typing.List[EOFData]) -> None:
@@ -333,11 +333,11 @@ class EOFDataForAllDOYs:
 
         :param eof_list:
         """
-        if len(eof_list) != 366:
-            raise ValueError("List of EOFs must contain 366 entries")
+        if len(eof_list) != 365:
+            raise ValueError("List of EOFs must contain 365 entries")
         reference_lat = eof_list[0].lat
         reference_long = eof_list[0].long
-        for i in range(0, 366):
+        for i in range(0, 365):
             if not np.all(eof_list[i].lat == reference_lat):
                 raise ValueError("All EOFs must have the same latitude grid. Problematic is DOY %i" % i)
             if not np.all(eof_list[i].long == reference_long):
@@ -402,7 +402,7 @@ class EOFDataForAllDOYs:
 
     def explained_variance1_for_all_doys(self):
         """
-        Returns a vector with 366 elements containing the explained variance of EOF1 for each DOY.
+        Returns a vector with 365 elements containing the explained variance of EOF1 for each DOY.
 
         :return: The variance vector.
 
@@ -415,7 +415,7 @@ class EOFDataForAllDOYs:
 
     def explained_variance2_for_all_doys(self):
         """
-        Returns a vector with 366 elements containing the explained variance of EOF2 for each DOY.
+        Returns a vector with 365 elements containing the explained variance of EOF2 for each DOY.
 
         :return: The variance vector.
         """
@@ -427,7 +427,7 @@ class EOFDataForAllDOYs:
 
     def total_explained_variance_for_all_doys(self):
         """
-        Returns a vector with 366 elements containing for each DOY the sum of the explained variance over all EOFs.
+        Returns a vector with 365 elements containing for each DOY the sum of the explained variance over all EOFs.
 
         :return: The variance vector. Should by close to 1 for each DOY if computation was successful.
         """
@@ -439,7 +439,7 @@ class EOFDataForAllDOYs:
 
     def no_observations_for_all_doys(self):
         """
-        Returns a vector with 366 elements containing for each DOY the number of observations that went into the
+        Returns a vector with 365 elements containing for each DOY the number of observations that went into the
         computation of the EOFs.
 
         :return: The number of observations vector.
@@ -452,7 +452,7 @@ class EOFDataForAllDOYs:
 
     def eigenvalue1_for_all_doys(self):
         """
-        Returns a vector with 366 elements containing the eigenvalues of EOF1 for each DOY.
+        Returns a vector with 365 elements containing the eigenvalues of EOF1 for each DOY.
 
         :return: The eigenvalue vector.
         """
@@ -464,7 +464,7 @@ class EOFDataForAllDOYs:
 
     def eigenvalue2_for_all_doys(self):
         """
-        Returns a vector with 366 elements containing the eigenvalues of EOF2 for each DOY.
+        Returns a vector with 365 elements containing the eigenvalues of EOF2 for each DOY.
 
         :return: The eigenvalue vector.
         """
@@ -567,9 +567,9 @@ def load_original_eofs_for_doy(dirname: Path, doy: int) -> EOFData:
     ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/
 
     :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.
-        This path should contain the sub directories *eof1* and *eof2*, in which the 366 files each are located:
+        This path should contain the sub directories *eof1* and *eof2*, in which the 365 files each are located:
         One file per day of the year.
-    :param doy: DOY for which the 2 EOFs are loaded (number between 1 and 366).
+    :param doy: DOY for which the 2 EOFs are loaded (number between 1 and 365).
 
     :return: The pair of EOFs.
     """
@@ -611,7 +611,7 @@ def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
     inserted hardcodedly.
 
     :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.
-        This path should contain the sub directories *eof1* and *eof2*, in which the 366 files each are located:
+        This path should contain the sub directories *eof1* and *eof2*, in which the 365 files each are located:
         One file per day of the year.
 
     :return: The original EOFs for all DOYs.
@@ -673,7 +673,7 @@ def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs, include_total_
         handles.append(p3)
     ax1.set_xlabel("DOY")
     ax1.set_ylabel("Fraction of explained variance")
-    ax1.set_xlim((0, 366))
+    ax1.set_xlim((0, 365))
 
     if include_no_observations:
         ax2 = ax1.twinx()
@@ -794,3 +794,5 @@ def plot_individual_explained_variance_all_eofs(eof: EOFData, doy: int = None, m
     else:
         plt.title("Explained variance")
     return fig
+
+
