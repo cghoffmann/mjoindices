@@ -26,23 +26,33 @@ This module provides basic helper routines for the OMI calculation
 import datetime as dt
 import typing
 import numpy as np
+import pandas as pd
 
-
-def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray]) -> typing.Union[int, np.ndarray]:
+def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], model=True) -> typing.Union[int, np.ndarray]:
     """
     Calculates the days of the year (DOYs) for an individual date or an array of dates.
 
     :param date: The date (or the dates), given as (NumPy array of) :class:`numpy.datetime64` value(s).
+    :param model: if True, then will not include leap years (as expected by model input)
 
     :return: the DOY (or the DOYs) as (NumPy array of) int value(s).
     """
+    day_per_mon = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
     if np.isscalar(date):
         if date.dtype == "<M8[ns]":
             # work around a bug, which prevents datetime64[ns] from being converted correctly to dt.datetime.
             date = date.astype("datetime64[us]")
+   
+        # expand datetime into individual time parts 
         temp = date.astype(dt.datetime)
         time_fragments = temp.timetuple()
-        result = time_fragments[7]
+
+        if model:
+            # sums days of previous months to get DOY
+            result = sum(day_per_mon[:time_fragments.tm_mon-1]) + time_fragments.tm_mday
+        else:
+            result = time_fragments[7]
     else:
         result = np.empty(date.size)
         for i, d in enumerate(date):
@@ -115,9 +125,22 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
 
 def doy_list() -> np.array:
     """
-    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.
+    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365.
     Useful, e.g., as axis for plotting.
+    Needs to go up to 366 if you want to use a leap year. 
 
     :return: The doy array.
     """
-    return np.arange(1, 367, 1)
+    return np.arange(1, 366, 1)
+
+def convert_time_to_period(time_array):
+    """
+    Converts a np.datetime64 array to the pandas period variable, since pandas cannot handle nonstandard calendars. 
+
+    Returns an array of pd.Period variables
+    """
+
+    periods_pd = [pd.Period(np.datetime_as_string(i)) for i in time_array]
+    return periods_pd
+
+
