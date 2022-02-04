@@ -25,6 +25,7 @@ This module provides basic functionality to handle PC data, which is a basic out
 
 import datetime
 from pathlib import Path
+import mjoindices.tools as tools
 
 import numpy as np
 import pandas as pd
@@ -38,6 +39,7 @@ class PCData:
     class as a major result of this package.
 
     :param time: Array containing the :class:`numpy.datetime64` dates.
+	:param period: Array containing the :class:`pandas.Period` dates.
     :param pc1: Array containing the values of PC1 (has to be of same length as the time array).
     :param pc2: Array containing the values of PC2 (has to be of same length as the time array).
     """
@@ -78,7 +80,14 @@ class PCData:
         """
         return self._pc2
 
-    def save_pcs_to_txt_file(self, filename: Path) -> None:
+    @property
+    def period(self) -> np.ndarray:
+        """
+        The time grid of the PC time series as an array of :class:'pandas.Period' elements.
+        """
+        return tools.convert_time_to_period(self.time)
+
+    def save_pcs_to_txt_file(self, filename: Path, model=True) -> None:
         """
         Saves the computed PCs to a text file.
 
@@ -88,22 +97,33 @@ class PCData:
         :func:`mjoindices.principal_components.load_original_pcs_from_txt_file`).
 
         :param filename: The full filename.
+        :param model: if using model data and thus need to use period rather than datetime64 data (time data out of range)
         """
-        df = pd.DataFrame({"Date": self._time, "PC1": self._pc1, "PC2": self._pc2})
+        if model:
+            df = pd.DataFrame({"Date": self.period, "PC1": self._pc1, "PC2": self._pc2})
+        else:
+            df = pd.DataFrame({"Date": self._time, "PC1": self._pc1, "PC2": self._pc2})
         df.to_csv(filename, index=False, float_format="%.5f")
 
 
-def load_pcs_from_txt_file(filename: Path) -> PCData:
+def load_pcs_from_txt_file(filename: Path, model=True) -> PCData:
     """
     Loads the PCs of OMI, which were previously saved with this package
     (:func:`mjoindices.principal_components.PCData.save_pcs_to_txt_file`).
 
     :param filename: Path to the PC file.
+    :param model: True if using model data, and thus time is in nonstandard calendar format
 
     :return: The PC data.
     """
-    df = pd.read_csv(filename, sep=',', parse_dates=[0], header=0)
-    dates = df.Date.values
+    if model:
+        df = pd.read_csv(filename, sep=',', header=0)
+        date_str = df.Date.astype(str)
+        temp_date = [np.datetime64(i) for i in date_str]
+        dates = np.array(temp_date, dtype=np.datetime64)
+    else:
+        df = pd.read_csv(filename, sep=',', parse_dates=[0], header=0)
+        dates = df.Date.values
     pc1 = df.PC1.values
     pc2 = df.PC2.values
     return PCData(dates, pc1, pc2)
@@ -130,3 +150,4 @@ def load_original_pcs_from_txt_file(filename: Path) -> PCData:
     pc1 = np.array(my_data[:, 4])
     pc2 = np.array(my_data[:, 5])
     return PCData(dates, pc1, pc2)
+
