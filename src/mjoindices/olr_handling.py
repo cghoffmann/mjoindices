@@ -54,6 +54,8 @@ class OLRData:
         Initialization of basic variables.
         """
         if olr.shape[0] != time.size:
+            print(olr.shape[0])
+            print(time.size)
             raise ValueError('Length of time grid does not fit to first dimension of OLR data cube')
         if olr.shape[1] != lat.size:
             raise ValueError('Length of lat grid does not fit to second dimension of OLR data cube')
@@ -308,6 +310,61 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
     return result
 
 
+def load_model_olr(filename: Path, date_reference='0001-01-01', leap=False) -> OLRData:
+    """
+    Loads the OLR data from model output (originally from SPCAM)
+
+    Puts data in same format as used above for NOAA observed data
+    date_reference is in the metadata of your model time variable (where the time variable starts)
+    For SPCAM, time is listed as "days since 0001-01-01"
+
+    If leap is False (as expected by model output), then will skip leap years
+    """
+
+    f = netcdf.netcdf_file(str(filename),'r')
+    lat = f.variables['lat'].data.copy()
+    lon = f.variables['lon'].data.copy()
+    # OLR stored as FLUT in SPCAM 
+    olr = f.variables['FLUT'].data.copy() 
+    days_since = f.variables['time'].data.copy()
+    f.close()
+
+    temptime = []
+    # np.datetime64 uses leap years based on the normal calendar
+    # assumes dates are in "days since" format (change for different unit)
+    if leap:
+        for item in days_since:
+            delta = np.timedelta64(int(item),'D')
+            day = np.datetime64(date_reference) + delta
+            temptime.append(day)
+    # most climate models have no leap years (all years with 365 days)
+    else:
+        # determine number of years in time variable (assumes full year)
+        nyear = np.arange(int(days_since[0]//365), int(np.ceil(days_since[-1]/365)))
+        # create temporary list of np.datetime64 dates for n years
+        temptime = [i for i in generate_list_valid_dates(nyear)]
+
+    time = np.array(temptime, dtype=np.datetime64)
+    result = OLRData(np.squeeze(olr), time, lat, lon)
+
+    return result
+
+
+def generate_list_valid_dates(nyear: np.ndarray):
+    """
+    Python generator, outputs a np.datetime variable of each day of the year
+    Does not use leap years. Each year has 365 days (assumes data contains full year)
+    """
+    nmon = 12
+    day_per_mon = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    for y in nyear: 
+        for m in range(nmon):
+            for d in range(day_per_mon[m]):
+                time_temp = f'{y+1:04d}' + '-' + f'{m+1:02d}' + '-' + f'{d+1:02d}'
+                yield np.datetime64(time_temp)
+
+
 def restore_from_npzfile(filename: Path) -> OLRData:
     """
     Loads an :class:`OLRData` object from a numpy file, which has been saved with the function
@@ -355,3 +412,5 @@ def plot_olr_map_for_date(olr: OLRData, date: np.datetime64) -> Figure:
         raise ValueError("No OLR data found for given date.")
 
     return fig
+
+
