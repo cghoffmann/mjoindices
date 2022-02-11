@@ -28,12 +28,12 @@ import typing
 import numpy as np
 import pandas as pd
 
-def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], model=True) -> typing.Union[int, np.ndarray]:
+def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: bool = True) -> typing.Union[int, np.ndarray]:
     """
     Calculates the days of the year (DOYs) for an individual date or an array of dates.
 
     :param date: The date (or the dates), given as (NumPy array of) :class:`numpy.datetime64` value(s).
-    :param model: if True, then will not include leap years (as expected by model input)
+    :param no_leap: if True, then will assume all years have 365 days
 
     :return: the DOY (or the DOYs) as (NumPy array of) int value(s).
     """
@@ -48,7 +48,7 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], model=True) 
         temp = date.astype(dt.datetime)
         time_fragments = temp.timetuple()
 
-        if model:
+        if no_leap:
             # sums days of previous months to get DOY
             result = sum(day_per_mon[:time_fragments.tm_mon-1]) + time_fragments.tm_mday
         else:
@@ -56,12 +56,12 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], model=True) 
     else:
         result = np.empty(date.size)
         for i, d in enumerate(date):
-            result[i] = calc_day_of_year(d)
+            result[i] = calc_day_of_year(d, no_leap=no_leap)
     return result
 
 
 def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: int,
-                             strict_leap_year_treatment: bool=False) -> typing.Tuple:
+                             strict_leap_year_treatment: bool=False, no_leap: bool = True) -> typing.Tuple:
     """
     Finds the indices in a given array of dates that fit into a particular window of DOYs.
 
@@ -71,7 +71,7 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
     :param center_doy: The center of the wanted window.
     :param window_length: the length of the window to both sides  of the center in days.
         The window spans 2*window_length+1 days in total (for exceptions see below).
-    :param strict_leap_year_treatmenmt: distinguishes between 2 different methods of constructing the DOY range window.
+    :param strict_leap_year_treatment: distinguishes between 2 different methods of constructing the DOY range window.
         1: Setting the switch to False will use a pragmatic implementation in which the start and end of the DOY window
         is directly computed as distance in units of DOYs. 2: Setting the switch to True will transfer the DOYs to
         actual calender dates and will calculate the start and end of the window also as calender dates using
@@ -85,10 +85,17 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
         center_doy=366, since a window is found only during leap years at all, which might cause the EOF to differ quite
         a lot from those of DOY 365 and DOY 1, which is not wanted. Because of that the recommended setting
         is the default value False.
+    :param no_leap: if True, will assume all years contain only 365 days. Will follow the basic methodology of 
+        strict_leap_year_treatment = False, but with ndoys = 365 instead of potentially 366. 
 
     :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.
     """
-    doys = calc_day_of_year(dates)
+    doys = calc_day_of_year(dates, no_leap=no_leap)
+
+    if (no_leap) & (strict_leap_year_treatment):
+        # make sure to go through strict_leap_year_treatment = False pathway
+        print('Warning, you cannot have strict_leap_year_treatment without leap years')
+        strict_leap_year_treatment = False
 
     if strict_leap_year_treatment:
         center_inds = np.nonzero(doys == center_doy)
@@ -123,15 +130,19 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
     return np.asarray(resulting_idxlist), doys[resulting_idxlist]
 
 
-def doy_list() -> np.array:
-    """
-    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365.
-    Useful, e.g., as axis for plotting.
-    Needs to go up to 366 if you want to use a leap year. 
+def doy_list(no_leap: bool = True) -> np.array:
 
+    """
+    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (if leap years).
+    Useful, e.g., as axis for plotting.
+
+    :param no_leap: if True, acts as if all years have 365 days. 
     :return: The doy array.
     """
-    return np.arange(1, 366, 1)
+    if no_leap:
+        return np.arange(1, 366, 1) 
+    else:
+        return np.arange(1, 367, 1)
 
 def convert_time_to_period(time_array):
     """
@@ -142,5 +153,4 @@ def convert_time_to_period(time_array):
 
     periods_pd = [pd.Period(np.datetime_as_string(i)) for i in time_array]
     return periods_pd
-
 

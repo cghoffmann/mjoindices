@@ -64,7 +64,8 @@ if eofs_package_available:
 
 def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: bool = True,
                        interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
-                       interpolation_end_doy: int = 316, strict_leap_year_treatment: bool = False) -> eof.EOFDataForAllDOYs:
+                       interpolation_end_doy: int = 316, strict_leap_year_treatment: bool = False, 
+                       no_leap: bool = True) -> eof.EOFDataForAllDOYs:
     """
     One major function of this module. It performs the complete OMI EOF computation.
 
@@ -79,13 +80,14 @@ def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", s
     :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.
     :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
     :param strict_leap_year_treatment: See description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    :param no_leap: If true, will act as if there are no leap years in the dataset (365 days consistently)
     :return:
     """
     preprocessed_olr = preprocess_olr(olrdata)
-    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation, strict_leap_year_treatment=strict_leap_year_treatment)
+    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation, strict_leap_year_treatment=strict_leap_year_treatment, no_leap=no_leap)
     result = post_process_eofs(raw_eofs, sign_doy1reference=sign_doy1reference, interpolate_eofs=interpolate_eofs,
                                interpolation_start_doy=interpolation_start_doy,
-                               interpolation_end_doy=interpolation_end_doy)
+                               interpolation_end_doy=interpolation_end_doy, no_leap=no_leap)
     return result
 
 
@@ -109,7 +111,7 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
 
 
 def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = "internal",
-                                    strict_leap_year_treatment: bool = False) -> eof.EOFDataForAllDOYs:
+                                    strict_leap_year_treatment: bool = False, no_leap: bool = True) -> eof.EOFDataForAllDOYs:
     """
     Calculates a series of EOF pairs: one pair for each DOY.
 
@@ -120,28 +122,30 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
     :param implementation: Two options are available: First, "internal": uses the internal implementation of the EOF
         approach. Second, "eofs_package": Uses the implementation of the external package :py:mod:`eofs`.
     :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    :param no_leap: if True, acts as if all years have 365 days
 
     :return: A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.
     """
     if implementation == "eofs_package" and not eofs_package_available:
         raise ValueError("Selected calculation with external eofs package, but package not available. Use "
                          "internal implementation or install eofs package")
-    doys = tools.doy_list()
+    doys = tools.doy_list(no_leap)
     eofs = []
     for doy in doys:
         print("Calculating EOFs for DOY %i" % doy)
         if (implementation == "eofs_package"):
             singleeof = calc_eofs_for_doy_using_eofs_package(olrdata, doy,
-                                                             strict_leap_year_treatment=strict_leap_year_treatment)
+                                                             strict_leap_year_treatment=strict_leap_year_treatment,
+                                                             no_leap=no_leap)
         else:
-            singleeof = calc_eofs_for_doy(olrdata, doy, strict_leap_year_treatment=strict_leap_year_treatment)
+            singleeof = calc_eofs_for_doy(olrdata, doy, strict_leap_year_treatment=strict_leap_year_treatment, no_leap=no_leap)
         eofs.append(singleeof)
     return eof.EOFDataForAllDOYs(eofs)
 
 
 def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool = True,
                       interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
-                      interpolation_end_doy: int = 316) -> eof.EOFDataForAllDOYs:
+                      interpolation_end_doy: int = 316, no_leap: bool = True) -> eof.EOFDataForAllDOYs:
     """
     Post processes a series of EOF pairs for all DOYs.
 
@@ -158,17 +162,18 @@ def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool =
     :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.
     :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.
     :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
+    :param no_leap: if True, assumes all years have 365 days
 
     :return: the postprocessed series of EOFs
     """
-    pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
+    pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference, no_leap=no_leap)
     if interpolate_eofs:
         pp_eofs = interpolate_eofs_between_doys(pp_eofs, start_doy=interpolation_start_doy,
-                                                end_doy=interpolation_end_doy)
+                                                end_doy=interpolation_end_doy, no_leap=no_leap)
     return pp_eofs
 
 
-def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = False) -> eof.EOFData:
+def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = False, no_leap: bool = True) -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
@@ -179,6 +184,7 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
     :param olrdata: The filtered OLR data to calculate the EOFs from.
     :param doy: The DOY for which the EOFs are calculated.
     :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    :param no_leap: if True, assumes each year has 365 days
 
     :return: An object containing the pair of EOFs together with diagnostic values.
 
@@ -188,7 +194,8 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
     nlat = olrdata.lat.size
     nlong = olrdata.long.size
     olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60,
-                                                                strict_leap_year_treatment=strict_leap_year_treatment)
+                                                                strict_leap_year_treatment=strict_leap_year_treatment,
+                                                                no_leap=no_leap)
     N = olr_maps_for_doy.shape[0]
     M = nlat * nlong
     F = np.reshape(olr_maps_for_doy, [N, M]).T  # vector: only one dimension. Length given by original longitude and latitude bins
@@ -217,7 +224,7 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
 
 
 def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
-                                         strict_leap_year_treatment: bool = False) -> eof.EOFData:
+                                         strict_leap_year_treatment: bool = False, no_leap: bool = True) -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
@@ -228,6 +235,7 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
     :param olrdata: The filtered OLR data to calculate the EOFs from.
     :param doy: The DOY for which the EOFs are calculated.
     :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    :param no_leap: if True, assumes all years have 365 days
 
     :return: An object containing the pair of EOFs together with diagnostic values.
 
@@ -238,7 +246,8 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
         nlat = olrdata.lat.size
         nlong = olrdata.long.size
         olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60,
-                                                                    strict_leap_year_treatment=strict_leap_year_treatment)
+                                                                    strict_leap_year_treatment=strict_leap_year_treatment, 
+                                                                    no_leap=no_leap)
 
         ntime = olr_maps_for_doy.shape[0]
         N = ntime
@@ -264,7 +273,8 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
 
 
 def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
-                                                   doy1reference: bool = False) -> eof.EOFDataForAllDOYs:
+                                                   doy1reference: bool = False,
+                                                   no_leap: bool = True) -> eof.EOFDataForAllDOYs:
     """
     Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.
 
@@ -278,6 +288,7 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
 
     :param eofs: The EOF series for which the signs should be aligned.
     :param doy1reference: If true, the EOFs of DOY 1 are aligned w.r.t to the original Kiladis (2014) calculation.
+    :param no_leap: if True, will assume all years have 365 days
 
     :return: The EOFs with aligned signs.
     """
@@ -303,7 +314,7 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
         corrected_doy1 = eofs.eofdata_for_doy(1)
     switched_eofs.append(corrected_doy1)
     previous_eof = corrected_doy1
-    for doy in tools.doy_list()[1:]:
+    for doy in tools.doy_list(no_leap)[1:]:
         corrected_eof = _correct_spontaneous_sign_change_of_individual_eof(previous_eof, eofs.eofdata_for_doy(doy))
         switched_eofs.append(corrected_eof)
         previous_eof = corrected_eof
@@ -346,7 +357,7 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
 
 
 def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 293,
-                                  end_doy: int = 316) -> eof.EOFDataForAllDOYs:
+                                  end_doy: int = 316, no_leap: bool = True) -> eof.EOFDataForAllDOYs:
     """
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
 
@@ -363,10 +374,11 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
         element, which will be replaced by the interpolation.
     :param end_doy:  The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last
         element, which will be replaced by the interpolation.
+    :param no_leap: if True, assumes all years have 365 days
 
     :return: The complete EOF series with the interpolated values.
     """
-    doys = tools.doy_list()
+    doys = tools.doy_list(no_leap)
     start_idx = start_doy - 1
     end_idx = end_doy - 1
     eof_len = eofs.lat.size * eofs.long.size

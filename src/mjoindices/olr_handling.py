@@ -133,7 +133,7 @@ class OLRData:
             return None
 
     def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0,
-                                         strict_leap_year_treatment: bool = False) -> np.ndarray:
+                                         strict_leap_year_treatment: bool = False, no_leap: bool = True) -> np.ndarray:
         """
         Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).
 
@@ -146,12 +146,14 @@ class OLRData:
         :param window_length: The window length in DOYs on both sides of the center DOY. Hence, if the window is fully
             covered by the data, one gets 2*window_length + 1 entries per year in the result.
         :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        :param no_leap: if True, will assume no leap years in dataset
 
         :return: The excerpt of the OLR data as a 3-dim array. The three dimensions correspond to
             time, latitude, and longitude, in this order.
         """
         inds, doys = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length,
-                                                    strict_leap_year_treatment=strict_leap_year_treatment)
+                                                    strict_leap_year_treatment=strict_leap_year_treatment,
+                                                    no_leap=no_leap)
         return self.olr[inds, :, :]
 
     def save_to_npzfile(self, filename: Path) -> None:
@@ -310,7 +312,7 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
     return result
 
 
-def load_model_olr(filename: Path, date_reference='0001-01-01', leap=False) -> OLRData:
+def load_model_olr(filename: Path, date_reference='0001-01-01', no_leap: bool = True) -> OLRData:
     """
     Loads the OLR data from model output (originally from SPCAM)
 
@@ -318,7 +320,7 @@ def load_model_olr(filename: Path, date_reference='0001-01-01', leap=False) -> O
     date_reference is in the metadata of your model time variable (where the time variable starts)
     For SPCAM, time is listed as "days since 0001-01-01"
 
-    If leap is False (as expected by model output), then will skip leap years
+    :param no_leap: if True, assumes all years have 365 days
     """
 
     f = netcdf.netcdf_file(str(filename),'r')
@@ -332,12 +334,12 @@ def load_model_olr(filename: Path, date_reference='0001-01-01', leap=False) -> O
     temptime = []
     # np.datetime64 uses leap years based on the normal calendar
     # assumes dates are in "days since" format (change for different unit)
-    if leap:
+    if not no_leap:
         for item in days_since:
             delta = np.timedelta64(int(item),'D')
             day = np.datetime64(date_reference) + delta
             temptime.append(day)
-    # most climate models have no leap years (all years with 365 days)
+    # for data with no leap years (all years with 365 days)
     else:
         # determine number of years in time variable (assumes full year)
         nyear = np.arange(int(days_since[0]//365), int(np.ceil(days_since[-1]/365)))
@@ -412,5 +414,3 @@ def plot_olr_map_for_date(olr: OLRData, date: np.datetime64) -> Figure:
         raise ValueError("No OLR data found for given date.")
 
     return fig
-
-
