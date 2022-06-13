@@ -28,7 +28,7 @@ import typing
 import numpy as np
 import pandas as pd
 
-def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: bool = True) -> typing.Union[int, np.ndarray]:
+def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: bool = False) -> typing.Union[int, np.ndarray]:
     """
     Calculates the days of the year (DOYs) for an individual date or an array of dates.
 
@@ -61,7 +61,7 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: boo
 
 
 def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: int,
-                             strict_leap_year_treatment: bool=False, no_leap: bool = True) -> typing.Tuple:
+                             strict_leap_year_treatment: bool=False, no_leap: bool = False) -> typing.Tuple:
     """
     Finds the indices in a given array of dates that fit into a particular window of DOYs.
 
@@ -129,8 +129,7 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
 
     return np.asarray(resulting_idxlist), doys[resulting_idxlist]
 
-
-def doy_list(no_leap: bool = True) -> np.array:
+def doy_list(no_leap: bool = False) -> np.array:
 
     """
     Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (if leap years).
@@ -153,4 +152,5 @@ def convert_time_to_period(time_array):
 
     periods_pd = [pd.Period(np.datetime_as_string(i)) for i in time_array]
     return periods_pd
+
 
