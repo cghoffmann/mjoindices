@@ -133,7 +133,7 @@ class OLRData:
             return None
 
     def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0,
-                                         strict_leap_year_treatment: bool = False, no_leap: bool = True) -> np.ndarray:
+                                         strict_leap_year_treatment: bool = False, no_leap: bool = False) -> np.ndarray:
         """
         Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).
 
@@ -236,6 +236,21 @@ def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime
         return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long)
 
 
+def remove_leap_years(olr: OLRData) -> OLRData:
+    """
+    Removes any leap days (any dates that have both Month = Feb and Day = 29) and returns complete OLRDataset
+    with remaining olr data
+
+    :param olr: the OLR data to restrict
+
+    :return: A new :class:'OLRData' object with no leap days
+    """
+
+    window_inds = [(i.astype(object).month != 2) | (i.astype(object).day != 29) for i in olr.time]
+
+    return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long) 
+
+
 def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF3 format.
@@ -312,15 +327,18 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
     return result
 
 
-def load_model_olr(filename: Path, date_reference='0001-01-01', no_leap: bool = True) -> OLRData:
+def load_model_olr(filename: Path, date_reference='0001-01-01', no_leap: bool = False) -> OLRData:
     """
-    Loads the OLR data from model output (originally from SPCAM)
-
+    Loads the OLR data from model output. Tested with SPCAM. 
     Puts data in same format as used above for NOAA observed data
-    date_reference is in the metadata of your model time variable (where the time variable starts)
-    For SPCAM, time is listed as "days since 0001-01-01"
 
+    :param filename: Full filename of a local copy of OLR data file.
+    :param date_reference: in the metadata of the model time variable, e.g. "days since 0001-01-01" corresponds
+    to a date_reference of '0001-01-01'
     :param no_leap: if True, assumes all years have 365 days
+
+    :return: The OLR data.
+
     """
 
     f = netcdf.netcdf_file(str(filename),'r')
@@ -414,3 +432,4 @@ def plot_olr_map_for_date(olr: OLRData, date: np.datetime64) -> Figure:
         raise ValueError("No OLR data found for given date.")
 
     return fig
+
