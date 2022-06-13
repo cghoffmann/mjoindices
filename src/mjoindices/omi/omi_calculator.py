@@ -46,6 +46,8 @@ import numpy as np
 import warnings
 import importlib
 import scipy.interpolate
+import scipy.optimize as optimize
+import scipy.linalg as linalg
 
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.olr_handling as olr
@@ -65,7 +67,7 @@ if eofs_package_available:
 def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: bool = True,
                        interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
                        interpolation_end_doy: int = 316, strict_leap_year_treatment: bool = False, 
-                       no_leap: bool = True) -> eof.EOFDataForAllDOYs:
+                       no_leap: bool = False) -> eof.EOFDataForAllDOYs:
     """
     One major function of this module. It performs the complete OMI EOF computation.
 
@@ -81,6 +83,7 @@ def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", s
     :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
     :param strict_leap_year_treatment: See description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
     :param no_leap: If true, will act as if there are no leap years in the dataset (365 days consistently)
+
     :return:
     """
     preprocessed_olr = preprocess_olr(olrdata)
@@ -111,7 +114,7 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
 
 
 def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = "internal",
-                                    strict_leap_year_treatment: bool = False, no_leap: bool = True) -> eof.EOFDataForAllDOYs:
+                                    strict_leap_year_treatment: bool = False, no_leap: bool = False) -> eof.EOFDataForAllDOYs:
     """
     Calculates a series of EOF pairs: one pair for each DOY.
 
@@ -122,7 +125,7 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
     :param implementation: Two options are available: First, "internal": uses the internal implementation of the EOF
         approach. Second, "eofs_package": Uses the implementation of the external package :py:mod:`eofs`.
     :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-    :param no_leap: if True, acts as if all years have 365 days
+    :param no_leap:if True, acts as if all years have 365 days
 
     :return: A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.
     """
@@ -138,14 +141,15 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
                                                              strict_leap_year_treatment=strict_leap_year_treatment,
                                                              no_leap=no_leap)
         else:
-            singleeof = calc_eofs_for_doy(olrdata, doy, strict_leap_year_treatment=strict_leap_year_treatment, no_leap=no_leap)
+            singleeof = calc_eofs_for_doy(olrdata, doy, strict_leap_year_treatment=strict_leap_year_treatment, 
+                                            no_leap=no_leap)
         eofs.append(singleeof)
-    return eof.EOFDataForAllDOYs(eofs)
+    return eof.EOFDataForAllDOYs(eofs, no_leap)
 
 
 def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool = True,
                       interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
-                      interpolation_end_doy: int = 316, no_leap: bool = True) -> eof.EOFDataForAllDOYs:
+                      interpolation_end_doy: int = 316, no_leap: bool = False) -> eof.EOFDataForAllDOYs:
     """
     Post processes a series of EOF pairs for all DOYs.
 
@@ -173,7 +177,8 @@ def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool =
     return pp_eofs
 
 
-def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = False, no_leap: bool = True) -> eof.EOFData:
+def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = False, 
+                        no_leap: bool = False) -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
@@ -224,7 +229,7 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
 
 
 def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
-                                         strict_leap_year_treatment: bool = False, no_leap: bool = True) -> eof.EOFData:
+                                         strict_leap_year_treatment: bool = False, no_leap: bool = False) -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
@@ -274,7 +279,7 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
 
 def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
                                                    doy1reference: bool = False,
-                                                   no_leap: bool = True) -> eof.EOFDataForAllDOYs:
+                                                   no_leap: bool = False) -> eof.EOFDataForAllDOYs:
     """
     Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.
 
@@ -312,13 +317,15 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
         corrected_doy1 = _correct_spontaneous_sign_change_of_individual_eof(reference_eofs, eofs.eofdata_for_doy(1))
     else:
         corrected_doy1 = eofs.eofdata_for_doy(1)
+
     switched_eofs.append(corrected_doy1)
     previous_eof = corrected_doy1
     for doy in tools.doy_list(no_leap)[1:]:
         corrected_eof = _correct_spontaneous_sign_change_of_individual_eof(previous_eof, eofs.eofdata_for_doy(doy))
         switched_eofs.append(corrected_eof)
         previous_eof = corrected_eof
-    return eof.EOFDataForAllDOYs(switched_eofs)
+
+    return eof.EOFDataForAllDOYs(switched_eofs, no_leap)
 
 
 def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, target=eof.EOFData) -> eof.EOFData:
@@ -357,7 +364,7 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
 
 
 def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 293,
-                                  end_doy: int = 316, no_leap: bool = True) -> eof.EOFDataForAllDOYs:
+                                  end_doy: int = 316, no_leap: bool = False) -> eof.EOFDataForAllDOYs:
     """
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
 
@@ -405,7 +412,8 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
                                              explained_variances=orig_eof.explained_variances,
                                              eigenvalues=orig_eof.eigenvalues, no_observations=orig_eof.no_observations)
                                  )
-    return eof.EOFDataForAllDOYs(interpolated_eofs)
+    return eof.EOFDataForAllDOYs(interpolated_eofs, no_leap)
+
 
 
 # #################PC Calculation
@@ -428,7 +436,7 @@ def calculate_pcs_from_olr(olrdata: olr.OLRData,
         on a 2-dim FFT) or a 1-dim FFT Filter. Setting this parameter to True uses the quicker 1-dim implementation. The
         results are quite similar.
 
-    :return: The PC time series.
+    :return: The PC time series. Normalized by the full PC time series
     """
     resticted_olr_data = olr.restrict_time_coverage(olrdata, period_start, period_end)
     resampled_olr_data = olr.interpolate_spatial_grid(resticted_olr_data, eofdata.lat, eofdata.long)
@@ -492,7 +500,7 @@ def regress_3dim_data_onto_eofs(data: object, eofdata: eof.EOFDataForAllDOYs) ->
     for idx, val in enumerate(data.time):
         day = val
         olr_singleday = data.get_olr_for_date(day)
-        doy = tools.calc_day_of_year(day)
+        doy = tools.calc_day_of_year(day, eofdata.no_leap)
         (pc1_single, pc2_single) = regress_vector_onto_eofs(
             eofdata.eofdata_for_doy(doy).reshape_to_vector(olr_singleday),
             eofdata.eof1vector_for_doy(doy),
@@ -525,3 +533,4 @@ def regress_vector_onto_eofs(vector: np.ndarray, eof1: np.ndarray, eof2: np.ndar
     # pseudo_inverse = np.linalg.pinv(eof_mat)
     # pcs = np.matmul(pseudo_inverse, vector)
     # return pcs[0], pcs[1]
+
