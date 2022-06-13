@@ -317,7 +317,7 @@ class EOFData:
 
 class EOFDataForAllDOYs:
     """
-    This class serves as a container for a series of EOF pairs, which covers all 365 DOYs and provides some overall
+    This class serves as a container for a series of EOF pairs, which covers all 365 or 366 DOYs and provides some overall
     statistical quantities.
 
     The basic EOF computation :func:`mjoindices.omi.omi_calculator.calc_eofs_from_olr` will return an object of this
@@ -325,25 +325,34 @@ class EOFDataForAllDOYs:
 
     The individual EOF pairs are represented by :class:`EOFData` objects.
 
-    :param eof_list: A list with the 365 :class:`EOFData` objects.
+    :param eof_list: A list with the 365 or 366 :class:`EOFData` objects.
+    :param no_leap: True if the eof_list should have 365 days (no leap years in dataset) or 366 (leap years in dataset)
     """
 
-    def __init__(self, eof_list: typing.List[EOFData]) -> None:
+    def __init__(self, eof_list: typing.List[EOFData], no_leap: bool) -> None:
         """
 
         :param eof_list:
         """
-        if len(eof_list) != 365:
-            raise ValueError("List of EOFs must contain 365 entries")
+        if (no_leap and len(eof_list) != 365):
+            raise ValueError("List of EOFs must contain 365 entries for no_leap")
+        elif (not no_leap and len(eof_list) != 366):
+            raise ValueError("List of EOFs must contain 366 entries for no_leap=False") 
+
+        if no_leap: 
+            reference_list_len = 365 # number of days in year
+        else:
+            reference_list_len = 366
         reference_lat = eof_list[0].lat
         reference_long = eof_list[0].long
-        for i in range(0, 365):
+        for i in range(0, reference_list_len):
             if not np.all(eof_list[i].lat == reference_lat):
                 raise ValueError("All EOFs must have the same latitude grid. Problematic is DOY %i" % i)
             if not np.all(eof_list[i].long == reference_long):
                 raise ValueError("All EOFs must have the same longitude grid. Problematic is DOY %i" % i)
         # deepcopy eofs so that they cannot be modified accidentally from outside after the consistency checks
         self._eof_list = copy.deepcopy(eof_list)
+        self._no_leap = no_leap
 
     # FIXME: Could this property be used to modify the EOFData objects because they are mutual?
     @property
@@ -354,6 +363,13 @@ class EOFDataForAllDOYs:
         Remember that DOY 1 corresponds to list entry 0.
         """
         return self._eof_list
+
+    @property
+    def no_leap(self) -> bool:
+        """
+        True if the eof_list should have 365 days (no leap years in dataset) or 366 (leap years in dataset) 
+        """
+        return self._no_leap
 
     @property
     def lat(self) -> np.ndarray:
@@ -369,6 +385,16 @@ class EOFDataForAllDOYs:
         The longitude grid common to the EOFs of all DOYs.
         """
         return self.eof_list[0].long
+
+    @property
+    def len_eof_list(self) -> int:
+        """
+        Length of the eof_list, based on no_leap
+        """
+        if self._no_leap:
+            return 365
+        else:
+            return 366
 
     def eofdata_for_doy(self, doy: int) -> EOFData:
         """
@@ -402,12 +428,12 @@ class EOFDataForAllDOYs:
 
     def explained_variance1_for_all_doys(self):
         """
-        Returns a vector with 365 elements containing the explained variance of EOF1 for each DOY.
+        Returns a vector with 365 or 366 elements containing the explained variance of EOF1 for each DOY.
 
         :return: The variance vector.
 
         """
-        doys = doy_list()
+        doys = doy_list(self._no_leap)
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).explained_variance_eof1)
@@ -415,11 +441,11 @@ class EOFDataForAllDOYs:
 
     def explained_variance2_for_all_doys(self):
         """
-        Returns a vector with 365 elements containing the explained variance of EOF2 for each DOY.
+        Returns a vector with 365 or 366 elements containing the explained variance of EOF2 for each DOY.
 
         :return: The variance vector.
         """
-        doys = doy_list()
+        doys = doy_list(self._no_leap)
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).explained_variance_eof2)
@@ -427,11 +453,11 @@ class EOFDataForAllDOYs:
 
     def total_explained_variance_for_all_doys(self):
         """
-        Returns a vector with 365 elements containing for each DOY the sum of the explained variance over all EOFs.
+        Returns a vector with 365 or 366 elements containing for each DOY the sum of the explained variance over all EOFs.
 
         :return: The variance vector. Should by close to 1 for each DOY if computation was successful.
         """
-        doys = doy_list()
+        doys = doy_list(self._no_leap)
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).sum_of_explained_variances)
@@ -439,12 +465,12 @@ class EOFDataForAllDOYs:
 
     def no_observations_for_all_doys(self):
         """
-        Returns a vector with 365 elements containing for each DOY the number of observations that went into the
+        Returns a vector with 365 or 366 elements containing for each DOY the number of observations that went into the
         computation of the EOFs.
 
         :return: The number of observations vector.
         """
-        doys = doy_list()
+        doys = doy_list(self._no_leap)
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).no_observations)
@@ -452,11 +478,11 @@ class EOFDataForAllDOYs:
 
     def eigenvalue1_for_all_doys(self):
         """
-        Returns a vector with 365 elements containing the eigenvalues of EOF1 for each DOY.
+        Returns a vector with 365 or 366 elements containing the eigenvalues of EOF1 for each DOY.
 
         :return: The eigenvalue vector.
         """
-        doys = doy_list()
+        doys = doy_list(self._no_leap)
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).eigenvalue_eof1)
@@ -464,11 +490,11 @@ class EOFDataForAllDOYs:
 
     def eigenvalue2_for_all_doys(self):
         """
-        Returns a vector with 365 elements containing the eigenvalues of EOF2 for each DOY.
+        Returns a vector with 365 or 366 elements containing the eigenvalues of EOF2 for each DOY.
 
         :return: The eigenvalue vector.
         """
-        doys = doy_list()
+        doys = doy_list(self._no_leap)
         result = []
         for doy in doys:
             result.append(self.eofdata_for_doy(doy).eigenvalue_eof2)
@@ -497,7 +523,7 @@ class EOFDataForAllDOYs:
 
         :param filename: The filename.
         """
-        doys = doy_list()
+        doys = doy_list(self._no_leap)
         eof1 = np.empty((doys.size, self.lat.size * self.long.size))
         eof2 = np.empty((doys.size, self.lat.size * self.long.size))
         eigenvalues = np.empty((doys.size, self.lat.size * self.long.size))
@@ -582,21 +608,23 @@ def load_original_eofs_for_doy(dirname: Path, doy: int) -> EOFData:
     return EOFData(orig_lat, orig_long, eof1, eof2)
 
 
-def load_all_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
+def load_all_eofs_from_directory(dirname: Path, no_leap: bool) -> EOFDataForAllDOYs:
     """
     Loads the EOF functions (created with the function :func:`EOFDataForAllDOYs.save_all_eofs_to_dir`)
     for all DOYs from the given directory
 
     :param dirname: The directory in which the files are stored.
+    :param no_leap: True if every year has 365 days, False if dataset contains leap years. 
+    Unlikely to work because it's possible different EOF files will have different values of no_leap. 
 
     :return: The EOFs for all DOYs.
     """
     eofs = []
-    for doy in doy_list():
+    for doy in doy_list(no_leap):
         filename = dirname / Path("eof%s.txt" % format(doy, '03'))
         eof = load_single_eofs_from_txt_file(filename)
         eofs.append(eof)
-    return EOFDataForAllDOYs(eofs)
+    return EOFDataForAllDOYs(eofs, no_leap)
 
 
 def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
@@ -611,16 +639,16 @@ def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
     inserted hardcodedly.
 
     :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.
-        This path should contain the sub directories *eof1* and *eof2*, in which the 365 files each are located:
+        This path should contain the sub directories *eof1* and *eof2*, in which the 366 files each are located:
         One file per day of the year.
 
     :return: The original EOFs for all DOYs.
     """
     eofs = []
-    for doy in doy_list():
+    for doy in doy_list(no_leap=False): # the original files contain leap years
         eof = load_original_eofs_for_doy(dirname, doy)
         eofs.append(eof)
-    return EOFDataForAllDOYs(eofs)
+    return EOFDataForAllDOYs(eofs, no_leap=False)
 
 
 def restore_all_eofs_from_npzfile(filename: Path) -> EOFDataForAllDOYs:
@@ -640,13 +668,20 @@ def restore_all_eofs_from_npzfile(filename: Path) -> EOFDataForAllDOYs:
         explained_variances = data["explained_variances"]
         no_observations = data["no_observations"]
     eofs = []
-    for i in range(0, doy_list().size):
+    if eof1.shape[0] == 365:
+        no_leap = True # sets True if no leap years in dataset. 
+    elif eof1.shape[0] == 366:
+        no_leap = False
+    else:
+        raise ValueError('Dataset does not have EOFs from each day of year.')
+
+    for i in range(0, doy_list(no_leap).size):
         eof = EOFData(lat, long, np.squeeze(eof1[i, :]), np.squeeze(eof2[i, :]),
                       eigenvalues=np.squeeze(eigenvalues[i, :]),
                       explained_variances=np.squeeze(explained_variances[i, :]),
                       no_observations=no_observations[i])
         eofs.append(eof)
-    return EOFDataForAllDOYs(eofs)
+    return EOFDataForAllDOYs(eofs, no_leap)
 
 
 def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs, include_total_variance: bool = False,
@@ -660,7 +695,8 @@ def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs, include_total_
 
     :return: Handle to the figure.
     """
-    doygrid = doy_list()
+    no_leap = eofs.no_leap
+    doygrid = doy_list(no_leap)
     fig = plt.figure("plot_explained_variance_for_all_doys", clear=True, figsize=(6, 4), dpi=150)
     ax1 = fig.add_subplot(111)
     handles = []
@@ -673,7 +709,7 @@ def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs, include_total_
         handles.append(p3)
     ax1.set_xlabel("DOY")
     ax1.set_ylabel("Fraction of explained variance")
-    ax1.set_xlim((0, 365))
+    ax1.set_xlim((0, eofs.len_eof_list))
 
     if include_no_observations:
         ax2 = ax1.twinx()
@@ -696,7 +732,7 @@ def plot_eigenvalues_for_all_doys(eofs: EOFDataForAllDOYs) -> Figure:
 
     :return: Handle to the figure.
     """
-    doygrid = doy_list()
+    doygrid = doy_list(eofs.no_leap)
     fig = plt.figure("plot_eigenvalues_for_all_doys", clear=True, figsize=(6, 4), dpi=150)
     p1, = plt.plot(doygrid, eofs.eigenvalue1_for_all_doys(), color="blue", label="EOF1")
     p2, = plt.plot(doygrid, eofs.eigenvalue2_for_all_doys(), color="red", label="EOF2")
@@ -794,5 +830,4 @@ def plot_individual_explained_variance_all_eofs(eof: EOFData, doy: int = None, m
     else:
         plt.title("Explained variance")
     return fig
-
 
