@@ -54,11 +54,12 @@ def test_if_refdata_isfound_for_correct_spontaneous_sign_changes_in_eof_series()
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
     eofs = []
+    no_leap = False
     for doy in range(1, 367):
         eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2))
-    eofs = eof.EOFDataForAllDOYs(eofs)
+    eofs = eof.EOFDataForAllDOYs(eofs, no_leap)
 
     try:
         target = omi.correct_spontaneous_sign_changes_in_eof_series(eofs, True)
@@ -116,7 +117,8 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
     eofs = omi.calc_eofs_from_olr(interpolated_olr,
                                   sign_doy1reference=True,
                                   interpolate_eofs=True,
-                                  strict_leap_year_treatment=True)
+                                  strict_leap_year_treatment=True,
+                                  no_leap=False)
     eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_strict_leap_year_treatment_EOFs.npz")
 
     # Validate EOFs against original (results are inexact but close)
@@ -246,7 +248,8 @@ def test_completeOMIReproduction(tmp_path):
         eofs = omi.calc_eofs_from_olr(interpolated_olr,
                                       sign_doy1reference=True,
                                       interpolate_eofs=True,
-                                      strict_leap_year_treatment=False)
+                                      strict_leap_year_treatment=False,
+                                      no_leap=False)
         eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_EOFs.npz")
 
         # Validate EOFs against original (results are inexact but close)
@@ -392,7 +395,8 @@ def test_completeOMIReproduction_coarsegrid(tmp_path):
     eofs = omi.calc_eofs_from_olr(interpolated_olr,
                                   sign_doy1reference=True,
                                   interpolate_eofs=True,
-                                  strict_leap_year_treatment=True)
+                                  strict_leap_year_treatment=True,
+                                  no_leap=False)
     eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_coarsegrid_EOFs.npz")
 
     # Validate EOFs against mjoindices own reference (results should be equal)
@@ -442,7 +446,8 @@ def test_completeOMIReproduction_eofs_package_strict_leap_year(tmp_path):
                                   sign_doy1reference=True,
                                   interpolate_eofs=True,
                                   strict_leap_year_treatment=True,
-                                  implementation="eofs_package")
+                                  implementation="eofs_package",
+                                  no_leap=False)
     eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_strict_leap_year_treatment_EOFs.npz")
 
     # Validate EOFs against mjoindices own reference (results should be equal)
