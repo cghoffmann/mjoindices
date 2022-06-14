@@ -155,7 +155,9 @@ def test_calc_vector_agreement():
 
 
 def test_calc_comparison_stats_for_eofs_all_doys():
-    doys = tools.doy_list()
+    no_leap = False # using all 366 days
+
+    doys = tools.doy_list(no_leap)
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
 
@@ -172,8 +174,8 @@ def test_calc_comparison_stats_for_eofs_all_doys():
         if doy == 4:
             eof2 = -1 * eof2
         eofs_data.append(eof.EOFData(lat, long, eof1, eof2))
-    reference = eof.EOFDataForAllDOYs(eofs_reference)
-    data = eof.EOFDataForAllDOYs(eofs_data)
+    reference = eof.EOFDataForAllDOYs(eofs_reference, no_leap)
+    data = eof.EOFDataForAllDOYs(eofs_data, no_leap)
 
     corr, diff_mean, diff_std, diff_abs_percent68, diff_abs_percent95, diff_abs_percent99 = \
         evalt.calc_comparison_stats_for_eofs_all_doys(reference, data, 1, exclude_doy366=False, percentage=False,
@@ -272,7 +274,8 @@ def test_calc_timeseries_agreement():
         errors.append("99% percentile not correct.")
 
     noise = np.ones(n) * 2
-    doys = tools.calc_day_of_year(signal_time)
+    no_leap = False
+    doys = tools.calc_day_of_year(signal_time, no_leap)
     doy366_inds = np.nonzero(doys == 366)
     noise[doy366_inds] = 1000000
     data = signal + noise
