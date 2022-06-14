@@ -508,6 +508,18 @@ def test_EOFDataForAllDOYs_initialization_exceptions():
     if "DOY 100" not in str(e.value):
         errors.append("Check for same latitudes failed.")
 
+    # one DOY missing with no_leap = True
+    eofs = []
+    no_leap = True
+    for doy in range(1, 365):
+        eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
+        eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
+        eofs.append(eof.EOFData(lat, long, eof1, eof2))
+    with pytest.raises(ValueError) as e:
+        target = eof.EOFDataForAllDOYs(eofs, no_leap)
+    if "contain 365" not in str(e.value):
+        errors.append("Check for 365 DOYs failed.")
+
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
@@ -624,9 +636,11 @@ def test_save_all_eofs_to_dir(tmp_path):
     print(tmp_path)
 
     errors = []
-    with pytest.raises(FileNotFoundError) as e:
+    #with pytest.raises(FileNotFoundError) as e:
+    with pytest.raises(OSError) as e:
         target.save_all_eofs_to_dir(tmp_path / "eofs_dir_not_exisiting", create_dir=False)
-    if "No such file or directory" not in str(e.value):
+    #if "No such file or directory" not in str(e.value):
+    if "non-existent directory" not in str(e.value):
         errors.append("Test target should raise error, because directory does not exist.")
 
     target.save_all_eofs_to_dir(tmp_path / "eofs")
