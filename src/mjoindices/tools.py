@@ -49,6 +49,10 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: boo
         time_fragments = temp.timetuple()
 
         if no_leap:
+            # check that day does not exceed number of days in a month
+            if time_fragments.tm_mday > day_per_mon[time_fragments.tm_mon-1]:
+                raise ValueError('Invalid date (day of month larger than number of days in month)')
+            
             # sums days of previous months to get DOY
             result = sum(day_per_mon[:time_fragments.tm_mon-1]) + time_fragments.tm_mday
         else:
