@@ -81,6 +81,9 @@ pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
 # Directory in which the figures are saved.
 fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots"
 
+# If you are using a dataset without leap years, change this to True
+no_leap = False
+
 # ############## There should be no need to change anything below (except you intend to use different OLR data as input
 # or you are experiencing problems with the NOAA OLR file NetCDF version.)
 
@@ -108,6 +111,11 @@ fig = olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 fig.show()
 fig.savefig(fig_dir / "OLR_map.png")
 
+# If you would like to remove leap years from your dataset, use the following function. The original OMI 
+# calculation includes leap years.
+#no_leap = True
+#no_leap_olr = olr.remove_leap_years(interpolated_olr)
+
 # Calculate the EOFs. In the postprocessing, the signs of the EOFs are adjusted and the EOFs in a period
 # around DOY 300 are replaced by an interpolation see Kiladis (2014).
 # The switch strict_leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
@@ -118,12 +126,13 @@ fig.savefig(fig_dir / "OLR_map.png")
 eofs = omi.calc_eofs_from_olr(interpolated_olr,
                              sign_doy1reference=True,
                              interpolate_eofs=True,
-                             strict_leap_year_treatment=False)
+                             strict_leap_year_treatment=False,
+                             no_leap=no_leap)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ### Some diagnostic plots to evaluate the calculated EOFs.
 # Load precalculated EOFs first.
-orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
+orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname, no_leap)
 eofs = eof.restore_all_eofs_from_npzfile(eofnpzfile)
 # Check correlation with original EOFs
 fig = mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys (eofs, orig_eofs, exclude_doy366=False, do_print=True)
