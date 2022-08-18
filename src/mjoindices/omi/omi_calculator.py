@@ -52,6 +52,7 @@ import mjoindices.olr_handling as olr
 import mjoindices.principal_components as pc
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
 import mjoindices.omi.quick_temporal_filter as qfilter
+import mjoindices.omi.postprocessing_original_kiladis2014 as pp_kil2014
 import mjoindices.tools as tools
 
 eofs_spec = importlib.util.find_spec("eofs")
@@ -62,9 +63,11 @@ if eofs_package_available:
 
 # #################EOF calculation
 
-def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: bool = True,
-                       interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
-                       interpolation_end_doy: int = 316, strict_leap_year_treatment: bool = False) -> eof.EOFDataForAllDOYs:
+def calc_eofs_from_olr(olrdata: olr.OLRData,
+                       implementation: str = "internal",
+                       strict_leap_year_treatment: bool = False,
+                       eofs_postprocessing_type:str ="kiladis2014",
+                       eofs_postprocessing_params:dict=None) -> eof.EOFDataForAllDOYs:
     """
     One major function of this module. It performs the complete OMI EOF computation.
 
@@ -74,20 +77,44 @@ def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", s
         in positive values. The spatial grid of the OLR datasets defines also the spatial grid of the complete OMI
         calculation.
     :param implementation: See :meth:`calc_eofs_from_preprocessed_olr`.
+    :param strict_leap_year_treatment: See description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    :param eofs_postprocessing_type: Different approaches of the post-rpcessing of the EOFs are available: "kiladis2014"
+    for the original post-processing described in Kiladis, 2014. "eof_rotation" for... and None for no post-processing.
+    :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the
+    respective post-processing function (:meth:`mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach` or ...)
     :param sign_doy1reference: See :meth:`correct_spontaneous_sign_changes_in_eof_series`.
     :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.
     :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.
     :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
-    :param strict_leap_year_treatment: See description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-    :return:
+    :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the respective post-rpocessinf function
+    :return: The computed EOFs.
     """
+
     preprocessed_olr = preprocess_olr(olrdata)
-    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation, strict_leap_year_treatment=strict_leap_year_treatment)
-    result = post_process_eofs(raw_eofs, sign_doy1reference=sign_doy1reference, interpolate_eofs=interpolate_eofs,
-                               interpolation_start_doy=interpolation_start_doy,
-                               interpolation_end_doy=interpolation_end_doy)
+    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation,
+                                               strict_leap_year_treatment=strict_leap_year_treatment)
+    result = initiate_eof_post_processing(raw_eofs, eofs_postprocessing_type, eofs_postprocessing_params)
     return result
 
+
+def initiate_eof_post_processing(raw_eofs: eof.EOFDataForAllDOYs,
+                                 eofs_postprocessing_type: str = "kiladis2014",
+                                 eofs_postprocessing_params: dict = None) -> eof.EOFDataForAllDOYs:
+    if eofs_postprocessing_type is None:
+        result = raw_eofs
+    elif eofs_postprocessing_type == "kiladis2014":
+        if eofs_postprocessing_params is None:
+            eofs_postprocessing_params = {"sign_doy1reference": True,
+                                          "interpolate_eofs": False,
+                                          "interpolation_start_doy": 293,
+                                          "interpolation_end_doy": 316}
+        result = pp_kil2014.post_process_eofs_original_kiladis_approach(raw_eofs, **eofs_postprocessing_params)
+    elif eofs_postprocessing_type == "eof_rotation":
+        # ToDo: (Sarah): execute your pp here and extend procedure docs
+        pass
+    else:
+        raise ValueError("EOF post-processing type unknown.")
+    return result
 
 def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
     """
@@ -137,35 +164,6 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
             singleeof = calc_eofs_for_doy(olrdata, doy, strict_leap_year_treatment=strict_leap_year_treatment)
         eofs.append(singleeof)
     return eof.EOFDataForAllDOYs(eofs)
-
-
-def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool = True,
-                      interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
-                      interpolation_end_doy: int = 316) -> eof.EOFDataForAllDOYs:
-    """
-    Post processes a series of EOF pairs for all DOYs.
-
-    Postprocessing includes an alignment of EOF signs and an interpolation of the EOF functions in a given DOY
-    window. Both steps are part of the original OMI algorithm described by Kiladis (2014).
-
-    See documentation of  the methods :meth:`correct_spontaneous_sign_changes_in_eof_series` and
-    :meth:`interpolate_eofs_between_doys` for further information.
-
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
-
-    :param eofdata: The EOF series, which should be post processed.
-    :param sign_doy1reference: See description of :meth:`correct_spontaneous_sign_changes_in_eof_series`.
-    :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.
-    :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.
-    :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
-
-    :return: the postprocessed series of EOFs
-    """
-    pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
-    if interpolate_eofs:
-        pp_eofs = interpolate_eofs_between_doys(pp_eofs, start_doy=interpolation_start_doy,
-                                                end_doy=interpolation_end_doy)
-    return pp_eofs
 
 
 def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = False) -> eof.EOFData:
@@ -261,139 +259,6 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
                            eigenvalues=L, explained_variances=explainedVariances, no_observations=N)
     else:
         raise ModuleNotFoundError("eofs")
-
-
-def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
-                                                   doy1reference: bool = False) -> eof.EOFDataForAllDOYs:
-    """
-    Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.
-
-    Note that the sign of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
-    which can be improved using this function. As long as this step is performed before computing the PCs, it will not
-    change the overall result.
-
-    Generally, the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous
-    DOY. The EOFs for DOY 1 are by default aligned with the original calculation by Kiladis (2014), resulting in a
-    an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off.
-
-    :param eofs: The EOF series for which the signs should be aligned.
-    :param doy1reference: If true, the EOFs of DOY 1 are aligned w.r.t to the original Kiladis (2014) calculation.
-
-    :return: The EOFs with aligned signs.
-    """
-    switched_eofs = []
-    if doy1reference is True:
-        reference_path = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))) / "sign_reference"
-        reference_eofs = eof.load_original_eofs_for_doy(reference_path, 1)
-        if not reference_eofs.lat.size == eofs.lat.size \
-                or not reference_eofs.long.size == eofs.long.size \
-                or not np.all(reference_eofs.lat == eofs.lat) \
-                or not np.all(reference_eofs.long == eofs.long):
-            warnings.warn("References for the sign of the EOFs for DOY1 have to be interpolated to spatial grid of the"
-                          " target EOFs. Treat results with caution.")
-            f1 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof1map,
-                                            kind='linear')
-            eof1map_interpol = f1(eofs.long, eofs.lat)
-            f2 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof2map,
-                                            kind='linear')
-            eof2map_interpol = f2(eofs.long, eofs.lat)
-            reference_eofs = eof.EOFData(eofs.lat, eofs.long, eof1map_interpol, eof2map_interpol)
-        corrected_doy1 = _correct_spontaneous_sign_change_of_individual_eof(reference_eofs, eofs.eofdata_for_doy(1))
-    else:
-        corrected_doy1 = eofs.eofdata_for_doy(1)
-    switched_eofs.append(corrected_doy1)
-    previous_eof = corrected_doy1
-    for doy in tools.doy_list()[1:]:
-        corrected_eof = _correct_spontaneous_sign_change_of_individual_eof(previous_eof, eofs.eofdata_for_doy(doy))
-        switched_eofs.append(corrected_eof)
-        previous_eof = corrected_eof
-    return eof.EOFDataForAllDOYs(switched_eofs)
-
-
-def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, target=eof.EOFData) -> eof.EOFData:
-    """
-    Switches the sign of a particular pair of EOFs (for a particular DOY) if necessary, so that is aligned with the
-    reference.
-
-    Note that the signs of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
-    which can be improved using this function. As long as this step is performed before computing the PCs, it will not
-    change the overall result.
-
-    :param reference: The reference-EOFs. This is usually the EOF pair of the previous DOY.
-    :param target: The EOFs of which the signs should be switched
-
-    :return: The target EOFs with aligned signs.
-    """
-    if (np.mean(np.abs(target.eof1vector + reference.eof1vector))
-            < np.mean(np.abs(
-                target.eof1vector - reference.eof1vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
-        eof1_switched = -1 * target.eof1vector
-    else:
-        eof1_switched = target.eof1vector
-    if (np.mean(np.abs(target.eof2vector + reference.eof2vector))
-            < np.mean(np.abs(
-                target.eof2vector - reference.eof2vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
-        eof2_switched = -1 * target.eof2vector
-    else:
-        eof2_switched = target.eof2vector
-    return eof.EOFData(target.lat,
-                       target.long,
-                       eof1_switched,
-                       eof2_switched,
-                       eigenvalues=target.eigenvalues,
-                       explained_variances=target.explained_variances,
-                       no_observations=target.no_observations)
-
-
-def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 293,
-                                  end_doy: int = 316) -> eof.EOFDataForAllDOYs:
-    """
-    Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
-
-    This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,
-    the EOFs have also been replaced by an interpolation according to Kiladis (2014). However, the period stated in
-    Kiladis (2014) from 1 November to 8 November is too short. The authors have confirmed that the right
-    interpolation period is from DOY 294 to DOY 315, which is used here as default value.
-
-    ATTENTION: The corresponding statistical values (e.g., the explained variances) are not changed by this routine.
-    So these values further on represent the original results of the PCA also for the interpolated EOFs.
-
-    :param eofs: The complete EOF series, in which the interpolation takes place.
-    :param start_doy: The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first
-        element, which will be replaced by the interpolation.
-    :param end_doy:  The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last
-        element, which will be replaced by the interpolation.
-
-    :return: The complete EOF series with the interpolated values.
-    """
-    doys = tools.doy_list()
-    start_idx = start_doy - 1
-    end_idx = end_doy - 1
-    eof_len = eofs.lat.size * eofs.long.size
-    eofs1 = np.empty((doys.size, eof_len))
-    eofs2 = np.empty((doys.size, eof_len))
-    # Todo: Maybe this could be solved more efficiently
-    # by using internal numpy functions for multidimenasional operations
-    for (idx, doy) in enumerate(doys):
-        eofs1[idx, :] = eofs.eof1vector_for_doy(doy)
-        eofs2[idx, :] = eofs.eof2vector_for_doy(doy)
-
-    for i in range(0, eof_len):
-        eofs1[start_idx + 1:end_idx - 1, i] = np.interp(doys[start_idx + 1:end_idx - 1],
-                                                        [doys[start_idx], doys[end_idx]],
-                                                        [eofs1[start_idx, i], eofs1[end_idx, i]])
-        eofs2[start_idx + 1:end_idx - 1, i] = np.interp(doys[start_idx + 1:end_idx - 1],
-                                                        [doys[start_idx], doys[end_idx]],
-                                                        [eofs2[start_idx, i], eofs2[end_idx, i]])
-    interpolated_eofs = []
-    for (idx, doy) in enumerate(doys):
-        orig_eof = eofs.eofdata_for_doy(doy)
-        interpolated_eofs.append(eof.EOFData(orig_eof.lat, orig_eof.long, np.squeeze(eofs1[idx, :]),
-                                             np.squeeze(eofs2[idx, :]),
-                                             explained_variances=orig_eof.explained_variances,
-                                             eigenvalues=orig_eof.eigenvalues, no_observations=orig_eof.no_observations)
-                                 )
-    return eof.EOFDataForAllDOYs(interpolated_eofs)
 
 
 # #################PC Calculation

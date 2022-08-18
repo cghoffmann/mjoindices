@@ -32,13 +32,11 @@ this suffix extension is removed, which will activate the file for the tests.
 #All calculated reference data should be added in future
 from pathlib import Path
 import os.path
+import numpy as np
 
 import mjoindices.olr_handling as olr
 import mjoindices.omi.omi_calculator as omi
-import mjoindices.empirical_orthogonal_functions as eofs
-import mjoindices.principal_components as pc
-import mjoindices.evaluation_tools
-import numpy as np
+
 
 olr_data_filename = Path(os.path.abspath('')).parent / "testdata" / "olr.day.mean.nc"
 
@@ -62,4 +60,4 @@ if __name__ == "__main__":
     preprocessed_olr = omi.preprocess_olr(interpolated_olr)
     raw_eofs = omi.calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation="internal",
                                                strict_leap_year_treatment=False)
-    eofs.save_all_eofs_to_npzfile(mjoindices_reference_eofs_filename_raw)
+    raw_eofs.save_all_eofs_to_npzfile(mjoindices_reference_eofs_filename_raw)

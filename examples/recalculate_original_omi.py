@@ -108,17 +108,34 @@ fig = olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 fig.show()
 fig.savefig(fig_dir / "OLR_map.png")
 
-# Calculate the EOFs. In the postprocessing, the signs of the EOFs are adjusted and the EOFs in a period
-# around DOY 300 are replaced by an interpolation see Kiladis (2014).
+# Calculate the EOFs.
+#
 # The switch strict_leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
 # minor differences for the other DOYs. While the results for setting strict_leap_year_treatment=False are closer to the
 # original values, the calculation strict_leap_year_treatment=True is somewhat more stringently implemented using
 # built-in datetime functionality.
 # See documentation of mjoindices.tools.find_doy_ranges_in_dates() for details.
+#
+# Two EOF post-processing types are currently available: The original approach according to Kiladis (2014) and the
+# EOF rotation approach according to ...
+# In the original postprocessing, the signs of the EOFs are adjusted and the EOFs in a period
+# around DOY 300 are replaced by an interpolation see Kiladis (2014).
+
+# ToDo: (Sarah): Modify docs to point to your code and paper. I think we should not add a call to your pp version here,
+# because the example is intended to recalculate the original OMI. Moreover, I would prever not to have an additional
+# full example, because this adds a lot of testing work in future changes. Maybe you find an elengant way to point the user
+# on how your code is used? Maybe we should have an extra document describing the different pp together
+# with the references and we simply refer to this document in all places, where we have the feeling that this information is relevant?
+
+kiladis_pp_params = {"sign_doy1reference": True,
+                      "interpolate_eofs": True,
+                      "interpolation_start_doy": 293,
+                      "interpolation_end_doy": 316}
+
 eofs = omi.calc_eofs_from_olr(interpolated_olr,
-                             sign_doy1reference=True,
-                             interpolate_eofs=True,
-                             strict_leap_year_treatment=False)
+                             strict_leap_year_treatment=False,
+                             eofs_postprocessing_type="kiladis2014",
+                             eofs_postprocessing_params=kiladis_pp_params)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ### Some diagnostic plots to evaluate the calculated EOFs.
