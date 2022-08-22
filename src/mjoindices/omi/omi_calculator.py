@@ -35,6 +35,11 @@ The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C.
 Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
 Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
 
+An additional post-processing step can be run after the EOFs have been calculated that reduces noise and potential 
+degeneracy issues. This algorithm is described in  Weidman, S., Kleiner, N., & Kuang, Z. (2022). A rotation procedure 
+to improve seasonally varying empirical orthogonal function bases for MJO indices. Geophysical Research Letters, 
+49, e2022GL099998. https://doi.org/10.1029/2022GL099998 
+
 """
 
 from pathlib import Path
@@ -53,6 +58,7 @@ import mjoindices.principal_components as pc
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
 import mjoindices.omi.quick_temporal_filter as qfilter
 import mjoindices.omi.postprocessing_original_kiladis2014 as pp_kil2014
+import mjoindices.omi.postprocessing_rotation_approach as pp_rotation
 import mjoindices.tools as tools
 
 eofs_spec = importlib.util.find_spec("eofs")
@@ -79,14 +85,16 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
     :param implementation: See :meth:`calc_eofs_from_preprocessed_olr`.
     :param strict_leap_year_treatment: See description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
     :param eofs_postprocessing_type: Different approaches of the post-rpcessing of the EOFs are available: "kiladis2014"
-    for the original post-processing described in Kiladis, 2014. "eof_rotation" for... and None for no post-processing.
+    for the original post-processing described in Kiladis, 2014. "eof_rotation" for the post-processing rotation algorithm 
+    described in Weidman, 2022; and None for no post-processing.
     :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the
-    respective post-processing function (:meth:`mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach` or ...)
+    respective post-processing function (:meth:`mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach` 
+    or :meth:`mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`)
     :param sign_doy1reference: See :meth:`correct_spontaneous_sign_changes_in_eof_series`.
     :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.
     :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.
     :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
-    :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the respective post-rpocessinf function
+    :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the respective post-processing function
     :return: The computed EOFs.
     """
 
@@ -110,8 +118,11 @@ def initiate_eof_post_processing(raw_eofs: eof.EOFDataForAllDOYs,
                                           "interpolation_end_doy": 316}
         result = pp_kil2014.post_process_eofs_original_kiladis_approach(raw_eofs, **eofs_postprocessing_params)
     elif eofs_postprocessing_type == "eof_rotation":
-        # ToDo: (Sarah): execute your pp here and extend procedure docs
-        pass
+        if eofs_postprocessing_params is None:
+            eofs_postprocessing_params = {"sign_doy1reference": True, 
+                                          "no_leap": False}
+        result = pp_rotation.post_process_eofs_rotation(raw_eofs, **eofs_postprocessing_params)
+
     else:
         raise ValueError("EOF post-processing type unknown.")
     return result
