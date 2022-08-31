@@ -81,6 +81,9 @@ pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
 # Directory in which the figures are saved.
 fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots"
 
+# If you are using a dataset without leap years, change this to True
+no_leap = False
+
 # ############## There should be no need to change anything below (except you intend to use different OLR data as input
 # or you are experiencing problems with the NOAA OLR file NetCDF version.)
 
@@ -110,6 +113,13 @@ fig.savefig(fig_dir / "OLR_map.png")
 
 # Calculate the EOFs.
 #
+# If you would like to remove leap years from your dataset, use the following function. The original OMI
+# calculation includes leap years.
+#leap_year_treatment = "no_leap_years"
+#no_leap_olr = olr.remove_leap_years(interpolated_olr)
+
+#ToDo Adjust docs according to leap year change
+
 # The switch strict_leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
 # minor differences for the other DOYs. While the results for setting strict_leap_year_treatment=False are closer to the
 # original values, the calculation strict_leap_year_treatment=True is somewhat more stringently implemented using
@@ -133,7 +143,7 @@ kiladis_pp_params = {"sign_doy1reference": True,
                       "interpolation_end_doy": 316}
 
 eofs = omi.calc_eofs_from_olr(interpolated_olr,
-                             strict_leap_year_treatment=False,
+                             leap_year_treatment="original",
                              eofs_postprocessing_type="kiladis2014",
                              eofs_postprocessing_params=kiladis_pp_params)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)

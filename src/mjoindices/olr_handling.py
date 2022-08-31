@@ -54,6 +54,8 @@ class OLRData:
         Initialization of basic variables.
         """
         if olr.shape[0] != time.size:
+            print(olr.shape[0])
+            print(time.size)
             raise ValueError('Length of time grid does not fit to first dimension of OLR data cube')
         if olr.shape[1] != lat.size:
             raise ValueError('Length of lat grid does not fit to second dimension of OLR data cube')
@@ -130,8 +132,7 @@ class OLRData:
         else:
             return None
 
-    def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0,
-                                         strict_leap_year_treatment: bool = False) -> np.ndarray:
+    def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0, leap_year_treatment: str = "original") -> np.ndarray:
         """
         Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).
 
@@ -143,13 +144,17 @@ class OLRData:
         :param center_doy: The center DOY of the window.
         :param window_length: The window length in DOYs on both sides of the center DOY. Hence, if the window is fully
             covered by the data, one gets 2*window_length + 1 entries per year in the result.
-        :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
+        "original" will be as close to the original version of Kiladis (2014) as possible.
+        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
+
 
         :return: The excerpt of the OLR data as a 3-dim array. The three dimensions correspond to
             time, latitude, and longitude, in this order.
         """
         inds, doys = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length,
-                                                    strict_leap_year_treatment=strict_leap_year_treatment)
+                                                    leap_year_treatment=leap_year_treatment)
         return self.olr[inds, :, :]
 
     def save_to_npzfile(self, filename: Path) -> None:
@@ -232,6 +237,21 @@ def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime
         return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long)
 
 
+def remove_leap_years(olr: OLRData) -> OLRData:
+    """
+    Removes any leap days (any dates that have both Month = Feb and Day = 29) and returns complete OLRDataset
+    with remaining olr data
+
+    :param olr: the OLR data to restrict
+
+    :return: A new :class:'OLRData' object with no leap days
+    """
+
+    window_inds = [(i.astype(object).month != 2) | (i.astype(object).day != 29) for i in olr.time]
+
+    return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long) 
+
+
 def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF3 format.
@@ -308,6 +328,64 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
     return result
 
 
+def load_model_olr(filename: Path, date_reference='0001-01-01', no_leap: bool = False) -> OLRData:
+    """
+    Loads the OLR data from model output. Tested with SPCAM. 
+    Puts data in same format as used above for NOAA observed data
+
+    :param filename: Full filename of a local copy of OLR data file.
+    :param date_reference: in the metadata of the model time variable, e.g. "days since 0001-01-01" corresponds
+    to a date_reference of '0001-01-01'
+    :param no_leap: if True, assumes all years have 365 days
+
+    :return: The OLR data.
+
+    """
+
+    f = netcdf.netcdf_file(str(filename),'r')
+    lat = f.variables['lat'].data.copy()
+    lon = f.variables['lon'].data.copy()
+    # OLR stored as FLUT in SPCAM 
+    olr = f.variables['FLUT'].data.copy() 
+    days_since = f.variables['time'].data.copy()
+    f.close()
+
+    temptime = []
+    # np.datetime64 uses leap years based on the normal calendar
+    # assumes dates are in "days since" format (change for different unit)
+    if not no_leap:
+        for item in days_since:
+            delta = np.timedelta64(int(item),'D')
+            day = np.datetime64(date_reference) + delta
+            temptime.append(day)
+    # for data with no leap years (all years with 365 days)
+    else:
+        # determine number of years in time variable (assumes full year)
+        nyear = np.arange(int(days_since[0]//365), int(np.ceil(days_since[-1]/365)))
+        # create temporary list of np.datetime64 dates for n years
+        temptime = [i for i in generate_list_valid_dates(nyear)]
+
+    time = np.array(temptime, dtype=np.datetime64)
+    result = OLRData(np.squeeze(olr), time, lat, lon)
+
+    return result
+
+
+def generate_list_valid_dates(nyear: np.ndarray):
+    """
+    Python generator, outputs a np.datetime variable of each day of the year
+    Does not use leap years. Each year has 365 days (assumes data contains full year)
+    """
+    nmon = 12
+    day_per_mon = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    for y in nyear: 
+        for m in range(nmon):
+            for d in range(day_per_mon[m]):
+                time_temp = f'{y+1:04d}' + '-' + f'{m+1:02d}' + '-' + f'{d+1:02d}'
+                yield np.datetime64(time_temp)
+
+
 def restore_from_npzfile(filename: Path) -> OLRData:
     """
     Loads an :class:`OLRData` object from a numpy file, which has been saved with the function
@@ -355,3 +433,4 @@ def plot_olr_map_for_date(olr: OLRData, date: np.datetime64) -> Figure:
         raise ValueError("No OLR data found for given date.")
 
     return fig
+

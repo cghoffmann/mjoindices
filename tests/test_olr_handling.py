@@ -276,6 +276,29 @@ def test_restrict_time_coverage():
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
+@pytest.mark.skipif(not os.path.isfile(olr_data_filename),
+                    reason="OLR data file not available")
+def test_remove_leap_years():
+    origOLR = olr.load_noaa_interpolated_olr(olr_data_filename)
+    shorterOLR = olr.restrict_time_coverage(origOLR, 
+                                            np.datetime64("1976-02-27"), 
+                                            np.datetime64("1976-03-02"))
+
+    errors = []
+    nonleap_idx = [0,1,3,4]
+
+    target = olr.remove_leap_years(shorterOLR)
+    if not np.all(target.lat == origOLR.lat):
+        errors.append("Latitude grid does not match original one")
+    if not np.all(target.long == origOLR.long):
+        errors.append("Logitude grid does not match original one")
+    if not np.all(target.time == shorterOLR.time[nonleap_idx]):
+        errors.append("Time grid does not remove leap years")
+    if not np.all(target.olr == shorterOLR.olr[nonleap_idx, :, :]):
+        errors.append("OLR data does not match the beginning of the original one")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+ 
 
 def test_save_to_npzfile_restore_from_npzfile(tmp_path):
     filename = tmp_path / "OLRSaveTest.npz"
