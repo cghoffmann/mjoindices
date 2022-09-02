@@ -358,11 +358,11 @@ def test_extract_olr_matrix_for_doy_range():
 
     errors = []
 
-    target = testdata.extract_olr_matrix_for_doy_range(4, 2, strict_leap_year_treatment=True)
+    target = testdata.extract_olr_matrix_for_doy_range(4, 2, leap_year_treatment="strict")
     if not np.all(target == np.squeeze(olrmatrix[1:6, :, :])):
         errors.append("Returned wrong OLR data for DOY 4, length 2.")
 
-    target = testdata.extract_olr_matrix_for_doy_range(4, 3, strict_leap_year_treatment=True)
+    target = testdata.extract_olr_matrix_for_doy_range(4, 3, leap_year_treatment="strict")
     if not np.all(target == np.squeeze(olrmatrix[0:7, :, :])):
         errors.append("Returned wrong OLR data for DOY 4, length 3.")
 
@@ -372,7 +372,7 @@ def test_extract_olr_matrix_for_doy_range():
     long = np.array([10, 20, 30, 40])
     olrmatrix = np.random.rand(9 + 365, 2, 4)
     testdata = olr.OLRData(olrmatrix, time, lat, long)
-    target = testdata.extract_olr_matrix_for_doy_range(4, 2, strict_leap_year_treatment=True)
+    target = testdata.extract_olr_matrix_for_doy_range(4, 2, leap_year_treatment="strict")
     inds = np.concatenate((np.arange(1, 6, 1), np.arange(1, 6, 1) + 365))
     if not np.all(target == np.squeeze(olrmatrix[inds, :, :])):
         errors.append("Returned wrong OLR data for DOY 4, length 2 oder 2 years")

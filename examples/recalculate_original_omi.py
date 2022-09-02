@@ -119,6 +119,7 @@ fig.savefig(fig_dir / "OLR_map.png")
 #no_leap_olr = olr.remove_leap_years(interpolated_olr)
 
 #ToDo Adjust docs according to leap year change
+#ToDo: (Sarah) and Christoph introdice new interface whiel maintaining backward compatibility
 
 # The switch strict_leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
 # minor differences for the other DOYs. While the results for setting strict_leap_year_treatment=False are closer to the

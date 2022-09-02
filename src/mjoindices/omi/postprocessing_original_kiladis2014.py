@@ -87,7 +87,6 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
 
     :param eofs: The EOF series for which the signs should be aligned.
     :param doy1reference: If true, the EOFs of DOY 1 are aligned w.r.t to the original Kiladis (2014) calculation.
-    :param no_leap: if True, will assume all years have 365 days
 
     :return: The EOFs with aligned signs.
     """
@@ -111,14 +110,12 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
         corrected_doy1 = _correct_spontaneous_sign_change_of_individual_eof(reference_eofs, eofs.eofdata_for_doy(1))
     else:
         corrected_doy1 = eofs.eofdata_for_doy(1)
-
     switched_eofs.append(corrected_doy1)
     previous_eof = corrected_doy1
     for doy in tools.doy_list(eofs.no_leap)[1:]:
         corrected_eof = _correct_spontaneous_sign_change_of_individual_eof(previous_eof, eofs.eofdata_for_doy(doy))
         switched_eofs.append(corrected_eof)
         previous_eof = corrected_eof
-
     return eof.EOFDataForAllDOYs(switched_eofs, eofs.no_leap)
 
 

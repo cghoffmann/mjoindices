@@ -39,15 +39,10 @@ Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
 
 from pathlib import Path
 from typing import Tuple
-import os.path
-import inspect
 
 import numpy as np
 import warnings
 import importlib
-import scipy.interpolate
-import scipy.optimize as optimize
-import scipy.linalg as linalg
 
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.olr_handling as olr

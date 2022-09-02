@@ -54,6 +54,7 @@ class OLRData:
         Initialization of basic variables.
         """
         if olr.shape[0] != time.size:
+            # ToDo: (Sarah) Should these prints remain in the final code?
             print(olr.shape[0])
             print(time.size)
             raise ValueError('Length of time grid does not fit to first dimension of OLR data cube')
@@ -329,6 +330,8 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
 
 
 def load_model_olr(filename: Path, date_reference='0001-01-01', no_leap: bool = False) -> OLRData:
+    # ToDo: (Sarah): Same comment as for loader functions in pcs files: Is this general enough or does it belong in your user code?
+    # Maybe we should disducc seperately, if we offer a set of loader functions or so somewhere else in the packge
     """
     Loads the OLR data from model output. Tested with SPCAM. 
     Puts data in same format as used above for NOAA observed data
@@ -372,6 +375,7 @@ def load_model_olr(filename: Path, date_reference='0001-01-01', no_leap: bool = 
 
 
 def generate_list_valid_dates(nyear: np.ndarray):
+    # ToDo: (Sarah): Is this something for tools.py? Does it have a unit test?
     """
     Python generator, outputs a np.datetime variable of each day of the year
     Does not use leap years. Each year has 365 days (assumes data contains full year)

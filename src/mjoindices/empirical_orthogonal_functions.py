@@ -695,8 +695,7 @@ def plot_explained_variance_for_all_doys(eofs: EOFDataForAllDOYs, include_total_
 
     :return: Handle to the figure.
     """
-    no_leap = eofs.no_leap
-    doygrid = doy_list(no_leap)
+    doygrid = doy_list(eofs.no_leap)
     fig = plt.figure("plot_explained_variance_for_all_doys", clear=True, figsize=(6, 4), dpi=150)
     ax1 = fig.add_subplot(111)
     handles = []

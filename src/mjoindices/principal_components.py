@@ -82,12 +82,24 @@ class PCData:
 
     @property
     def period(self) -> np.ndarray:
+        # ToDo: (Sarah): Is this redundant information but just in another format, only for technical reasons? then I would probably not make it a property but a functions which tells more what it does in its name "return_XXX_As_Pandas_XXX" or so. Could youndo that or just let me know if I git something wring?
         """
         The time grid of the PC time series as an array of :class:'pandas.Period' elements.
         """
         return tools.convert_time_to_period(self.time)
 
     def save_pcs_to_txt_file(self, filename: Path, model=True) -> None:
+        # ToDo: (Sarah): I am not totally sure, if I understand how general this model setting really is:
+        # 1) Will this be the right format for really all models?
+        # I could imagine that many people would prefer different output formats right (most questions, which I gut are
+        # in the context of file formats) Because the desired formats are so different, the original idea was
+        # that each user is him/herself responsible for implementing the I/O functions in the user code
+        # Only very basic tools will be provided here.
+        # If you think that your format could be useful laos for other then we could leave it in here,
+        # but I would prefer to put it into a secdonf function with a speaking name
+        # "save_pcs_to_txt_file_optimized_for_modelXXX". It should not be restircted to your model (then its not general enough)
+        # but maybe you can name a model class or whatever.
+        # An individual function should of cource also have its individual unit tests.
         """
         Saves the computed PCs to a text file.
 
@@ -107,6 +119,7 @@ class PCData:
 
 
 def load_pcs_from_txt_file(filename: Path, model=True) -> PCData:
+    # ToDo: (Sarah): Same Comment as for save_pcs_to_txt_file
     """
     Loads the PCs of OMI, which were previously saved with this package
     (:func:`mjoindices.principal_components.PCData.save_pcs_to_txt_file`).

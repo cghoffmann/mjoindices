@@ -117,11 +117,10 @@ def test_calc_day_of_year_array():
 def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
 
     errors = []
-    no_leap = False
 
     # Non leap years
     dates = np.arange("2018-01-01", "2019-12-31", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, strict_leap_year_treatment=True, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, leap_year_treatment="strict")
     if not target_inds.size == (20 * 2 + 1) * 2:
         errors.append("Length of DOY range covering the middle of the year is wrong")
     control_inds = np.concatenate((np.arange(30, 71, 1) - 1, np.arange(30, 71, 1) + 365 - 1))
@@ -132,7 +131,7 @@ def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
         errors.append("DOY values of DOY range covering the middle of the year are wrong")
 
     dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, strict_leap_year_treatment=True, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, leap_year_treatment="strict")
     if not target_inds.size == 20 * 2 + 1:
         errors.append("Length of DOY range covering the ending of the previous year is wrong")
     control = np.concatenate((np.arange(355, 366, 1), np.arange(1, 31, 1)))
@@ -140,7 +139,7 @@ def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
         errors.append("DOY range covering the ending of the previous year is wrong")
 
     dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, strict_leap_year_treatment=True, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, leap_year_treatment="strict")
     if not target_inds.size == 25 * 2 + 1:
         errors.append("Length of DOY range covering the beginning of the next year is wrong")
     control = np.concatenate((np.arange(325, 366, 1), np.arange(1, 11, 1)))
@@ -149,7 +148,7 @@ def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
 
     # Leap years
     dates = np.arange("2016-01-01", "2017-12-31", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, strict_leap_year_treatment=True, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, leap_year_treatment="strict")
     if not target_inds.size == (20 * 2 + 1) * 2:
         errors.append("Length of DOY range covering the middle of the year is wrong")
     control_inds = np.concatenate((np.arange(30, 71, 1) - 1, np.arange(30, 71, 1) + 366 - 1))
@@ -160,7 +159,7 @@ def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
         errors.append("DOY values of DOY range covering the middle of the year are wrong (Leap year test)")
 
     dates = np.arange("2016-06-01", "2017-06-30", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, strict_leap_year_treatment=True, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, leap_year_treatment="strict")
     if not target_inds.size == 20 * 2 + 1:
         errors.append("Length of DOY range covering the ending of the previous year is wrong")
     control = np.concatenate((np.arange(356, 367, 1), np.arange(1, 31, 1)))
@@ -168,7 +167,7 @@ def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
         errors.append("DOY range covering the ending of the previous year is wrong (Leap year test)")
 
     dates = np.arange("2016-06-01", "2017-06-30", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, strict_leap_year_treatment=True, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, leap_year_treatment="strict")
     if not target_inds.size == 25 * 2 + 1:
         errors.append("Length of DOY range covering the beginning of the next year is wrong")
     control = np.concatenate((np.arange(325, 367, 1), np.arange(1, 10, 1)))
@@ -181,11 +180,10 @@ def test_find_doy_ranges_in_dates_strict_leap_year_treatment():
 def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
 
     errors = []
-    no_leap = False
 
     # Non leap years
     dates = np.arange("2018-01-01", "2019-12-31", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, strict_leap_year_treatment=False, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, leap_year_treatment="original")
     if not target_inds.size == (20 * 2 + 1) * 2:
         errors.append("Length of DOY range covering the middle of the year is wrong")
     control_inds = np.concatenate((np.arange(30, 71, 1) - 1, np.arange(30, 71, 1) + 365 - 1))
@@ -196,7 +194,7 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
         errors.append("DOY values of DOY range covering the middle of the year are wrong")
 
     dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, strict_leap_year_treatment=False, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, leap_year_treatment="original")
     if not target_inds.size == 20 * 2 + 1:
         errors.append("Length of DOY range covering the ending of the previous year is wrong")
     control = np.concatenate((np.arange(355, 366, 1), np.arange(1, 31, 1)))
@@ -204,7 +202,7 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
         errors.append("DOY range covering the ending of the previous year is wrong")
 
     dates = np.arange("2018-06-01", "2019-06-30", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, strict_leap_year_treatment=False, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, leap_year_treatment="original")
     if not target_inds.size == 25 * 2 + 1:
         errors.append("Length of DOY range covering the beginning of the next year is wrong")
     control = np.concatenate((np.arange(325, 366, 1), np.arange(1, 11, 1)))
@@ -213,7 +211,7 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
 
     # Leap years
     dates = np.arange("2016-01-01", "2017-12-31", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, strict_leap_year_treatment=False, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 50, 20, leap_year_treatment="original")
     if not target_inds.size == (20 * 2 + 1) * 2:
         errors.append("Length of DOY range covering the middle of the year is wrong")
     control_inds = np.concatenate((np.arange(30, 71, 1) - 1, np.arange(30, 71, 1) + 366 - 1))
@@ -224,7 +222,7 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
         errors.append("DOY values of DOY range covering the middle of the year are wrong (Leap year test)")
 
     dates = np.arange("2016-06-01", "2017-06-30", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, strict_leap_year_treatment=False, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 10, 20, leap_year_treatment="original")
     if not target_inds.size == 20 * 2 + 2:
         errors.append("Length of DOY range covering the ending of the previous year is wrong")
     control = np.concatenate((np.arange(355, 367, 1), np.arange(1, 31, 1)))
@@ -232,7 +230,7 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
         errors.append("DOY range covering the ending of the previous year is wrong (Leap year test)")
 
     dates = np.arange("2016-06-01", "2017-06-30", dtype='datetime64[D]')
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, strict_leap_year_treatment=False, no_leap=no_leap)
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 350, 25, leap_year_treatment="original")
     if not target_inds.size == 25 * 2 + 2:
         errors.append("Length of DOY range covering the beginning of the next year is wrong")
     control = np.concatenate((np.arange(325, 367, 1), np.arange(1, 11, 1)))
@@ -241,15 +239,14 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
 
 
     # no_leap condition
-    no_leap = True
     dates = np.array(["2016-02-27", "2016-02-28", "2016-02-29", "2016-03-01", "2016-03-02", "2017-02-27", "2017-02-28", "2017-03-01", "2017-03-02"],
                     dtype='datetime64[D]')
     with pytest.raises(ValueError):
-        tools.find_doy_ranges_in_dates(dates, 59, 1, strict_leap_year_treatment=False, no_leap=no_leap)
+        tools.find_doy_ranges_in_dates(dates, 59, 1, leap_year_treatment="no_leap_years")
 
     dates = np.array(["2016-02-27", "2016-02-28", "2016-03-01", "2016-03-02", "2017-02-27", "2017-02-28", "2017-03-01", "2017-03-02"],
                     dtype='datetime64[D]') 
-    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 59, 1, strict_leap_year_treatment=False, no_leap=no_leap) 
+    target_inds, target_doys = tools.find_doy_ranges_in_dates(dates, 59, 1, leap_year_treatment="no_leap_years")
     if not target_inds.size == 6:
         errors.append("Length of DOY range covering the middle of the year is wrong")
     control_inds = np.array([0,1,2,4,5,6])
@@ -265,13 +262,11 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
 def test_doy_list():
     errors = []
 
-    no_leap = False
-    target = tools.doy_list(no_leap)
+    target = tools.doy_list(False)
     if not np.all(target == np.arange(1, 367, 1)):
         errors.append("DOY list not correct for no_leap = False")
 
-    no_leap = True
-    target = tools.doy_list(no_leap)
+    target = tools.doy_list(True)
     if not np.all(target == np.arange(1, 366, 1)):
         errors.append("DOY list not correct for no_leap = True") 
 

@@ -698,6 +698,8 @@ def test_save_all_eofs_to_npzfile(tmp_path):
     if not target_reloaded.eofdata_for_doy(1) == eofs[0]:
         errors.append("Sample EOF data is incorrect")
 
+    # ToDo: (Sarah): Should the no_leap_setting not be checked here?
+
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 

@@ -29,6 +29,7 @@ import numpy as np
 import pandas as pd
 
 def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: bool = False) -> typing.Union[int, np.ndarray]:
+    # ToDo: (Sarah): I would prefer to call the parameter no_leap_years in all interfaces. However, I don't want to change too much at once. Maybe you could rename all occurences after you checked that my changes did not break anything?
     """
     Calculates the days of the year (DOYs) for an individual date or an array of dates.
 
@@ -52,7 +53,8 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: boo
             # check that day does not exceed number of days in a month
             if time_fragments.tm_mday > day_per_mon[time_fragments.tm_mon-1]:
                 raise ValueError('Invalid date (day of month larger than number of days in month)')
-            
+                # ToDo: (Sarah): I am not sure if this case ever appears. But if yes, it has probably to do with a leap year, right? May one should give that hint in the error massage.
+
             # sums days of previous months to get DOY
             result = sum(day_per_mon[:time_fragments.tm_mon-1]) + time_fragments.tm_mday
         else:
