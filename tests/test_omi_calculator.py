@@ -57,9 +57,8 @@ mjoindices_reference_eofs_filename_raw = Path(
     os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs_raw.npz"
 original_omi_explained_variance_file = Path(os.path.abspath('')) / "testdata" / "OriginalOMI" / "omi_var.txt"
 
+
 setups = [(True, 0.99, 0.99), (False, 0.999, 0.999)]
-
-
 @pytest.mark.slow  # noqa: E302
 @pytest.mark.parametrize("use_quick_temporal_filter, expectedCorr1, expectedCorr2", setups)
 @pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available")
@@ -108,7 +107,7 @@ def test_completeOMIReproduction_strict_leap_year_treatment(tmp_path):
     kiladis_pp_params = {"sign_doy1reference": True,
                          "interpolate_eofs": True}
     eofs = omi.calc_eofs_from_olr(interpolated_olr,
-                                  strict_leap_year_treatment=True,
+                                  leap_year_treatment="strict",
                                   eofs_postprocessing_type="kiladis2014",
                                   eofs_postprocessing_params=kiladis_pp_params)
     eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_strict_leap_year_treatment_EOFs.npz")
@@ -249,13 +248,14 @@ def test_completeOMIReproduction(tmp_path):
     kiladis_pp_params = {"sign_doy1reference": True,
                          "interpolate_eofs": True}
     eofs = omi.calc_eofs_from_olr(interpolated_olr,
-                                  strict_leap_year_treatment=False,
+                                  leap_year_treatment="original",
                                   eofs_postprocessing_type="kiladis2014",
                                   eofs_postprocessing_params=kiladis_pp_params)
     eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_EOFs.npz")
 
     # Validate EOFs against original (results are inexact but close)
     orig_eofs = eof.load_all_original_eofs_from_directory(originalOMIDataDirname)
+
 
     corr_1, diff_mean_1, diff_std_1, diff_abs_percent68_1, diff_abs_percent95_1, diff_abs_percent99_1 = mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys(
         orig_eofs, eofs, 1, exclude_doy366=False, percentage=False, do_print=False)
@@ -396,7 +396,7 @@ def test_completeOMIReproduction_coarsegrid(tmp_path):
     kiladis_pp_params = {"sign_doy1reference": True,
                          "interpolate_eofs": True}
     eofs = omi.calc_eofs_from_olr(interpolated_olr,
-                                  strict_leap_year_treatment=True,
+                                  leap_year_treatment="strict",
                                   eofs_postprocessing_type="kiladis2014",
                                   eofs_postprocessing_params=kiladis_pp_params)
     eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_coarsegrid_EOFs.npz")
@@ -449,7 +449,7 @@ def test_completeOMIReproduction_eofs_package_strict_leap_year(tmp_path):
                          "interpolate_eofs": True}
     eofs = omi.calc_eofs_from_olr(interpolated_olr,
                                   implementation="eofs_package",
-                                  strict_leap_year_treatment=True,
+                                  leap_year_treatment="strict",
                                   eofs_postprocessing_type="kiladis2014",
                                   eofs_postprocessing_params=kiladis_pp_params)
     eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_strict_leap_year_treatment_EOFs.npz")

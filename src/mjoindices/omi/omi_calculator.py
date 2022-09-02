@@ -39,13 +39,10 @@ Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
 
 from pathlib import Path
 from typing import Tuple
-import os.path
-import inspect
 
 import numpy as np
 import warnings
 import importlib
-import scipy.interpolate
 
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.olr_handling as olr
@@ -65,7 +62,7 @@ if eofs_package_available:
 
 def calc_eofs_from_olr(olrdata: olr.OLRData,
                        implementation: str = "internal",
-                       strict_leap_year_treatment: bool = False,
+                       leap_year_treatment: str = "original",
                        eofs_postprocessing_type:str ="kiladis2014",
                        eofs_postprocessing_params:dict=None) -> eof.EOFDataForAllDOYs:
     """
@@ -77,22 +74,21 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
         in positive values. The spatial grid of the OLR datasets defines also the spatial grid of the complete OMI
         calculation.
     :param implementation: See :meth:`calc_eofs_from_preprocessed_olr`.
-    :param strict_leap_year_treatment: See description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-    :param eofs_postprocessing_type: Different approaches of the post-rpcessing of the EOFs are available: "kiladis2014"
+    :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
+        "original" will be as close to the original version of Kiladis (2014) as possible.
+        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
+    :param eofs_postprocessing_type: Different approaches of the post-processing of the EOFs are available: "kiladis2014"
     for the original post-processing described in Kiladis, 2014. "eof_rotation" for... and None for no post-processing.
     :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the
     respective post-processing function (:meth:`mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach` or ...)
-    :param sign_doy1reference: See :meth:`correct_spontaneous_sign_changes_in_eof_series`.
-    :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.
-    :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.
-    :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
     :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the respective post-rpocessinf function
     :return: The computed EOFs.
     """
 
     preprocessed_olr = preprocess_olr(olrdata)
     raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation,
-                                               strict_leap_year_treatment=strict_leap_year_treatment)
+                                               leap_year_treatment=leap_year_treatment)
     result = initiate_eof_post_processing(raw_eofs, eofs_postprocessing_type, eofs_postprocessing_params)
     return result
 
@@ -136,7 +132,7 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
 
 
 def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = "internal",
-                                    strict_leap_year_treatment: bool = False) -> eof.EOFDataForAllDOYs:
+                                    leap_year_treatment: str = "original") -> eof.EOFDataForAllDOYs:
     """
     Calculates a series of EOF pairs: one pair for each DOY.
 
@@ -146,27 +142,32 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
     :param olrdata: the preprocessed OLR data, from which the EOFs are calculated.
     :param implementation: Two options are available: First, "internal": uses the internal implementation of the EOF
         approach. Second, "eofs_package": Uses the implementation of the external package :py:mod:`eofs`.
-    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
+        "original" will be as close to the original version of Kiladis (2014) as possible.
+        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
 
     :return: A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.
     """
     if implementation == "eofs_package" and not eofs_package_available:
         raise ValueError("Selected calculation with external eofs package, but package not available. Use "
                          "internal implementation or install eofs package")
-    doys = tools.doy_list()
+    no_leap = False
+    if leap_year_treatment == "no_leap_years":
+        no_leap = True
+    doys = tools.doy_list(no_leap)
     eofs = []
     for doy in doys:
         print("Calculating EOFs for DOY %i" % doy)
         if (implementation == "eofs_package"):
-            singleeof = calc_eofs_for_doy_using_eofs_package(olrdata, doy,
-                                                             strict_leap_year_treatment=strict_leap_year_treatment)
+            singleeof = calc_eofs_for_doy_using_eofs_package(olrdata, doy, leap_year_treatment=leap_year_treatment)
         else:
-            singleeof = calc_eofs_for_doy(olrdata, doy, strict_leap_year_treatment=strict_leap_year_treatment)
+            singleeof = calc_eofs_for_doy(olrdata, doy, leap_year_treatment=leap_year_treatment)
         eofs.append(singleeof)
-    return eof.EOFDataForAllDOYs(eofs)
+    return eof.EOFDataForAllDOYs(eofs, no_leap)
 
 
-def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = False) -> eof.EOFData:
+def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, leap_year_treatment: str = "original") -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
@@ -176,7 +177,10 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
 
     :param olrdata: The filtered OLR data to calculate the EOFs from.
     :param doy: The DOY for which the EOFs are calculated.
-    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
+    "original" will be as close to the original version of Kiladis (2014) as possible.
+    "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
 
     :return: An object containing the pair of EOFs together with diagnostic values.
 
@@ -186,7 +190,7 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
     nlat = olrdata.lat.size
     nlong = olrdata.long.size
     olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60,
-                                                                strict_leap_year_treatment=strict_leap_year_treatment)
+                                                                leap_year_treatment=leap_year_treatment)
     N = olr_maps_for_doy.shape[0]
     M = nlat * nlong
     F = np.reshape(olr_maps_for_doy, [N, M]).T  # vector: only one dimension. Length given by original longitude and latitude bins
@@ -215,7 +219,7 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
 
 
 def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
-                                         strict_leap_year_treatment: bool = False) -> eof.EOFData:
+                                         leap_year_treatment: str = "original") -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
@@ -225,8 +229,10 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
 
     :param olrdata: The filtered OLR data to calculate the EOFs from.
     :param doy: The DOY for which the EOFs are calculated.
-    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-
+    :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
+        "original" will be as close to the original version of Kiladis (2014) as possible.
+        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
     :return: An object containing the pair of EOFs together with diagnostic values.
 
     .. seealso:: :meth:`calc_eofs_for_doy`
@@ -236,7 +242,7 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
         nlat = olrdata.lat.size
         nlong = olrdata.long.size
         olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60,
-                                                                    strict_leap_year_treatment=strict_leap_year_treatment)
+                                                                    leap_year_treatment=leap_year_treatment)
 
         ntime = olr_maps_for_doy.shape[0]
         N = ntime
@@ -260,7 +266,6 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
     else:
         raise ModuleNotFoundError("eofs")
 
-
 # #################PC Calculation
 
 def calculate_pcs_from_olr(olrdata: olr.OLRData,
@@ -281,7 +286,7 @@ def calculate_pcs_from_olr(olrdata: olr.OLRData,
         on a 2-dim FFT) or a 1-dim FFT Filter. Setting this parameter to True uses the quicker 1-dim implementation. The
         results are quite similar.
 
-    :return: The PC time series.
+    :return: The PC time series. Normalized by the full PC time series
     """
     resticted_olr_data = olr.restrict_time_coverage(olrdata, period_start, period_end)
     resampled_olr_data = olr.interpolate_spatial_grid(resticted_olr_data, eofdata.lat, eofdata.long)
@@ -345,7 +350,7 @@ def regress_3dim_data_onto_eofs(data: object, eofdata: eof.EOFDataForAllDOYs) ->
     for idx, val in enumerate(data.time):
         day = val
         olr_singleday = data.get_olr_for_date(day)
-        doy = tools.calc_day_of_year(day)
+        doy = tools.calc_day_of_year(day, eofdata.no_leap)
         (pc1_single, pc2_single) = regress_vector_onto_eofs(
             eofdata.eofdata_for_doy(doy).reshape_to_vector(olr_singleday),
             eofdata.eof1vector_for_doy(doy),
@@ -378,3 +383,4 @@ def regress_vector_onto_eofs(vector: np.ndarray, eof1: np.ndarray, eof2: np.ndar
     # pseudo_inverse = np.linalg.pinv(eof_mat)
     # pcs = np.matmul(pseudo_inverse, vector)
     # return pcs[0], pcs[1]
+

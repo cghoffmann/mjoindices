@@ -112,11 +112,12 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
         corrected_doy1 = eofs.eofdata_for_doy(1)
     switched_eofs.append(corrected_doy1)
     previous_eof = corrected_doy1
-    for doy in tools.doy_list()[1:]:
+    for doy in tools.doy_list(eofs.no_leap)[1:]:
         corrected_eof = _correct_spontaneous_sign_change_of_individual_eof(previous_eof, eofs.eofdata_for_doy(doy))
         switched_eofs.append(corrected_eof)
         previous_eof = corrected_eof
-    return eof.EOFDataForAllDOYs(switched_eofs)
+    return eof.EOFDataForAllDOYs(switched_eofs, eofs.no_leap)
+
 
 
 def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, target=eof.EOFData) -> eof.EOFData:
