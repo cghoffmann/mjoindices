@@ -14,9 +14,7 @@ The post-processing procedure follows the below steps:
 
 """
 
-from pathlib import Path
 from typing import Tuple
-import os.path
 import inspect
 
 import numpy as np
@@ -25,11 +23,7 @@ import importlib
 import pandas as pd
 
 import mjoindices.empirical_orthogonal_functions as eof
-import mjoindices.olr_handling as olr
 import mjoindices.omi.postprocessing_original_kiladis2014 as pp_kil2014
-import mjoindices.principal_components as pc
-import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
-import mjoindices.omi.quick_temporal_filter as qfilter
 import mjoindices.tools as tools
 
 
