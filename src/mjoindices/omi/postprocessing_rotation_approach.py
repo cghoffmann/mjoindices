@@ -20,7 +20,6 @@ import inspect
 import numpy as np
 import warnings
 import importlib
-import pandas as pd
 
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.omi.postprocessing_original_kiladis2014 as pp_kil2014
