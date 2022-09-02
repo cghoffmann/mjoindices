@@ -636,12 +636,15 @@ def test_save_all_eofs_to_dir(tmp_path):
     print(tmp_path)
 
     errors = []
+    # ToDo: (Sarah): Did you comment out the lines below and change the test? Could you give me some hints on the reason?
+    # In any case, I had to indent the two lines start with if "non-existent directory" to make it work properly.
+    # Maybe you can double check all the changes here?
     #with pytest.raises(FileNotFoundError) as e:
     with pytest.raises(OSError) as e:
         target.save_all_eofs_to_dir(tmp_path / "eofs_dir_not_exisiting", create_dir=False)
     #if "No such file or directory" not in str(e.value):
-    if "non-existent directory" not in str(e.value):
-        errors.append("Test target should raise error, because directory does not exist.")
+        if "non-existent directory" not in str(e.value):
+            errors.append("Test target should raise error, because directory does not exist.")
 
     target.save_all_eofs_to_dir(tmp_path / "eofs")
     target_reloaded = eof.load_all_eofs_from_directory(tmp_path / "eofs", no_leap)

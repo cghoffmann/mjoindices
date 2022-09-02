@@ -45,7 +45,7 @@ def test_if_refdata_isfound_for_correct_spontaneous_sign_changes_in_eof_series()
         eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2))
-    eofs = eof.EOFDataForAllDOYs(eofs)
+    eofs = eof.EOFDataForAllDOYs(eofs, no_leap=False)
 
     try:
         target = pp_kil2014.correct_spontaneous_sign_changes_in_eof_series(eofs, True)
