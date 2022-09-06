@@ -26,8 +26,7 @@ import mjoindices.omi.postprocessing_original_kiladis2014 as pp_kil2014
 import mjoindices.tools as tools
 
 
-def post_process_eofs_rotation(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool = True,
-                               no_leap: bool = False) -> eof.EOFDataForAllDOYs:
+def post_process_eofs_rotation(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool = True) -> eof.EOFDataForAllDOYs:
     """
     Post processes a series of EOF pairs for all DOYs.
 
@@ -47,34 +46,32 @@ def post_process_eofs_rotation(eofdata: eof.EOFDataForAllDOYs, sign_doy1referenc
     :param eofdata: The EOF series, which should be post processed.
     :param sign_doy1reference: See description of :meth:`correct_spontaneous_sign_changes_in_eof_series` 
     in omi_calculatory.py.
-    :param no_leap: if True, assumes all years have 365 days
 
     :return: the postprocessed series of EOFs
     """
-    # currently correct sign changes will fail bc no_leap
-    pp_eofs = pp_kil2014.correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference, no_leap=no_leap)
-    rot_eofs = rotate_eofs(pp_eofs, no_leap=no_leap)
-    norm_eofs = normalize_eofs(rot_eofs, no_leap=no_leap)
+    
+    pp_eofs = pp_kil2014.correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
+    rot_eofs = rotate_eofs(pp_eofs)
+    norm_eofs = normalize_eofs(rot_eofs)
     
     return norm_eofs
 
 
-def rotate_eofs(orig_eofs: eof.EOFDataForAllDOYs, no_leap: bool = False) -> eof.EOFDataForAllDOYs:
+def rotate_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
     """
     Rotate EOFs at each DOY to 1) align with the EOFs of the previous day and 2) be continuous across December to
     January boundary. Described more in detail in :meth:'post_process_rotation'
 
-    :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes
-    :param no_leap: if True, assumes all years have 365 days
+    :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes 
 
     :return: set of rotated EOFs
     """
 
-    delta = calculate_angle_from_discontinuity(orig_eofs, no_leap)
+    delta = calculate_angle_from_discontinuity(orig_eofs)
 
     print('Rotating by ', delta)
 
-    return rotate_each_eof_by_delta(orig_eofs, delta, no_leap)
+    return rotate_each_eof_by_delta(orig_eofs, delta)
 
 
 def rotation_matrix(delta):
@@ -84,20 +81,19 @@ def rotation_matrix(delta):
     return np.array([[np.cos(delta), -np.sin(delta)],[np.sin(delta), np.cos(delta)]])
 
 
-def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs, no_leap: bool):
+def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs):
     """
     Project the matrix to align with previous day's EOFs and calculate the resulting
     discontinuity between January 1 and December 31. Divide by number of days in year to 
     result in delta for rotation matrix. 
 
     :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes
-    :param no_leap: if True, assumes all years have 365 days
 
     :return: float of (negative) average angular discontinuity between EOF1 and EOF2 on the 
     first and last day of year, divided by the length of the year.
     """
 
-    list_of_doys = tools.doy_list(no_leap)
+    list_of_doys = tools.doy_list(orig_eofs.no_leap)
     doy1 = orig_eofs.eofdata_for_doy(1)
 
     ndoys = len(list_of_doys)
@@ -123,8 +119,7 @@ def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs, no_leap
     return -discont/ndoys
 
 
-def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs, 
-                                delta: float, no_leap: bool) -> eof.EOFDataForAllDOYs:
+def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs, delta: float) -> eof.EOFDataForAllDOYs:
     """
     Use delta calculated by optimization function to rotate original EOFs by delta.
     First projects EOFs from DOY n-1 onto EOF space for DOY n, then rotates projected
@@ -132,15 +127,15 @@ def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs,
 
     :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes
     :param delta: scalar by which to rotate EOFs calculated from discontinuity
-    :param no_leap: True if each year has 365 days, False if leap years included in dataset
 
     :returns: new EOFdata with rotated EOFs.  
     """
 
     R = rotation_matrix(delta)
 
-    doy1 = orig_eofs.eofdata_for_doy(1)
-    list_of_doys = tools.doy_list(no_leap)
+    doy1 = orig_eofs.eofdata_for_doy(1)   
+    list_of_doys = tools.doy_list(orig_eofs.no_leap)
+    
     eofdata_rotated = []
     eofdata_rotated.append(doy1) # first doy is unchanged
 
@@ -164,17 +159,19 @@ def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs,
                                 eigenvalues=doyn.eigenvalues,
                                 no_observations=doyn.no_observations))
 
-    return eof.EOFDataForAllDOYs(eofdata_rotated, no_leap)
+    return eof.EOFDataForAllDOYs(eofdata_rotated, orig_eofs.no_leap)
 
 
-def normalize_eofs(orig_eofs: eof.EOFDataForAllDOYs, no_leap: bool) -> eof.EOFDataForAllDOYs:
+def normalize_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
     """
+    Normalize all EOFs to have a magnitude of 1
+
     :param eofdata: The rotated EOF series
-    :param no_leap: if True, assumes all years have 365 days
 
-    :return: normalize the EOFs to have length 1
+    :return: normalized EOFdata for all days
     """
-    list_of_doys = tools.doy_list(no_leap)
+
+    list_of_doys = tools.doy_list(orig_eofs.no_leap)
 
     eofdata_normalized = []
 
@@ -192,7 +189,8 @@ def normalize_eofs(orig_eofs: eof.EOFDataForAllDOYs, no_leap: bool) -> eof.EOFDa
                                             eigenvalues=doyn.eigenvalues,
                                             no_observations=doyn.no_observations)) 
 
-    return eof.EOFDataForAllDOYs(eofdata_normalized, no_leap) 
+    return eof.EOFDataForAllDOYs(eofdata_normalized, orig_eofs.no_leap) 
+
 
 def angle_between_eofs(reference: eof.EOFData, target=eof.EOFData):
     """
