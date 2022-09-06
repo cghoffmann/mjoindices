@@ -82,7 +82,8 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
     :param implementation: See :meth:`calc_eofs_from_preprocessed_olr`.
     :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
         "original" will be as close to the original version of Kiladis (2014) as possible.
-        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. 
+        See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
         "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
     :param eofs_postprocessing_type: Different approaches of the post-processing of the EOFs are available: "kiladis2014"
     for the original post-processing described in Kiladis, 2014. "eof_rotation" for the post-processing rotation algorithm 
@@ -115,8 +116,7 @@ def initiate_eof_post_processing(raw_eofs: eof.EOFDataForAllDOYs,
         result = pp_kil2014.post_process_eofs_original_kiladis_approach(raw_eofs, **eofs_postprocessing_params)
     elif eofs_postprocessing_type == "eof_rotation":
         if eofs_postprocessing_params is None:
-            eofs_postprocessing_params = {"sign_doy1reference": True, 
-                                          "no_leap": False}
+            eofs_postprocessing_params = {"sign_doy1reference": True}
         result = pp_rotation.post_process_eofs_rotation(raw_eofs, **eofs_postprocessing_params)
 
     else:
@@ -155,7 +155,8 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
         approach. Second, "eofs_package": Uses the implementation of the external package :py:mod:`eofs`.
     :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
         "original" will be as close to the original version of Kiladis (2014) as possible.
-        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. 
+        See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
         "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
 
     :return: A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.
@@ -189,9 +190,10 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, leap_year_treatment: str =
     :param olrdata: The filtered OLR data to calculate the EOFs from.
     :param doy: The DOY for which the EOFs are calculated.
     :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
-    "original" will be as close to the original version of Kiladis (2014) as possible.
-    "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-    "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
+        "original" will be as close to the original version of Kiladis (2014) as possible.
+        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. 
+        See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
 
     :return: An object containing the pair of EOFs together with diagnostic values.
 
@@ -242,7 +244,8 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
     :param doy: The DOY for which the EOFs are calculated.
     :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
         "original" will be as close to the original version of Kiladis (2014) as possible.
-        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. 
+        See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
         "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
     :return: An object containing the pair of EOFs together with diagnostic values.
 
