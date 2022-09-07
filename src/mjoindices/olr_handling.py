@@ -54,9 +54,6 @@ class OLRData:
         Initialization of basic variables.
         """
         if olr.shape[0] != time.size:
-            # ToDo: (Sarah) Should these prints remain in the final code?
-            print(olr.shape[0])
-            print(time.size)
             raise ValueError('Length of time grid does not fit to first dimension of OLR data cube')
         if olr.shape[1] != lat.size:
             raise ValueError('Length of lat grid does not fit to second dimension of OLR data cube')
@@ -366,28 +363,12 @@ def load_model_olr(filename: Path, date_reference='0001-01-01', no_leap: bool = 
         # determine number of years in time variable (assumes full year)
         nyear = np.arange(int(days_since[0]//365), int(np.ceil(days_since[-1]/365)))
         # create temporary list of np.datetime64 dates for n years
-        temptime = [i for i in generate_list_valid_dates(nyear)]
+        temptime = [i for i in tools.generate_list_valid_dates(nyear)]
 
     time = np.array(temptime, dtype=np.datetime64)
     result = OLRData(np.squeeze(olr), time, lat, lon)
 
     return result
-
-
-def generate_list_valid_dates(nyear: np.ndarray):
-    # ToDo: (Sarah): Is this something for tools.py? Does it have a unit test?
-    """
-    Python generator, outputs a np.datetime variable of each day of the year
-    Does not use leap years. Each year has 365 days (assumes data contains full year)
-    """
-    nmon = 12
-    day_per_mon = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-    for y in nyear: 
-        for m in range(nmon):
-            for d in range(day_per_mon[m]):
-                time_temp = f'{y+1:04d}' + '-' + f'{m+1:02d}' + '-' + f'{d+1:02d}'
-                yield np.datetime64(time_temp)
 
 
 def restore_from_npzfile(filename: Path) -> OLRData:
