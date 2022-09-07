@@ -157,7 +157,6 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
 
 def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 293,
                                   end_doy: int = 316) -> eof.EOFDataForAllDOYs:
-    # ToDo: (Sarah): Do we have to adapt this function (or the complete kiladis pp) to no_leap ? Did it get lost? Would you be willing to do that in necceessary?
     """
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
 
@@ -177,7 +176,7 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
 
     :return: The complete EOF series with the interpolated values.
     """
-    doys = tools.doy_list()
+    doys = tools.doy_list(eofs.no_leap)
     start_idx = start_doy - 1
     end_idx = end_doy - 1
     eof_len = eofs.lat.size * eofs.long.size
@@ -205,9 +204,6 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
                                              eigenvalues=orig_eof.eigenvalues, no_observations=orig_eof.no_observations)
                                  )
     return eof.EOFDataForAllDOYs(interpolated_eofs, no_leap=eofs.no_leap)
-
-# ToDo: (Sarah): Add a similar python file for your pp-script
-
 
 
 

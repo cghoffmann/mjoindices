@@ -156,6 +156,23 @@ def doy_list(no_leap_years: bool = False) -> np.array:
     else:
         return np.arange(1, 367, 1)
 
+
+def generate_list_valid_dates(nyear: np.ndarray):
+    # ToDo: (Sarah): Does it have a unit test?
+    """
+    Python generator, outputs a np.datetime variable of each day of the year
+    Does not use leap years. Each year has 365 days (assumes data contains full year)
+    """
+    nmon = 12
+    day_per_mon = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    for y in nyear: 
+        for m in range(nmon):
+            for d in range(day_per_mon[m]):
+                time_temp = f'{y+1:04d}' + '-' + f'{m+1:02d}' + '-' + f'{d+1:02d}'
+                yield np.datetime64(time_temp)
+                
+
 def convert_time_to_period(time_array):
     """
     Converts a np.datetime64 array to the pandas period variable, since pandas cannot handle nonstandard calendars. 
