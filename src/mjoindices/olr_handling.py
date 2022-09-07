@@ -326,51 +326,6 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
     return result
 
 
-def load_model_olr(filename: Path, date_reference='0001-01-01', no_leap: bool = False) -> OLRData:
-    # ToDo: (Sarah): Same comment as for loader functions in pcs files: Is this general enough or does it belong in your user code?
-    # Maybe we should disducc seperately, if we offer a set of loader functions or so somewhere else in the packge
-    """
-    Loads the OLR data from model output. Tested with SPCAM. 
-    Puts data in same format as used above for NOAA observed data
-
-    :param filename: Full filename of a local copy of OLR data file.
-    :param date_reference: in the metadata of the model time variable, e.g. "days since 0001-01-01" corresponds
-    to a date_reference of '0001-01-01'
-    :param no_leap: if True, assumes all years have 365 days
-
-    :return: The OLR data.
-
-    """
-
-    f = netcdf.netcdf_file(str(filename),'r')
-    lat = f.variables['lat'].data.copy()
-    lon = f.variables['lon'].data.copy()
-    # OLR stored as FLUT in SPCAM 
-    olr = f.variables['FLUT'].data.copy() 
-    days_since = f.variables['time'].data.copy()
-    f.close()
-
-    temptime = []
-    # np.datetime64 uses leap years based on the normal calendar
-    # assumes dates are in "days since" format (change for different unit)
-    if not no_leap:
-        for item in days_since:
-            delta = np.timedelta64(int(item),'D')
-            day = np.datetime64(date_reference) + delta
-            temptime.append(day)
-    # for data with no leap years (all years with 365 days)
-    else:
-        # determine number of years in time variable (assumes full year)
-        nyear = np.arange(int(days_since[0]//365), int(np.ceil(days_since[-1]/365)))
-        # create temporary list of np.datetime64 dates for n years
-        temptime = [i for i in tools.generate_list_valid_dates(nyear)]
-
-    time = np.array(temptime, dtype=np.datetime64)
-    result = OLRData(np.squeeze(olr), time, lat, lon)
-
-    return result
-
-
 def restore_from_npzfile(filename: Path) -> OLRData:
     """
     Loads an :class:`OLRData` object from a numpy file, which has been saved with the function
