@@ -93,7 +93,7 @@ def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs):
     first and last day of year, divided by the length of the year.
     """
 
-    list_of_doys = tools.doy_list(orig_eofs.no_leap)
+    list_of_doys = tools.doy_list(orig_eofs.no_leap_years)
     doy1 = orig_eofs.eofdata_for_doy(1)
 
     ndoys = len(list_of_doys)
@@ -134,7 +134,7 @@ def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs, delta: float) -> 
     R = rotation_matrix(delta)
 
     doy1 = orig_eofs.eofdata_for_doy(1)   
-    list_of_doys = tools.doy_list(orig_eofs.no_leap)
+    list_of_doys = tools.doy_list(orig_eofs.no_leap_years)
     
     eofdata_rotated = []
     eofdata_rotated.append(doy1) # first doy is unchanged
@@ -159,7 +159,7 @@ def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs, delta: float) -> 
                                 eigenvalues=doyn.eigenvalues,
                                 no_observations=doyn.no_observations))
 
-    return eof.EOFDataForAllDOYs(eofdata_rotated, orig_eofs.no_leap)
+    return eof.EOFDataForAllDOYs(eofdata_rotated, orig_eofs.no_leap_years)
 
 
 def normalize_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
@@ -171,7 +171,7 @@ def normalize_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
     :return: normalized EOFdata for all days
     """
 
-    list_of_doys = tools.doy_list(orig_eofs.no_leap)
+    list_of_doys = tools.doy_list(orig_eofs.no_leap_years)
 
     eofdata_normalized = []
 
@@ -189,7 +189,7 @@ def normalize_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
                                             eigenvalues=doyn.eigenvalues,
                                             no_observations=doyn.no_observations)) 
 
-    return eof.EOFDataForAllDOYs(eofdata_normalized, orig_eofs.no_leap) 
+    return eof.EOFDataForAllDOYs(eofdata_normalized, orig_eofs.no_leap_years) 
 
 
 def angle_between_eofs(reference: eof.EOFData, target=eof.EOFData):
