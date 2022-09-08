@@ -155,15 +155,6 @@ def doy_list(no_leap_years: bool = False) -> np.array:
     else:
         return np.arange(1, 367, 1)
 
-def convert_time_to_period(time_array):
-    # ToDo: (Sarah) only used in PC saving, so maybe this is unnecessary?
-    """
-    Converts a np.datetime64 array to the pandas period variable, since pandas cannot handle nonstandard calendars. 
 
-    Returns an array of pd.Period variables
-    """
-
-    periods_pd = [pd.Period(np.datetime_as_string(i)) for i in time_array]
-    return periods_pd
 
 
