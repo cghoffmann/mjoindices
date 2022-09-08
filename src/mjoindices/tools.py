@@ -28,13 +28,12 @@ import typing
 import numpy as np
 import pandas as pd
 
-def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: bool = False) -> typing.Union[int, np.ndarray]:
-    # ToDo: (Sarah): I would prefer to call the parameter no_leap_years in all interfaces. However, I don't want to change too much at once. Maybe you could rename all occurences after you checked that my changes did not break anything?
+def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap_years: bool = False) -> typing.Union[int, np.ndarray]:
     """
     Calculates the days of the year (DOYs) for an individual date or an array of dates.
 
     :param date: The date (or the dates), given as (NumPy array of) :class:`numpy.datetime64` value(s).
-    :param no_leap: if True, then will assume all years have 365 days
+    :param no_leap_years: if True, then will assume all years have 365 days
 
     :return: the DOY (or the DOYs) as (NumPy array of) int value(s).
     """
@@ -49,10 +48,10 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: boo
         temp = date.astype(dt.datetime)
         time_fragments = temp.timetuple()
 
-        if no_leap:
+        if no_leap_years:
             # check that day does not exceed number of days in a month
             if time_fragments.tm_mday > day_per_mon[time_fragments.tm_mon-1]:
-                raise ValueError('Invalid date. Likely due to mismatch between input date and no_leap parameter')
+                raise ValueError('Invalid date. Likely due to mismatch between input date and no_leap_years parameter')
                 # ToDo: (Sarah): Maybe turn this into a test case rather than a check right here. 
 
             # sums days of previous months to get DOY
@@ -62,7 +61,7 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap: boo
     else:
         result = np.empty(date.size)
         for i, d in enumerate(date):
-            result[i] = calc_day_of_year(d, no_leap=no_leap)
+            result[i] = calc_day_of_year(d, no_leap_years=no_leap_years)
     return result
 
 
@@ -100,15 +99,15 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
     :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.
     """
 
-    no_leap = False
+    no_leap_years = False
     if leap_year_treatment == "no_leap_years":
-        no_leap = True
+        no_leap_years = True
 
     strict_leap_year_treatment = False
     if leap_year_treatment == "strict":
         strict_leap_year_treatment = True
 
-    doys = calc_day_of_year(dates, no_leap=no_leap)
+    doys = calc_day_of_year(dates, no_leap_years=no_leap_years)
 
     if strict_leap_year_treatment:
         center_inds = np.nonzero(doys == center_doy)
