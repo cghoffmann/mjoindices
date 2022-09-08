@@ -164,10 +164,10 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
     if implementation == "eofs_package" and not eofs_package_available:
         raise ValueError("Selected calculation with external eofs package, but package not available. Use "
                          "internal implementation or install eofs package")
-    no_leap = False
+    no_leap_years = False
     if leap_year_treatment == "no_leap_years":
-        no_leap = True
-    doys = tools.doy_list(no_leap)
+        no_leap_years = True
+    doys = tools.doy_list(no_leap_years)
     eofs = []
     for doy in doys:
         print("Calculating EOFs for DOY %i" % doy)
@@ -176,7 +176,7 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
         else:
             singleeof = calc_eofs_for_doy(olrdata, doy, leap_year_treatment=leap_year_treatment)
         eofs.append(singleeof)
-    return eof.EOFDataForAllDOYs(eofs, no_leap)
+    return eof.EOFDataForAllDOYs(eofs, no_leap_years)
 
 
 def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, leap_year_treatment: str = "original") -> eof.EOFData:
@@ -364,7 +364,7 @@ def regress_3dim_data_onto_eofs(data: object, eofdata: eof.EOFDataForAllDOYs) ->
     for idx, val in enumerate(data.time):
         day = val
         olr_singleday = data.get_olr_for_date(day)
-        doy = tools.calc_day_of_year(day, eofdata.no_leap)
+        doy = tools.calc_day_of_year(day, eofdata.no_leap_years)
         (pc1_single, pc2_single) = regress_vector_onto_eofs(
             eofdata.eofdata_for_doy(doy).reshape_to_vector(olr_singleday),
             eofdata.eof1vector_for_doy(doy),
