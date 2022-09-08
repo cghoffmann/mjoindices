@@ -25,7 +25,6 @@ This module provides basic functionality to handle PC data, which is a basic out
 
 import datetime
 from pathlib import Path
-import mjoindices.tools as tools
 
 import numpy as np
 import pandas as pd
