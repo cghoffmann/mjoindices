@@ -116,7 +116,13 @@ def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs):
     # calculate discontinuity between Jan 1 and Jan 1 at end of rotation cycle
     discont = angle_btwn_vectors(doy1.eof1vector, rots[0,:])
 
-    return -discont/ndoys
+    # determine whether to rotate clockwise or counterclockwise, based on angle of E1 from projected
+    # E2 and angle of E2 from projected E1
+    cross_angle = np.dot(doy1.eof1vector, rots[1,:])/(np.linalg.norm(doy1.eof1vector)*np.linalg.norm(rots[1,:]))
+    if cross_angle <= 0:
+        return -discont/ndoys
+    else: 
+        return discont/ndoys
 
 
 def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs, delta: float) -> eof.EOFDataForAllDOYs:
