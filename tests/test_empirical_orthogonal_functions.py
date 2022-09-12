@@ -467,7 +467,7 @@ def test_EOFDataForAllDOYs_initialization_exceptions():
     long = np.array([0., 5.])
 
     errors = []
-    no_leap = False
+    no_leap_years = False
 
     # one DOY missing
     eofs = []
@@ -476,7 +476,7 @@ def test_EOFDataForAllDOYs_initialization_exceptions():
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2))
     with pytest.raises(ValueError) as e:
-        target = eof.EOFDataForAllDOYs(eofs, no_leap)
+        target = eof.EOFDataForAllDOYs(eofs, no_leap_years)
     if "contain 366" not in str(e.value):
         errors.append("Check for 366 DOYs failed.")
 
@@ -490,7 +490,7 @@ def test_EOFDataForAllDOYs_initialization_exceptions():
             corrupt = 3.
         eofs.append(eof.EOFData(corrupt * lat, long, eof1, eof2))
     with pytest.raises(ValueError) as e:
-        target = eof.EOFDataForAllDOYs(eofs, no_leap)
+        target = eof.EOFDataForAllDOYs(eofs, no_leap_years)
     if "DOY 200" not in str(e.value):
         errors.append("Check for same latitudes failed.")
 
@@ -504,19 +504,19 @@ def test_EOFDataForAllDOYs_initialization_exceptions():
             corrupt = 2.
         eofs.append(eof.EOFData(lat, corrupt * long, eof1, eof2))
     with pytest.raises(ValueError) as e:
-        target = eof.EOFDataForAllDOYs(eofs, no_leap)
+        target = eof.EOFDataForAllDOYs(eofs, no_leap_years)
     if "DOY 100" not in str(e.value):
         errors.append("Check for same latitudes failed.")
 
-    # one DOY missing with no_leap = True
+    # one DOY missing with no_leap_years = True
     eofs = []
-    no_leap = True
+    no_leap_years = True
     for doy in range(1, 365):
         eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2))
     with pytest.raises(ValueError) as e:
-        target = eof.EOFDataForAllDOYs(eofs, no_leap)
+        target = eof.EOFDataForAllDOYs(eofs, no_leap_years)
     if "contain 365" not in str(e.value):
         errors.append("Check for 365 DOYs failed.")
 
@@ -527,12 +527,12 @@ def test_EOFDataForAllDOYs_basic_properties():
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
     eofs = []
-    no_leap = False
+    no_leap_years = False
     for doy in range(1, 367):
         eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2))
-    target = eof.EOFDataForAllDOYs(eofs, no_leap)
+    target = eof.EOFDataForAllDOYs(eofs, no_leap_years)
 
     errors = []
     if not target.eof_list == eofs:
@@ -551,12 +551,12 @@ def test_EOFDataForAllDOYs_doy_getfunctions():
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
     eofs = []
-    no_leap = False
+    no_leap_years = False
     for doy in range(1, 367):
         eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2))
-    target = eof.EOFDataForAllDOYs(eofs, no_leap)
+    target = eof.EOFDataForAllDOYs(eofs, no_leap_years)
 
     errors = []
     if not target.eofdata_for_doy(1).eof1vector[0] == 1:
@@ -578,8 +578,8 @@ def test_EOFDataForAllDOYs_doy_getfunctions():
 
 
 def test_EOFDataForAllDOYs_alldoy_getfunctions():
-    no_leap = False
-    doys = tools.doy_list(no_leap)
+    no_leap_years = False
+    doys = tools.doy_list(no_leap_years)
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
     explained_variances = np.array([np.arange(1, doys.size + 1, 1) + 111,
@@ -603,7 +603,7 @@ def test_EOFDataForAllDOYs_alldoy_getfunctions():
         eofs.append(eof.EOFData(lat, long, eof1, eof2,
                                 explained_variances=np.squeeze(explained_variances[:, doy - 1]),
                                 eigenvalues=np.squeeze(eigenvalues[:, doy - 1]), no_observations=no_obs[doy - 1]))
-    target = eof.EOFDataForAllDOYs(eofs, no_leap)
+    target = eof.EOFDataForAllDOYs(eofs, no_leap_years)
 
     errors = []
     if not np.all(target.explained_variance1_for_all_doys() == explained_variances[0, :]):
@@ -626,12 +626,12 @@ def test_save_all_eofs_to_dir(tmp_path):
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
     eofs = []
-    no_leap = False
+    no_leap_years = False
     for doy in range(1, 367):
         eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2))
-    target = eof.EOFDataForAllDOYs(eofs, no_leap)
+    target = eof.EOFDataForAllDOYs(eofs, no_leap_years)
 
     print(tmp_path)
 
@@ -651,7 +651,7 @@ def test_save_all_eofs_to_dir(tmp_path):
             errors.append("Test target should raise error, because directory does not exist.")
 
     target.save_all_eofs_to_dir(tmp_path / "eofs")
-    target_reloaded = eof.load_all_eofs_from_directory(tmp_path / "eofs", no_leap)
+    target_reloaded = eof.load_all_eofs_from_directory(tmp_path / "eofs", no_leap_years)
     if not target_reloaded.eof_list == eofs:
         errors.append("List of EOFData objects incorrect")
     if not np.all(target_reloaded.lat == lat):
@@ -663,11 +663,10 @@ def test_save_all_eofs_to_dir(tmp_path):
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
-
-def test_save_all_eofs_to_npzfile(tmp_path):
+@pytest.mark.parametrize('no_leap_years', [False, True])
+def test_save_all_eofs_to_npzfile(tmp_path, no_leap_years):
     filename = tmp_path / "test.npz"
-    no_leap = False 
-    doys = tools.doy_list(no_leap)
+    doys = tools.doy_list(no_leap_years)
     lat = np.array([-10., 0., 10.])
     long = np.array([0., 5.])
     explained_variances = np.array([np.arange(1, doys.size + 1, 1) + 111,
@@ -691,7 +690,7 @@ def test_save_all_eofs_to_npzfile(tmp_path):
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2, explained_variances=np.squeeze(explained_variances[:, doy - 1]),
                                 eigenvalues=np.squeeze(eigenvalues[:, doy - 1]), no_observations=no_obs[doy - 1]))
-    target = eof.EOFDataForAllDOYs(eofs, no_leap)
+    target = eof.EOFDataForAllDOYs(eofs, no_leap_years)
     target.save_all_eofs_to_npzfile(filename)
 
     errors = []
@@ -704,8 +703,6 @@ def test_save_all_eofs_to_npzfile(tmp_path):
         errors.append("Long is incorrect")
     if not target_reloaded.eofdata_for_doy(1) == eofs[0]:
         errors.append("Sample EOF data is incorrect")
-
-    # ToDo: (Sarah): Should the no_leap_setting not be checked here?
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
