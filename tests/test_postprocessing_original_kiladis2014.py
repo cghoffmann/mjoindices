@@ -53,6 +53,9 @@ def test_if_refdata_isfound_for_correct_spontaneous_sign_changes_in_eof_series()
         pytest.fail("Function failed with OS Error, hence the reference data has probably not been found, which points "
                     "to an installation problem of the package: ".format(OSError))
 
+# TODO: (Sarah) For interpolating over the Dec --> Jan boundary
+def test_interpolation_no_leap_years():
+    pass
 
 def test_post_process_eofs_original_kiladis_approach():
 
@@ -91,5 +94,5 @@ def test_post_process_eofs_original_kiladis_approach_with_kw_dict():
 
         assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
-# ToDo: (Sarah): Add a similar test_file for your pp_script
+
 
