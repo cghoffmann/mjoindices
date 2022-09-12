@@ -639,6 +639,10 @@ def test_save_all_eofs_to_dir(tmp_path):
     # ToDo: (Sarah): Did you comment out the lines below and change the test? Could you give me some hints on the reason?
     # In any case, I had to indent the two lines start with if "non-existent directory" to make it work properly.
     # Maybe you can double check all the changes here?
+
+    # I don't remember making these changes, but when I try running the test cases on the master branch, this case fails in 
+    # the way you're describing. The indents you made here allow the test to pass in here, for me. - Sarah
+
     #with pytest.raises(FileNotFoundError) as e:
     with pytest.raises(OSError) as e:
         target.save_all_eofs_to_dir(tmp_path / "eofs_dir_not_exisiting", create_dir=False)
