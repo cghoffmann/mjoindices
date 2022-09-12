@@ -484,6 +484,12 @@ def test_completeOMIReproduction_eofs_package_strict_leap_year(tmp_path):
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
+def test_completeOMIReproduction_no_leap_years():
+    pass
+
+def test_completeOMIReproduction_postprocessing_rotation():
+    pass
+
 
 def test_preprocess_olr_warning():
     time = np.arange("2018-01-01", "2018-01-03", dtype='datetime64[D]')
