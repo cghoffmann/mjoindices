@@ -29,63 +29,63 @@ import mjoindices.tools as tools
 
 def test_calc_day_of_year_scalar():
 
-    no_leap = False
+    no_leap_years = False
     errors = []
     date = np.datetime64("2019-01-01")
-    target = tools.calc_day_of_year(date, no_leap)
+    target = tools.calc_day_of_year(date, no_leap_years)
     if not target == 1:
         errors.append("Error in DOY calc for %s" % str(date))
 
     date = np.datetime64("2019-01-11")
-    target = tools.calc_day_of_year(date, no_leap)
+    target = tools.calc_day_of_year(date, no_leap_years)
     if not target == 11:
         errors.append("Error in DOY calc for %s" % str(date))
 
     date = np.datetime64("2019-02-28")
-    target = tools.calc_day_of_year(date, no_leap)
+    target = tools.calc_day_of_year(date, no_leap_years)
     if not target == 31 + 28:
         errors.append("Error in DOY calc for %s" % str(date))
 
     date = np.datetime64("2019-12-31")
-    target = tools.calc_day_of_year(date, no_leap)
+    target = tools.calc_day_of_year(date, no_leap_years)
     if not target == 365:
         errors.append("Error in DOY calc for %s" % str(date))
 
     # test leap year
     date = np.datetime64("2020-02-29")
-    target = tools.calc_day_of_year(date, no_leap)
+    target = tools.calc_day_of_year(date, no_leap_years)
     if not target == 31 + 29:
         errors.append("Error in DOY calc for %s" % str(date))
 
     # test leap year
     date = np.datetime64("2020-12-31")
-    target = tools.calc_day_of_year(date, no_leap)
+    target = tools.calc_day_of_year(date, no_leap_years)
     if not target == 366:
         errors.append("Error in DOY calc for %s" % str(date))
 
     # Test work around to deal with datetime format in ns
     date = np.datetime64("2019-01-01", "ns")
-    target = tools.calc_day_of_year(date, no_leap)
+    target = tools.calc_day_of_year(date, no_leap_years)
     if not target == 1:
         errors.append("Error in DOY calc for %s with format ns" % str(date))
 
     # Test work around to deal with datetime format in ns
     date = np.datetime64("2019-01-11", "ns")
-    target = tools.calc_day_of_year(date, no_leap)
+    target = tools.calc_day_of_year(date, no_leap_years)
     if not target == 11:
         errors.append("Error in DOY calc for %s with format ns" % str(date))
 
-    # Test no_leap functionality
-    no_leap = True
+    # Test no_leap_years functionality
+    no_leap_years = True
     date = np.datetime64("2020-12-31")
-    target = tools.calc_day_of_year(date, no_leap)
+    target = tools.calc_day_of_year(date, no_leap_years)
     if not target == 365:
-       errors.append("Error in DOY calc for %s with no_leap = True" % str(date)) 
+       errors.append("Error in DOY calc for %s with no_leap_years = True" % str(date)) 
 
-    # Test no_leap functionality
+    # Test no_leap_years functionality
     date = np.datetime64("2020-02-29")
     with pytest.raises(ValueError):
-        tools.calc_day_of_year(date, no_leap)
+        tools.calc_day_of_year(date, no_leap_years)
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
@@ -93,21 +93,21 @@ def test_calc_day_of_year_scalar():
 def test_calc_day_of_year_array():
 
     errors = []
-    no_leap = False
+    no_leap_years = False
     dates = np.array([np.datetime64("2019-01-01"), np.datetime64("2019-01-02"), np.datetime64("2019-01-03")])
-    target = tools.calc_day_of_year(dates, no_leap)
+    target = tools.calc_day_of_year(dates, no_leap_years)
     if not np.all(target == np.array([1, 2, 3])):
         errors.append("Error in DOY calc for array")
 
     dates = np.array([np.datetime64("2020-12-30"), np.datetime64("2020-12-31"), np.datetime64("2021-01-01"),
                       np.datetime64("2021-01-02")])
-    target = tools.calc_day_of_year(dates, no_leap)
+    target = tools.calc_day_of_year(dates, no_leap_years)
     if not np.all(target == np.array([365, 366, 1, 2])):
         errors.append("Error in DOY calc for array")
 
     # Test work around to deal with datetime format in ns
     dates = np.array([np.datetime64("2019-01-01"), np.datetime64("2019-01-02"), np.datetime64("2019-01-03")], dtype="datetime64[ns]")
-    target = tools.calc_day_of_year(dates, no_leap)
+    target = tools.calc_day_of_year(dates, no_leap_years)
     if not np.all(target == np.array([1, 2, 3])):
         errors.append("Error in DOY calc for array with format ns")
 
@@ -238,7 +238,7 @@ def test_find_doy_ranges_in_dates__no_strict_leap_year_treatment():
         errors.append("DOY range covering the the beginning of the next year is wrong (Leap year test)")
 
 
-    # no_leap condition
+    # no_leap_years condition
     dates = np.array(["2016-02-27", "2016-02-28", "2016-02-29", "2016-03-01", "2016-03-02", "2017-02-27", "2017-02-28", "2017-03-01", "2017-03-02"],
                     dtype='datetime64[D]')
     with pytest.raises(ValueError):
@@ -264,10 +264,10 @@ def test_doy_list():
 
     target = tools.doy_list(False)
     if not np.all(target == np.arange(1, 367, 1)):
-        errors.append("DOY list not correct for no_leap = False")
+        errors.append("DOY list not correct for no_leap_years = False")
 
     target = tools.doy_list(True)
     if not np.all(target == np.arange(1, 366, 1)):
-        errors.append("DOY list not correct for no_leap = True") 
+        errors.append("DOY list not correct for no_leap_years = True") 
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
