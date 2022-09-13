@@ -23,12 +23,9 @@ from pathlib import Path
 import os.path
 import pytest
 
-import mjoindices.olr_handling as olr
-import mjoindices.omi.omi_calculator as omi
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.omi.postprocessing_original_kiladis2014 as pp_kil2014
-import mjoindices.principal_components as pc
-import mjoindices.evaluation_tools
+
 import numpy as np
 
 
@@ -52,10 +49,6 @@ def test_if_refdata_isfound_for_correct_spontaneous_sign_changes_in_eof_series()
     except OSError:
         pytest.fail("Function failed with OS Error, hence the reference data has probably not been found, which points "
                     "to an installation problem of the package: ".format(OSError))
-
-# TODO: (Sarah) For interpolating over the Dec --> Jan boundary
-def test_interpolation_no_leap_years():
-    pass
 
 def test_post_process_eofs_original_kiladis_approach():
 
