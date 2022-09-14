@@ -55,6 +55,10 @@ mjoindices_reference_eofs_filename = Path(os.path.abspath('')) / "testdata" / "m
 mjoindices_reference_pcs_filename = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs.txt"
 mjoindices_reference_eofs_filename_raw = Path(
     os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs_raw.npz"
+mjoindices_reference_eofs_noleapyears_filename = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs_no_leap_years.npz"
+mjoindices_reference_pcs_noleapyears_filename = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs_no_leap_years.txt" 
+mjoindices_reference_eofs_rotated_filename = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "EOFs_pp_rot.npz"
+mjoindices_reference_pcs_rotated_filename = Path(os.path.abspath('')) / "testdata" / "mjoindices_reference" / "PCs_pp_rot.txt"  
 original_omi_explained_variance_file = Path(os.path.abspath('')) / "testdata" / "OriginalOMI" / "omi_var.txt"
 
 
@@ -484,11 +488,102 @@ def test_completeOMIReproduction_eofs_package_strict_leap_year(tmp_path):
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
-def test_completeOMIReproduction_no_leap_years():
-    pass
+@pytest.mark.slow
+@pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available.")
+def test_completeOMIReproduction_no_leap_years(tmp_path):
 
-def test_completeOMIReproduction_postprocessing_rotation():
-    pass
+    errors = []
+
+    # Calculate EOFs with no_leap_years
+    raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+    olr_no_leap = olr.remove_leap_years(raw_olr)
+    shorter_olr = olr.restrict_time_coverage(olr_no_leap, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
+    interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
+    kiladis_pp_params = {"sign_doy1reference": True,
+                         "interpolate_eofs": False} # Does not use original interpolation of EOFs in November
+    eofs = omi.calc_eofs_from_olr(interpolated_olr,
+                                  leap_year_treatment="no_leap_years",
+                                  eofs_postprocessing_type="kiladis2014",
+                                  eofs_postprocessing_params=kiladis_pp_params)
+    eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_no_leap_years_EOFs.npz")
+
+    # Validate EOFs against mjoindices own reference with no_leap_years (results should be equal)
+    mjoindices_reference_eofs = eof.restore_all_eofs_from_npzfile(mjoindices_reference_eofs_noleapyears_filename)
+    for idx, target_eof in enumerate(eofs.eof_list):
+        if not mjoindices_reference_eofs.eof_list[idx].close(target_eof):
+            errors.append("mjoindices-reference-validation: EOF data at index %i is incorrect" % idx)
+
+    # Calculate PCs
+    raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+    olr_no_leap = olr.remove_leap_years(raw_olr)
+    pcs = omi.calculate_pcs_from_olr(olr_no_leap,
+                                     eofs,
+                                     np.datetime64("1979-01-01"),
+                                     np.datetime64("2018-08-28"),
+                                     use_quick_temporal_filter=False)
+    pc_temp_file = tmp_path / "test_completeOMIReproduction_no_leap_years_PCs.txt"
+    pcs.save_pcs_to_txt_file(pc_temp_file)
+
+    # Validate PCs against mjoindices own reference (results should be equal)
+    # Reload pcs instead of using the calculated ones, because the saving routine has truncated some decimals of the
+    # reference values. So do the same with the testing target pcs.
+    pcs = pc.load_pcs_from_txt_file(pc_temp_file)
+    mjoindices_reference_pcs = pc.load_pcs_from_txt_file(mjoindices_reference_pcs_noleapyears_filename)
+    if not np.all(mjoindices_reference_pcs.time == pcs.time):
+        errors.append("mjoindices-reference-validation: Dates of PCs do not match.")
+    if not np.allclose(mjoindices_reference_pcs.pc1, pcs.pc1):
+        errors.append("mjoindices-reference-validation: PC1 values do not match.")
+    if not np.allclose(mjoindices_reference_pcs.pc2, pcs.pc2):
+        errors.append("mjoindices-reference-validation: PC2 values do not match.")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
+@pytest.mark.slow
+@pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available.")
+def test_completeOMIReproduction_postprocessing_rotation(tmp_path):
+
+    errors = []
+
+    # Calculate EOFs with no_leap_years
+    raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+    shorter_olr = olr.restrict_time_coverage(raw_olr, np.datetime64('1979-01-01'), np.datetime64('2012-12-31'))
+    interpolated_olr = olr.interpolate_spatial_grid_to_original(shorter_olr)
+    rotation_pp_params = {"sign_doy1reference": True}
+    eofs = omi.calc_eofs_from_olr(interpolated_olr,
+                                  leap_year_treatment="original",
+                                  eofs_postprocessing_type="eof_rotation",
+                                  eofs_postprocessing_params=rotation_pp_params)
+    eofs.save_all_eofs_to_npzfile(tmp_path / "test_completeOMIReproduction_rotated_EOFs.npz")
+
+    # Validate EOFs against mjoindices own reference with no_leap_years (results should be equal)
+    mjoindices_reference_eofs = eof.restore_all_eofs_from_npzfile(mjoindices_reference_eofs_rotated_filename)
+    for idx, target_eof in enumerate(eofs.eof_list):
+        if not mjoindices_reference_eofs.eof_list[idx].close(target_eof):
+            errors.append("mjoindices-reference-validation: EOF data at index %i is incorrect" % idx)
+
+    # Calculate PCs
+    raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
+    pcs = omi.calculate_pcs_from_olr(raw_olr,
+                                     eofs,
+                                     np.datetime64("1979-01-01"),
+                                     np.datetime64("2018-08-28"),
+                                     use_quick_temporal_filter=False)
+    pc_temp_file = tmp_path / "test_completeOMIReproduction_rotated_PCs.txt"
+    pcs.save_pcs_to_txt_file(pc_temp_file)
+
+    # Validate PCs against mjoindices own reference (results should be equal)
+    # Reload pcs instead of using the calculated ones, because the saving routine has truncated some decimals of the
+    # reference values. So do the same with the testing target pcs.
+    pcs = pc.load_pcs_from_txt_file(pc_temp_file)
+    mjoindices_reference_pcs = pc.load_pcs_from_txt_file(mjoindices_reference_pcs_rotated_filename)
+    if not np.all(mjoindices_reference_pcs.time == pcs.time):
+        errors.append("mjoindices-reference-validation: Dates of PCs do not match.")
+    if not np.allclose(mjoindices_reference_pcs.pc1, pcs.pc1):
+        errors.append("mjoindices-reference-validation: PC1 values do not match.")
+    if not np.allclose(mjoindices_reference_pcs.pc2, pcs.pc2):
+        errors.append("mjoindices-reference-validation: PC2 values do not match.")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
 
 def test_preprocess_olr_warning():
@@ -548,9 +643,19 @@ def test_initiate_eof_post_processing():
     eofs = omi.initiate_eof_post_processing(raw_eofs, eofs_postprocessing_type="kiladis2014",
                                             eofs_postprocessing_params=None)
 
-    # Check EOFRotation-PP
-    # ToDo: (Sarah): Add a similar test for your pp here to make sure, that it is actually executed by the initiation routine...
-    # ... I am aware of the fact that this tests the numbers as the specific unit tests in the sepearate file for your pp routine...
-    # ... However, I thin it it important to test the the right pp routine is actually executed by the initiation routine.
+    # Check rotation pp-routine
+    rotation_params = {"sign_doy1reference": True}
 
+    eofs = omi.initiate_eof_post_processing(raw_eofs, eofs_postprocessing_type="eof_rotation",
+                                            eofs_postprocessing_params=rotation_params)
+
+    # Validate EOFs against rotated reference (results should be equal)
+    mjoindices_reference_eofs_rotated = eof.restore_all_eofs_from_npzfile(mjoindices_reference_eofs_rotated_filename)
+    for idx, target_eof in enumerate(eofs.eof_list):
+        if not mjoindices_reference_eofs_rotated.eof_list[idx].close(target_eof):
+            errors.append("EOF rotation PP Test: EOF data at index %i is incorrect" % idx)
+
+    # Test that default settings work for rotation pp-routine
+    eofs = omi.initiate_eof_post_processing(raw_eofs, eofs_postprocessing_type="eof_rotation")
+    
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
