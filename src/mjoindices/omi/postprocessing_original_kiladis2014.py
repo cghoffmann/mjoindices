@@ -157,7 +157,6 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
 
 def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 293,
                                   end_doy: int = 316) -> eof.EOFDataForAllDOYs:
-    #ToDo (Sarah) write unit test for interpolation with no leap (over Dec -- Jan is most important)
     """
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
 

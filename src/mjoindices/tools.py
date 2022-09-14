@@ -52,7 +52,6 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap_year
             # check that day does not exceed number of days in a month
             if time_fragments.tm_mday > day_per_mon[time_fragments.tm_mon-1]:
                 raise ValueError('Invalid date. Likely due to mismatch between input date and no_leap_years parameter')
-                # ToDo: (Sarah): Maybe turn this into a test case rather than a check right here. 
 
             # sums days of previous months to get DOY
             result = sum(day_per_mon[:time_fragments.tm_mon-1]) + time_fragments.tm_mday
