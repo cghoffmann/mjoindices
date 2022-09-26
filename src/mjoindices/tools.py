@@ -33,7 +33,7 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap_year
     Calculates the days of the year (DOYs) for an individual date or an array of dates.
 
     :param date: The date (or the dates), given as (NumPy array of) :class:`numpy.datetime64` value(s).
-    :param no_leap_years: if True, then will assume all years have 365 days
+    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. 
 
     :return: the DOY (or the DOYs) as (NumPy array of) int value(s).
     """
@@ -146,7 +146,7 @@ def doy_list(no_leap_years: bool = False) -> np.array:
     Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (if leap years).
     Useful, e.g., as axis for plotting.
 
-    :param no_leap_years: if True, acts as if all years have 365 days. 
+    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. 
     :return: The doy array.
     """
     if no_leap_years:

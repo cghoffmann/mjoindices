@@ -326,7 +326,7 @@ class EOFDataForAllDOYs:
     The individual EOF pairs are represented by :class:`EOFData` objects.
 
     :param eof_list: A list with the 365 or 366 :class:`EOFData` objects.
-    :param no_leap_years: True if the eof_list should have 365 days (no leap years in dataset) or 366 (leap years in dataset)
+    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. 
     """
 
     def __init__(self, eof_list: typing.List[EOFData], no_leap_years: bool) -> None:
@@ -367,7 +367,7 @@ class EOFDataForAllDOYs:
     @property
     def no_leap_years(self) -> bool:
         """
-        True if the eof_list should have 365 days (no leap years in dataset) or 366 (leap years in dataset) 
+        True if every year has 365 days, False if dataset contains leap years. 
         """
         return self._no_leap_years
 
