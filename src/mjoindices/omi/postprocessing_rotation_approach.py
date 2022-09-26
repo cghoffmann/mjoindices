@@ -41,7 +41,7 @@ def post_process_eofs_rotation(eofdata: eof.EOFDataForAllDOYs, sign_doy1referenc
     See documentation of the methods :meth:`correct_spontaneous_sign_changes_in_eof_series` in postprocessing_original_kiladis2014.py
     for EOF sign flipping
 
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr_with_rotation` to cover the complete algorithm.
+    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
 
     :param eofdata: The EOF series, which should be post processed.
     :param sign_doy1reference: See description of :meth:`correct_spontaneous_sign_changes_in_eof_series` 
@@ -60,7 +60,7 @@ def post_process_eofs_rotation(eofdata: eof.EOFDataForAllDOYs, sign_doy1referenc
 def rotate_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
     """
     Rotate EOFs at each DOY to 1) align with the EOFs of the previous day and 2) be continuous across December to
-    January boundary. Described more in detail in :meth:'post_process_rotation'
+    January boundary. Described more in detail in :func:'post_process_eofs_rotation'
 
     :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes 
 

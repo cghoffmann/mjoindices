@@ -31,14 +31,16 @@ According to the OMI algorithm, the EOFs have to be computed for each day of the
 Basically, only OLR data on a suitable spatial grid is needed. With that, the the OMI EOFs and afterwards the PCs are
 computed using the functions :func:`calc_eofs_from_olr` and :func:`calculate_pcs_from_olr`, respectively.
 
-The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
-Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
-Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
+The complete algorithm and original post-processing procedure is described in Kiladis, G.N., J. Dias, K.H. Straub, 
+M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M. Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based 
+Indices for Tracking the MJO. Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
 
-An additional post-processing step can be run after the EOFs have been calculated that reduces noise and potential 
-degeneracy issues. This algorithm is described in  Weidman, S., Kleiner, N., & Kuang, Z. (2022). A rotation procedure 
+An alternative post-processing procedure may be used to reduce noise and potential degeneracy issues. This algorithm is 
+described in  Weidman, S., Kleiner, N., & Kuang, Z. (2022). A rotation procedure 
 to improve seasonally varying empirical orthogonal function bases for MJO indices. Geophysical Research Letters, 
 49, e2022GL099998. https://doi.org/10.1029/2022GL099998 
+The alternative post-processing procedure is explained in :meth:'postprocessing_rotation_approach.post_process_eofs_rotation',
+and can be used by calling :param:eofs_postprocessing_type:str ="eof_rotation" in :func:`calc_eofs_from_olr`.
 
 """
 
@@ -85,13 +87,18 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
         "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. 
         See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
         "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
-    :param eofs_postprocessing_type: Different approaches of the post-processing of the EOFs are available: "kiladis2014"
-    for the original post-processing described in Kiladis, 2014. "eof_rotation" for the post-processing rotation algorithm 
-    described in Weidman, 2022; and None for no post-processing.
+    :param eofs_postprocessing_type: Different approaches of the post-processing of the EOFs are available: 
+        "kiladis2014" for the original post-processing described in Kiladis, 2014. 
+        "eof_rotation" for the post-processing rotation algorithm described in Weidman, 2022;
+        None for no post-processing.
     :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the
     respective post-processing function (:meth:`mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach` 
-    or :meth:`mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`)
-    :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the respective post-processing function
+    or :meth:`mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`). If no postprocessing parameters 
+    are given:
+        :param eofs_postprocessing_type:"kiladis2014" will align the sign of the EOFs from DOY 1 to the reference EOFs 
+        and not perform any interpolation.
+        :param eofs_postprocessing_type:"eof_rotation" will align the sign of the EOFs from DOY 1 to the reference EOFs, in 
+        addition to the EOF rotation procedure. 
     :return: The computed EOFs.
     """
 
