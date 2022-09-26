@@ -614,7 +614,8 @@ def load_all_eofs_from_directory(dirname: Path, no_leap_years: bool) -> EOFDataF
     for all DOYs from the given directory
 
     :param dirname: The directory in which the files are stored.
-    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. 
+    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years.
+    TODO: add automatic detection of number of DOYs in EOF directory 
 
     :return: The EOFs for all DOYs.
     """
