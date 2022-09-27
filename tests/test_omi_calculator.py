@@ -655,7 +655,12 @@ def test_initiate_eof_post_processing():
         if not mjoindices_reference_eofs_rotated.eof_list[idx].close(target_eof):
             errors.append("EOF rotation PP Test: EOF data at index %i is incorrect" % idx)
 
-    # Test that default settings work for rotation pp-routine
-    eofs = omi.initiate_eof_post_processing(raw_eofs, eofs_postprocessing_type="eof_rotation")
+    # check that the rotation pp-routine is executable with default params.
+    eofs = omi.initiate_eof_post_processing(raw_eofs, eofs_postprocessing_type="eof_rotation", 
+                                            eofs_postprocessing_params=None)
+    for idx, target_eof in enumerate(eofs.eof_list):
+        if not mjoindices_reference_eofs_rotated.eof_list[idx].close(target_eof):
+            errors.append("EOF rotation PP Test: EOF data at index %i is incorrect" % idx)
+
     
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
