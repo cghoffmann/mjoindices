@@ -608,23 +608,27 @@ def load_original_eofs_for_doy(dirname: Path, doy: int) -> EOFData:
     return EOFData(orig_lat, orig_long, eof1, eof2)
 
 
-def load_all_eofs_from_directory(dirname: Path, no_leap_years: bool) -> EOFDataForAllDOYs:
+def load_all_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
     """
     Loads the EOF functions (created with the function :func:`EOFDataForAllDOYs.save_all_eofs_to_dir`)
     for all DOYs from the given directory
 
     :param dirname: The directory in which the files are stored.
-    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years.
-    TODO: add automatic detection of number of DOYs in EOF directory 
 
     :return: The EOFs for all DOYs.
     """
     eofs = []
-    for doy in doy_list(no_leap_years):
+    for doy in doy_list(no_leap_years=False):
         filename = dirname / Path("eof%s.txt" % format(doy, '03'))
+        if doy == 366:
+            try:
+                eof = load_single_eofs_from_txt_file(filename)
+                eofs.append(eof)
+                return EOFDataForAllDOYs(eofs, no_leap_years=False)  
+            except:
+                return EOFDataForAllDOYs(eofs, no_leap_years=True) 
         eof = load_single_eofs_from_txt_file(filename)
         eofs.append(eof)
-    return EOFDataForAllDOYs(eofs, no_leap_years)
 
 
 def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
