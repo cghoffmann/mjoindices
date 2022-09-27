@@ -513,7 +513,7 @@ class EOFDataForAllDOYs:
         """
         if not dirname.exists() and create_dir:
             dirname.mkdir(parents=True, exist_ok=False)
-        for doy in doy_list():
+        for doy in doy_list(self.no_leap_years):
             filename = dirname / Path("eof%s.txt" % format(doy, '03'))
             self.eofdata_for_doy(doy).save_eofs_to_txt_file(filename)
 
