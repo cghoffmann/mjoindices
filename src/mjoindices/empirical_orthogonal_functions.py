@@ -626,6 +626,7 @@ def load_all_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
                 eofs.append(eof)
                 return EOFDataForAllDOYs(eofs, no_leap_years=False)  
             except:
+                print('No EOFs from DOY 366. Assuming no leap years in dataset.')
                 return EOFDataForAllDOYs(eofs, no_leap_years=True) 
         eof = load_single_eofs_from_txt_file(filename)
         eofs.append(eof)
