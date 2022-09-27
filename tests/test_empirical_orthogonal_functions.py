@@ -618,6 +618,16 @@ def test_EOFDataForAllDOYs_alldoy_getfunctions():
         errors.append("Total explained variance incorrect")
     if not np.all(target.no_observations_for_all_doys() == no_obs):
         errors.append("number of observations incorrect")
+    if not len(target.eof_list) == 366:
+        errors.append("Number of EOFs incorrect for no_leap_years = False")
+    if target.no_leap_years:
+        errors.append("no_leap_years=False param incorrect")
+
+    target_no_leap_years = eof.EOFDataForAllDOYs(eofs[:-1], no_leap_years=True)
+    if not len(target_no_leap_years.eof_list) == 365:
+        errors.append("Number of EOFs incorrect for no_leap_years = True")
+    if not target_no_leap_years.no_leap_years:
+        errors.append("no_leap_years=True param incorrect") 
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
@@ -651,7 +661,7 @@ def test_save_all_eofs_to_dir(tmp_path):
             errors.append("Test target should raise error, because directory does not exist.")
 
     target.save_all_eofs_to_dir(tmp_path / "eofs")
-    target_reloaded = eof.load_all_eofs_from_directory(tmp_path / "eofs", no_leap_years)
+    target_reloaded = eof.load_all_eofs_from_directory(tmp_path / "eofs")
     if not target_reloaded.eof_list == eofs:
         errors.append("List of EOFData objects incorrect")
     if not np.all(target_reloaded.lat == lat):
@@ -660,6 +670,16 @@ def test_save_all_eofs_to_dir(tmp_path):
         errors.append("Long is incorrect")
     if not target_reloaded.eofdata_for_doy(1) == eofs[0]:
         errors.append("Sample EOF data is incorrect")
+    if not target_reloaded.no_leap_years == no_leap_years:
+        errors.append("Reloaded no_leap_years=False is incorrect")
+
+    target_no_leap_years = eof.EOFDataForAllDOYs(eofs[:-1], no_leap_years=True)
+    target_no_leap_years.save_all_eofs_to_dir(tmp_path / "eofs_noleap")
+    target_reloaded_no_leap_years = eof.load_all_eofs_from_directory(tmp_path / "eofs_noleap")
+    if not target_reloaded_no_leap_years.eof_list == eofs[:-1]:
+        errors.append("List of EOFData objects is incorrect")
+    if not target_reloaded_no_leap_years.no_leap_years:
+        errors.append("Reloaded no_leap_years=True is incorrect") 
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
