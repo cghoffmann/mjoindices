@@ -675,7 +675,10 @@ def test_save_all_eofs_to_dir(tmp_path):
 
     target_no_leap_years = eof.EOFDataForAllDOYs(eofs[:-1], no_leap_years=True)
     target_no_leap_years.save_all_eofs_to_dir(tmp_path / "eofs_noleap")
-    target_reloaded_no_leap_years = eof.load_all_eofs_from_directory(tmp_path / "eofs_noleap")
+    # loading dataset with no leap years should raise a warning
+    with pytest.warns(UserWarning,
+                      match="No EOFs from DOY 366 in directory. Assuming no leap years in dataset."):
+        target_reloaded_no_leap_years = eof.load_all_eofs_from_directory(tmp_path / "eofs_noleap")
     if not target_reloaded_no_leap_years.eof_list == eofs[:-1]:
         errors.append("List of EOFData objects is incorrect")
     if not target_reloaded_no_leap_years.no_leap_years:

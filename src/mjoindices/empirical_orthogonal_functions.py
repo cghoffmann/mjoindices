@@ -29,6 +29,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib.cm
+import warnings
 
 from mjoindices.tools import doy_list
 
@@ -620,16 +621,19 @@ def load_all_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
     eofs = []
     for doy in doy_list(no_leap_years=False):
         filename = dirname / Path("eof%s.txt" % format(doy, '03'))
-        if doy == 366:
+        if doy < 366:
+            eof = load_single_eofs_from_txt_file(filename)
+            eofs.append(eof) 
+        else:
+            # try to load DOY 366 from directory, if it exists. 
             try:
                 eof = load_single_eofs_from_txt_file(filename)
                 eofs.append(eof)
-                return EOFDataForAllDOYs(eofs, no_leap_years=False)  
+                no_leap_years = False
             except:
-                print('No EOFs from DOY 366. Assuming no leap years in dataset.')
-                return EOFDataForAllDOYs(eofs, no_leap_years=True) 
-        eof = load_single_eofs_from_txt_file(filename)
-        eofs.append(eof)
+                no_leap_years = True
+                warnings.warn('No EOFs from DOY 366 in directory. Assuming no leap years in dataset.')            
+    return EOFDataForAllDOYs(eofs, no_leap_years) 
 
 
 def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
