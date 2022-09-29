@@ -43,7 +43,7 @@ Download the source, move into the directory containing the file setup.py and ru
 API documentation
 -----------------
 The API documentation is found on [GitHub Pages](https://cghoffmann.github.io/mjoindices/index.html) and also in the docs
-folder of the [source](https://github.com/cghoffmann/mjoindices/tree/master/docs).
+folder of the [source](docs/index.html).
     
 Getting started / examples
 --------------------------
