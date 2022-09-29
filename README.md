@@ -13,7 +13,7 @@ index of the Madden-Julian-Oscillation (MJO), particularly the OLR-based MJO ind
 Whereas the package name has been chosen to indicate that further MJO indices should be included in future, the 
 implementation is currently limited to the OMI algorithm.
 
-A scientific description of the packge is found in [Hoffmann et al. (2021)](https://doi.org/10.5334/jors.331).
+A scientific description of the package is found in [Hoffmann et al. (2021)](https://doi.org/10.5334/jors.331).
 
 Citation
 --------
@@ -76,7 +76,7 @@ your installation using pytest.
 
 * Download the complete test directory to you local file system.
 
-* Download some external input and reference data files from  [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README). 
+* Download some external input and reference data files from  [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](tests/testdata/README). 
 
 * Move into your local test directory and run
 
