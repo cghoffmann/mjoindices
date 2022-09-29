@@ -25,7 +25,6 @@ This module provides basic functionality to handle PC data, which is a basic out
 
 import datetime
 from pathlib import Path
-import mjoindices.tools as tools
 
 import numpy as np
 import pandas as pd
@@ -80,26 +79,7 @@ class PCData:
         """
         return self._pc2
 
-    @property
-    def period(self) -> np.ndarray:
-        # ToDo: (Sarah): Is this redundant information but just in another format, only for technical reasons? then I would probably not make it a property but a functions which tells more what it does in its name "return_XXX_As_Pandas_XXX" or so. Could youndo that or just let me know if I git something wring?
-        """
-        The time grid of the PC time series as an array of :class:'pandas.Period' elements.
-        """
-        return tools.convert_time_to_period(self.time)
-
-    def save_pcs_to_txt_file(self, filename: Path, model=True) -> None:
-        # ToDo: (Sarah): I am not totally sure, if I understand how general this model setting really is:
-        # 1) Will this be the right format for really all models?
-        # I could imagine that many people would prefer different output formats right (most questions, which I gut are
-        # in the context of file formats) Because the desired formats are so different, the original idea was
-        # that each user is him/herself responsible for implementing the I/O functions in the user code
-        # Only very basic tools will be provided here.
-        # If you think that your format could be useful laos for other then we could leave it in here,
-        # but I would prefer to put it into a secdonf function with a speaking name
-        # "save_pcs_to_txt_file_optimized_for_modelXXX". It should not be restircted to your model (then its not general enough)
-        # but maybe you can name a model class or whatever.
-        # An individual function should of cource also have its individual unit tests.
+    def save_pcs_to_txt_file(self, filename: Path) -> None:
         """
         Saves the computed PCs to a text file.
 
@@ -109,34 +89,22 @@ class PCData:
         :func:`mjoindices.principal_components.load_original_pcs_from_txt_file`).
 
         :param filename: The full filename.
-        :param model: if using model data and thus need to use period rather than datetime64 data (time data out of range)
         """
-        if model:
-            df = pd.DataFrame({"Date": self.period, "PC1": self._pc1, "PC2": self._pc2})
-        else:
-            df = pd.DataFrame({"Date": self._time, "PC1": self._pc1, "PC2": self._pc2})
+        df = pd.DataFrame({"Date": self._time, "PC1": self._pc1, "PC2": self._pc2})
         df.to_csv(filename, index=False, float_format="%.5f")
 
 
-def load_pcs_from_txt_file(filename: Path, model=True) -> PCData:
-    # ToDo: (Sarah): Same Comment as for save_pcs_to_txt_file
+def load_pcs_from_txt_file(filename: Path) -> PCData:
     """
     Loads the PCs of OMI, which were previously saved with this package
     (:func:`mjoindices.principal_components.PCData.save_pcs_to_txt_file`).
 
     :param filename: Path to the PC file.
-    :param model: True if using model data, and thus time is in nonstandard calendar format
 
     :return: The PC data.
     """
-    if model:
-        df = pd.read_csv(filename, sep=',', header=0)
-        date_str = df.Date.astype(str)
-        temp_date = [np.datetime64(i) for i in date_str]
-        dates = np.array(temp_date, dtype=np.datetime64)
-    else:
-        df = pd.read_csv(filename, sep=',', parse_dates=[0], header=0)
-        dates = df.Date.values
+    df = pd.read_csv(filename, sep=',', parse_dates=[0], header=0)
+    dates = df.Date.values
     pc1 = df.PC1.values
     pc2 = df.PC2.values
     return PCData(dates, pc1, pc2)

@@ -23,12 +23,9 @@ from pathlib import Path
 import os.path
 import pytest
 
-import mjoindices.olr_handling as olr
-import mjoindices.omi.omi_calculator as omi
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.omi.postprocessing_original_kiladis2014 as pp_kil2014
-import mjoindices.principal_components as pc
-import mjoindices.evaluation_tools
+
 import numpy as np
 
 
@@ -45,14 +42,13 @@ def test_if_refdata_isfound_for_correct_spontaneous_sign_changes_in_eof_series()
         eof1 = np.array([1, 2, 3, 4, 5, 6]) * doy
         eof2 = np.array([10, 20, 30, 40, 50, 60]) * doy
         eofs.append(eof.EOFData(lat, long, eof1, eof2))
-    eofs = eof.EOFDataForAllDOYs(eofs, no_leap=False)
+    eofs = eof.EOFDataForAllDOYs(eofs, no_leap_years=False)
 
     try:
         target = pp_kil2014.correct_spontaneous_sign_changes_in_eof_series(eofs, True)
     except OSError:
         pytest.fail("Function failed with OS Error, hence the reference data has probably not been found, which points "
                     "to an installation problem of the package: ".format(OSError))
-
 
 def test_post_process_eofs_original_kiladis_approach():
 
@@ -91,5 +87,5 @@ def test_post_process_eofs_original_kiladis_approach_with_kw_dict():
 
         assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
-# ToDo: (Sarah): Add a similar test_file for your pp_script
+
 
