@@ -48,7 +48,7 @@ folder of the [source](docs/index.html).
 Getting started / examples
 --------------------------
 After you have installed mjoindices, you can download an
-[example](https://github.com/cghoffmann/mjoindices/tree/master/examples) from the source, which consists of two files: 
+[example](examples/) from the source, which consists of two files: 
 
 * recalculate_original_omi.py: After downloading some data files, which are mentioned and linked in the source
 documentation of the example, you can run this example to recalculate the original OMI values. The script will save
@@ -71,7 +71,7 @@ Both files are also available as Jupyter notebook files.
 Automated testing
 -----------------
 After you have installed mjoindices, you can also download
-[unit and integration tests](https://github.com/cghoffmann/mjoindices/tree/master/tests) from the source to check
+[unit and integration tests](tests/) from the source to check
 your installation using pytest.
 
 * Download the complete test directory to you local file system.
