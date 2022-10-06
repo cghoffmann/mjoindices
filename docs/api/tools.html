@@ -90,7 +90,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>date</strong> – The date (or the dates), given as (NumPy array of) <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.datetime64</span></code> value(s).</p></li>
-<li><p><strong>no_leap_years</strong> – True if every year has 365 days, False if dataset contains leap years.</p></li>
+<li><p><strong>no_leap_years</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> if every year has 365 days, <code class="docutils literal notranslate"><span class="pre">False</span></code> if dataset contains leap years.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -102,14 +102,14 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.tools.doy_list">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.tools.</span></span><span class="sig-name descname"><span class="pre">doy_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no_leap_years</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../_modules/mjoindices/tools.html#doy_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.tools.doy_list" title="Permalink to this definition"></a></dt>
-<dd><p>Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (if leap years).
-Useful, e.g., as axis for plotting.</p>
+<dd><p>Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (depending on the
+consideration of leap years). Useful, e.g., as axis for plotting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>no_leap_years</strong> – True if every year has 365 days, False if dataset contains leap years.</p>
+<dd class="field-odd"><p><strong>no_leap_years</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> if every year has 365 days, <code class="docutils literal notranslate"><span class="pre">False</span></code> if dataset contains leap years.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The doy array.</p>
+<dd class="field-even"><p>The DOY array.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -118,7 +118,7 @@ Useful, e.g., as axis for plotting.</p>
 <dt class="sig sig-object py" id="mjoindices.tools.find_doy_ranges_in_dates">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.tools.</span></span><span class="sig-name descname"><span class="pre">find_doy_ranges_in_dates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center_doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">leap_year_treatment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'original'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/tools.html#find_doy_ranges_in_dates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.tools.find_doy_ranges_in_dates" title="Permalink to this definition"></a></dt>
 <dd><p>Finds the indices in a given array of dates that fit into a particular window of DOYs.</p>
-<p>This task sounds trivial, but is a little bit complicated by the appearance of leap years.</p>
+<p>This task sounds trivial, but is a little complicated by the appearance of leap years.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -126,26 +126,30 @@ Useful, e.g., as axis for plotting.</p>
 <li><p><strong>center_doy</strong> – The center of the wanted window.</p></li>
 <li><p><strong>window_length</strong> – the length of the window to both sides  of the center in days.
 The window spans 2*window_length+1 days in total (for exceptions see below).</p></li>
-<li><p><strong>leap_year_treatment</strong> – Either “original”, “strict” or “no_leap_years”.
-“original” will be as close to the original version of Kiladis (2014) as possible.
-“strict” (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also comment below.
-“no_leap_years” will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
-Three versions of dealing with leap years are distinguished for constructing the DOY range window.
-1: Setting the switch to “original” will use a pragmatic implementation in which the start and end of the DOY window
-is directly computed as distance in units of DOYs. 2: Setting the switch to “strict” will transfer the DOYs to
-actual calender dates and will calculate the start and end of the window also as calender dates using
-built-in numpy datetime functions. In the context of the EOF calculation, the setting has major implications
+<li><p><strong>leap_year_treatment</strong> – <p>Choose one of the following values:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;original&quot;</span></code> will be as close to the original version of <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a> as possible. It will use a
+pragmatic implementation in which the start and end of the DOY window is directly computed as distance in
+units of DOYs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;strict&quot;</span></code> (not recommended) will treat leap years somewhat more strictly, which might, however,
+cause the results to deviate from the original.  It will transfer the DOYs to actual calendar dates and
+will calculate the start and end of the window also as calendar dates using built-in numpy datetime functions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;no_leap_years&quot;</span></code> will act as if there are no leap years in the dataset (365 days consistently),
+which might be useful for modeled data. It will follow the basic methodology of
+<code class="docutils literal notranslate"><span class="pre">&quot;original&quot;</span></code>, but with <code class="docutils literal notranslate"><span class="pre">ndoys</span> <span class="pre">=</span> <span class="pre">365</span></code> instead of potentially <code class="docutils literal notranslate"><span class="pre">ndoys</span> <span class="pre">=</span> <span class="pre">366</span></code>.</p></li>
+</ul>
+<p>In the context of the EOF calculation, the setting has major implications
 only for the EOFs calculated for DOY 366 and causes only minor differences for the other DOYs. The results for
-the setting “original” are closer to the original values, and approximately the same total number of calender days
-covered by the window is found for each center DOY including 366. However, the length of the window is not
-guaranteed to be 2*window_length+1, but can also be 2*window_length+2 if the window crosses the ending of a leap
-year. The setting “strict” is somewhat more stringently implemented. The window length is always 2*window_length+1,
-however, the number of calender days covered by a window is reduced by approximately a factor of 4 for
-center_doy=366, since a window is found only during leap years at all, which might cause the EOF to differ quite
+the setting <code class="docutils literal notranslate"><span class="pre">&quot;original&quot;</span></code> are closer to the original values, and approximately the same total number of calendar days
+covered by the window is found for each center DOY including DOY 366. However, the length of the window is not
+guaranteed to be <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">window_length</span> <span class="pre">+</span> <span class="pre">1</span></code>, but can also be <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">window_length</span> <span class="pre">+</span> <span class="pre">2</span></code> if the window crosses the ending of a leap
+year. The setting <code class="docutils literal notranslate"><span class="pre">&quot;strict&quot;</span></code> is somewhat more stringently implemented. The window length is always <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">window_length</span> <span class="pre">+</span> <span class="pre">1</span></code>,
+however, the number of calendar days covered by a window is reduced by approximately a factor of 4 for
+<code class="docutils literal notranslate"><span class="pre">center_doy=366</span></code>, since a window is found only during leap years at all. This might cause the EOF to differ quite
 a lot from those of DOY 365 and DOY 1, which is not wanted. Because of that the recommended setting
-is the default value “original”.
-3: The setting “no_leap_years” will assume all years contain only 365 days. This will follow the basic methodology of
-“original”, but with ndoys = 365 instead of potentially 366.</p></li>
+is the default value <code class="docutils literal notranslate"><span class="pre">&quot;original&quot;</span></code>, except for modeled data that contains no leap years. In this case the setting
+<code class="docutils literal notranslate"><span class="pre">&quot;no_leap_years&quot;</span></code> is recommended.</p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

@@ -113,16 +113,16 @@
 <span class="sd">    :param lat: The latitude grid of the EOF data.</span>
 <span class="sd">    :param long: The longitude grid of the EOF data.</span>
 <span class="sd">    :param eof1: Values of the first EOF. Can either be a 1-dim vector with</span>
-<span class="sd">        lat.size*long.size elements (Start with all values of the first latitude, then all values of the second</span>
+<span class="sd">        ``lat.size * long.size`` elements (Start with all values of the first latitude, then all values of the second</span>
 <span class="sd">        latitude, etc.) or a 2-dim map with the first index representing the latitude axis and the second index</span>
 <span class="sd">        representing longitude axis.</span>
-<span class="sd">    :param eof2: Values of the second EOF. Structure similar to *eof1*</span>
+<span class="sd">    :param eof2: Values of the second EOF. Structure similar to ``eof1``</span>
 <span class="sd">    :param explained_variances: Fraction of data variance that is explained by each EOF (for all EOFs and not only the</span>
-<span class="sd">        first two EOFs). May be None.</span>
-<span class="sd">    :param eigenvalues: Eigenvalue corresponding to each EOF. May be None.</span>
-<span class="sd">    :param no_observations: The number of observations that went into the EOF calculation. May be None.</span>
+<span class="sd">        first two EOFs). Can  be set to ``None``.</span>
+<span class="sd">    :param eigenvalues: Eigenvalue corresponding to each EOF. Can  be set to ``None``.</span>
+<span class="sd">    :param no_observations: The number of observations that went into the EOF calculation. Can  be set to ``None``.</span>
 
-<span class="sd">    Note that the explained variances are not independent from the eigenvalues. However, this class is meant to only</span>
+<span class="sd">    Note that the explained variances are not independent of the eigenvalues. However, this class is meant to only</span>
 <span class="sd">    store the data. Hence, we store redundant data here intentionally to be able to have all computation rules together</span>
 <span class="sd">    in another location.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -245,7 +245,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The explained variances of all EOFs (not only the first two ones).</span>
 
-<span class="sd">        :return: Explained Variances. Might be None.</span>
+<span class="sd">        :return: Explained Variances. Might be ``None``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_explained_variances</span>
 
@@ -254,7 +254,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The explained variance of EOF1 as fraction between 0 and 1.</span>
 
-<span class="sd">        :return: The variance. Might be None.</span>
+<span class="sd">        :return: The variance. Might be ``None``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_explained_variances</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_explained_variances</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -266,7 +266,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The explained variance of EOF2 as fraction between 0 and 1.</span>
 
-<span class="sd">        :return: The variance. Might be None.</span>
+<span class="sd">        :return: The variance. Might be ``None``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_explained_variances</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_explained_variances</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -280,7 +280,7 @@
 
 <span class="sd">        This should be close to 1 if the calculation was successful.</span>
 
-<span class="sd">        :return: The total explained variance. Might be None.</span>
+<span class="sd">        :return: The total explained variance. Might be ``None``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_explained_variances</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_explained_variances</span><span class="p">)</span>
@@ -292,7 +292,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The eigenvalues of all EOFs (not only the first two ones).</span>
 
-<span class="sd">        :return: The eigenvalues. Might be None.</span>
+<span class="sd">        :return: The eigenvalues. Might be ``None``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues</span>
 
@@ -301,7 +301,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The eigenvalue of EOF1.</span>
 
-<span class="sd">        :return: The eigenvalue. Might be None.</span>
+<span class="sd">        :return: The eigenvalue. Might be ``None``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eigenvalues</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -313,7 +313,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The eigenvalue of EOF2.</span>
 
-<span class="sd">        :return: The eigenvalue. Might be None.</span>
+<span class="sd">        :return: The eigenvalue. Might be ``None``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eigenvalues</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -350,7 +350,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reshapes data in a vector to fit into a matrix, which corresponds to the present latitude/longitude grid.</span>
 
-<span class="sd">        :param vector: The vector with the data. Must have the length lat.size*long.size.</span>
+<span class="sd">        :param vector: The vector with the data. Must have the length ``lat.size * long.size``.</span>
 
 <span class="sd">        :return: The map. The first index corresponds to the latitude grid, the second to longitude grid.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -370,8 +370,8 @@
 <span class="sd">        into the same file instead of 2 separate files. Furthermore, the lat/long-grids are also explicitly saved.</span>
 
 <span class="sd">        A suitable reader is provided by the function</span>
-<span class="sd">        :func:`mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file`, whereas a reader for the</span>
-<span class="sd">        original files is provided by :func:`mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy`</span>
+<span class="sd">        :py:func:`load_single_eofs_from_txt_file`, whereas a reader for the</span>
+<span class="sd">        original files is provided by :py:func:`load_original_eofs_for_doy`</span>
 
 <span class="sd">        :param filename: The full path- and filename.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -390,23 +390,25 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">[docs]</a><span class="k">class</span> <span class="nc">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This class serves as a container for a series of EOF pairs, which covers all 365 or 366 DOYs and provides some overall</span>
+<span class="sd">    This class serves as a container for a series of EOF pairs, which covers all DOYs and provides some overall</span>
 <span class="sd">    statistical quantities.</span>
 
-<span class="sd">    The basic EOF computation :func:`mjoindices.omi.omi_calculator.calc_eofs_from_olr` will return an object of this</span>
-<span class="sd">    class as a major result of this package.</span>
+<span class="sd">    The basic EOF computation function :py:func:`mjoindices.omi.omi_calculator.calc_eofs_from_olr` will return an object</span>
+<span class="sd">    of this class as a major result of this package.</span>
 
 <span class="sd">    The individual EOF pairs are represented by :class:`EOFData` objects.</span>
 
-<span class="sd">    :param eof_list: A list with the 365 or 366 :class:`EOFData` objects.</span>
-<span class="sd">    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. </span>
+<span class="sd">    Note that the user can choose to consider or to ignore leap years in the data. This is probably of interest for the work</span>
+<span class="sd">    with modeled data, since models might ignore leap years in idealized setups. Here, this means that the number of</span>
+<span class="sd">    considered DOYs (and therefore the number of EOF pairs and further variables) can be either 365 or 366, respectively.</span>
+<span class="sd">    The code in this package is designed to treat both cases consistently, however, the users should have their own</span>
+<span class="sd">    choice in mind when working with the results.</span>
+
+<span class="sd">    :param eof_list: A list with one :class:`EOFData` object for each DOY.</span>
+<span class="sd">    :param no_leap_years: ``True`` if every year has 365 days, ``False`` if dataset contains leap years.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eof_list</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">EOFData</span><span class="p">],</span> <span class="n">no_leap_years</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">        :param eof_list:</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">no_leap_years</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">eof_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">365</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;List of EOFs must contain 365 entries for no_leap_years=True&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="p">(</span><span class="ow">not</span> <span class="n">no_leap_years</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">eof_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">366</span><span class="p">):</span>
@@ -440,7 +442,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">no_leap_years</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        True if every year has 365 days, False if dataset contains leap years. </span>
+<span class="sd">        ``True`` if every year has 365 days, ``False`` if dataset contains leap years.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span>
 
@@ -462,7 +464,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">len_eof_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Length of the eof_list, based on no_leap_years</span>
+<span class="sd">        Length of the ``eof_list``, based on ``no_leap_years``, i.e. the number of considered DOYs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">365</span>
@@ -501,7 +503,7 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.explained_variance1_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">explained_variance1_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 365 or 366 elements containing the explained variance of EOF1 for each DOY.</span>
+<span class="sd">        Returns a vector containing the explained variance of EOF1 for each DOY.</span>
 
 <span class="sd">        :return: The variance vector.</span>
 
@@ -514,7 +516,7 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.explained_variance2_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">explained_variance2_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 365 or 366 elements containing the explained variance of EOF2 for each DOY.</span>
+<span class="sd">        Returns a vector containing the explained variance of EOF2 for each DOY.</span>
 
 <span class="sd">        :return: The variance vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -526,7 +528,7 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.total_explained_variance_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">total_explained_variance_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 365 or 366 elements containing for each DOY the sum of the explained variance over all EOFs.</span>
+<span class="sd">        Returns a vector containing -for each DOY- the sum of the explained variance over all EOFs.</span>
 
 <span class="sd">        :return: The variance vector. Should by close to 1 for each DOY if computation was successful.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -538,7 +540,7 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.no_observations_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">no_observations_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 365 or 366 elements containing for each DOY the number of observations that went into the</span>
+<span class="sd">        Returns a vector containing -for each DOY- the number of observations that went into the</span>
 <span class="sd">        computation of the EOFs.</span>
 
 <span class="sd">        :return: The number of observations vector.</span>
@@ -551,7 +553,7 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.eigenvalue1_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">eigenvalue1_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 365 or 366 elements containing the eigenvalues of EOF1 for each DOY.</span>
+<span class="sd">        Returns a vector containing the eigenvalues of EOF1 for each DOY.</span>
 
 <span class="sd">        :return: The eigenvalue vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -563,7 +565,7 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.eigenvalue2_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">eigenvalue2_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 365 or 366 elements containing the eigenvalues of EOF2 for each DOY.</span>
+<span class="sd">        Returns a vector containing the eigenvalues of EOF2 for each DOY.</span>
 
 <span class="sd">        :return: The eigenvalue vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -579,10 +581,10 @@
 
 <span class="sd">        For each DOY, one text file will be created, which contains both EOF functions.</span>
 <span class="sd">        Note that the text files do not contain the eigenvalues and explained variance values. To save also those</span>
-<span class="sd">        values, use the function :func:`save_all_eofs_to_npzfile`.</span>
+<span class="sd">        values, use the function :py:func:`save_all_eofs_to_npzfile`.</span>
 
 <span class="sd">        :param dirname: The directory, where the files will be saved into.</span>
-<span class="sd">        :param create_dir: If True, the directory (and parent directories) will be created, if not existing.</span>
+<span class="sd">        :param create_dir: If ``True``, the directory (and parent directories) will be created, if not existing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">dirname</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">create_dir</span><span class="p">:</span>
             <span class="n">dirname</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -621,7 +623,7 @@
 
 <div class="viewcode-block" id="load_single_eofs_from_txt_file"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file">[docs]</a><span class="k">def</span> <span class="nf">load_single_eofs_from_txt_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EOFData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads a pair of EOFs, which was previously saved with this package (function :func:`EOFData.save_eofs_to_txt_file`).</span>
+<span class="sd">    Loads a pair of EOFs, which was previously saved with this package (function :py:func:`EOFData.save_eofs_to_txt_file`).</span>
 
 <span class="sd">    :param filename: Path to the  EOF file.</span>
 
@@ -666,9 +668,9 @@
 <span class="sd">    ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</span>
 
 <span class="sd">    :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.</span>
-<span class="sd">        This path should contain the sub directories *eof1* and *eof2*, in which the 365 files each are located:</span>
-<span class="sd">        One file per day of the year.</span>
-<span class="sd">    :param doy: DOY for which the 2 EOFs are loaded (number between 1 and 365).</span>
+<span class="sd">        This path should contain the sub directories &quot;eof1&quot; and &quot;eof2&quot;, in which the 365 or 366 files each are located:</span>
+<span class="sd">        One file per DOY.</span>
+<span class="sd">    :param doy: DOY for which the 2 EOFs are loaded (number between 1 and 366).</span>
 
 <span class="sd">    :return: The pair of EOFs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -683,7 +685,7 @@
 
 <div class="viewcode-block" id="load_all_eofs_from_directory"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.load_all_eofs_from_directory">[docs]</a><span class="k">def</span> <span class="nf">load_all_eofs_from_directory</span><span class="p">(</span><span class="n">dirname</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads the EOF functions (created with the function :func:`EOFDataForAllDOYs.save_all_eofs_to_dir`)</span>
+<span class="sd">    Loads the EOF functions (created with the function :py:func:`EOFDataForAllDOYs.save_all_eofs_to_dir`)</span>
 <span class="sd">    for all DOYs from the given directory</span>
 
 <span class="sd">    :param dirname: The directory in which the files are stored.</span>
@@ -720,7 +722,7 @@
 <span class="sd">    inserted hardcodedly.</span>
 
 <span class="sd">    :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.</span>
-<span class="sd">        This path should contain the sub directories *eof1* and *eof2*, in which the 366 files each are located:</span>
+<span class="sd">        This path should contain the sub directories &quot;eof1&quot; and &quot;eof2&quot;, in which the 366 files each are located:</span>
 <span class="sd">        One file per day of the year.</span>
 
 <span class="sd">    :return: The original EOFs for all DOYs.</span>
@@ -734,7 +736,7 @@
 
 <div class="viewcode-block" id="restore_all_eofs_from_npzfile"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.restore_all_eofs_from_npzfile">[docs]</a><span class="k">def</span> <span class="nf">restore_all_eofs_from_npzfile</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads all EOF data from a numpy file, which was written with :func:`EOFDataForAllDOYs.save_all_eofs_to_npzfile`.</span>
+<span class="sd">    Loads all EOF data from a numpy file, which was written with :py:func:`EOFDataForAllDOYs.save_all_eofs_to_npzfile`.</span>
 
 <span class="sd">    :param filename: The filename.</span>
 
@@ -770,7 +772,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots the explained variance values for EOF1 and EOF2 for all DOYs.</span>
 
-<span class="sd">    Comparable to Kiladis (2014), Fig. 1 (although the values there are to high by a factor of 2).</span>
+<span class="sd">    Comparable to :ref:`refKiladis2014`, Fig. 1 (although the values there are too high by a factor of 2). See</span>
+<span class="sd">    :ref:`refKiladis2020` for the correct original values.</span>
 
 <span class="sd">    :param eofs: The EOF data to plot.</span>
 
@@ -827,7 +830,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots a pair of original EOFs, which are loaded from a directory, in two maps.</span>
 
-<span class="sd">    :param path: The directory with the EOF data (see :func:`load_original_eofs_for_doy` for details).</span>
+<span class="sd">    :param path: The directory with the EOF data (see :py:func:`load_original_eofs_for_doy` for details).</span>
 <span class="sd">    :param doy: The corresponding DOY. Only used to display it in the title.</span>
 
 <span class="sd">    :return: Handle to the figure.</span>

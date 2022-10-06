@@ -90,18 +90,18 @@
 <li><p><strong>lat</strong> – The latitude grid of the EOF data.</p></li>
 <li><p><strong>long</strong> – The longitude grid of the EOF data.</p></li>
 <li><p><strong>eof1</strong> – Values of the first EOF. Can either be a 1-dim vector with
-lat.size*long.size elements (Start with all values of the first latitude, then all values of the second
+<code class="docutils literal notranslate"><span class="pre">lat.size</span> <span class="pre">*</span> <span class="pre">long.size</span></code> elements (Start with all values of the first latitude, then all values of the second
 latitude, etc.) or a 2-dim map with the first index representing the latitude axis and the second index
 representing longitude axis.</p></li>
-<li><p><strong>eof2</strong> – Values of the second EOF. Structure similar to <em>eof1</em></p></li>
+<li><p><strong>eof2</strong> – Values of the second EOF. Structure similar to <code class="docutils literal notranslate"><span class="pre">eof1</span></code></p></li>
 <li><p><strong>explained_variances</strong> – Fraction of data variance that is explained by each EOF (for all EOFs and not only the
-first two EOFs). May be None.</p></li>
-<li><p><strong>eigenvalues</strong> – Eigenvalue corresponding to each EOF. May be None.</p></li>
-<li><p><strong>no_observations</strong> – The number of observations that went into the EOF calculation. May be None.</p></li>
+first two EOFs). Can  be set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>eigenvalues</strong> – Eigenvalue corresponding to each EOF. Can  be set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>no_observations</strong> – The number of observations that went into the EOF calculation. Can  be set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
-<p>Note that the explained variances are not independent from the eigenvalues. However, this class is meant to only
+<p>Note that the explained variances are not independent of the eigenvalues. However, this class is meant to only
 store the data. Hence, we store redundant data here intentionally to be able to have all computation rules together
 in another location.</p>
 <dl class="py method">
@@ -124,7 +124,7 @@ in another location.</p>
 <dd><p>The eigenvalue of EOF1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The eigenvalue. Might be None.</p>
+<dd class="field-odd"><p>The eigenvalue. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -135,7 +135,7 @@ in another location.</p>
 <dd><p>The eigenvalue of EOF2.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The eigenvalue. Might be None.</p>
+<dd class="field-odd"><p>The eigenvalue. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -146,7 +146,7 @@ in another location.</p>
 <dd><p>The eigenvalues of all EOFs (not only the first two ones).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The eigenvalues. Might be None.</p>
+<dd class="field-odd"><p>The eigenvalues. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -181,7 +181,7 @@ in another location.</p>
 <dd><p>The explained variance of EOF1 as fraction between 0 and 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The variance. Might be None.</p>
+<dd class="field-odd"><p>The variance. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -192,7 +192,7 @@ in another location.</p>
 <dd><p>The explained variance of EOF2 as fraction between 0 and 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The variance. Might be None.</p>
+<dd class="field-odd"><p>The variance. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -203,7 +203,7 @@ in another location.</p>
 <dd><p>The explained variances of all EOFs (not only the first two ones).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Explained Variances. Might be None.</p>
+<dd class="field-odd"><p>Explained Variances. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -232,7 +232,7 @@ in another location.</p>
 <dd><p>Reshapes data in a vector to fit into a matrix, which corresponds to the present latitude/longitude grid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>vector</strong> – The vector with the data. Must have the length lat.size*long.size.</p>
+<dd class="field-odd"><p><strong>vector</strong> – The vector with the data. Must have the length <code class="docutils literal notranslate"><span class="pre">lat.size</span> <span class="pre">*</span> <span class="pre">long.size</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The map. The first index corresponds to the latitude grid, the second to longitude grid.</p>
@@ -264,8 +264,8 @@ longitude grid.</p>
 <p>Note that the file format is not exactly that of the original data files. Particularly, both EOFs are written
 into the same file instead of 2 separate files. Furthermore, the lat/long-grids are also explicitly saved.</p>
 <p>A suitable reader is provided by the function
-<a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file" title="mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file()</span></code></a>, whereas a reader for the
-original files is provided by <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy" title="mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy()</span></code></a></p>
+<a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file" title="mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_single_eofs_from_txt_file()</span></code></a>, whereas a reader for the
+original files is provided by <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy" title="mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_original_eofs_for_doy()</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>filename</strong> – The full path- and filename.</p>
@@ -280,7 +280,7 @@ original files is provided by <a class="reference internal" href="#mjoindices.em
 <p>This should be close to 1 if the calculation was successful.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The total explained variance. Might be None.</p>
+<dd class="field-odd"><p>The total explained variance. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -290,23 +290,28 @@ original files is provided by <a class="reference internal" href="#mjoindices.em
 <dl class="py class">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">EOFDataForAllDOYs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eof_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_leap_years</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="Permalink to this definition"></a></dt>
-<dd><p>This class serves as a container for a series of EOF pairs, which covers all 365 or 366 DOYs and provides some overall
+<dd><p>This class serves as a container for a series of EOF pairs, which covers all DOYs and provides some overall
 statistical quantities.</p>
-<p>The basic EOF computation <a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator.calc_eofs_from_olr()</span></code></a> will return an object of this
-class as a major result of this package.</p>
+<p>The basic EOF computation function <a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator.calc_eofs_from_olr()</span></code></a> will return an object
+of this class as a major result of this package.</p>
 <p>The individual EOF pairs are represented by <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> objects.</p>
+<p>Note that the user can choose to consider or to ignore leap years in the data. This is probably of interest for the work
+with modeled data, since models might ignore leap years in idealized setups. Here, this means that the number of
+considered DOYs (and therefore the number of EOF pairs and further variables) can be either 365 or 366, respectively.
+The code in this package is designed to treat both cases consistently, however, the users should have their own
+choice in mind when working with the results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>eof_list</strong> – A list with the 365 or 366 <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> objects.</p></li>
-<li><p><strong>no_leap_years</strong> – True if every year has 365 days, False if dataset contains leap years.</p></li>
+<li><p><strong>eof_list</strong> – A list with one <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> object for each DOY.</p></li>
+<li><p><strong>no_leap_years</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> if every year has 365 days, <code class="docutils literal notranslate"><span class="pre">False</span></code> if dataset contains leap years.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys">
 <span class="sig-name descname"><span class="pre">eigenvalue1_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eigenvalue1_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a vector with 365 or 366 elements containing the eigenvalues of EOF1 for each DOY.</p>
+<dd><p>Returns a vector containing the eigenvalues of EOF1 for each DOY.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The eigenvalue vector.</p>
@@ -317,7 +322,7 @@ class as a major result of this package.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys">
 <span class="sig-name descname"><span class="pre">eigenvalue2_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eigenvalue2_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a vector with 365 or 366 elements containing the eigenvalues of EOF2 for each DOY.</p>
+<dd><p>Returns a vector containing the eigenvalues of EOF2 for each DOY.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The eigenvalue vector.</p>
@@ -377,7 +382,7 @@ class as a major result of this package.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys">
 <span class="sig-name descname"><span class="pre">explained_variance1_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.explained_variance1_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a vector with 365 or 366 elements containing the explained variance of EOF1 for each DOY.</p>
+<dd><p>Returns a vector containing the explained variance of EOF1 for each DOY.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The variance vector.</p>
@@ -388,7 +393,7 @@ class as a major result of this package.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys">
 <span class="sig-name descname"><span class="pre">explained_variance2_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.explained_variance2_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a vector with 365 or 366 elements containing the explained variance of EOF2 for each DOY.</p>
+<dd><p>Returns a vector containing the explained variance of EOF2 for each DOY.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The variance vector.</p>
@@ -405,7 +410,7 @@ class as a major result of this package.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.len_eof_list">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">len_eof_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.len_eof_list" title="Permalink to this definition"></a></dt>
-<dd><p>Length of the eof_list, based on no_leap_years</p>
+<dd><p>Length of the <code class="docutils literal notranslate"><span class="pre">eof_list</span></code>, based on <code class="docutils literal notranslate"><span class="pre">no_leap_years</span></code>, i.e. the number of considered DOYs.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -417,13 +422,13 @@ class as a major result of this package.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_leap_years">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">no_leap_years</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_leap_years" title="Permalink to this definition"></a></dt>
-<dd><p>True if every year has 365 days, False if dataset contains leap years.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if every year has 365 days, <code class="docutils literal notranslate"><span class="pre">False</span></code> if dataset contains leap years.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys">
 <span class="sig-name descname"><span class="pre">no_observations_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.no_observations_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a vector with 365 or 366 elements containing for each DOY the number of observations that went into the
+<dd><p>Returns a vector containing -for each DOY- the number of observations that went into the
 computation of the EOFs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -443,7 +448,7 @@ values, use the function <a class="reference internal" href="#mjoindices.empiric
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dirname</strong> – The directory, where the files will be saved into.</p></li>
-<li><p><strong>create_dir</strong> – If True, the directory (and parent directories) will be created, if not existing.</p></li>
+<li><p><strong>create_dir</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the directory (and parent directories) will be created, if not existing.</p></li>
 </ul>
 </dd>
 </dl>
@@ -463,7 +468,7 @@ values, use the function <a class="reference internal" href="#mjoindices.empiric
 <dl class="py method">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys">
 <span class="sig-name descname"><span class="pre">total_explained_variance_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.total_explained_variance_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys" title="Permalink to this definition"></a></dt>
-<dd><p>Returns a vector with 365 or 366 elements containing for each DOY the sum of the explained variance over all EOFs.</p>
+<dd><p>Returns a vector containing -for each DOY- the sum of the explained variance over all EOFs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The variance vector. Should by close to 1 for each DOY if computation was successful.</p>
@@ -500,7 +505,7 @@ inserted hardcodedly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>dirname</strong> – Path to the directory, in which the EOFs for all DOYs are stored.
-This path should contain the sub directories <em>eof1</em> and <em>eof2</em>, in which the 366 files each are located:
+This path should contain the sub directories “eof1” and “eof2”, in which the 366 files each are located:
 One file per day of the year.</p>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -522,9 +527,9 @@ inserted hardcodedly.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dirname</strong> – Path to the directory, in which the EOFs for all DOYs are stored.
-This path should contain the sub directories <em>eof1</em> and <em>eof2</em>, in which the 365 files each are located:
-One file per day of the year.</p></li>
-<li><p><strong>doy</strong> – DOY for which the 2 EOFs are loaded (number between 1 and 365).</p></li>
+This path should contain the sub directories “eof1” and “eof2”, in which the 365 or 366 files each are located:
+One file per DOY.</p></li>
+<li><p><strong>doy</strong> – DOY for which the 2 EOFs are loaded (number between 1 and 366).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -565,7 +570,8 @@ One file per day of the year.</p></li>
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.plot_explained_variance_for_all_doys">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">plot_explained_variance_for_all_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_total_variance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_no_observations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_explained_variance_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_explained_variance_for_all_doys" title="Permalink to this definition"></a></dt>
 <dd><p>Plots the explained variance values for EOF1 and EOF2 for all DOYs.</p>
-<p>Comparable to Kiladis (2014), Fig. 1 (although the values there are to high by a factor of 2).</p>
+<p>Comparable to <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>, Fig. 1 (although the values there are too high by a factor of 2). See
+<a class="reference internal" href="../references.html#refkiladis2020"><span class="std std-ref">Kiladis et al. (2020)</span></a> for the correct original values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>eofs</strong> – The EOF data to plot.</p>

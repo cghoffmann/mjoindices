@@ -33,7 +33,7 @@ def calc_day_of_year(date: typing.Union[np.datetime64, np.ndarray], no_leap_year
     Calculates the days of the year (DOYs) for an individual date or an array of dates.
 
     :param date: The date (or the dates), given as (NumPy array of) :class:`numpy.datetime64` value(s).
-    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. 
+    :param no_leap_years: ``True`` if every year has 365 days, ``False`` if dataset contains leap years.
 
     :return: the DOY (or the DOYs) as (NumPy array of) int value(s).
     """
@@ -68,32 +68,36 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
     """
     Finds the indices in a given array of dates that fit into a particular window of DOYs.
 
-    This task sounds trivial, but is a little bit complicated by the appearance of leap years.
+    This task sounds trivial, but is a little complicated by the appearance of leap years.
 
     :param dates: The array of dates as :class:`numpy.datetime64` values.
     :param center_doy: The center of the wanted window.
     :param window_length: the length of the window to both sides  of the center in days.
         The window spans 2*window_length+1 days in total (for exceptions see below).
-    :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
-        "original" will be as close to the original version of Kiladis (2014) as possible.
-        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also comment below.
-        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
-        Three versions of dealing with leap years are distinguished for constructing the DOY range window.
-        1: Setting the switch to "original" will use a pragmatic implementation in which the start and end of the DOY window
-        is directly computed as distance in units of DOYs. 2: Setting the switch to "strict" will transfer the DOYs to
-        actual calender dates and will calculate the start and end of the window also as calender dates using
-        built-in numpy datetime functions. In the context of the EOF calculation, the setting has major implications
+
+    :param leap_year_treatment: Choose one of the following values:
+
+        * ``"original"`` will be as close to the original version of :ref:`refKiladis2014` as possible. It will use a
+          pragmatic implementation in which the start and end of the DOY window is directly computed as distance in
+          units of DOYs.
+        * ``"strict"`` (not recommended) will treat leap years somewhat more strictly, which might, however,
+          cause the results to deviate from the original.  It will transfer the DOYs to actual calendar dates and
+          will calculate the start and end of the window also as calendar dates using built-in numpy datetime functions.
+        * ``"no_leap_years"`` will act as if there are no leap years in the dataset (365 days consistently),
+          which might be useful for modeled data. It will follow the basic methodology of
+          ``"original"``, but with ``ndoys = 365`` instead of potentially ``ndoys = 366``.
+
+        In the context of the EOF calculation, the setting has major implications
         only for the EOFs calculated for DOY 366 and causes only minor differences for the other DOYs. The results for
-        the setting "original" are closer to the original values, and approximately the same total number of calender days
-        covered by the window is found for each center DOY including 366. However, the length of the window is not
-        guaranteed to be 2*window_length+1, but can also be 2*window_length+2 if the window crosses the ending of a leap
-        year. The setting "strict" is somewhat more stringently implemented. The window length is always 2*window_length+1,
-        however, the number of calender days covered by a window is reduced by approximately a factor of 4 for
-        center_doy=366, since a window is found only during leap years at all, which might cause the EOF to differ quite
+        the setting ``"original"`` are closer to the original values, and approximately the same total number of calendar days
+        covered by the window is found for each center DOY including DOY 366. However, the length of the window is not
+        guaranteed to be ``2 * window_length + 1``, but can also be ``2 * window_length + 2`` if the window crosses the ending of a leap
+        year. The setting ``"strict"`` is somewhat more stringently implemented. The window length is always ``2 * window_length + 1``,
+        however, the number of calendar days covered by a window is reduced by approximately a factor of 4 for
+        ``center_doy=366``, since a window is found only during leap years at all. This might cause the EOF to differ quite
         a lot from those of DOY 365 and DOY 1, which is not wanted. Because of that the recommended setting
-        is the default value "original".
-        3: The setting "no_leap_years" will assume all years contain only 365 days. This will follow the basic methodology of
-        "original", but with ndoys = 365 instead of potentially 366.
+        is the default value ``"original"``, except for modeled data that contains no leap years. In this case the setting
+        ``"no_leap_years"`` is recommended.
 
     :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.
 
@@ -144,11 +148,11 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
 def doy_list(no_leap_years: bool = False) -> np.array:
 
     """
-    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (if leap years).
-    Useful, e.g., as axis for plotting.
+    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (depending on the
+    consideration of leap years). Useful, e.g., as axis for plotting.
 
-    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. 
-    :return: The doy array.
+    :param no_leap_years: ``True`` if every year has 365 days, ``False`` if dataset contains leap years.
+    :return: The DOY array.
     """
     if no_leap_years:
         return np.arange(1, 366, 1) 

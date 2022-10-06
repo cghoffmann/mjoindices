@@ -27,7 +27,6 @@ Kiladis et al. (2014)
 * **Reference:** Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M. Weickmann, and M.J. Ventrice (2014): A Comparison of OLR and Circulation-Based
   Indices for Tracking the MJO. Mon. Wea. Rev., 142, 1697-1715, https://doi.org/10.1175/MWR-D-13-00301.1
 
-
 .. _refWeidman2022:
 
 Weidmann et al. (2022)
@@ -58,3 +57,15 @@ Hoffmann et al. (2020b)
 * Persistent storage of the reference data for unit tests and validation.
 * Can be cited if this data is of particular importance for a publication, e.g., if an OMI advancement is validated in a paper.
 * **Reference:** Hoffmann, C.G., Kiladis, G.N., Gehne, M., Dias, J. and Smith, C. (2020). Reference dataset to check the Python package for the calculation of the OLR-based MJO index (OMI) (1.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.3746563
+
+.. _refKiladis2020:
+
+Kiladis et al. (2020)
+~~~~~~~~~~~~~~~~~~~~~
+
+* A correction to :ref:`refKiladis2014` showing the correct values of the explained variance of the EOFs, which are also reproduced by
+  the present software package. In fact, the mistake in :ref:`refKiladis2014` was discovered during the development of this package in close collaboration
+  with the authors.
+* Should be cited if the right values of explained variance of the EOFs are of particular interest.
+* **Reference:** Kiladis, G. N., Dias, J., Straub, K. H., Wheeler, M. C., Tulich, S. N., Kikuchi, K., Weickmann, K. M., and Ventrice, M. J. (2020).
+  CORRIGENDUM, Monthly Weather Review, 148(2), 875-876, https://doi.org/10.1175/MWR-D-19-0385.1

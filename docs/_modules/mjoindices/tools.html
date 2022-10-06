@@ -105,7 +105,7 @@
 <span class="sd">    Calculates the days of the year (DOYs) for an individual date or an array of dates.</span>
 
 <span class="sd">    :param date: The date (or the dates), given as (NumPy array of) :class:`numpy.datetime64` value(s).</span>
-<span class="sd">    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. </span>
+<span class="sd">    :param no_leap_years: ``True`` if every year has 365 days, ``False`` if dataset contains leap years.</span>
 
 <span class="sd">    :return: the DOY (or the DOYs) as (NumPy array of) int value(s).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -140,32 +140,36 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds the indices in a given array of dates that fit into a particular window of DOYs.</span>
 
-<span class="sd">    This task sounds trivial, but is a little bit complicated by the appearance of leap years.</span>
+<span class="sd">    This task sounds trivial, but is a little complicated by the appearance of leap years.</span>
 
 <span class="sd">    :param dates: The array of dates as :class:`numpy.datetime64` values.</span>
 <span class="sd">    :param center_doy: The center of the wanted window.</span>
 <span class="sd">    :param window_length: the length of the window to both sides  of the center in days.</span>
 <span class="sd">        The window spans 2*window_length+1 days in total (for exceptions see below).</span>
-<span class="sd">    :param leap_year_treatment: Either &quot;original&quot;, &quot;strict&quot; or &quot;no_leap_years&quot;.</span>
-<span class="sd">        &quot;original&quot; will be as close to the original version of Kiladis (2014) as possible.</span>
-<span class="sd">        &quot;strict&quot; (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also comment below.</span>
-<span class="sd">        &quot;no_leap_years&quot; will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.</span>
-<span class="sd">        Three versions of dealing with leap years are distinguished for constructing the DOY range window.</span>
-<span class="sd">        1: Setting the switch to &quot;original&quot; will use a pragmatic implementation in which the start and end of the DOY window</span>
-<span class="sd">        is directly computed as distance in units of DOYs. 2: Setting the switch to &quot;strict&quot; will transfer the DOYs to</span>
-<span class="sd">        actual calender dates and will calculate the start and end of the window also as calender dates using</span>
-<span class="sd">        built-in numpy datetime functions. In the context of the EOF calculation, the setting has major implications</span>
+
+<span class="sd">    :param leap_year_treatment: Choose one of the following values:</span>
+
+<span class="sd">        * ``&quot;original&quot;`` will be as close to the original version of :ref:`refKiladis2014` as possible. It will use a</span>
+<span class="sd">          pragmatic implementation in which the start and end of the DOY window is directly computed as distance in</span>
+<span class="sd">          units of DOYs.</span>
+<span class="sd">        * ``&quot;strict&quot;`` (not recommended) will treat leap years somewhat more strictly, which might, however,</span>
+<span class="sd">          cause the results to deviate from the original.  It will transfer the DOYs to actual calendar dates and</span>
+<span class="sd">          will calculate the start and end of the window also as calendar dates using built-in numpy datetime functions.</span>
+<span class="sd">        * ``&quot;no_leap_years&quot;`` will act as if there are no leap years in the dataset (365 days consistently),</span>
+<span class="sd">          which might be useful for modeled data. It will follow the basic methodology of</span>
+<span class="sd">          ``&quot;original&quot;``, but with ``ndoys = 365`` instead of potentially ``ndoys = 366``.</span>
+
+<span class="sd">        In the context of the EOF calculation, the setting has major implications</span>
 <span class="sd">        only for the EOFs calculated for DOY 366 and causes only minor differences for the other DOYs. The results for</span>
-<span class="sd">        the setting &quot;original&quot; are closer to the original values, and approximately the same total number of calender days</span>
-<span class="sd">        covered by the window is found for each center DOY including 366. However, the length of the window is not</span>
-<span class="sd">        guaranteed to be 2*window_length+1, but can also be 2*window_length+2 if the window crosses the ending of a leap</span>
-<span class="sd">        year. The setting &quot;strict&quot; is somewhat more stringently implemented. The window length is always 2*window_length+1,</span>
-<span class="sd">        however, the number of calender days covered by a window is reduced by approximately a factor of 4 for</span>
-<span class="sd">        center_doy=366, since a window is found only during leap years at all, which might cause the EOF to differ quite</span>
+<span class="sd">        the setting ``&quot;original&quot;`` are closer to the original values, and approximately the same total number of calendar days</span>
+<span class="sd">        covered by the window is found for each center DOY including DOY 366. However, the length of the window is not</span>
+<span class="sd">        guaranteed to be ``2 * window_length + 1``, but can also be ``2 * window_length + 2`` if the window crosses the ending of a leap</span>
+<span class="sd">        year. The setting ``&quot;strict&quot;`` is somewhat more stringently implemented. The window length is always ``2 * window_length + 1``,</span>
+<span class="sd">        however, the number of calendar days covered by a window is reduced by approximately a factor of 4 for</span>
+<span class="sd">        ``center_doy=366``, since a window is found only during leap years at all. This might cause the EOF to differ quite</span>
 <span class="sd">        a lot from those of DOY 365 and DOY 1, which is not wanted. Because of that the recommended setting</span>
-<span class="sd">        is the default value &quot;original&quot;.</span>
-<span class="sd">        3: The setting &quot;no_leap_years&quot; will assume all years contain only 365 days. This will follow the basic methodology of</span>
-<span class="sd">        &quot;original&quot;, but with ndoys = 365 instead of potentially 366.</span>
+<span class="sd">        is the default value ``&quot;original&quot;``, except for modeled data that contains no leap years. In this case the setting</span>
+<span class="sd">        ``&quot;no_leap_years&quot;`` is recommended.</span>
 
 <span class="sd">    :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.</span>
 
@@ -216,11 +220,11 @@
 <div class="viewcode-block" id="doy_list"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.doy_list">[docs]</a><span class="k">def</span> <span class="nf">doy_list</span><span class="p">(</span><span class="n">no_leap_years</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (if leap years).</span>
-<span class="sd">    Useful, e.g., as axis for plotting.</span>
+<span class="sd">    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (depending on the</span>
+<span class="sd">    consideration of leap years). Useful, e.g., as axis for plotting.</span>
 
-<span class="sd">    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. </span>
-<span class="sd">    :return: The doy array.</span>
+<span class="sd">    :param no_leap_years: ``True`` if every year has 365 days, ``False`` if dataset contains leap years.</span>
+<span class="sd">    :return: The DOY array.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">no_leap_years</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">366</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> 

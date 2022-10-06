@@ -94,15 +94,13 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.</span>
 
-<span class="sd">Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,</span>
+<span class="sd">Although implemented generically, it is not intended to use this module stand-alone outside the OMI context,</span>
 <span class="sd">since it is only extensively tested for the specific OMI filtering conditions.</span>
 
 <span class="sd">Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.</span>
 <span class="sd">Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.</span>
 
-<span class="sd">The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.</span>
-<span class="sd">Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.</span>
-<span class="sd">Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1</span>
+<span class="sd">The complete algorithm is described by :ref:`refKiladis2014`</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -112,15 +110,14 @@
 
 <div class="viewcode-block" id="filter_olr_for_mjo_pc_calculation"><a class="viewcode-back" href="../../../api/wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_pc_calculation">[docs]</a><span class="k">def</span> <span class="nf">filter_olr_for_mjo_pc_calculation</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">do_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Filters OLR data temporally.</span>
+<span class="sd">    Filters OLR data temporally with a bandwidth particularly selected for the PC calculation.</span>
 
 <span class="sd">    The filter algorithm is the same as for the combined temporal and longitudinal filtering,</span>
 <span class="sd">    but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is</span>
-<span class="sd">    applied.</span>
-<span class="sd">    The temporal filtering constants are chosen to meet the values in the description by Kiladis (2014).</span>
+<span class="sd">    applied. The temporal filtering constants are chosen to meet the values in the description by :ref:`refKiladis2014`.</span>
 
 <span class="sd">    :param olrdata: The original OLR data.</span>
-<span class="sd">    :param do_plot: If True, diagnosis plots will be generated.</span>
+<span class="sd">    :param do_plot: If ``True``, diagnosis plots will be generated.</span>
 
 <span class="sd">    :return: The filtered OLR.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -141,7 +138,7 @@
 <span class="sd">    :param olrdata: The original OLR data</span>
 <span class="sd">    :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.</span>
 <span class="sd">    :param period_max: Temporal filter constant: Only lower periods (in days) remain in the data.</span>
-<span class="sd">    :param do_plot: If True, diagnosis plots will be generated.</span>
+<span class="sd">    :param do_plot: If ``True``, diagnosis plots will be generated.</span>
 
 <span class="sd">    :return: The filtered OLR.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -150,12 +147,12 @@
 
 <div class="viewcode-block" id="filter_olr_for_mjo_eof_calculation"><a class="viewcode-back" href="../../../api/wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_eof_calculation">[docs]</a><span class="k">def</span> <span class="nf">filter_olr_for_mjo_eof_calculation</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">do_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Filters OLR data temporally and longitudinally.</span>
+<span class="sd">    Filters OLR data temporally and longitudinally with a bandwidth particularly selected for the EOF calculation.</span>
 
 <span class="sd">    The filter setup meets the description of Kiladis (2014) for the EOF calculation.</span>
 
 <span class="sd">    :param olrdata: The original OLR data</span>
-<span class="sd">    :param do_plot: If True, diagnosis plots will be generated.</span>
+<span class="sd">    :param do_plot: If ``True``, diagnosis plots will be generated.</span>
 
 <span class="sd">    :return: The filtered OLR data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -179,7 +176,7 @@
 <span class="sd">    :param period_max: Temporal filter constant: Only lower periods (in days) remain in the data.</span>
 <span class="sd">    :param wn_min: Longitudinal filter constant: Only greater wave numbers (in cycles per globe) remain in the data.</span>
 <span class="sd">    :param wn_max:  Longitudinal filter constant: Only lower wave numbers (in cycles per globe) remain in the data.</span>
-<span class="sd">    :param do_plot: If True, diagnosis plots will be generated.</span>
+<span class="sd">    :param do_plot: If ``True``, diagnosis plots will be generated.</span>
 
 <span class="sd">    :return: The filtered OLR.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -242,7 +239,7 @@
 <span class="sd">    This class contains the major Wheeler-Kiladis-Filtering functionality.</span>
 <span class="sd">    The functionality is encapsulated in a class because values of intermediate processing steps</span>
 <span class="sd">    are saved as class members for debugging purposes.</span>
-<span class="sd">    To run the filtering, only the method :func:`perform_2dim_spectral_filtering` has to be executed.</span>
+<span class="sd">    To run the filtering, only the method :py:func:`perform_2dim_spectral_filtering` has to be executed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DebugInputOLR</span> <span class="o">=</span> <span class="p">[]</span>
@@ -288,8 +285,8 @@
 <span class="sd">        :param period_max: Maximal period (in days) that remains in the dataset.</span>
 <span class="sd">        :param wn_min: Minimal wavenumber (in cycles per globe) that remains in the dataset.</span>
 <span class="sd">        :param wn_max: Maximal wavenumber (in cycles per globe) that remains in the dataset.</span>
-<span class="sd">        :param do_plot: If True, diagnosis plots will be generated.</span>
-<span class="sd">        :param save_debug: If true, some variables will be filled with values of intermediate processing steps</span>
+<span class="sd">        :param do_plot: If ``True``, diagnosis plots will be generated.</span>
+<span class="sd">        :param save_debug: If ``true``, some variables will be filled with values of intermediate processing steps</span>
 <span class="sd">            for debugging purposes.</span>
 
 <span class="sd">        :return: The filtered data.</span>

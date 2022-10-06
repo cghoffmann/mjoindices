@@ -83,7 +83,7 @@
 <span id="module-mjoindices-omi-quick-temporal-filter"></span><h1>Module mjoindices.omi.quick_temporal_filter<a class="headerlink" href="#module-mjoindices.omi.quick_temporal_filter" title="Permalink to this heading"></a></h1>
 <p>This module provides a simple 1-dim filtering algorithm, which can be used during the PC calculation instead of the
 full 2-dim Wheeler-Kiladis-Filter.</p>
-<p>It is not intended to use this module stand-alone outside of the OMI context, since it is only extensively tested
+<p>It is not intended to use this module stand-alone outside the OMI context, since it is only extensively tested
 for the specific OMI filtering conditions.</p>
 <p>Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
 Instead, they might probably want to use the module <a class="reference internal" href="omi_calculator.html#module-mjoindices.omi.omi_calculator" title="mjoindices.omi.omi_calculator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator</span></code></a> directly.</p>
@@ -91,7 +91,7 @@ Instead, they might probably want to use the module <a class="reference internal
 <dt class="sig sig-object py" id="mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.omi.quick_temporal_filter.</span></span><span class="sig-name descname"><span class="pre">filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">olrdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/quick_temporal_filter.html#filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing" title="Permalink to this definition"></a></dt>
 <dd><p>Filters OLR data temporally using a 1d Fourier transform filter.</p>
-<p>The temporal filtering constants are chosen to meet the values in the description by Kiladis (2014).</p>
+<p>The temporal filtering constants are chosen to meet the values in the description by <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>olrdata</strong> – The original OLR data</p>

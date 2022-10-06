@@ -82,7 +82,7 @@
   <section id="module-mjoindices.evaluation_tools">
 <span id="module-mjoindices-evaluation-tools"></span><h1>Module mjoindices.evaluation_tools<a class="headerlink" href="#module-mjoindices.evaluation_tools" title="Permalink to this heading"></a></h1>
 <p>This module provides a bunch of methods that help to evaluate the agreement of the OMI calculation by this package
-and the original calculation by Kiladis (2014).
+and the original calculation by <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>.
 It is probably not of major relevance for the user of this package.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys">
@@ -93,10 +93,10 @@ It is probably not of major relevance for the user of this package.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>recalc_eof</strong> – The EOFs to validate.</p></li>
 <li><p><strong>orig_eof</strong> – The reference EOFs.</p></li>
-<li><p><strong>exclude_doy366</strong> – If True, DOY 366 will be included in the calculation (sometimes worse agreement depending on
+<li><p><strong>exclude_doy366</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, DOY 366 will be included in the calculation (sometimes worse agreement depending on
 the leap year treatment mode).</p></li>
-<li><p><strong>percentage</strong> – If True: calculation results will be in percent of the mean of the absolute reference values.</p></li>
-<li><p><strong>do_print</strong> – If True, some characteristic values will we printed to the console.</p></li>
+<li><p><strong>percentage</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>: calculation results will be in percent of the mean of the absolute reference values.</p></li>
+<li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some characteristic values will we printed to the console.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -116,8 +116,8 @@ for 68%, 95%, and 99%.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_var</strong> – The reference variances.</p></li>
 <li><p><strong>calc_var</strong> – The variances to compare.</p></li>
-<li><p><strong>do_print</strong> – If True, some statistical values will also be shown in the console.</p></li>
-<li><p><strong>exclude_doy366</strong> – If True, the data for DOY 366 will not be considered in the statistics.</p></li>
+<li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistical values will also be shown in the console.</p></li>
+<li><p><strong>exclude_doy366</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data for DOY 366 will not be considered in the statistics.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -139,8 +139,8 @@ standard deviation of the differences, and percentiles of the absolute differenc
 <li><p><strong>data</strong> – The time series vector to validate.</p></li>
 <li><p><strong>time</strong> – The time grid of the time series to validate. It will be checked if this is similar to the time grid
 of the reference.</p></li>
-<li><p><strong>exclude_doy366</strong> – If True, the data for DOY 366 will not be considered in the statistics.</p></li>
-<li><p><strong>do_print</strong> – If True, some statistical values will also be shown in the console.</p></li>
+<li><p><strong>exclude_doy366</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data for DOY 366 will not be considered in the statistics.</p></li>
+<li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistical values will also be shown in the console.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -159,8 +159,8 @@ standard deviation of the differences, and percentiles of the absolute differenc
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_vec</strong> – The reference vector.</p></li>
 <li><p><strong>vec</strong> – The vector to validate.</p></li>
-<li><p><strong>percentage</strong> – If true: calculation results will be in percent of the mean of the absolute reference values.</p></li>
-<li><p><strong>do_print</strong> – If true, some statistical values will we printed to the console.</p></li>
+<li><p><strong>percentage</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>: calculation results will be in percent of the mean of the absolute reference values.</p></li>
+<li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistical values will we printed to the console.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -179,7 +179,7 @@ deviation of the differences, and percentiles of the absolute differences for 68
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_vec</strong> – The reference vector.</p></li>
 <li><p><strong>vec</strong> – The vector to validate.</p></li>
-<li><p><strong>percentage</strong> – If true: calculation results will be in percent of the mean of the absolute reference values.</p></li>
+<li><p><strong>percentage</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>: calculation results will be in percent of the mean of the absolute reference values.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -212,8 +212,8 @@ deviation of the differences, and percentiles of the absolute differences for 68
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>calc_pcs</strong> – The recalculated PC time series.</p></li>
 <li><p><strong>orig_pcs</strong> – The reference PC time series.</p></li>
-<li><p><strong>start_date</strong> – Start of the period to plot. If None, the whole period will be plotted.</p></li>
-<li><p><strong>end_date</strong> – End of the period to plot. If None, the whole period will be plotted.</p></li>
+<li><p><strong>start_date</strong> – Start of the period to plot. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the whole period will be plotted.</p></li>
+<li><p><strong>end_date</strong> – End of the period to plot. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the whole period will be plotted.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -233,9 +233,9 @@ EOF2.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>recalc_eof</strong> – The EOFs to compare.</p></li>
 <li><p><strong>orig_eof</strong> – The reference eofs.</p></li>
-<li><p><strong>exclude_doy366</strong> – If True, DOY 366 will be included in the plot (sometimes worse agreement depending on the
+<li><p><strong>exclude_doy366</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, DOY 366 will be included in the plot (sometimes worse agreement depending on the
 leap year treatment mode).</p></li>
-<li><p><strong>do_print</strong> – If True, some characteristic values will we printed to the console.</p></li>
+<li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some characteristic values will we printed to the console.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -254,8 +254,8 @@ leap year treatment mode).</p></li>
 <li><p><strong>ref_var</strong> – The reference variances.</p></li>
 <li><p><strong>calc_var</strong> – The variances to validate.</p></li>
 <li><p><strong>title</strong> – A title for the figure.</p></li>
-<li><p><strong>do_print</strong> – If True, some statistical values will also be shown in the console.</p></li>
-<li><p><strong>exclude_doy366</strong> – If True, the data for DOY 366 will not be considered in the statistics.</p></li>
+<li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistical values will also be shown in the console.</p></li>
+<li><p><strong>exclude_doy366</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data for DOY 366 will not be considered in the statistics.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -274,10 +274,10 @@ leap year treatment mode).</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>recalc_eof</strong> – The EOFs to validate.</p></li>
 <li><p><strong>orig_eof</strong> – The reference EOFs.</p></li>
-<li><p><strong>exclude_doy366</strong> – If False, DOY 366 will be included in the plot (sometimes worse correlation depending on the
+<li><p><strong>exclude_doy366</strong> – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, DOY 366 will be included in the plot (sometimes worse correlation depending on the
 leap year treatment mode).</p></li>
-<li><p><strong>do_print</strong> – If True, some characteristic values will we printed to the console.</p></li>
-<li><p><strong>full_value_range</strong> – If True, the ordinate spans the range from 0 to 1 instead of the used value range only.</p></li>
+<li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some characteristic values will we printed to the console.</p></li>
+<li><p><strong>full_value_range</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the ordinate spans the range from 0 to 1 instead of the used value range only.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -318,7 +318,7 @@ differences.</p>
 <li><p><strong>data</strong> – The time series vector to validate.</p></li>
 <li><p><strong>time</strong> – The time grid of the data to validate. It will be checked if this is similar to the time grid of the reference.</p></li>
 <li><p><strong>title</strong> – A title for the plot. Use this to explain the quantity which is compared evaluated with the plot.</p></li>
-<li><p><strong>do_print</strong> – If True, some statistical values will also be shown in the console.</p></li>
+<li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistical values will also be shown in the console.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -339,7 +339,7 @@ the differences.</p>
 <li><p><strong>ref_data</strong> – The reference vector.</p></li>
 <li><p><strong>data</strong> – The vector to validate.</p></li>
 <li><p><strong>title</strong> – A title for the plot. Use this to explain the quantity which is evaluated with the plot.</p></li>
-<li><p><strong>do_print</strong> – If True, some statistics values will also be shown in the console.</p></li>
+<li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistics values will also be shown in the console.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

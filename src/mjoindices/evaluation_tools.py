@@ -21,7 +21,7 @@
 
 """
 This module provides a bunch of methods that help to evaluate the agreement of the OMI calculation by this package
-and the original calculation by Kiladis (2014).
+and the original calculation by :ref:`refKiladis2014`.
 It is probably not of major relevance for the user of this package.
 """
 
@@ -47,7 +47,7 @@ def compute_vector_difference_quantity(ref_vec: np.ndarray, vec: np.ndarray, per
 
     :param ref_vec: The reference vector.
     :param vec: The vector to validate.
-    :param percentage: If true: calculation results will be in percent of the mean of the absolute reference values.
+    :param percentage: If ``True``: calculation results will be in percent of the mean of the absolute reference values.
 
     :return: A vector containing the difference.
     """
@@ -63,8 +63,8 @@ def calc_vector_agreement(ref_vec: np.ndarray, vec: np.ndarray, percentage: bool
 
     :param ref_vec: The reference vector.
     :param vec: The vector to validate.
-    :param percentage: If true: calculation results will be in percent of the mean of the absolute reference values.
-    :param do_print: If true, some statistical values will we printed to the console.
+    :param percentage: If ``True``: calculation results will be in percent of the mean of the absolute reference values.
+    :param do_print: If ``True``, some statistical values will we printed to the console.
 
     :return: A tuple containing values for the following quantities: correlation, mean of the differences, standard
         deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.
@@ -102,10 +102,10 @@ def calc_comparison_stats_for_eofs_all_doys(eofs_ref: eof.EOFDataForAllDOYs,
 
     :param recalc_eof: The EOFs to validate.
     :param orig_eof: The reference EOFs.
-    :param exclude_doy366: If True, DOY 366 will be included in the calculation (sometimes worse agreement depending on
+    :param exclude_doy366: If ``True``, DOY 366 will be included in the calculation (sometimes worse agreement depending on
         the leap year treatment mode).
-    :param percentage: If True: calculation results will be in percent of the mean of the absolute reference values.
-    :param do_print: If True, some characteristic values will we printed to the console.
+    :param percentage: If ``True``: calculation results will be in percent of the mean of the absolute reference values.
+    :param do_print: If ``True``, some characteristic values will we printed to the console.
 
     :return: A tuple containing arrays with 366 or 365 elements each for the following quantities: correlation, mean
         of the differences, standard deviation of the differences, and percentiles of the absolute differences
@@ -163,9 +163,9 @@ def plot_comparison_stats_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
 
     :param recalc_eof: The EOFs to compare.
     :param orig_eof: The reference eofs.
-    :param exclude_doy366: If True, DOY 366 will be included in the plot (sometimes worse agreement depending on the
+    :param exclude_doy366: If ``True``, DOY 366 will be included in the plot (sometimes worse agreement depending on the
         leap year treatment mode).
-    :param do_print: If True, some characteristic values will we printed to the console.
+    :param do_print: If ``True``, some characteristic values will we printed to the console.
 
     :return: The figure handle
     """
@@ -237,10 +237,10 @@ def plot_correlation_for_eofs_all_doys(recalc_eof: eof.EOFDataForAllDOYs,
 
     :param recalc_eof: The EOFs to validate.
     :param orig_eof: The reference EOFs.
-    :param exclude_doy366: If False, DOY 366 will be included in the plot (sometimes worse correlation depending on the
+    :param exclude_doy366: If ``False``, DOY 366 will be included in the plot (sometimes worse correlation depending on the
         leap year treatment mode).
-    :param do_print: If True, some characteristic values will we printed to the console.
-    :param full_value_range: If True, the ordinate spans the range from 0 to 1 instead of the used value range only.
+    :param do_print: If ``True``, some characteristic values will we printed to the console.
+    :param full_value_range: If ``True``, the ordinate spans the range from 0 to 1 instead of the used value range only.
     :return: A handle to the figure.
     """
 
@@ -345,8 +345,8 @@ def calc_comparison_stats_for_explained_variance(ref_var: np.ndarray,
 
     :param ref_var: The reference variances.
     :param calc_var: The variances to compare.
-    :param do_print: If True, some statistical values will also be shown in the console.
-    :param exclude_doy366: If True, the data for DOY 366 will not be considered in the statistics.
+    :param do_print: If ``True``, some statistical values will also be shown in the console.
+    :param exclude_doy366: If ``True``, the data for DOY 366 will not be considered in the statistics.
 
     :return: A tuple containing values for the following quantities: correlation, mean of the differences,
         standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.
@@ -374,8 +374,8 @@ def plot_comparison_stats_for_explained_variance(ref_var: np.ndarray,
     :param ref_var: The reference variances.
     :param calc_var: The variances to validate.
     :param title: A title for the figure.
-    :param do_print: If True, some statistical values will also be shown in the console.
-    :param exclude_doy366: If True, the data for DOY 366 will not be considered in the statistics.
+    :param do_print: If ``True``, some statistical values will also be shown in the console.
+    :param exclude_doy366: If ``True``, the data for DOY 366 will not be considered in the statistics.
 
     :return: The figure handle
     """
@@ -404,8 +404,8 @@ def calc_timeseries_agreement(ref_data: np.ndarray, ref_time: np.ndarray, data: 
     :param data: The time series vector to validate.
     :param time: The time grid of the time series to validate. It will be checked if this is similar to the time grid
         of the reference.
-    :param exclude_doy366: If True, the data for DOY 366 will not be considered in the statistics.
-    :param do_print: If True, some statistical values will also be shown in the console.
+    :param exclude_doy366: If ``True``, the data for DOY 366 will not be considered in the statistics.
+    :param do_print: If ``True``, some statistical values will also be shown in the console.
 
     :return: A tuple containing values for the following quantities: correlation, mean of the differences,
         standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.
@@ -452,7 +452,7 @@ def plot_timeseries_agreement(ref_data: np.ndarray,
     :param data: The time series vector to validate.
     :param time: The time grid of the data to validate. It will be checked if this is similar to the time grid of the reference.
     :param title: A title for the plot. Use this to explain the quantity which is compared evaluated with the plot.
-    :param do_print: If True, some statistical values will also be shown in the console.
+    :param do_print: If ``True``, some statistical values will also be shown in the console.
 
     :return: The figure handle.
     """
@@ -539,7 +539,7 @@ def plot_vector_agreement(ref_data: np.ndarray, data: np.ndarray, title: str = N
     :param ref_data: The reference vector.
     :param data: The vector to validate.
     :param title: A title for the plot. Use this to explain the quantity which is evaluated with the plot.
-    :param do_print: If True, some statistics values will also be shown in the console.
+    :param do_print: If ``True``, some statistics values will also be shown in the console.
 
     :return: The figure handle.
     """
@@ -600,8 +600,8 @@ def plot_comparison_orig_calc_pcs(calc_pcs: pc.PCData,
 
     :param calc_pcs: The recalculated PC time series.
     :param orig_pcs: The reference PC time series.
-    :param start_date: Start of the period to plot. If None, the whole period will be plotted.
-    :param end_date: End of the period to plot. If None, the whole period will be plotted.
+    :param start_date: Start of the period to plot. If ``None``, the whole period will be plotted.
+    :param end_date: End of the period to plot. If ``None``, the whole period will be plotted.
 
     :return: The figure handle.
     """
