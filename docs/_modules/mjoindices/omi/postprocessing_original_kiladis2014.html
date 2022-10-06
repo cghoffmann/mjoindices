@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mjoindices.omi.postprocessing_original_kiladis2014 &mdash; mjoindices  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> mjoindices
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html">API documentation (for running calculations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References and citation hints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mjoindices</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>mjoindices.omi.postprocessing_original_kiladis2014</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mjoindices.omi.postprocessing_original_kiladis2014</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># Copyright (C) 2022 Christoph G. Hoffmann. All rights reserved.</span>
+
+<span class="c1"># This file is part of mjoindices</span>
+
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+
+<span class="c1"># Contact: christoph.hoffmann@uni-greifswald.de</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Contains the post-processing routines for the EOFs as described in the original OMI paper by :ref:`refKiladis2014`.</span>
+
+<span class="sd">.. seealso:: :py:mod:`mjoindices.omi.postprocessing_rotation_approach`</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">scipy.interpolate</span>
+
+<span class="kn">import</span> <span class="nn">mjoindices.empirical_orthogonal_functions</span> <span class="k">as</span> <span class="nn">eof</span>
+<span class="kn">import</span> <span class="nn">mjoindices.olr_handling</span> <span class="k">as</span> <span class="nn">olr</span>
+<span class="kn">import</span> <span class="nn">mjoindices.principal_components</span> <span class="k">as</span> <span class="nn">pc</span>
+<span class="kn">import</span> <span class="nn">mjoindices.omi.wheeler_kiladis_mjo_filter</span> <span class="k">as</span> <span class="nn">wkfilter</span>
+<span class="kn">import</span> <span class="nn">mjoindices.omi.quick_temporal_filter</span> <span class="k">as</span> <span class="nn">qfilter</span>
+<span class="kn">import</span> <span class="nn">mjoindices.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+
+<div class="viewcode-block" id="post_process_eofs_original_kiladis_approach"><a class="viewcode-back" href="../../../api/postprocessing_original_kiladis2014.html#mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach">[docs]</a><span class="k">def</span> <span class="nf">post_process_eofs_original_kiladis_approach</span><span class="p">(</span><span class="n">eofdata</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span> <span class="n">sign_doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                      <span class="n">interpolate_eofs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">interpolation_start_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">293</span><span class="p">,</span>
+                      <span class="n">interpolation_end_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">316</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Executes the complete post-processing of a series of EOF pairs for all DOYs according to the original approach</span>
+<span class="sd">    by :ref:`refKiladis2014`. This includes an alignment of EOF signs and an interpolation of the EOF functions in a given DOY</span>
+<span class="sd">    window.</span>
+
+<span class="sd">    See documentation of the functions :py:func:`correct_spontaneous_sign_changes_in_eof_series` and</span>
+<span class="sd">    :py:func:`interpolate_eofs_between_doys` for further information.</span>
+
+<span class="sd">    Note that it is recommended to use the function :py:func:`~mjoindices.omi.omi_calculator.calc_eofs_from_olr`</span>
+<span class="sd">    to cover the complete algorithm.</span>
+
+<span class="sd">    :param eofdata: The EOF series, which should be post-processed.</span>
+<span class="sd">    :param sign_doy1reference: See :py:func:`correct_spontaneous_sign_changes_in_eof_series`.</span>
+<span class="sd">    :param interpolate_eofs: If ``True``, the EOF sub-series between the given DOYs will be interpolated.</span>
+<span class="sd">    :param interpolation_start_doy: See  :py:func:`interpolate_eofs_between_doys`.</span>
+<span class="sd">    :param interpolation_end_doy: See :py:func:`interpolate_eofs_between_doys`.</span>
+
+<span class="sd">    :return: The postprocessed series of EOFs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pp_eofs</span> <span class="o">=</span> <span class="n">correct_spontaneous_sign_changes_in_eof_series</span><span class="p">(</span><span class="n">eofdata</span><span class="p">,</span> <span class="n">doy1reference</span><span class="o">=</span><span class="n">sign_doy1reference</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">interpolate_eofs</span><span class="p">:</span>
+        <span class="n">pp_eofs</span> <span class="o">=</span> <span class="n">interpolate_eofs_between_doys</span><span class="p">(</span><span class="n">pp_eofs</span><span class="p">,</span> <span class="n">start_doy</span><span class="o">=</span><span class="n">interpolation_start_doy</span><span class="p">,</span>
+                                                <span class="n">end_doy</span><span class="o">=</span><span class="n">interpolation_end_doy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pp_eofs</span></div>
+
+<div class="viewcode-block" id="correct_spontaneous_sign_changes_in_eof_series"><a class="viewcode-back" href="../../../api/postprocessing_original_kiladis2014.html#mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series">[docs]</a><span class="k">def</span> <span class="nf">correct_spontaneous_sign_changes_in_eof_series</span><span class="p">(</span><span class="n">eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span>
+                                                   <span class="n">doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.</span>
+
+<span class="sd">    Note that the signs of the EOFs are not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,</span>
+<span class="sd">    which can be improved using this function. As long as this step is performed before computing the PCs, it will not</span>
+<span class="sd">    change the overall result.</span>
+
+<span class="sd">    Generally, the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous</span>
+<span class="sd">    DOY. The EOFs for DOY 1 are by default aligned with the original calculation by :ref:`refKiladis2014`, resulting in</span>
+<span class="sd">    an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off, so</span>
+<span class="sd">    that only the EOFs for the DOYs beginning with DOY 2 are aligned according to the sign of the EOFS for DOY 1.</span>
+
+<span class="sd">    :param eofs: The EOF series for which the signs should be aligned.</span>
+<span class="sd">    :param doy1reference: If ``True``, the EOFs of DOY 1 are aligned w.r.t to the original :ref:`refKiladis2014` calculation.</span>
+
+<span class="sd">    :return: The EOFs with aligned signs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">switched_eofs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">doy1reference</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">reference_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()))))</span> <span class="o">/</span> <span class="s2">&quot;sign_reference&quot;</span>
+        <span class="n">reference_eofs</span> <span class="o">=</span> <span class="n">eof</span><span class="o">.</span><span class="n">load_original_eofs_for_doy</span><span class="p">(</span><span class="n">reference_path</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">size</span> \
+                <span class="ow">or</span> <span class="ow">not</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">long</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="o">.</span><span class="n">size</span> \
+                <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">reference_eofs</span><span class="o">.</span><span class="n">lat</span> <span class="o">==</span> <span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span> \
+                <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">reference_eofs</span><span class="o">.</span><span class="n">long</span> <span class="o">==</span> <span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;References for the sign of the EOFs for DOY1 have to be interpolated to spatial grid of the&quot;</span>
+                          <span class="s2">&quot; target EOFs. Treat results with caution.&quot;</span><span class="p">)</span>
+            <span class="n">f1</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">interp2d</span><span class="p">(</span><span class="n">reference_eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">eof1map</span><span class="p">,</span>
+                                            <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+            <span class="n">eof1map_interpol</span> <span class="o">=</span> <span class="n">f1</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span>
+            <span class="n">f2</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">interpolate</span><span class="o">.</span><span class="n">interp2d</span><span class="p">(</span><span class="n">reference_eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">reference_eofs</span><span class="o">.</span><span class="n">eof2map</span><span class="p">,</span>
+                                            <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+            <span class="n">eof2map_interpol</span> <span class="o">=</span> <span class="n">f2</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">)</span>
+            <span class="n">reference_eofs</span> <span class="o">=</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">eof1map_interpol</span><span class="p">,</span> <span class="n">eof2map_interpol</span><span class="p">)</span>
+        <span class="n">corrected_doy1</span> <span class="o">=</span> <span class="n">_correct_spontaneous_sign_change_of_individual_eof</span><span class="p">(</span><span class="n">reference_eofs</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">corrected_doy1</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">switched_eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corrected_doy1</span><span class="p">)</span>
+    <span class="n">previous_eof</span> <span class="o">=</span> <span class="n">corrected_doy1</span>
+    <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">corrected_eof</span> <span class="o">=</span> <span class="n">_correct_spontaneous_sign_change_of_individual_eof</span><span class="p">(</span><span class="n">previous_eof</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">))</span>
+        <span class="n">switched_eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corrected_eof</span><span class="p">)</span>
+        <span class="n">previous_eof</span> <span class="o">=</span> <span class="n">corrected_eof</span>
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">switched_eofs</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_correct_spontaneous_sign_change_of_individual_eof</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Switches the sign of a particular pair of EOFs (for a particular DOY) if necessary, so that is aligned with the</span>
+<span class="sd">    reference.</span>
+
+<span class="sd">    Note that the signs of the EOFs are not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,</span>
+<span class="sd">    which can be improved using this function. As long as this step is performed before computing the PCs, it will not</span>
+<span class="sd">    change the overall result.</span>
+
+<span class="sd">    :param reference: The reference-EOFs. This is usually the EOF pair of the previous DOY.</span>
+<span class="sd">    :param target: The EOFs of which the signs should be switched</span>
+
+<span class="sd">    :return: The target EOFs with aligned signs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span> <span class="o">+</span> <span class="n">reference</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">))</span>
+            <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                <span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span> <span class="o">-</span> <span class="n">reference</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">))):</span>  <span class="c1"># if abs(sum) is lower than abs(diff), than the signs are different...</span>
+        <span class="n">eof1_switched</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">eof1_switched</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">eof2vector</span> <span class="o">+</span> <span class="n">reference</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">))</span>
+            <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                <span class="n">target</span><span class="o">.</span><span class="n">eof2vector</span> <span class="o">-</span> <span class="n">reference</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">))):</span>  <span class="c1"># if abs(sum) is lower than abs(diff), than the signs are different...</span>
+        <span class="n">eof2_switched</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">target</span><span class="o">.</span><span class="n">eof2vector</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">eof2_switched</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">eof2vector</span>
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span>
+                       <span class="n">target</span><span class="o">.</span><span class="n">long</span><span class="p">,</span>
+                       <span class="n">eof1_switched</span><span class="p">,</span>
+                       <span class="n">eof2_switched</span><span class="p">,</span>
+                       <span class="n">eigenvalues</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">eigenvalues</span><span class="p">,</span>
+                       <span class="n">explained_variances</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">explained_variances</span><span class="p">,</span>
+                       <span class="n">no_observations</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">no_observations</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="interpolate_eofs_between_doys"><a class="viewcode-back" href="../../../api/postprocessing_original_kiladis2014.html#mjoindices.omi.postprocessing_original_kiladis2014.interpolate_eofs_between_doys">[docs]</a><span class="k">def</span> <span class="nf">interpolate_eofs_between_doys</span><span class="p">(</span><span class="n">eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span> <span class="n">start_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">293</span><span class="p">,</span>
+                                  <span class="n">end_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">316</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.</span>
+
+<span class="sd">    This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,</span>
+<span class="sd">    the EOFs have also been replaced by an interpolation according to :ref:`refKiladis2014`. However, the period stated in</span>
+<span class="sd">    :ref:`refKiladis2014` from 1 November to 8 November is too short. The authors have confirmed that the right</span>
+<span class="sd">    interpolation period is from DOY 294 to DOY 315, which is used here as default value.</span>
+
+<span class="sd">    ATTENTION: The corresponding statistical values (e.g., the explained variances) are not changed by this routine.</span>
+<span class="sd">    So these values further on represent the original results of the PCA also for the interpolated EOFs.</span>
+
+<span class="sd">    :param eofs: The complete EOF series, in which the interpolation takes place.</span>
+<span class="sd">    :param start_doy: The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first</span>
+<span class="sd">        element, which will be replaced by the interpolation.</span>
+<span class="sd">    :param end_doy:  The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last</span>
+<span class="sd">        element, which will be replaced by the interpolation.</span>
+
+<span class="sd">    :return: The complete EOF series with the interpolated values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span>
+    <span class="n">start_idx</span> <span class="o">=</span> <span class="n">start_doy</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">end_idx</span> <span class="o">=</span> <span class="n">end_doy</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">eof_len</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">eofs</span><span class="o">.</span><span class="n">long</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">eofs1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">eof_len</span><span class="p">))</span>
+    <span class="n">eofs2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">eof_len</span><span class="p">))</span>
+    <span class="c1"># Todo: Maybe this could be solved more efficiently</span>
+    <span class="c1"># by using internal numpy functions for multidimenasional operations</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">doy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">doys</span><span class="p">):</span>
+        <span class="n">eofs1</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eof1vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+        <span class="n">eofs2</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eof2vector_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">eof_len</span><span class="p">):</span>
+        <span class="n">eofs1</span><span class="p">[</span><span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">end_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">doys</span><span class="p">[</span><span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">end_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                                                        <span class="p">[</span><span class="n">doys</span><span class="p">[</span><span class="n">start_idx</span><span class="p">],</span> <span class="n">doys</span><span class="p">[</span><span class="n">end_idx</span><span class="p">]],</span>
+                                                        <span class="p">[</span><span class="n">eofs1</span><span class="p">[</span><span class="n">start_idx</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">eofs1</span><span class="p">[</span><span class="n">end_idx</span><span class="p">,</span> <span class="n">i</span><span class="p">]])</span>
+        <span class="n">eofs2</span><span class="p">[</span><span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">end_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">doys</span><span class="p">[</span><span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">end_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                                                        <span class="p">[</span><span class="n">doys</span><span class="p">[</span><span class="n">start_idx</span><span class="p">],</span> <span class="n">doys</span><span class="p">[</span><span class="n">end_idx</span><span class="p">]],</span>
+                                                        <span class="p">[</span><span class="n">eofs2</span><span class="p">[</span><span class="n">start_idx</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">eofs2</span><span class="p">[</span><span class="n">end_idx</span><span class="p">,</span> <span class="n">i</span><span class="p">]])</span>
+    <span class="n">interpolated_eofs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">doy</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">doys</span><span class="p">):</span>
+        <span class="n">orig_eof</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+        <span class="n">interpolated_eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">orig_eof</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eofs1</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]),</span>
+                                             <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eofs2</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]),</span>
+                                             <span class="n">explained_variances</span><span class="o">=</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">explained_variances</span><span class="p">,</span>
+                                             <span class="n">eigenvalues</span><span class="o">=</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">eigenvalues</span><span class="p">,</span> <span class="n">no_observations</span><span class="o">=</span><span class="n">orig_eof</span><span class="o">.</span><span class="n">no_observations</span><span class="p">)</span>
+                                 <span class="p">)</span>
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">interpolated_eofs</span><span class="p">,</span> <span class="n">no_leap_years</span><span class="o">=</span><span class="n">eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span></div>
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Christoph G. Hoffmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-XXXXXXX-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>

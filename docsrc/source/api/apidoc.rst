@@ -6,6 +6,8 @@ API documentation (for running calculations)
 
    omi_calculator
    olr_handling
+   postprocessing_original_kiladis2014
+   postprocessing_rotation_approach
 
 API documentation (for working with results)
 ============================================

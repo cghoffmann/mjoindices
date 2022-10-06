@@ -23,24 +23,24 @@
 This major module provides the execution of the algorithm of the OMI calculation.
 
 First, the algorithm can be used to compute the empirical orthogonal functions (EOFs), which serve as a new basis for
-the OLR data. Second, the time-dependent coefficients of the OLR maps w.r.t the EOFs are computed. These coefficients
-are called the principal components (PCs).
+the OLR data. According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY). Second,
+the time-dependent coefficients of the OLR maps w.r.t the EOFs are computed. These coefficients are called the
+principal components (PCs).
 
-According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY).
+The complete algorithm is described in :ref:`refKiladis2014`.
 
-Basically, only OLR data on a suitable spatial grid is needed. With that, the the OMI EOFs and afterwards the PCs are
+Basically, only OLR data on a suitable spatial grid is needed. With that, the OMI EOFs and afterwards the PCs are
 computed using the functions :func:`calc_eofs_from_olr` and :func:`calculate_pcs_from_olr`, respectively.
 
-The complete algorithm and original post-processing procedure is described in Kiladis, G.N., J. Dias, K.H. Straub, 
-M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M. Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based 
-Indices for Tracking the MJO. Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
+In terms of the post-processing of the EOFs (before the PCs are calculated), the following options are available.
+They are selected with the parameter ``eofs_postprocessing_type`` of the function :py:func:`calc_eofs_from_olr`
 
-An alternative post-processing procedure may be used to reduce noise and potential degeneracy issues. This algorithm is 
-described in  Weidman, S., Kleiner, N., & Kuang, Z. (2022). A rotation procedure 
-to improve seasonally varying empirical orthogonal function bases for MJO indices. Geophysical Research Letters, 
-49, e2022GL099998. https://doi.org/10.1029/2022GL099998 
-The alternative post-processing procedure is explained in :meth:'postprocessing_rotation_approach.post_process_eofs_rotation',
-and can be used by calling :param:eofs_postprocessing_type:str ="eof_rotation" in :func:`calc_eofs_from_olr`.
+* The original approach is described in :ref:`refKiladis2014`.
+  Details are found in :py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach`
+
+* An alternative post-processing procedure may be used to reduce noise and potential degeneracy issues. This algorithm is
+  described in :ref:`refWeidman2022`. The alternative post-processing procedure is explained
+  in :py:func:`~mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`.
 
 """
 
@@ -71,8 +71,8 @@ if eofs_package_available:
 def calc_eofs_from_olr(olrdata: olr.OLRData,
                        implementation: str = "internal",
                        leap_year_treatment: str = "original",
-                       eofs_postprocessing_type:str ="kiladis2014",
-                       eofs_postprocessing_params:dict=None) -> eof.EOFDataForAllDOYs:
+                       eofs_postprocessing_type: str ="kiladis2014",
+                       eofs_postprocessing_params: dict=None) -> eof.EOFDataForAllDOYs:
     """
     One major function of this module. It performs the complete OMI EOF computation.
 
@@ -81,25 +81,33 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
     :param olrdata: The OLR dataset, from which OMI should be calculated. Note that OLR values are assumed to be given
         in positive values. The spatial grid of the OLR datasets defines also the spatial grid of the complete OMI
         calculation.
-    :param implementation: See :meth:`calc_eofs_from_preprocessed_olr`.
-    :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
-        "original" will be as close to the original version of Kiladis (2014) as possible.
-        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. 
-        See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
-    :param eofs_postprocessing_type: Different approaches of the post-processing of the EOFs are available: 
-        "kiladis2014" for the original post-processing described in Kiladis, 2014. 
-        "eof_rotation" for the post-processing rotation algorithm described in Weidman, 2022;
-        None for no post-processing.
+    :param implementation: Choose one of the following values:
+
+        * ``"internal"``: uses the internal implementation of the EOF approach.
+        * ``"eofs_package"``: Uses the implementation of the external package :py:mod:`eofs`.
+
+    :param leap_year_treatment: Choose one of the following values:
+
+        * ``"original"`` will be as close to the original version of :ref:`refKiladis2014` as possible.
+        * ``"strict"`` (not recommended) will treat leap years somewhat more strictly, which might, however,
+          cause the results to deviate from the original.
+          See also description in :meth:`~mjoindices.tools.find_doy_ranges_in_dates`.
+        * ``"no_leap_years"`` will act as if there are no leap years in the dataset (365 days consistently),
+          which might be useful for modeled data.
+
+    :param eofs_postprocessing_type: Different approaches of the post-processing of the EOFs are available:
+
+        * ``"kiladis2014"`` for the original post-processing described in :ref:`refKiladis2014`.
+        * ``"eof_rotation"`` for the post-processing rotation algorithm described in :ref:`refWeidman2022`;
+        * ``None`` for no post-processing.
+
     :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the
-    respective post-processing function (:meth:`mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach` 
-    or :meth:`mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`). If no postprocessing parameters 
-    are given:
-        :param eofs_postprocessing_type:"kiladis2014" will align the sign of the EOFs from DOY 1 to the reference EOFs 
-        and not perform any interpolation.
-        :param eofs_postprocessing_type:"eof_rotation" will align the sign of the EOFs from DOY 1 to the reference EOFs, in 
-        addition to the EOF rotation procedure. 
+        respective post-processing function. See the descriptions of the respective functions for details
+        (:py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach`
+        or :py:func:`~mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`).
+
     :return: The computed EOFs.
+
     """
 
     preprocessed_olr = preprocess_olr(olrdata)
@@ -112,6 +120,16 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
 def initiate_eof_post_processing(raw_eofs: eof.EOFDataForAllDOYs,
                                  eofs_postprocessing_type: str = "kiladis2014",
                                  eofs_postprocessing_params: dict = None) -> eof.EOFDataForAllDOYs:
+    """
+    Helper function that starts the selected post-processing routine and applies default post-processing parameters
+    if none are given.
+
+    :param raw_eofs: The EOFs, which have not been post-processed.
+    :param eofs_postprocessing_type: see :py:func:`calc_eofs_from_olr`.
+    :param eofs_postprocessing_params: see :py:func:`calc_eofs_from_olr`.
+
+    :return: The post-processed EOFs.
+    """
     if eofs_postprocessing_type is None:
         result = raw_eofs
     elif eofs_postprocessing_type == "kiladis2014":
@@ -136,9 +154,9 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
 
     This is actually a major step of the OMI algorithm and includes the Wheeler-Kiladis-Filtering.
 
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    Note that it is recommended to use the function :py:func:`calc_eofs_from_olr` to cover the complete algorithm.
 
-    :param olrdata: The OLR dataset, which should be preprocessed. Note that OLR values are assumed to be given in
+    :param olrdata: The original OLR dataset to be preprocessed. Note that OLR values are assumed to be given in
         positive values.
 
     :return: The filtered OLR dataset.
@@ -155,17 +173,11 @@ def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = 
     Calculates a series of EOF pairs: one pair for each DOY.
 
     This is based on already preprocessed OLR. Note that it is recommended to use the function
-    :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    :py:func:`calc_eofs_from_olr` to cover the complete algorithm.
 
     :param olrdata: the preprocessed OLR data, from which the EOFs are calculated.
-    :param implementation: Two options are available: First, "internal": uses the internal implementation of the EOF
-        approach. Second, "eofs_package": Uses the implementation of the external package :py:mod:`eofs`.
-    :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
-        "original" will be as close to the original version of Kiladis (2014) as possible.
-        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. 
-        See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
-
+    :param implementation: see :py:func:`calc_eofs_from_olr`.
+    :param leap_year_treatment: see :py:func:`calc_eofs_from_olr`.
     :return: A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.
     """
     if implementation == "eofs_package" and not eofs_package_available:
@@ -192,19 +204,16 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, leap_year_treatment: str =
 
     An explicit internal implementation of the EOF approach is used.
 
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    Note that it is recommended for the end user to call the function py:func:`calc_eofs_from_olr` to cover the
+    complete algorithm.
 
     :param olrdata: The filtered OLR data to calculate the EOFs from.
     :param doy: The DOY for which the EOFs are calculated.
-    :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
-        "original" will be as close to the original version of Kiladis (2014) as possible.
-        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. 
-        See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
+    :param leap_year_treatment: see :py:func:`calc_eofs_from_olr`.
 
     :return: An object containing the pair of EOFs together with diagnostic values.
 
-    .. seealso:: :meth:`calc_eofs_for_doy_using_eofs_package`
+    .. seealso:: :py:func:`calc_eofs_for_doy_using_eofs_package`
 
     """
     nlat = olrdata.lat.size
@@ -243,20 +252,17 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
     """
     Calculates a pair of EOFs for a particular DOY.
 
-    The external package :py:mod:`eofs` is used for the core calculation
+    The external package :py:mod:`eofs` is used for the core calculation.
 
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    Note that it is recommended to use the function :py:func:`calc_eofs_from_olr` to cover the complete algorithm.
 
     :param olrdata: The filtered OLR data to calculate the EOFs from.
     :param doy: The DOY for which the EOFs are calculated.
-    :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
-        "original" will be as close to the original version of Kiladis (2014) as possible.
-        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. 
-        See also description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
+    :param leap_year_treatment: see :py:func:`calc_eofs_from_olr`.
+
     :return: An object containing the pair of EOFs together with diagnostic values.
 
-    .. seealso:: :meth:`calc_eofs_for_doy`
+    .. seealso:: :py:func:`calc_eofs_for_doy`
 
     """
     if eofs_package_available:
@@ -298,14 +304,16 @@ def calculate_pcs_from_olr(olrdata: olr.OLRData,
     This major function computes PCs according to the OMI algorithm based on given OLR data and previously calculated
     EOFs.
 
-    :param olrdata: The OLR dataset. The spatial grid must fit to that of the EOFs
+    :param olrdata: The OLR dataset. The spatial grid must fit to that of the EOFs.
     :param eofdata: The previously calculated DOY-dependent EOFs.
     :param period_start: the beginning of the period, for which the PCs should be calculated.
     :param period_end: the ending of the period, for which the PCs should be calculated.
-    :param use_quick_temporal_filter: There are two implementations of the temporal filtering: First, the original
-        Wheeler-Kiladis-Filter, which is closer to the original implementation while being slower (because it is based
-        on a 2-dim FFT) or a 1-dim FFT Filter. Setting this parameter to True uses the quicker 1-dim implementation. The
-        results are quite similar.
+    :param use_quick_temporal_filter: There are two implementations of the temporal filtering
+        available (the results of both methods are quite similar):
+
+        * ``False``: the original Wheeler-Kiladis-Filter, which is closer to the original implementation while being
+          slower (because it is based on a 2-dim FFT).
+        * ``True``: 1-dim FFT Filter, which results in a quicker computation.
 
     :return: The PC time series. Normalized by the full PC time series
     """
@@ -326,15 +334,16 @@ def calculate_pcs_from_olr_original_conditions(olrdata: olr.OLRData,
                                                original_eof_dirname: Path,
                                                use_quick_temporal_filter=False) -> pc.PCData:
     """
-    Calculates the OMI PCs for the original period using the original dataset (which has, however, to be provided
-    by the user himself).
+    Convenience function that calculates the OMI PCs for the original period using the original dataset (which has,
+    however, to be provided by the user himself).
 
     :param olrdata: The original OLR data, which can be downloaded from
-        ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
+        https://www.psl.noaa.gov/thredds/catalog/Datasets/interp_OLR/catalog.html?dataset=Datasets/interp_OLR/olr.day.mean.nc. It can be read with the
+        function :py:func:`mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4`.
     :param original_eof_dirname: Path to the original EOFs, which can be downloaded
         from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ .
         The contents of both remote directories should again be placed into sub directories *eof1* and *eof2*
-    :param use_quick_temporal_filter: see :func:`calculate_pcs_from_olr`
+    :param use_quick_temporal_filter: See :py:func:`calculate_pcs_from_olr`
 
     :return: The PCs, which should be similar to the original ones.
     """

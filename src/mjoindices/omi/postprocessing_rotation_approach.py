@@ -1,16 +1,16 @@
 """
-Contains the post-processing of the EOFs as described in Weidman, S., Kleiner, N., & Kuang, Z. (2022). 
-A rotation procedure to improve seasonally varying empirical orthogonal function bases for MJO indices. 
-Geophysical Research Letters, 49, e2022GL099998. https://doi.org/10.1029/2022GL099998. The new method 
-includes a projection and rotation postprocessing step that reduces noise in the original EOF calculation. 
+Contains the post-processing of the EOFs as described in :ref:`refWeidman2022`. This is an alternative post-processing
+approach and does not lead to the same results as shown in :ref:`refKiladis2014`. It reduces noise avoids
+potential degeneracy issues.
 
 The post-processing procedure follows the below steps:
-    1. Corrects spontaneous sign changes in the EOFs (same as the original procedure)
-    2. Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations
-    between EOFs on sequential days
-    3. Rotate the projected EOFs by 1/366 (or 1/365) per day to ensure continuity across January to December
-    4. Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical
-    errors).
+
+#. Corrects spontaneous sign changes in the EOFs (same as the original procedure)
+#. Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations between EOFs on sequential days
+#. Rotate the projected EOFs by 1/366 (or 1/365) per day to ensure continuity across January to December
+#. Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical errors).
+
+.. seealso:: :py:mod:`mjoindices.omi.postprocessing_original_kiladis2014`
 
 """
 
@@ -28,26 +28,28 @@ import mjoindices.tools as tools
 
 def post_process_eofs_rotation(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool = True) -> eof.EOFDataForAllDOYs:
     """
-    Post processes a series of EOF pairs for all DOYs.
+    Executes the complete post-processing of a series of EOF pairs for all DOYs according to the alterntive procedure
+    described by :ref:`refWeidman2022`.
 
     Postprocessing includes an alignment of EOF signs and a rotation algorithm that rotates the EOFs
     in three steps:
-    1. Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations
-    between EOFs on sequential days
-    2. Rotate the projected EOFs by 1/366 (or 1/365) per day to ensure continuity across January to December
-    3. Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical
-    errors).
 
-    See documentation of the methods :meth:`correct_spontaneous_sign_changes_in_eof_series` in postprocessing_original_kiladis2014.py
+    #. Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations between EOFs
+       on sequential days
+    #. Rotate the projected EOFs by 1/366 (or 1/365) per day to ensure continuity across January to December
+    #. Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical errors).
+
+    See documentation of the methods :py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series`
     for EOF sign flipping
 
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    Note that it is recommended to use the function :py:func:`~mjoindices.omi.omi_calculator.calc_eofs_from_olr` to cover
+    the complete algorithm.
 
     :param eofdata: The EOF series, which should be post processed.
-    :param sign_doy1reference: See description of :meth:`correct_spontaneous_sign_changes_in_eof_series` 
-    in omi_calculatory.py.
+    :param sign_doy1reference: See :py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series`.
 
-    :return: the postprocessed series of EOFs
+    :return: The postprocessed series of EOFs
+
     """
     
     pp_eofs = pp_kil2014.correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
@@ -59,22 +61,27 @@ def post_process_eofs_rotation(eofdata: eof.EOFDataForAllDOYs, sign_doy1referenc
 
 def rotate_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
     """
-    Rotate EOFs at each DOY to 1) align with the EOFs of the previous day and 2) be continuous across December to
-    January boundary. Described more in detail in :func:'post_process_eofs_rotation'
+    Rotate EOFs at each DOY to
 
-    :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes 
+    #. align with the EOFs of the previous day and
+    #. be continuous across December to January boundary.
 
-    :return: set of rotated EOFs
+    Described more in detail in :py:func:'post_process_eofs_rotation'
+
+    :param orig_eofs: Calculated EOFs, signs have been changed via spontaneous_sign_changes.
+
+    :return: set of rotated EOFs.
     """
 
     delta = calculate_angle_from_discontinuity(orig_eofs)
 
     print('Rotating by ', delta)
-
+    # ToDo (Sarah): Is that a wanted print?
     return rotate_each_eof_by_delta(orig_eofs, delta)
 
 
 def rotation_matrix(delta):
+    # ToDo (Sarah): Please extend description by param and return value (although kind of trivial...)
     """
     Return 2d rotation matrix for corresponding delta
     """
@@ -82,6 +89,7 @@ def rotation_matrix(delta):
 
 
 def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs):
+    # ToDo (Sarah): Should it read "day's" or "DOYs"?
     """
     Project the matrix to align with previous day's EOFs and calculate the resulting
     discontinuity between January 1 and December 31. Divide by number of days in year to 
@@ -90,7 +98,8 @@ def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs):
     :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes
 
     :return: float of (negative) average angular discontinuity between EOF1 and EOF2 on the 
-    first and last day of year, divided by the length of the year.
+             first and last day of year, divided by the length of the year.
+
     """
 
     list_of_doys = tools.doy_list(orig_eofs.no_leap_years)
@@ -126,6 +135,7 @@ def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs):
 
 
 def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs, delta: float) -> eof.EOFDataForAllDOYs:
+    # ToDo (Sarah): Maybe spell out once, what delta actually is?
     """
     Use delta calculated by optimization function to rotate original EOFs by delta.
     First projects EOFs from DOY n-1 onto EOF space for DOY n, then rotates projected
@@ -170,11 +180,11 @@ def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs, delta: float) -> 
 
 def normalize_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
     """
-    Normalize all EOFs to have a magnitude of 1
+    Normalize all EOFs to have a magnitude of 1.
 
-    :param eofdata: The rotated EOF series
+    :param eofdata: The rotated EOF series.
 
-    :return: normalized EOFdata for all days
+    :return: normalized EOFdata for all days.
     """
 
     list_of_doys = tools.doy_list(orig_eofs.no_leap_years)
@@ -199,14 +209,14 @@ def normalize_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
 
 
 def angle_between_eofs(reference: eof.EOFData, target=eof.EOFData):
+    # ToDo (Sarah): Is theta the closeness? I have change the punctuation. Does ist still mean what you want to say?
     """
-    Calculates angle between two EOF vectors to determine their "closeness."
-    theta = arccos(t . r / (||r||*||t||)), 
+    Calculates angle between two EOF vectors to determine their "closeness" :math:`theta = arccos(t . r / (||r||*||t||))`.
 
     :param reference: The reference-EOFs. This is usually the EOF pair of the previous or "first" DOY.
-    :param target: The EOF that you want to find the angle with
+    :param target: The EOF that you want to find the angle with.
 
-    :return: A tuple of the  the angles between the reference and target EOFs for both EOF1 and EOF2
+    :return: A tuple of  the angles between the reference and target EOFs for both EOF1 and EOF2
     """
 
     angle1 = angle_btwn_vectors(reference.eof1vector, target.eof1vector)
@@ -216,8 +226,9 @@ def angle_between_eofs(reference: eof.EOFData, target=eof.EOFData):
 
 
 def angle_btwn_vectors(vector1, vector2):
+    # ToDo (Sarah): Please explicitely describe params ans return values.
     """
-    Calculates the angle between vectors, theta = arccos(t . r / (||r||*||t||))
+    Calculates the angle between vectors, :math:`theta = arccos(t . r / (||r||*||t||))`.
 
     Returns angle in radians
     """

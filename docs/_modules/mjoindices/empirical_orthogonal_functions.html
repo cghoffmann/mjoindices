@@ -1,65 +1,32 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>mjoindices.empirical_orthogonal_functions &mdash; mjoindices  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../index.html" class="icon icon-home"> mjoindices
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -67,86 +34,41 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html">API documentation (for running calculations)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References and citation hints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices and tables</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">mjoindices</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
       <li>mjoindices.empirical_orthogonal_functions</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for mjoindices.empirical_orthogonal_functions</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -179,6 +101,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
 <span class="kn">import</span> <span class="nn">matplotlib.cm</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">mjoindices.tools</span> <span class="kn">import</span> <span class="n">doy_list</span>
 
@@ -467,7 +390,7 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">[docs]</a><span class="k">class</span> <span class="nc">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This class serves as a container for a series of EOF pairs, which covers all 366 DOYs and provides some overall</span>
+<span class="sd">    This class serves as a container for a series of EOF pairs, which covers all 365 or 366 DOYs and provides some overall</span>
 <span class="sd">    statistical quantities.</span>
 
 <span class="sd">    The basic EOF computation :func:`mjoindices.omi.omi_calculator.calc_eofs_from_olr` will return an object of this</span>
@@ -475,25 +398,34 @@
 
 <span class="sd">    The individual EOF pairs are represented by :class:`EOFData` objects.</span>
 
-<span class="sd">    :param eof_list: A list with the 366 :class:`EOFData` objects.</span>
+<span class="sd">    :param eof_list: A list with the 365 or 366 :class:`EOFData` objects.</span>
+<span class="sd">    :param no_leap_years: True if every year has 365 days, False if dataset contains leap years. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eof_list</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">EOFData</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eof_list</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">EOFData</span><span class="p">],</span> <span class="n">no_leap_years</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        :param eof_list:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">eof_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">366</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;List of EOFs must contain 366 entries&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">no_leap_years</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">eof_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">365</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;List of EOFs must contain 365 entries for no_leap_years=True&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="ow">not</span> <span class="n">no_leap_years</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">eof_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">366</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;List of EOFs must contain 366 entries for no_leap_years=False&quot;</span><span class="p">)</span> 
+
+        <span class="k">if</span> <span class="n">no_leap_years</span><span class="p">:</span> 
+            <span class="n">reference_list_len</span> <span class="o">=</span> <span class="mi">365</span> <span class="c1"># number of days in year</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">reference_list_len</span> <span class="o">=</span> <span class="mi">366</span>
         <span class="n">reference_lat</span> <span class="o">=</span> <span class="n">eof_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lat</span>
         <span class="n">reference_long</span> <span class="o">=</span> <span class="n">eof_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">long</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">366</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">reference_list_len</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">eof_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">lat</span> <span class="o">==</span> <span class="n">reference_lat</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;All EOFs must have the same latitude grid. Problematic is DOY </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">eof_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">long</span> <span class="o">==</span> <span class="n">reference_long</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;All EOFs must have the same longitude grid. Problematic is DOY </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
         <span class="c1"># deepcopy eofs so that they cannot be modified accidentally from outside after the consistency checks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_eof_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">eof_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span> <span class="o">=</span> <span class="n">no_leap_years</span>
 
     <span class="c1"># FIXME: Could this property be used to modify the EOFData objects because they are mutual?</span>
     <span class="nd">@property</span>
@@ -504,6 +436,13 @@
 <span class="sd">        Remember that DOY 1 corresponds to list entry 0.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eof_list</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">no_leap_years</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        True if every year has 365 days, False if dataset contains leap years. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">lat</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
@@ -519,6 +458,16 @@
 <span class="sd">        The longitude grid common to the EOFs of all DOYs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eof_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">long</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">len_eof_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Length of the eof_list, based on no_leap_years</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">365</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">366</span>
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.eofdata_for_doy"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eofdata_for_doy">[docs]</a>    <span class="k">def</span> <span class="nf">eofdata_for_doy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EOFData</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -552,12 +501,12 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.explained_variance1_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">explained_variance1_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 366 elements containing the explained variance of EOF1 for each DOY.</span>
+<span class="sd">        Returns a vector with 365 or 366 elements containing the explained variance of EOF1 for each DOY.</span>
 
 <span class="sd">        :return: The variance vector.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">()</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doys</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span><span class="o">.</span><span class="n">explained_variance_eof1</span><span class="p">)</span>
@@ -565,11 +514,11 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.explained_variance2_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">explained_variance2_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 366 elements containing the explained variance of EOF2 for each DOY.</span>
+<span class="sd">        Returns a vector with 365 or 366 elements containing the explained variance of EOF2 for each DOY.</span>
 
 <span class="sd">        :return: The variance vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">()</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doys</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span><span class="o">.</span><span class="n">explained_variance_eof2</span><span class="p">)</span>
@@ -577,11 +526,11 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.total_explained_variance_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">total_explained_variance_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 366 elements containing for each DOY the sum of the explained variance over all EOFs.</span>
+<span class="sd">        Returns a vector with 365 or 366 elements containing for each DOY the sum of the explained variance over all EOFs.</span>
 
 <span class="sd">        :return: The variance vector. Should by close to 1 for each DOY if computation was successful.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">()</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doys</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span><span class="o">.</span><span class="n">sum_of_explained_variances</span><span class="p">)</span>
@@ -589,12 +538,12 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.no_observations_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">no_observations_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 366 elements containing for each DOY the number of observations that went into the</span>
+<span class="sd">        Returns a vector with 365 or 366 elements containing for each DOY the number of observations that went into the</span>
 <span class="sd">        computation of the EOFs.</span>
 
 <span class="sd">        :return: The number of observations vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">()</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doys</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span><span class="o">.</span><span class="n">no_observations</span><span class="p">)</span>
@@ -602,11 +551,11 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.eigenvalue1_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">eigenvalue1_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 366 elements containing the eigenvalues of EOF1 for each DOY.</span>
+<span class="sd">        Returns a vector with 365 or 366 elements containing the eigenvalues of EOF1 for each DOY.</span>
 
 <span class="sd">        :return: The eigenvalue vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">()</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doys</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span><span class="o">.</span><span class="n">eigenvalue_eof1</span><span class="p">)</span>
@@ -614,11 +563,11 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.eigenvalue2_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys">[docs]</a>    <span class="k">def</span> <span class="nf">eigenvalue2_for_all_doys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a vector with 366 elements containing the eigenvalues of EOF2 for each DOY.</span>
+<span class="sd">        Returns a vector with 365 or 366 elements containing the eigenvalues of EOF2 for each DOY.</span>
 
 <span class="sd">        :return: The eigenvalue vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">()</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doys</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span><span class="o">.</span><span class="n">eigenvalue_eof2</span><span class="p">)</span>
@@ -637,7 +586,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">dirname</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">create_dir</span><span class="p">:</span>
             <span class="n">dirname</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doy_list</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doy_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">):</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">dirname</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;eof</span><span class="si">%s</span><span class="s2">.txt&quot;</span> <span class="o">%</span> <span class="nb">format</span><span class="p">(</span><span class="n">doy</span><span class="p">,</span> <span class="s1">&#39;03&#39;</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span><span class="o">.</span><span class="n">save_eofs_to_txt_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
 
@@ -647,7 +596,7 @@
 
 <span class="sd">        :param filename: The filename.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">()</span>
+        <span class="n">doys</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_no_leap_years</span><span class="p">)</span>
         <span class="n">eof1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">long</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
         <span class="n">eof2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">long</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
         <span class="n">eigenvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">doys</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">long</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
@@ -717,9 +666,9 @@
 <span class="sd">    ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</span>
 
 <span class="sd">    :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.</span>
-<span class="sd">        This path should contain the sub directories *eof1* and *eof2*, in which the 366 files each are located:</span>
+<span class="sd">        This path should contain the sub directories *eof1* and *eof2*, in which the 365 files each are located:</span>
 <span class="sd">        One file per day of the year.</span>
-<span class="sd">    :param doy: DOY for which the 2 EOFs are loaded (number between 1 and 366).</span>
+<span class="sd">    :param doy: DOY for which the 2 EOFs are loaded (number between 1 and 365).</span>
 
 <span class="sd">    :return: The pair of EOFs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -742,11 +691,21 @@
 <span class="sd">    :return: The EOFs for all DOYs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">eofs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doy_list</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doy_list</span><span class="p">(</span><span class="n">no_leap_years</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">dirname</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;eof</span><span class="si">%s</span><span class="s2">.txt&quot;</span> <span class="o">%</span> <span class="nb">format</span><span class="p">(</span><span class="n">doy</span><span class="p">,</span> <span class="s1">&#39;03&#39;</span><span class="p">))</span>
-        <span class="n">eof</span> <span class="o">=</span> <span class="n">load_single_eofs_from_txt_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="n">eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">eofs</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">doy</span> <span class="o">&lt;</span> <span class="mi">366</span><span class="p">:</span>
+            <span class="n">eof</span> <span class="o">=</span> <span class="n">load_single_eofs_from_txt_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="p">)</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># try to load DOY 366 from directory, if it exists. </span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">eof</span> <span class="o">=</span> <span class="n">load_single_eofs_from_txt_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                <span class="n">eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="p">)</span>
+                <span class="n">no_leap_years</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">no_leap_years</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No EOFs from DOY 366 in directory. Assuming no leap years in dataset.&#39;</span><span class="p">)</span>            
+    <span class="k">return</span> <span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">eofs</span><span class="p">,</span> <span class="n">no_leap_years</span><span class="p">)</span> </div>
 
 
 <div class="viewcode-block" id="load_all_original_eofs_from_directory"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.load_all_original_eofs_from_directory">[docs]</a><span class="k">def</span> <span class="nf">load_all_original_eofs_from_directory</span><span class="p">(</span><span class="n">dirname</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
@@ -767,10 +726,10 @@
 <span class="sd">    :return: The original EOFs for all DOYs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">eofs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doy_list</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">doy</span> <span class="ow">in</span> <span class="n">doy_list</span><span class="p">(</span><span class="n">no_leap_years</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span> <span class="c1"># the original files contain leap years</span>
         <span class="n">eof</span> <span class="o">=</span> <span class="n">load_original_eofs_for_doy</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">doy</span><span class="p">)</span>
         <span class="n">eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">eofs</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">eofs</span><span class="p">,</span> <span class="n">no_leap_years</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="restore_all_eofs_from_npzfile"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.restore_all_eofs_from_npzfile">[docs]</a><span class="k">def</span> <span class="nf">restore_all_eofs_from_npzfile</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
@@ -790,13 +749,20 @@
         <span class="n">explained_variances</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;explained_variances&quot;</span><span class="p">]</span>
         <span class="n">no_observations</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;no_observations&quot;</span><span class="p">]</span>
     <span class="n">eofs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">doy_list</span><span class="p">()</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">eof1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">365</span><span class="p">:</span>
+        <span class="n">no_leap_years</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># sets True if no leap years in dataset. </span>
+    <span class="k">elif</span> <span class="n">eof1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">366</span><span class="p">:</span>
+        <span class="n">no_leap_years</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Dataset does not have EOFs from each day of year.&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">doy_list</span><span class="p">(</span><span class="n">no_leap_years</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
         <span class="n">eof</span> <span class="o">=</span> <span class="n">EOFData</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">long</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eof1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eof2</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]),</span>
                       <span class="n">eigenvalues</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]),</span>
                       <span class="n">explained_variances</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">explained_variances</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]),</span>
                       <span class="n">no_observations</span><span class="o">=</span><span class="n">no_observations</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="n">eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">eofs</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">eofs</span><span class="p">,</span> <span class="n">no_leap_years</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="plot_explained_variance_for_all_doys"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.plot_explained_variance_for_all_doys">[docs]</a><span class="k">def</span> <span class="nf">plot_explained_variance_for_all_doys</span><span class="p">(</span><span class="n">eofs</span><span class="p">:</span> <span class="n">EOFDataForAllDOYs</span><span class="p">,</span> <span class="n">include_total_variance</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -810,7 +776,7 @@
 
 <span class="sd">    :return: Handle to the figure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">doygrid</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">()</span>
+    <span class="n">doygrid</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s2">&quot;plot_explained_variance_for_all_doys&quot;</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
     <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
     <span class="n">handles</span> <span class="o">=</span> <span class="p">[]</span>
@@ -823,7 +789,7 @@
         <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p3</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;DOY&quot;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Fraction of explained variance&quot;</span><span class="p">)</span>
-    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">366</span><span class="p">))</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">len_eof_list</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">include_no_observations</span><span class="p">:</span>
         <span class="n">ax2</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
@@ -846,7 +812,7 @@
 
 <span class="sd">    :return: Handle to the figure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">doygrid</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">()</span>
+    <span class="n">doygrid</span> <span class="o">=</span> <span class="n">doy_list</span><span class="p">(</span><span class="n">eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s2">&quot;plot_eigenvalues_for_all_doys&quot;</span><span class="p">,</span> <span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
     <span class="n">p1</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doygrid</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eigenvalue1_for_all_doys</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF1&quot;</span><span class="p">)</span>
     <span class="n">p2</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">doygrid</span><span class="p">,</span> <span class="n">eofs</span><span class="o">.</span><span class="n">eigenvalue2_for_all_doys</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;EOF2&quot;</span><span class="p">)</span>
@@ -944,57 +910,45 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Explained variance&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">fig</span></div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2020, Christoph G. Hoffmann
-
-    </p>
+    <p>&#169; Copyright 2020, Christoph G. Hoffmann.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-
-  
-  
-    
     <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
     <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-    ga('create', 'UA-XXXXXXX-1', 'auto');
-    ga('send', 'pageview');
-    </script>
-
-    
-   
+      gtag('config', 'UA-XXXXXXX-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
 
 </body>
 </html>

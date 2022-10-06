@@ -20,10 +20,9 @@
 # Contact: christoph.hoffmann@uni-greifswald.de
 
 """
-Contains the post-processing of the EOFs as described in the original OMI paper:
-Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
-Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
-Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
+Contains the post-processing routines for the EOFs as described in the original OMI paper by :ref:`refKiladis2014`.
+
+.. seealso:: :py:mod:`mjoindices.omi.postprocessing_rotation_approach`
 
 """
 
@@ -48,23 +47,23 @@ def post_process_eofs_original_kiladis_approach(eofdata: eof.EOFDataForAllDOYs, 
                       interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
                       interpolation_end_doy: int = 316) -> eof.EOFDataForAllDOYs:
     """
-    Post processes a series of EOF pairs for all DOYs.
+    Executes the complete post-processing of a series of EOF pairs for all DOYs according to the original approach
+    by :ref:`refKiladis2014`. This includes an alignment of EOF signs and an interpolation of the EOF functions in a given DOY
+    window.
 
-    Postprocessing includes an alignment of EOF signs and an interpolation of the EOF functions in a given DOY
-    window. Both steps are part of the original OMI algorithm described by Kiladis (2014).
+    See documentation of the functions :py:func:`correct_spontaneous_sign_changes_in_eof_series` and
+    :py:func:`interpolate_eofs_between_doys` for further information.
 
-    See documentation of  the methods :meth:`correct_spontaneous_sign_changes_in_eof_series` and
-    :meth:`interpolate_eofs_between_doys` for further information.
+    Note that it is recommended to use the function :py:func:`~mjoindices.omi.omi_calculator.calc_eofs_from_olr`
+    to cover the complete algorithm.
 
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    :param eofdata: The EOF series, which should be post-processed.
+    :param sign_doy1reference: See :py:func:`correct_spontaneous_sign_changes_in_eof_series`.
+    :param interpolate_eofs: If ``True``, the EOF sub-series between the given DOYs will be interpolated.
+    :param interpolation_start_doy: See  :py:func:`interpolate_eofs_between_doys`.
+    :param interpolation_end_doy: See :py:func:`interpolate_eofs_between_doys`.
 
-    :param eofdata: The EOF series, which should be post processed.
-    :param sign_doy1reference: See description of :meth:`correct_spontaneous_sign_changes_in_eof_series`.
-    :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.
-    :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.
-    :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
-
-    :return: the postprocessed series of EOFs
+    :return: The postprocessed series of EOFs
     """
     pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
     if interpolate_eofs:
@@ -77,16 +76,17 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
     """
     Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.
 
-    Note that the sign of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
+    Note that the signs of the EOFs are not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
     which can be improved using this function. As long as this step is performed before computing the PCs, it will not
     change the overall result.
 
     Generally, the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous
-    DOY. The EOFs for DOY 1 are by default aligned with the original calculation by Kiladis (2014), resulting in a
-    an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off.
+    DOY. The EOFs for DOY 1 are by default aligned with the original calculation by :ref:`refKiladis2014`, resulting in
+    an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off, so
+    that only the EOFs for the DOYs beginning with DOY 2 are aligned according to the sign of the EOFS for DOY 1.
 
     :param eofs: The EOF series for which the signs should be aligned.
-    :param doy1reference: If true, the EOFs of DOY 1 are aligned w.r.t to the original Kiladis (2014) calculation.
+    :param doy1reference: If ``True``, the EOFs of DOY 1 are aligned w.r.t to the original :ref:`refKiladis2014` calculation.
 
     :return: The EOFs with aligned signs.
     """
@@ -125,7 +125,7 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
     Switches the sign of a particular pair of EOFs (for a particular DOY) if necessary, so that is aligned with the
     reference.
 
-    Note that the signs of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
+    Note that the signs of the EOFs are not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
     which can be improved using this function. As long as this step is performed before computing the PCs, it will not
     change the overall result.
 
@@ -161,8 +161,8 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
     Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
 
     This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,
-    the EOFs have also been replaced by an interpolation according to Kiladis (2014). However, the period stated in
-    Kiladis (2014) from 1 November to 8 November is too short. The authors have confirmed that the right
+    the EOFs have also been replaced by an interpolation according to :ref:`refKiladis2014`. However, the period stated in
+    :ref:`refKiladis2014` from 1 November to 8 November is too short. The authors have confirmed that the right
     interpolation period is from DOY 294 to DOY 315, which is used here as default value.
 
     ATTENTION: The corresponding statistical values (e.g., the explained variances) are not changed by this routine.

@@ -75,9 +75,9 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
     :param window_length: the length of the window to both sides  of the center in days.
         The window spans 2*window_length+1 days in total (for exceptions see below).
     :param leap_year_treatment: Either "original", "strict" or "no_leap_years".
-    "original" will be as close to the original version of Kiladis (2014) as possible.
-    "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also comment below.
-    "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
+        "original" will be as close to the original version of Kiladis (2014) as possible.
+        "strict" (not recommended) will treat leap years somewhat more strictly, which might, however, cause the results to deviate from the original. See also comment below.
+        "no_leap_years" will act as if there are no leap years in the dataset (365 days consistently), which might be useful for modeled data.
         Three versions of dealing with leap years are distinguished for constructing the DOY range window.
         1: Setting the switch to "original" will use a pragmatic implementation in which the start and end of the DOY window
         is directly computed as distance in units of DOYs. 2: Setting the switch to "strict" will transfer the DOYs to
@@ -96,6 +96,7 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
         "original", but with ndoys = 365 instead of potentially 366.
 
     :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.
+
     """
 
     no_leap_years = False
