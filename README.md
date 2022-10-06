@@ -50,9 +50,9 @@ Getting started / examples
 --------------------------
 There are three basic entry points, of which you should read the documentation:
 
-* Calculation of the EOFs: [calc_eofs_from_olr](docs/api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr).
-* Calculation of the PCs: [calculate_pcs_from_olr](docs/api/omi_calculator.html#mjoindices.omi.omi_calculator.calculate_pcs_from_olr).
-* An OLR data container class, which has to be provided for the calculations: [OLRData](docs/api/olr_handling.html#mjoindices.olr_handling.OLRData)
+* Calculation of the EOFs: [calc_eofs_from_olr](https://cghoffmann.github.io/mjoindices/api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr).
+* Calculation of the PCs: [calculate_pcs_from_olr](https://cghoffmann.github.io/mjoindices/api/omi_calculator.html#mjoindices.omi.omi_calculator.calculate_pcs_from_olr).
+* An OLR data container class, which has to be provided for the calculations: [OLRData](https://cghoffmann.github.io/mjoindices/api/olr_handling.html#mjoindices.olr_handling.OLRData)
 
 After you have installed mjoindices, you can download an
 [example](examples/) from the source, which consists of two files: 
