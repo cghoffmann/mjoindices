@@ -72,7 +72,13 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
                        implementation: str = "internal",
                        leap_year_treatment: str = "original",
                        eofs_postprocessing_type: str ="kiladis2014",
-                       eofs_postprocessing_params: dict=None) -> eof.EOFDataForAllDOYs:
+                       eofs_postprocessing_params: dict=None,
+                       sign_doy1reference: bool = None,
+                       interpolate_eofs: bool = None,
+                       interpolation_start_doy: int = None,
+                       interpolation_end_doy: int = None,
+                       strict_leap_year_treatment: bool = None
+                       ) -> eof.EOFDataForAllDOYs:
     """
     One major function of this module. It performs the complete OMI EOF computation.
 
@@ -109,6 +115,63 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
     :return: The computed EOFs.
 
     """
+    # ######The following lines are only for backwards compatibility of the interface and can be deleted in one of the next releases
+    deprecated_pp_interface_used = False
+    if sign_doy1reference is not None:
+        deprecated_pp_interface_used = True
+        warntext = "Argument 'sign_doy1reference' is deprecated and will be removed soon. Use 'eofs_postprocessing_type' and 'eofs_postprocessing_params' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+    if interpolate_eofs is not None:
+        deprecated_pp_interface_used = True
+        warntext = "Argument 'interpolate_eofs' is deprecated and will be removed soon. Use 'eofs_postprocessing_type' and 'eofs_postprocessing_params' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+    if interpolation_start_doy is not None:
+        deprecated_pp_interface_used = True
+        warntext = "Argument 'interpolation_start_doy' is deprecated and will be removed soon. Use 'eofs_postprocessing_type' and 'eofs_postprocessing_params' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+    if interpolation_end_doy is not None:
+        deprecated_pp_interface_used = True
+        warntext = "Argument 'interpolation_end_doy' is deprecated and will be removed soon. Use 'eofs_postprocessing_type' and 'eofs_postprocessing_params' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+    if strict_leap_year_treatment is not None:
+        warntext = "Argument 'strict_leap_year_treatment' is deprecated and will be removed soon. Use 'leap_year_treatment' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+        if strict_leap_year_treatment is True:
+            leap_year_treatment = "strict"
+        else:
+            leap_year_treatment = "original"
+
+    if deprecated_pp_interface_used:
+        eofs_postprocessing_type = "kiladis2014"
+        if sign_doy1reference is None:
+            temp_sign_doy1reference = True
+        else:
+            temp_sign_doy1reference = sign_doy1reference
+        if interpolate_eofs is None:
+            temp_interpolate_eofs = False
+        else:
+            temp_interpolate_eofs = interpolate_eofs
+        if interpolation_start_doy is None:
+            temp_interpolation_start_doy = 293
+        else:
+            temp_interpolation_start_doy = interpolation_start_doy
+        if interpolation_end_doy is None:
+            temp_interpolation_end_doy = 316
+        else:
+            temp_interpolation_end_doy = interpolation_end_doy
+
+        eofs_postprocessing_params = {"sign_doy1reference": temp_sign_doy1reference,
+                                      "interpolate_eofs": temp_interpolate_eofs,
+                                      "interpolation_start_doy": temp_interpolation_start_doy,
+                                      "interpolation_end_doy": temp_interpolation_end_doy}
+
+    # ###### end of backward compatibility section.
+
 
     preprocessed_olr = preprocess_olr(olrdata)
     raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation,
@@ -135,7 +198,7 @@ def initiate_eof_post_processing(raw_eofs: eof.EOFDataForAllDOYs,
     elif eofs_postprocessing_type == "kiladis2014":
         if eofs_postprocessing_params is None:
             eofs_postprocessing_params = {"sign_doy1reference": True,
-                                          "interpolate_eofs": False,
+                                          "interpolate_eofs": True,
                                           "interpolation_start_doy": 293,
                                           "interpolation_end_doy": 316}
         result = pp_kil2014.post_process_eofs_original_kiladis_approach(raw_eofs, **eofs_postprocessing_params)
