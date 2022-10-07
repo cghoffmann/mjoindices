@@ -144,7 +144,13 @@
                        <span class="n">implementation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;internal&quot;</span><span class="p">,</span>
                        <span class="n">leap_year_treatment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;original&quot;</span><span class="p">,</span>
                        <span class="n">eofs_postprocessing_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span><span class="s2">&quot;kiladis2014&quot;</span><span class="p">,</span>
-                       <span class="n">eofs_postprocessing_params</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+                       <span class="n">eofs_postprocessing_params</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">sign_doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">interpolate_eofs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">interpolation_start_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">interpolation_end_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span>
+                       <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    One major function of this module. It performs the complete OMI EOF computation.</span>
 
@@ -178,9 +184,72 @@
 <span class="sd">        (:py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach`</span>
 <span class="sd">        or :py:func:`~mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`).</span>
 
+<span class="sd">    :param sign_doy1reference: .. deprecated:: 1.4</span>
+<span class="sd">    :param interpolate_eofs: .. deprecated:: 1.4</span>
+<span class="sd">    :param interpolation_start_doy: .. deprecated:: 1.4</span>
+<span class="sd">    :param interpolation_end_doy: .. deprecated:: 1.4</span>
+<span class="sd">    :param strict_leap_year_treatment: .. deprecated:: 1.4</span>
+
 <span class="sd">    :return: The computed EOFs.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># ######The following lines are only for backwards compatibility of the interface and can be deleted in one of the next releases</span>
+    <span class="n">deprecated_pp_interface_used</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">sign_doy1reference</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">deprecated_pp_interface_used</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">warntext</span> <span class="o">=</span> <span class="s2">&quot;Argument &#39;sign_doy1reference&#39; is deprecated and will be removed soon. Use &#39;eofs_postprocessing_type&#39; and &#39;eofs_postprocessing_params&#39; instead.&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warntext</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">warntext</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">interpolate_eofs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">deprecated_pp_interface_used</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">warntext</span> <span class="o">=</span> <span class="s2">&quot;Argument &#39;interpolate_eofs&#39; is deprecated and will be removed soon. Use &#39;eofs_postprocessing_type&#39; and &#39;eofs_postprocessing_params&#39; instead.&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warntext</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">warntext</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">interpolation_start_doy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">deprecated_pp_interface_used</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">warntext</span> <span class="o">=</span> <span class="s2">&quot;Argument &#39;interpolation_start_doy&#39; is deprecated and will be removed soon. Use &#39;eofs_postprocessing_type&#39; and &#39;eofs_postprocessing_params&#39; instead.&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warntext</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">warntext</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">interpolation_end_doy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">deprecated_pp_interface_used</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">warntext</span> <span class="o">=</span> <span class="s2">&quot;Argument &#39;interpolation_end_doy&#39; is deprecated and will be removed soon. Use &#39;eofs_postprocessing_type&#39; and &#39;eofs_postprocessing_params&#39; instead.&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warntext</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">warntext</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">strict_leap_year_treatment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warntext</span> <span class="o">=</span> <span class="s2">&quot;Argument &#39;strict_leap_year_treatment&#39; is deprecated and will be removed soon. Use &#39;leap_year_treatment&#39; instead.&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warntext</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">warntext</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">strict_leap_year_treatment</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">leap_year_treatment</span> <span class="o">=</span> <span class="s2">&quot;strict&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">leap_year_treatment</span> <span class="o">=</span> <span class="s2">&quot;original&quot;</span>
+
+    <span class="k">if</span> <span class="n">deprecated_pp_interface_used</span><span class="p">:</span>
+        <span class="n">eofs_postprocessing_type</span> <span class="o">=</span> <span class="s2">&quot;kiladis2014&quot;</span>
+        <span class="k">if</span> <span class="n">sign_doy1reference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">temp_sign_doy1reference</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp_sign_doy1reference</span> <span class="o">=</span> <span class="n">sign_doy1reference</span>
+        <span class="k">if</span> <span class="n">interpolate_eofs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">temp_interpolate_eofs</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp_interpolate_eofs</span> <span class="o">=</span> <span class="n">interpolate_eofs</span>
+        <span class="k">if</span> <span class="n">interpolation_start_doy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">temp_interpolation_start_doy</span> <span class="o">=</span> <span class="mi">293</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp_interpolation_start_doy</span> <span class="o">=</span> <span class="n">interpolation_start_doy</span>
+        <span class="k">if</span> <span class="n">interpolation_end_doy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">temp_interpolation_end_doy</span> <span class="o">=</span> <span class="mi">316</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">temp_interpolation_end_doy</span> <span class="o">=</span> <span class="n">interpolation_end_doy</span>
+
+        <span class="n">eofs_postprocessing_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sign_doy1reference&quot;</span><span class="p">:</span> <span class="n">temp_sign_doy1reference</span><span class="p">,</span>
+                                      <span class="s2">&quot;interpolate_eofs&quot;</span><span class="p">:</span> <span class="n">temp_interpolate_eofs</span><span class="p">,</span>
+                                      <span class="s2">&quot;interpolation_start_doy&quot;</span><span class="p">:</span> <span class="n">temp_interpolation_start_doy</span><span class="p">,</span>
+                                      <span class="s2">&quot;interpolation_end_doy&quot;</span><span class="p">:</span> <span class="n">temp_interpolation_end_doy</span><span class="p">}</span>
+
+    <span class="c1"># ###### end of backward compatibility section.</span>
+
 
     <span class="n">preprocessed_olr</span> <span class="o">=</span> <span class="n">preprocess_olr</span><span class="p">(</span><span class="n">olrdata</span><span class="p">)</span>
     <span class="n">raw_eofs</span> <span class="o">=</span> <span class="n">calc_eofs_from_preprocessed_olr</span><span class="p">(</span><span class="n">preprocessed_olr</span><span class="p">,</span> <span class="n">implementation</span><span class="o">=</span><span class="n">implementation</span><span class="p">,</span>
@@ -207,7 +276,7 @@
     <span class="k">elif</span> <span class="n">eofs_postprocessing_type</span> <span class="o">==</span> <span class="s2">&quot;kiladis2014&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">eofs_postprocessing_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">eofs_postprocessing_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sign_doy1reference&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                                          <span class="s2">&quot;interpolate_eofs&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                                          <span class="s2">&quot;interpolate_eofs&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                                           <span class="s2">&quot;interpolation_start_doy&quot;</span><span class="p">:</span> <span class="mi">293</span><span class="p">,</span>
                                           <span class="s2">&quot;interpolation_end_doy&quot;</span><span class="p">:</span> <span class="mi">316</span><span class="p">}</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">pp_kil2014</span><span class="o">.</span><span class="n">post_process_eofs_original_kiladis_approach</span><span class="p">(</span><span class="n">raw_eofs</span><span class="p">,</span> <span class="o">**</span><span class="n">eofs_postprocessing_params</span><span class="p">)</span>

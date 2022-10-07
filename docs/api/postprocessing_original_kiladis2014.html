@@ -82,6 +82,12 @@
   <section id="module-mjoindices.omi.postprocessing_original_kiladis2014">
 <span id="module-mjoindices-omi-postprocessing-original-kiladis2014"></span><h1>Module mjoindices.omi.postprocessing_original_kiladis2014<a class="headerlink" href="#module-mjoindices.omi.postprocessing_original_kiladis2014" title="Permalink to this heading"></a></h1>
 <p>Contains the post-processing routines for the EOFs as described in the original OMI paper by <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>.</p>
+<p>The original post-processing consists of two steps:</p>
+<ol class="arabic simple">
+<li><p>The signs of the EOFs for subsequent DOYs are aligned.</p></li>
+<li><p>The EOFs for a period between the DOYs 293 and 316 are discarded and replaced by an interpolation between the EOFs
+of the mentioned DOYs 293 and 316.</p></li>
+</ol>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="postprocessing_rotation_approach.html#module-mjoindices.omi.postprocessing_rotation_approach" title="mjoindices.omi.postprocessing_rotation_approach"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mjoindices.omi.postprocessing_rotation_approach</span></code></a></p>

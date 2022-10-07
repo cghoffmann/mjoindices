@@ -112,6 +112,12 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
         (:py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach`
         or :py:func:`~mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`).
 
+    :param sign_doy1reference: .. deprecated:: 1.4
+    :param interpolate_eofs: .. deprecated:: 1.4
+    :param interpolation_start_doy: .. deprecated:: 1.4
+    :param interpolation_end_doy: .. deprecated:: 1.4
+    :param strict_leap_year_treatment: .. deprecated:: 1.4
+
     :return: The computed EOFs.
 
     """

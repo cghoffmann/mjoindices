@@ -22,6 +22,12 @@
 """
 Contains the post-processing routines for the EOFs as described in the original OMI paper by :ref:`refKiladis2014`.
 
+The original post-processing consists of two steps:
+
+#. The signs of the EOFs for subsequent DOYs are aligned.
+#. The EOFs for a period between the DOYs 293 and 316 are discarded and replaced by an interpolation between the EOFs
+   of the mentioned DOYs 293 and 316.
+
 .. seealso:: :py:mod:`mjoindices.omi.postprocessing_rotation_approach`
 
 """
