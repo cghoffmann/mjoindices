@@ -81,9 +81,6 @@ pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
 # Directory in which the figures are saved.
 fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots"
 
-# If you are using a dataset without leap years, change this to True
-no_leap = False
-
 # ############## There should be no need to change anything below (except you intend to use different OLR data as input
 # or you are experiencing problems with the NOAA OLR file NetCDF version.)
 
@@ -95,7 +92,7 @@ if not fig_dir.exists():
 # Load the OLR data.
 # This is the first line to replace to use your own OLR data, if you want to compute OMI for a different dataset.
 raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
-# ATTENTION: Note that the file format has apparently been changed by NOAA from NetCDF3 to NetCDF4 sometime
+# ATTENTION: Note that the file format was changed by NOAA from NetCDF3 to NetCDF4 sometime
 # between the years 2019 and 2021. If you are using a recent download of the data an experience problems
 # with the previous loader method, you should use the following line instead:
 # raw_olr = olr.load_noaa_interpolated_olr_netcdf4(olr_data_filename)
@@ -112,31 +109,24 @@ fig.show()
 fig.savefig(fig_dir / "OLR_map.png")
 
 # Calculate the EOFs.
-#
-# If you would like to remove leap years from your dataset, use the following function. The original OMI
-# calculation includes leap years.
-#leap_year_treatment = "no_leap_years"
-#no_leap_olr = olr.remove_leap_years(interpolated_olr)
 
-#ToDo Adjust docs according to leap year change
 #ToDo: (Sarah) and Christoph introdice new interface whiel maintaining backward compatibility
 
-# The switch strict_leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
-# minor differences for the other DOYs. While the results for setting strict_leap_year_treatment=False are closer to the
-# original values, the calculation strict_leap_year_treatment=True is somewhat more stringently implemented using
-# built-in datetime functionality.
+# The parameter leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
+# minor differences for the other DOYs. While the results for setting leap_year_treatment='original' are closer to the
+# original values, the calculation leap_year_treatment='strict' is somewhat more stringently implemented using
+# built-in datetime functionality. If your OLR dataset does not use leap years, or if you would like to restrict your data 
+# a constant 365 days per year, set leap_year_treatment='no_leap_years'. Leap years can be removed from an OLR dataset using
+# :func:'mjoindices.olr.remove_leap_years()'.
 # See documentation of mjoindices.tools.find_doy_ranges_in_dates() for details.
 #
-# Two EOF post-processing types are currently available: The original approach according to Kiladis (2014) and the
-# EOF rotation approach according to ...
-# In the original postprocessing, the signs of the EOFs are adjusted and the EOFs in a period
-# around DOY 300 are replaced by an interpolation see Kiladis (2014).
+# Two EOF post-processing types are currently available: The original approach according to Kiladis (2014), demonstrated here,
+# and the EOF rotation approach according to Weidman et al. (2022).
+    # To use the original Kiladis approach, no changes to this example file are necessary. In the original postprocessing, the signs 
+    # of the EOFs are adjusted and the EOFs in a period around DOY 300 are replaced by an interpolation. See Kiladis (2014).
 
-# ToDo: (Sarah): Modify docs to point to your code and paper. I think we should not add a call to your pp version here,
-# because the example is intended to recalculate the original OMI. Moreover, I would prever not to have an additional
-# full example, because this adds a lot of testing work in future changes. Maybe you find an elengant way to point the user
-# on how your code is used? Maybe we should have an extra document describing the different pp together
-# with the references and we simply refer to this document in all places, where we have the feeling that this information is relevant?
+    # To use the rotation postprocessing algorithm, see documentation in mjoindices.omi.postprocessing_rotation_approach.py. Only
+    # the parameters eofs_postprocessing_type and eofs_postprocessing_params in omi.calc_eofs_from_olr (below) need to be changed.
 
 kiladis_pp_params = {"sign_doy1reference": True,
                       "interpolate_eofs": True,
