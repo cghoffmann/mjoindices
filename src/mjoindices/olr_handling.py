@@ -29,7 +29,7 @@ import numpy as np
 import scipy
 import scipy.interpolate
 from matplotlib.figure import Figure
-from scipy.io import netcdf
+import scipy.io
 import netCDF4 as netcdf4
 import matplotlib.pyplot as plt
 
@@ -267,7 +267,7 @@ def load_noaa_interpolated_olr(filename: Path) -> OLRData:
 
     :return: The OLR data.
     """
-    f = netcdf.netcdf_file(str(filename), 'r')
+    f = scipy.io.netcdf_file(str(filename), 'r')
     lat = f.variables['lat'].data.copy()
     lon = f.variables['lon'].data.copy()
     # scaling and offset as given in meta data of nc file
