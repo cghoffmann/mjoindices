@@ -160,17 +160,42 @@ As for recalculate_original_omi.py, some file and directory names have to be ada
 <h3>Automated testing<a class="headerlink" href="#automated-testing" title="Permalink to this heading"></a></h3>
 <p>After you have installed mjoindices, you can also download
 <a class="reference external" href="tests/">unit and integration tests</a> from the source to check
-your installation using pytest.</p>
+your installation using pytest:</p>
 <ul>
 <li><p>Download the complete test directory to you local file system.</p></li>
-<li><p>Download some external input and reference data files from <a class="reference external" href="https://doi.org/10.5281/zenodo.3746562">Zenodo</a>. Details are given in a separate <a class="reference external" href="tests/testdata/README">Readme file</a>.</p></li>
+<li><p>Download some external input and reference data files from <a class="reference external" href="https://doi.org/10.5281/zenodo.3746562">Zenodo</a>.</p>
+<ul class="simple">
+<li><p>Details are given in a separate <a class="reference external" href="tests/testdata/README">Readme file</a>.</p></li>
+<li><p>Note that some necessary data files are already included in the test directory in the repository. Make sure to download
+those files together with the tests. The data files on Zenodo are complementary and not
+included in the repository for reasons of file size and ownership.</p></li>
+</ul>
+</li>
 <li><p>Move into your local test directory and run</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span>
 </pre></div>
 </div>
 </li>
+<li><p>In case that some tests are failing with FileNotFoundErrors, it is likely that the package code is actually working, but that the test
+environment is not setup properly. You should check the following before contacting us:</p>
+<ul class="simple">
+<li><p>Did you download the data files from the repository?</p></li>
+<li><p>Did you download the data files from Zenodo?</p></li>
+<li><p>Did you preserve the directory structure?</p></li>
+<li><p>Did you execute pytest in the tests/ subdirectory (where pytest.ini is located)?</p></li>
 </ul>
-<p>Note that the tests may run for a few hours on a common personal computer.</p>
+</li>
+<li><p>Note that the tests may run for a few hours on a common personal computer.</p>
+<ul>
+<li><p>To get a quicker impression, you can omit slow tests by executing the following command. However, this will
+not check the core OMI computation, which is most important, of course.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="o">-</span><span class="n">m</span> <span class="s1">&#39;not slow&#39;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
 </section>
 </section>
 </section>

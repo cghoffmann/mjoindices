@@ -79,14 +79,29 @@ Automated testing
 -----------------
 After you have installed mjoindices, you can also download
 [unit and integration tests](tests/) from the source to check
-your installation using pytest.
+your installation using pytest:
 
 * Download the complete test directory to you local file system.
 
-* Download some external input and reference data files from [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](tests/testdata/README). 
+* Download some external input and reference data files from [Zenodo](https://doi.org/10.5281/zenodo.3746562). 
+  * Details are given in a separate [Readme file](tests/testdata/README).
+  * Note that some necessary data files are already included in the test directory in the repository. Make sure to download
+    those files together with the tests. The data files on Zenodo are complementary and not 
+    included in the repository for reasons of file size and ownership.
 
 * Move into your local test directory and run
 
       pytest
 
-Note that the tests may run for a few hours on a common personal computer.
+* In case that some tests are failing with FileNotFoundErrors, it is likely that the package code is actually working, but that the test 
+  environment is not setup properly. You should check the following before contacting us:
+   * Did you download the data files from the repository?
+   * Did you download the data files from Zenodo?
+   * Did you preserve the directory structure?
+   * Did you execute pytest in the tests/ subdirectory (where pytest.ini is located)? 
+
+* Note that the tests may run for a few hours on a common personal computer.
+  * To get a quicker impression, you can omit slow tests by executing the following command. However, this will
+    not check the core OMI computation, which is most important, of course.
+
+        pytest -m 'not slow' 
