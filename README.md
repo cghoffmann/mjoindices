@@ -62,7 +62,7 @@ After you have installed mjoindices, you can download an
   the computed Empirical Orthogonal Functions (EOFs) and the Principal Components (PCs) in two individual files, which
   can also be configured in the source code. In addition, it will save a few plots into a directory, which can
   also be configured in the source. These plots show the agreement with the original OMI values (slight deviations are 
-  expected due to numerical differences. This will be detailed in the corresponding software meta paper).
+  expected due to numerical differences. This is explained in detail in the corresponding software meta paper).
 
   Note that you can use this example also as a template to calculate OMI values with your own OLR data. 
   In order to do that, you have to adapt only two parts of the code, which are also marked in the code documentation.
@@ -70,7 +70,7 @@ After you have installed mjoindices, you can download an
   Note also that this script may run for one or two hours on common personal computer systems.
 
 * evaluate_omi_reproduction.py: This script produces more detailed comparison plots and saves them into a directory.
-  The script recalculate_original_omi.py has to be run before, as the evaluation script is based on the saved results.
+  The script recalculate_original_omi.py has to be run first, since the evaluation script is based on the saved results.
   As for recalculate_original_omi.py, some file and directory names have to be adapted in the beginning of the code.
 
 Both files are also available as Jupyter notebook files.
