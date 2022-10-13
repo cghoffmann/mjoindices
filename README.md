@@ -7,7 +7,7 @@ mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI 
 Overview
 --------
 
-mjoindices is a Python package relevant for users of the atmospheric sciences. It provides functionality to compute an 
+mjoindices is a Python package relevant for atmospheric scientists. It provides functionality to compute an 
 index of the Madden-Julian-Oscillation (MJO), particularly the OLR-based MJO index (OMI).
 
 Whereas the package name has been chosen to indicate that further MJO indices should be included in the future, the 
@@ -17,7 +17,7 @@ A scientific description of the package is found in [Hoffmann et al. (2021)](htt
 
 Citation
 --------
-If you use mjoindices in published research, please cite the correspondig paper: Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021.
+If you use mjoindices in published research, please cite the corresponding paper: Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021.
 A Python Package to Calculate the OLR-Based Index of the Madden- Julian-Oscillation (OMI) in Climate Science and Weather Forecasting. 
 Journal of Open Research Software, 9(1), p.9. DOI: http://doi.org/10.5334/jors.331
 
@@ -83,7 +83,7 @@ your installation using pytest.
 
 * Download the complete test directory to you local file system.
 
-* Download some external input and reference data files from [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](tests/testdata/README). 
+* Download the external input and reference data files from [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](tests/testdata/README). 
 
 * Move into your local test directory and run
 

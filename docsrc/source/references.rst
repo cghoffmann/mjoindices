@@ -1,7 +1,7 @@
 References and citation hints
 =============================
 The following publications are closely related to the mjoindices software package. Please consider citing them
-in published research based on the hints given below.
+in published research based on the descriptions given below.
 
 Peer-reviewed
 -------------
@@ -29,7 +29,7 @@ Kiladis et al. (2014)
 
 .. _refWeidman2022:
 
-Weidmann et al. (2022)
+Weidman et al. (2022)
 ~~~~~~~~~~~~~~~~~~~~~~
 
 * Description of an alternative procedure for the EOF post-processing, which reduces noise and avoids potential degeneracy issues.
