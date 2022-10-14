@@ -119,10 +119,10 @@ class OLRData:
         """
         Returns the spatially distributed OLR map for a particular date.
 
-        :param date: The date, which hat to be exactly matched by one of the dates in the OLR time grid.
+        :param date: The date, which has to be exactly matched by one of the dates in the OLR time grid.
 
         :return: The excerpt of the OLR data as a 2-dim array. The two dimensions correspond to
-            latitude, and longitude, in this order. Returns ``None`` if the date is not contained in the OLR time series.
+            latitude and longitude, in this order. Returns ``None`` if the date is not contained in the OLR time series.
         """
         cand = self.time == date
         if not np.all(cand == False):  # noqa: E712
@@ -132,7 +132,7 @@ class OLRData:
 
     def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0, leap_year_treatment: str = "original") -> np.ndarray:
         """
-        Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).
+        Extracts a range of OLR data from the DOYs around one center DOY (center_doy +/- windowlength).
 
         Keep in mind that the OLR time series might span several years. In this case the center DOY is found more than
         once and the respective window in considered for each year.
@@ -140,7 +140,7 @@ class OLRData:
         time axis
 
         :param center_doy: The center DOY of the window.
-        :param window_length: The window length in DOYs on both sides of the center DOY. Hence, if the window is fully
+        :param window_length: The window length of DOYs on both sides of the center DOY. Hence, if the window is fully
             covered by the data, one gets :math:``2*window_length + 1`` entries per year in the result.
         :param leap_year_treatment: see :py:func:``mjoindices.omi.omi_calculator.calc_eofs_from_olr``.
         :return: The excerpt of the OLR data as a 3-dim array. The three dimensions correspond to
@@ -187,8 +187,8 @@ def interpolate_spatial_grid(olr: OLRData, target_lat: np.ndarray, target_long: 
     No extrapolation will be done. Instead, a :py:class:`ValueError` is raised if the data does not cover the target
     grid.
 
-    Note that no sophisticated resampling is provided here. So, if some kind of averaging, etc., is needed, it should
-    be performed by the user himself before injecting the data into the OMI calculation.
+    Note that no sophisticated resampling is provided here. If some kind of averaging, etc., is needed, it should
+    be performed by the user before injecting the data into the OMI calculation.
 
     :param olr: The OLR data to resample.
     :param target_lat: The new latitude grid.
@@ -212,7 +212,7 @@ def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime
     Of course, it can also be used to limit the PC calculation to a specific period.
 
     Note that a temporal resampling method is not provided here, since the possible resampling methods,
-    which the users might want to apply, are too diverse. Hence, it is assumed that the temporal spacing ist already
+    which the users might want to apply, are too diverse. Hence, it is assumed that the temporal spacing is already
     correct (daily averages recommended) and only a restriction of the period is needed before calculation.
 
     :param olr: The OLR data to restrict.
@@ -233,12 +233,12 @@ def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime
 
 def remove_leap_years(olr: OLRData) -> OLRData:
     """
-    Removes any leap days (any dates that have both Month = Feb and Day = 29) and returns complete OLRDataset
-    with remaining olr data
+    Removes any leap days (any instances of February 29) and returns an :class:`OLRData` object
+    with the remaining OLR data
 
     :param olr: The OLR data to restrict.
 
-    :return: A new :class:'OLRData' object with no leap days
+    :return: A new :class:`OLRData` object with no leap days
     """
 
     window_inds = [(i.astype(object).month != 2) | (i.astype(object).day != 29) for i in olr.time]
@@ -251,8 +251,8 @@ def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     Loads the standard OLR data product provided by NOAA in NetCDF3 format.
     This is mainly used to load the OLR files originally used for the OMI calculation some years ago.
 
-    ATTENTION: Note that the file format has apparently been changed by NOAA from NetCDF3 to NetCDF4 sometime
-    between the years 2019 and 2021. If you are using a recent download of the data an experience problems
+    ATTENTION: Note that the file format was changed by NOAA from NetCDF3 to NetCDF4 sometime
+    between the years 2019 and 2021. If you are using a recent download of the data and experience problems
     with this loader method, you should use :py:func:`load_noaa_interpolated_olr_netcdf4` instead.
 
     The original OLR data file is contained in the reference data package found at: https://doi.org/10.5281/zenodo.3746562
@@ -291,7 +291,7 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
     Loads the standard OLR data product provided by NOAA in NetCDF4 format.
 
     ATTENTION: Whereas NetCDF4 seems to be the format of the recent NOAA OLR data files, the files originally used some
-    years ago where saved in NetCDF3. So, if you are going to load the original files for reference purposes, you should
+    years ago were saved as NetCDF3. So, if you are going to load the original files for reference purposes, you should
     use the loader function :py:func:`load_noaa_interpolated_olr` instead.
 
     The dataset can be obtained from
@@ -344,7 +344,7 @@ def plot_olr_map_for_date(olr: OLRData, date: np.datetime64) -> Figure:
     Plots a map pf the OLR data for a specific date.
 
     :param olr: The complete OLR data.
-    :param date: The date for which da OLR data should be plotted
+    :param date: The date for which the OLR data should be plotted
         (has to be exactly matched by a date of the OLR time grid).
 
     :return: The handle to the figure.

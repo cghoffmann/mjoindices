@@ -1,6 +1,6 @@
 """
 Contains the post-processing of the EOFs as described in :ref:`refWeidman2022`. This is an alternative post-processing
-approach and does not lead to the same results as shown in :ref:`refKiladis2014`. It reduces noise avoids
+approach and does not lead to the same results as shown in :ref:`refKiladis2014`. It reduces noise and avoids
 potential degeneracy issues.
 
 The post-processing procedure follows the below steps:
@@ -36,7 +36,7 @@ def post_process_eofs_rotation(eofdata: eof.EOFDataForAllDOYs, sign_doy1referenc
 
     #. Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations between EOFs
        on sequential days
-    #. Rotate the projected EOFs by 1/366 (or 1/365) of the December --> January discontinuity per day to ensure 
+    #. Rotate the projected EOFs by 1/366 (or 1/365) of the December --> January discontinuity each day to ensure 
        continuity across December to January
     #. Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical errors).
 
@@ -69,7 +69,7 @@ def rotate_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
 
     Described more in detail in :py:func:'post_process_eofs_rotation'
 
-    :param orig_eofs: Calculated EOFs, signs have been changed via spontaneous_sign_changes.
+    :param orig_eofs: Calculated EOFs, which already has algined signs between neighboring DOYs.
 
     :return: set of rotated EOFs.
     """
@@ -85,7 +85,7 @@ def rotation_matrix(delta):
 
     :param delta: Scalar angle, in radians, of desired rotation.
 
-    :returns: 2x2 rotation matrix that can be used to rotate an Nx2 matrix in the x-y plane counterclockwise 
+    :return: 2x2 rotation matrix that can be used to rotate an Nx2 matrix in the x-y plane counterclockwise 
     by delta.
     """
     return np.array([[np.cos(delta), -np.sin(delta)],[np.sin(delta), np.cos(delta)]])
@@ -95,7 +95,7 @@ def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs):
     """
     Project the matrix to align with the EOFs from the previous DOY and calculate the resulting
     discontinuity between January 1 and January 1 after one year of projections. Divide by the number of days 
-    in year to determine the discontinuity used for rotation. 
+    in one year to determine the discontinuity used for rotation. 
 
     :param orig_eofs: calculated EOFs, after signs have been changed via spontaneous_sign_changes
 
@@ -145,7 +145,7 @@ def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs, delta: float) -> 
     :param delta: scalar by which to rotate EOFs. Calculated as the angular discontinuity between EOF1 on DOY1 
     and EOF1 on DOY1 after a full year of projection, divided by the length of the year.
 
-    :returns: new EOFdata with projected and rotated EOFs.  
+    :return: new EOFdata with projected and rotated EOFs.  
     """
 
     R = rotation_matrix(delta)
@@ -216,7 +216,7 @@ def angle_between_eofs(reference: eof.EOFData, target=eof.EOFData):
     :param reference: The reference-EOFs. This is usually the EOF pair of the previous or "first" DOY.
     :param target: The EOF data from the target DOY.
 
-    :return: A tuple of  the angles between the reference and target EOFs for both EOF1 and EOF2
+    :return: A tuple of the angles between the reference and target EOFs for both EOF1 and EOF2
     """
 
     angle1 = angle_btwn_vectors(reference.eof1vector, target.eof1vector)

@@ -74,7 +74,7 @@ def calc_eofs_from_olr(olrdata: olr.OLRData,
                        eofs_postprocessing_type: str ="kiladis2014",
                        eofs_postprocessing_params: dict=None) -> eof.EOFDataForAllDOYs:
     """
-    One major function of this module. It performs the complete OMI EOF computation.
+    One of the major functions of this module. It performs the complete OMI EOF computation.
 
     This function executes consistently the preprocessing (filtering), the actual EOF analysis, and the postprocessing.
 
@@ -152,7 +152,7 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
     """
     Performs the preprocessing of an OLR dataset to make it suitable for the EOF analysis.
 
-    This is actually a major step of the OMI algorithm and includes the Wheeler-Kiladis-Filtering.
+    This is a major step of the OMI algorithm and includes the Wheeler-Kiladis-Filtering.
 
     Note that it is recommended to use the function :py:func:`calc_eofs_from_olr` to cover the complete algorithm.
 
@@ -335,7 +335,7 @@ def calculate_pcs_from_olr_original_conditions(olrdata: olr.OLRData,
                                                use_quick_temporal_filter=False) -> pc.PCData:
     """
     Convenience function that calculates the OMI PCs for the original period using the original dataset (which has,
-    however, to be provided by the user himself).
+    however, to be provided by the user).
 
     :param olrdata: The original OLR data, which can be downloaded from
         https://www.psl.noaa.gov/thredds/catalog/Datasets/interp_OLR/catalog.html?dataset=Datasets/interp_OLR/olr.day.mean.nc. It can be read with the
@@ -362,11 +362,11 @@ def regress_3dim_data_onto_eofs(data: object, eofdata: eof.EOFDataForAllDOYs) ->
     Finds time-dependent coefficients w.r.t the DOY-dependent EOF basis for time-dependent spatially resolved data.
 
     I.e. it finds the PCs for temporally resolved OLR data. But the function can also be used for other datasets,
-    as long as those datasets have the same structure like the the class :class:`mjoindices.olr_handling.OLRData`.
+    as long as those datasets have the same structure as the the class :class:`mjoindices.olr_handling.OLRData`.
 
-    :param data: The data, for which the coefficients are sought. Should be an object of class
+    :param data: The data used to compute the coefficients. Should be an object of class
         :class:`mjoindices.olr_handling.OLRData` or of similar structure.
-    :param eofdata: The DOY-dependent pairs of EOFs, like computed by, e.g., :func:`calc_eofs_from_olr`
+    :param eofdata: The DOY-dependent pairs of EOFs, as computed by, e.g., :func:`calc_eofs_from_olr`
 
     :return: The time-dependent PCs as :class:`mjoindices.principal_components.PCData`
     """
