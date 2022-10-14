@@ -247,7 +247,7 @@ def remove_leap_years(olr: OLRData) -> OLRData:
     
 
 
-def load_noaa_interpolated_olr(filename: Path, use_xarray: bool = False) -> OLRData:
+def load_noaa_interpolated_olr(filename: Path, use_xarray: bool = True) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF3 format.
     This is mainly used to load the OLR files originally used for the OMI calculation some years ago.
@@ -296,7 +296,7 @@ def load_noaa_interpolated_olr(filename: Path, use_xarray: bool = False) -> OLRD
     return result
 
 
-def load_noaa_interpolated_olr_netcdf4(filename: Path, use_xarray: bool = False) -> OLRData:
+def load_noaa_interpolated_olr_netcdf4(filename: Path, use_xarray: bool = True) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF4 format.
 

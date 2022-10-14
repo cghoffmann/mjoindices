@@ -79,7 +79,7 @@ def test_OLRData_basic_properties():
 @pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available")
 def test_loadNOAAInterpolatedOLR():
     errors = []
-    target = olr.load_noaa_interpolated_olr(olr_data_filename)
+    target = olr.load_noaa_interpolated_olr(olr_data_filename, use_xarray=True)
 
     # Check time grid
     # Period always starts on 1974/06/01, whereas the ending date
@@ -110,11 +110,11 @@ def test_loadNOAAInterpolatedOLR():
     # Check OLR Data
     # OLR samples extracted from file using Panoply viewer, which directly
     # applies scaling and offset values
-    if not math.isclose(target.olr[0, 0, 0], 205.450):
+    if not math.isclose(target.olr[0, 0, 0], 205.450, abs_tol=1e-5):
         errors.append("First OLR sample value does not match")
-    if not math.isclose(target.olr[0, 3, 0], 207.860):
+    if not math.isclose(target.olr[0, 3, 0], 207.860, abs_tol=1e-4):
         errors.append("Second OLR sample value does not match")
-    if not math.isclose(target.olr[4, 3, 15], 216.700):
+    if not math.isclose(target.olr[4, 3, 15], 216.700, abs_tol=1e-5):
         errors.append("Third OLR sample value does not match")
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
@@ -123,7 +123,7 @@ def test_loadNOAAInterpolatedOLR():
 @pytest.mark.skipif(not olr_data_netcdf4_filename.is_file(), reason="OLR data file in NetCDF4 is not available")
 def test_loadNOAAInterpolatedOLRNetCDF4():
     errors = []
-    target = olr.load_noaa_interpolated_olr_netcdf4(olr_data_netcdf4_filename)
+    target = olr.load_noaa_interpolated_olr_netcdf4(olr_data_netcdf4_filename,use_xarray=True)
 
     # Check time grid
     # Period always starts on 1974/06/01, whereas the ending date
