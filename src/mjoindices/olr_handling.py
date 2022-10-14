@@ -244,9 +244,10 @@ def remove_leap_years(olr: OLRData) -> OLRData:
     window_inds = [(i.astype(object).month != 2) | (i.astype(object).day != 29) for i in olr.time]
 
     return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long) 
+    
 
 
-def load_noaa_interpolated_olr(filename: Path) -> OLRData:
+def load_noaa_interpolated_olr(filename: Path, use_xarray: bool = False) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF3 format.
     This is mainly used to load the OLR files originally used for the OMI calculation some years ago.
@@ -264,29 +265,38 @@ def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html
 
     :param filename: Full filename of a local copy of OLR data file.
+    :param use_xarray: Option to use xarray instead of NetCDF4 for faster loading of data and timestamps
 
     :return: The OLR data.
     """
-    f = scipy.io.netcdf_file(str(filename), 'r')
-    lat = f.variables['lat'].data.copy()
-    lon = f.variables['lon'].data.copy()
-    # scaling and offset as given in meta data of nc file
-    olr = f.variables['olr'].data.copy() / 100. + 327.65
-    hours_since1800 = f.variables['time'].data.copy()
-    f.close()
+    if use_xarray:
+        import xarray as xr
+        f = xr.open_dataset(filename)
+        lat = f.lat.data.copy()
+        lon = f.lon.data.copy()
+        olr = f.olr.data.copy()
+        time = np.array(f.olr.time.values, dtype='datetime64[D]')
+    else:
+        f = scipy.io.netcdf_file(str(filename), 'r')
+        lat = f.variables['lat'].data.copy()
+        lon = f.variables['lon'].data.copy()
+        # scaling and offset as given in meta data of nc file
+        olr = f.variables['olr'].data.copy() / 100. + 327.65
+        hours_since1800 = f.variables['time'].data.copy()
+        f.close()
 
-    temptime = []
-    for item in hours_since1800:
-        delta = np.timedelta64(int(item / 24), 'D')
-        day = np.datetime64('1800-01-01') + delta
-        temptime.append(day)
-    time = np.array(temptime, dtype=np.datetime64)
+        temptime = []
+        for item in hours_since1800:
+            delta = np.timedelta64(int(item / 24), 'D')
+            day = np.datetime64('1800-01-01') + delta
+            temptime.append(day)
+        time = np.array(temptime, dtype=np.datetime64)
     result = OLRData(np.squeeze(olr), time, lat, lon)
 
     return result
 
 
-def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
+def load_noaa_interpolated_olr_netcdf4(filename: Path, use_xarray: bool = False) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF4 format.
 
@@ -301,22 +311,31 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
     https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html
 
     :param filename: Full filename of a local copy of OLR data file.
+    :param use_xarray: Option to use xarray instead of NetCDF4 for faster loading of data and timestamps
 
     :return: The OLR data.
     """
-    f = netcdf4.Dataset(filename, "r")
-    lat = f.variables['lat'][:].data.copy()
-    lon = f.variables['lon'][:].data.copy()
-    olr = f.variables['olr'][:].data.copy()
-    hours_since1800 = f.variables['time'][:].data.copy()
-    f.close()
+    if use_xarray:
+        import xarray as xr
+        f = xr.open_dataset(filename)
+        lat = f.lat.data.copy()
+        lon = f.lon.data.copy()
+        olr = f.olr.data.copy()
+        time = np.array(f.olr.time.values, dtype='datetime64[D]')
+    else:
+        f = netcdf4.Dataset(filename, "r")
+        lat = f.variables['lat'][:].data.copy()
+        lon = f.variables['lon'][:].data.copy()
+        olr = f.variables['olr'][:].data.copy()
+        hours_since1800 = f.variables['time'][:].data.copy()
+        f.close()
 
-    temptime = []
-    for item in hours_since1800:
-        delta = np.timedelta64(int(item / 24), 'D')
-        day = np.datetime64('1800-01-01') + delta
-        temptime.append(day)
-    time = np.array(temptime, dtype=np.datetime64)
+        temptime = []
+        for item in hours_since1800:
+            delta = np.timedelta64(int(item / 24), 'D')
+            day = np.datetime64('1800-01-01') + delta
+            temptime.append(day)
+        time = np.array(temptime, dtype=np.datetime64)
     result = OLRData(np.squeeze(olr), time, lat, lon)
 
     return result
