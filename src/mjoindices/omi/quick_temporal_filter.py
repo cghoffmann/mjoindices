@@ -23,7 +23,7 @@
 This module provides a simple 1-dim filtering algorithm, which can be used during the PC calculation instead of the
 full 2-dim Wheeler-Kiladis-Filter.
 
-It is not intended to use this module stand-alone outside of the OMI context, since it is only extensively tested
+It is not intended to use this module stand-alone outside the OMI context, since it is only extensively tested
 for the specific OMI filtering conditions.
 
 Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
@@ -41,7 +41,7 @@ def filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing(olrdata: olr.OLRData
     """
     Filters OLR data temporally using a 1d Fourier transform filter.
 
-    The temporal filtering constants are chosen to meet the values in the description by Kiladis (2014).
+    The temporal filtering constants are chosen to meet the values in the description by :ref:`refKiladis2014`.
 
     :param olrdata: The original OLR data
 

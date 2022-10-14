@@ -1,65 +1,32 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>mjoindices.tools &mdash; mjoindices  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../index.html" class="icon icon-home"> mjoindices
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -67,86 +34,41 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html">API documentation (for running calculations)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References and citation hints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../indices.html">Indices and tables</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">mjoindices</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
       <li>mjoindices.tools</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for mjoindices.tools</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -176,59 +98,92 @@
 <span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
 <span class="kn">import</span> <span class="nn">typing</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-
-<div class="viewcode-block" id="calc_day_of_year"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.calc_day_of_year">[docs]</a><span class="k">def</span> <span class="nf">calc_day_of_year</span><span class="p">(</span><span class="n">date</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<div class="viewcode-block" id="calc_day_of_year"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.calc_day_of_year">[docs]</a><span class="k">def</span> <span class="nf">calc_day_of_year</span><span class="p">(</span><span class="n">date</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">no_leap_years</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the days of the year (DOYs) for an individual date or an array of dates.</span>
 
 <span class="sd">    :param date: The date (or the dates), given as (NumPy array of) :class:`numpy.datetime64` value(s).</span>
+<span class="sd">    :param no_leap_years: ``True`` if every year has 365 days, ``False`` if dataset contains leap years.</span>
 
 <span class="sd">    :return: the DOY (or the DOYs) as (NumPy array of) int value(s).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">day_per_mon</span> <span class="o">=</span> <span class="p">[</span><span class="mi">31</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">31</span><span class="p">]</span>
+
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">date</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s2">&quot;&lt;M8[ns]&quot;</span><span class="p">:</span>
             <span class="c1"># work around a bug, which prevents datetime64[ns] from being converted correctly to dt.datetime.</span>
             <span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;datetime64[us]&quot;</span><span class="p">)</span>
+   
+        <span class="c1"># expand datetime into individual time parts </span>
         <span class="n">temp</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
         <span class="n">time_fragments</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">time_fragments</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">no_leap_years</span><span class="p">:</span>
+            <span class="c1"># check that day does not exceed number of days in a month</span>
+            <span class="k">if</span> <span class="n">time_fragments</span><span class="o">.</span><span class="n">tm_mday</span> <span class="o">&gt;</span> <span class="n">day_per_mon</span><span class="p">[</span><span class="n">time_fragments</span><span class="o">.</span><span class="n">tm_mon</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid date. Likely due to mismatch between input date and no_leap_years parameter&#39;</span><span class="p">)</span>
+
+            <span class="c1"># sums days of previous months to get DOY</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">day_per_mon</span><span class="p">[:</span><span class="n">time_fragments</span><span class="o">.</span><span class="n">tm_mon</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">time_fragments</span><span class="o">.</span><span class="n">tm_mday</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">time_fragments</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
-            <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_day_of_year</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">calc_day_of_year</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">no_leap_years</span><span class="o">=</span><span class="n">no_leap_years</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="find_doy_ranges_in_dates"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.find_doy_ranges_in_dates">[docs]</a><span class="k">def</span> <span class="nf">find_doy_ranges_in_dates</span><span class="p">(</span><span class="n">dates</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">center_doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                             <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
+<div class="viewcode-block" id="find_doy_ranges_in_dates"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.find_doy_ranges_in_dates">[docs]</a><span class="k">def</span> <span class="nf">find_doy_ranges_in_dates</span><span class="p">(</span><span class="n">dates</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">center_doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">leap_year_treatment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;original&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds the indices in a given array of dates that fit into a particular window of DOYs.</span>
 
-<span class="sd">    This task sounds trivial, but is a little bit complicated by the appearance of leap years.</span>
+<span class="sd">    This task sounds trivial, but is a little complicated by the appearance of leap years.</span>
 
 <span class="sd">    :param dates: The array of dates as :class:`numpy.datetime64` values.</span>
 <span class="sd">    :param center_doy: The center of the wanted window.</span>
 <span class="sd">    :param window_length: the length of the window to both sides  of the center in days.</span>
 <span class="sd">        The window spans 2*window_length+1 days in total (for exceptions see below).</span>
-<span class="sd">    :param strict_leap_year_treatmenmt: distinguishes between 2 different methods of constructing the DOY range window.</span>
-<span class="sd">        1: Setting the switch to False will use a pragmatic implementation in which the start and end of the DOY window</span>
-<span class="sd">        is directly computed as distance in units of DOYs. 2: Setting the switch to True will transfer the DOYs to</span>
-<span class="sd">        actual calender dates and will calculate the start and end of the window also as calender dates using</span>
-<span class="sd">        built-in numpy datetime functions. In the context of the EOF calculation, the setting has major implications</span>
+
+<span class="sd">    :param leap_year_treatment: Choose one of the following values:</span>
+
+<span class="sd">        * ``&quot;original&quot;`` will be as close to the original version of :ref:`refKiladis2014` as possible. It will use a</span>
+<span class="sd">          pragmatic implementation in which the start and end of the DOY window is directly computed as distance in</span>
+<span class="sd">          units of DOYs.</span>
+<span class="sd">        * ``&quot;strict&quot;`` (not recommended) will treat leap years somewhat more strictly, which might, however,</span>
+<span class="sd">          cause the results to deviate from the original.  It will transfer the DOYs to actual calendar dates and</span>
+<span class="sd">          will calculate the start and end of the window also as calendar dates using built-in numpy datetime functions.</span>
+<span class="sd">        * ``&quot;no_leap_years&quot;`` will act as if there are no leap years in the dataset (365 days consistently),</span>
+<span class="sd">          which might be useful for modeled data. It will follow the basic methodology of</span>
+<span class="sd">          ``&quot;original&quot;``, but with ``ndoys = 365`` instead of potentially ``ndoys = 366``.</span>
+
+<span class="sd">        In the context of the EOF calculation, the setting has major implications</span>
 <span class="sd">        only for the EOFs calculated for DOY 366 and causes only minor differences for the other DOYs. The results for</span>
-<span class="sd">        the setting False are closer to the original values, and approximately the same total number of calender days</span>
-<span class="sd">        covered by the window is found for each center DOY including 366. However, the length of the window is not</span>
-<span class="sd">        guaranteed to be 2*window_length+1, but can also be 2*window_length+2 if the window crosses the ending of a leap</span>
-<span class="sd">        year. The setting True is somewhat more stringently implemented. The window length is always 2*window_length+1,</span>
-<span class="sd">        however, the number of calender days covered by a window is reduced by approximately a factor of 4 for</span>
-<span class="sd">        center_doy=366, since a window is found only during leap years at all, which might cause the EOF to differ quite</span>
+<span class="sd">        the setting ``&quot;original&quot;`` are closer to the original values, and approximately the same total number of calendar days</span>
+<span class="sd">        covered by the window is found for each center DOY including DOY 366. However, the length of the window is not</span>
+<span class="sd">        guaranteed to be ``2 * window_length + 1``, but can also be ``2 * window_length + 2`` if the window crosses the ending of a leap</span>
+<span class="sd">        year. The setting ``&quot;strict&quot;`` is somewhat more stringently implemented. The window length is always ``2 * window_length + 1``,</span>
+<span class="sd">        however, the number of calendar days covered by a window is reduced by approximately a factor of 4 for</span>
+<span class="sd">        ``center_doy=366``, since a window is found only during leap years at all. This might cause the EOF to differ quite</span>
 <span class="sd">        a lot from those of DOY 365 and DOY 1, which is not wanted. Because of that the recommended setting</span>
-<span class="sd">        is the default value False.</span>
+<span class="sd">        is the default value ``&quot;original&quot;``, except for modeled data that contains no leap years. In this case the setting</span>
+<span class="sd">        ``&quot;no_leap_years&quot;`` is recommended.</span>
 
 <span class="sd">    :return: Tuple with, first, the array of indices and, second, the resulting DOYs for comparison.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">doys</span> <span class="o">=</span> <span class="n">calc_day_of_year</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span>
+
+    <span class="n">no_leap_years</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">leap_year_treatment</span> <span class="o">==</span> <span class="s2">&quot;no_leap_years&quot;</span><span class="p">:</span>
+        <span class="n">no_leap_years</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">strict_leap_year_treatment</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">leap_year_treatment</span> <span class="o">==</span> <span class="s2">&quot;strict&quot;</span><span class="p">:</span>
+        <span class="n">strict_leap_year_treatment</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">doys</span> <span class="o">=</span> <span class="n">calc_day_of_year</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">no_leap_years</span><span class="o">=</span><span class="n">no_leap_years</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">strict_leap_year_treatment</span><span class="p">:</span>
         <span class="n">center_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">doys</span> <span class="o">==</span> <span class="n">center_doy</span><span class="p">)</span>
@@ -262,66 +217,61 @@
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">resulting_idxlist</span><span class="p">),</span> <span class="n">doys</span><span class="p">[</span><span class="n">resulting_idxlist</span><span class="p">]</span></div>
 
+<div class="viewcode-block" id="doy_list"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.doy_list">[docs]</a><span class="k">def</span> <span class="nf">doy_list</span><span class="p">(</span><span class="n">no_leap_years</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 
-<div class="viewcode-block" id="doy_list"><a class="viewcode-back" href="../../api/tools.html#mjoindices.tools.doy_list">[docs]</a><span class="k">def</span> <span class="nf">doy_list</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 366.</span>
-<span class="sd">    Useful, e.g., as axis for plotting.</span>
+<span class="sd">    Returns an array of all DOYs in a year, hence simply the numbers from 1 to 365 or 366 (depending on the</span>
+<span class="sd">    consideration of leap years). Useful, e.g., as axis for plotting.</span>
 
-<span class="sd">    :return: The doy array.</span>
+<span class="sd">    :param no_leap_years: ``True`` if every year has 365 days, ``False`` if dataset contains leap years.</span>
+<span class="sd">    :return: The DOY array.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">367</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+    <span class="k">if</span> <span class="n">no_leap_years</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">366</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> 
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">367</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2020, Christoph G. Hoffmann
-
-    </p>
+    <p>&#169; Copyright 2020, Christoph G. Hoffmann.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-
-  
-  
-    
     <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
     <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-    ga('create', 'UA-XXXXXXX-1', 'auto');
-    ga('send', 'pageview');
-    </script>
-
-    
-   
+      gtag('config', 'UA-XXXXXXX-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
 
 </body>
 </html>

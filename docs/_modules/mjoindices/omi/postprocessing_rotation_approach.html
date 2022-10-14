@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mjoindices.omi.postprocessing_rotation_approach &mdash; mjoindices  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> mjoindices
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html">API documentation (for running calculations)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References and citation hints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mjoindices</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>mjoindices.omi.postprocessing_rotation_approach</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mjoindices.omi.postprocessing_rotation_approach</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Contains the post-processing of the EOFs as described in :ref:`refWeidman2022`. This is an alternative post-processing</span>
+<span class="sd">approach and does not lead to the same results as shown in :ref:`refKiladis2014`. It reduces noise avoids</span>
+<span class="sd">potential degeneracy issues.</span>
+
+<span class="sd">The post-processing procedure follows the below steps:</span>
+
+<span class="sd">#. Corrects spontaneous sign changes in the EOFs (same as the original procedure)</span>
+<span class="sd">#. Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations between EOFs on sequential days</span>
+<span class="sd">#. Rotate the projected EOFs by 1/366 (or 1/365) per day to ensure continuity across January to December</span>
+<span class="sd">#. Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical errors).</span>
+
+<span class="sd">.. seealso:: :py:mod:`mjoindices.omi.postprocessing_original_kiladis2014`</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+
+<span class="kn">import</span> <span class="nn">mjoindices.empirical_orthogonal_functions</span> <span class="k">as</span> <span class="nn">eof</span>
+<span class="kn">import</span> <span class="nn">mjoindices.omi.postprocessing_original_kiladis2014</span> <span class="k">as</span> <span class="nn">pp_kil2014</span>
+<span class="kn">import</span> <span class="nn">mjoindices.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+
+
+<div class="viewcode-block" id="post_process_eofs_rotation"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation">[docs]</a><span class="k">def</span> <span class="nf">post_process_eofs_rotation</span><span class="p">(</span><span class="n">eofdata</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span> <span class="n">sign_doy1reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Executes the complete post-processing of a series of EOF pairs for all DOYs according to the alterntive procedure</span>
+<span class="sd">    described by :ref:`refWeidman2022`.</span>
+
+<span class="sd">    Postprocessing includes an alignment of EOF signs and a rotation algorithm that rotates the EOFs</span>
+<span class="sd">    in three steps:</span>
+
+<span class="sd">    #. Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations between EOFs</span>
+<span class="sd">       on sequential days</span>
+<span class="sd">    #. Rotate the projected EOFs by 1/366 (or 1/365) per day to ensure continuity across January to December</span>
+<span class="sd">    #. Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical errors).</span>
+
+<span class="sd">    See documentation of the methods :py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series`</span>
+<span class="sd">    for EOF sign flipping</span>
+
+<span class="sd">    Note that it is recommended to use the function :py:func:`~mjoindices.omi.omi_calculator.calc_eofs_from_olr` to cover</span>
+<span class="sd">    the complete algorithm.</span>
+
+<span class="sd">    :param eofdata: The EOF series, which should be post processed.</span>
+<span class="sd">    :param sign_doy1reference: See :py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series`.</span>
+
+<span class="sd">    :return: The postprocessed series of EOFs</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">pp_eofs</span> <span class="o">=</span> <span class="n">pp_kil2014</span><span class="o">.</span><span class="n">correct_spontaneous_sign_changes_in_eof_series</span><span class="p">(</span><span class="n">eofdata</span><span class="p">,</span> <span class="n">doy1reference</span><span class="o">=</span><span class="n">sign_doy1reference</span><span class="p">)</span>
+    <span class="n">rot_eofs</span> <span class="o">=</span> <span class="n">rotate_eofs</span><span class="p">(</span><span class="n">pp_eofs</span><span class="p">)</span>
+    <span class="n">norm_eofs</span> <span class="o">=</span> <span class="n">normalize_eofs</span><span class="p">(</span><span class="n">rot_eofs</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">norm_eofs</span></div>
+
+
+<div class="viewcode-block" id="rotate_eofs"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.rotate_eofs">[docs]</a><span class="k">def</span> <span class="nf">rotate_eofs</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rotate EOFs at each DOY to</span>
+
+<span class="sd">    #. align with the EOFs of the previous day and</span>
+<span class="sd">    #. be continuous across December to January boundary.</span>
+
+<span class="sd">    Described more in detail in :py:func:&#39;post_process_eofs_rotation&#39;</span>
+
+<span class="sd">    :param orig_eofs: Calculated EOFs, signs have been changed via spontaneous_sign_changes.</span>
+
+<span class="sd">    :return: set of rotated EOFs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">calculate_angle_from_discontinuity</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rotating by &#39;</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
+    <span class="c1"># ToDo (Sarah): Is that a wanted print?</span>
+    <span class="k">return</span> <span class="n">rotate_each_eof_by_delta</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rotation_matrix"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.rotation_matrix">[docs]</a><span class="k">def</span> <span class="nf">rotation_matrix</span><span class="p">(</span><span class="n">delta</span><span class="p">):</span>
+    <span class="c1"># ToDo (Sarah): Please extend description by param and return value (although kind of trivial...)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return 2d rotation matrix for corresponding delta</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">delta</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">delta</span><span class="p">)],[</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">delta</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">delta</span><span class="p">)]])</span></div>
+
+
+<div class="viewcode-block" id="calculate_angle_from_discontinuity"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.calculate_angle_from_discontinuity">[docs]</a><span class="k">def</span> <span class="nf">calculate_angle_from_discontinuity</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">):</span>
+    <span class="c1"># ToDo (Sarah): Should it read &quot;day&#39;s&quot; or &quot;DOYs&quot;?</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Project the matrix to align with previous day&#39;s EOFs and calculate the resulting</span>
+<span class="sd">    discontinuity between January 1 and December 31. Divide by number of days in year to </span>
+<span class="sd">    result in delta for rotation matrix. </span>
+
+<span class="sd">    :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes</span>
+
+<span class="sd">    :return: float of (negative) average angular discontinuity between EOF1 and EOF2 on the </span>
+<span class="sd">             first and last day of year, divided by the length of the year.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">list_of_doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">(</span><span class="n">orig_eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span>
+    <span class="n">doy1</span> <span class="o">=</span> <span class="n">orig_eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">ndoys</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_doys</span><span class="p">)</span>
+    
+    <span class="c1"># set DOY1 initialization</span>
+    <span class="n">rots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">doy1</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">,</span> <span class="n">doy1</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">])</span>
+
+    <span class="c1"># project onto previous day</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">list_of_doys</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span><span class="o">+</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="n">ndoys</span><span class="p">:</span> <span class="c1"># for last day in cycle, return to January 1</span>
+            <span class="n">doyn</span> <span class="o">=</span> <span class="n">orig_eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">doyn</span> <span class="o">=</span> <span class="n">orig_eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">doyn</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">,</span> <span class="n">doyn</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">])</span><span class="o">.</span><span class="n">T</span> 
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rots</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">rots</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]])</span><span class="o">.</span><span class="n">T</span>
+    
+        <span class="n">rots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">),</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    
+    <span class="c1"># calculate discontinuity between Jan 1 and Jan 1 at end of rotation cycle</span>
+    <span class="n">discont</span> <span class="o">=</span> <span class="n">angle_btwn_vectors</span><span class="p">(</span><span class="n">doy1</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">,</span> <span class="n">rots</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span>
+
+    <span class="c1"># determine whether to rotate clockwise or counterclockwise, based on angle of E1 from projected</span>
+    <span class="c1"># E2 and angle of E2 from projected E1</span>
+    <span class="n">cross_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">doy1</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">,</span> <span class="n">rots</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">doy1</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">rots</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span>
+    <span class="k">if</span> <span class="n">cross_angle</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">discont</span><span class="o">/</span><span class="n">ndoys</span>
+    <span class="k">else</span><span class="p">:</span> 
+        <span class="k">return</span> <span class="n">discont</span><span class="o">/</span><span class="n">ndoys</span></div>
+
+
+<div class="viewcode-block" id="rotate_each_eof_by_delta"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.rotate_each_eof_by_delta">[docs]</a><span class="k">def</span> <span class="nf">rotate_each_eof_by_delta</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="c1"># ToDo (Sarah): Maybe spell out once, what delta actually is?</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Use delta calculated by optimization function to rotate original EOFs by delta.</span>
+<span class="sd">    First projects EOFs from DOY n-1 onto EOF space for DOY n, then rotates projected</span>
+<span class="sd">    EOFs by small angle delta. </span>
+
+<span class="sd">    :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes</span>
+<span class="sd">    :param delta: scalar by which to rotate EOFs calculated from discontinuity</span>
+
+<span class="sd">    :returns: new EOFdata with rotated EOFs.  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">R</span> <span class="o">=</span> <span class="n">rotation_matrix</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
+
+    <span class="n">doy1</span> <span class="o">=</span> <span class="n">orig_eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   
+    <span class="n">list_of_doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">(</span><span class="n">orig_eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span>
+    
+    <span class="n">eofdata_rotated</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">eofdata_rotated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">doy1</span><span class="p">)</span> <span class="c1"># first doy is unchanged</span>
+
+    <span class="c1"># set DOY1 initialization</span>
+    <span class="n">rots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">doy1</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">,</span> <span class="n">doy1</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">])</span>
+
+    <span class="c1"># project onto previous day and rotate </span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">list_of_doys</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">doyn</span> <span class="o">=</span> <span class="n">orig_eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+        <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">doyn</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">,</span> <span class="n">doyn</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">])</span><span class="o">.</span><span class="n">T</span> 
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rots</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">rots</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]])</span><span class="o">.</span><span class="n">T</span>
+    
+        <span class="n">rots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span><span class="p">),</span><span class="n">A</span><span class="p">),</span><span class="n">R</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="c1"># create new EOFData variable for rotated EOFs</span>
+        <span class="n">eofdata_rotated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">doyn</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">doyn</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> 
+                                <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">rots</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]),</span> 
+                                <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">rots</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]),</span>
+                                <span class="n">explained_variances</span><span class="o">=</span><span class="n">doyn</span><span class="o">.</span><span class="n">explained_variances</span><span class="p">,</span>
+                                <span class="n">eigenvalues</span><span class="o">=</span><span class="n">doyn</span><span class="o">.</span><span class="n">eigenvalues</span><span class="p">,</span>
+                                <span class="n">no_observations</span><span class="o">=</span><span class="n">doyn</span><span class="o">.</span><span class="n">no_observations</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">eofdata_rotated</span><span class="p">,</span> <span class="n">orig_eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="normalize_eofs"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.normalize_eofs">[docs]</a><span class="k">def</span> <span class="nf">normalize_eofs</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normalize all EOFs to have a magnitude of 1.</span>
+
+<span class="sd">    :param eofdata: The rotated EOF series.</span>
+
+<span class="sd">    :return: normalized EOFdata for all days.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">list_of_doys</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">doy_list</span><span class="p">(</span><span class="n">orig_eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span>
+
+    <span class="n">eofdata_normalized</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">list_of_doys</span><span class="p">:</span>
+
+        <span class="n">doyn</span> <span class="o">=</span> <span class="n">orig_eofs</span><span class="o">.</span><span class="n">eofdata_for_doy</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">eof1_norm</span> <span class="o">=</span> <span class="n">doyn</span><span class="o">.</span><span class="n">eof1vector</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">doyn</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">)</span>
+        <span class="n">eof2_norm</span> <span class="o">=</span> <span class="n">doyn</span><span class="o">.</span><span class="n">eof2vector</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">doyn</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">)</span> 
+
+       <span class="c1"># create new EOFData variable for rotated EOFs</span>
+        <span class="n">eofdata_normalized</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">(</span><span class="n">doyn</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">doyn</span><span class="o">.</span><span class="n">long</span><span class="p">,</span> 
+                                            <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eof1_norm</span><span class="p">),</span> 
+                                            <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">eof2_norm</span><span class="p">),</span>
+                                            <span class="n">explained_variances</span><span class="o">=</span><span class="n">doyn</span><span class="o">.</span><span class="n">explained_variances</span><span class="p">,</span>
+                                            <span class="n">eigenvalues</span><span class="o">=</span><span class="n">doyn</span><span class="o">.</span><span class="n">eigenvalues</span><span class="p">,</span>
+                                            <span class="n">no_observations</span><span class="o">=</span><span class="n">doyn</span><span class="o">.</span><span class="n">no_observations</span><span class="p">))</span> 
+
+    <span class="k">return</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">(</span><span class="n">eofdata_normalized</span><span class="p">,</span> <span class="n">orig_eofs</span><span class="o">.</span><span class="n">no_leap_years</span><span class="p">)</span> </div>
+
+
+<div class="viewcode-block" id="angle_between_eofs"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.angle_between_eofs">[docs]</a><span class="k">def</span> <span class="nf">angle_between_eofs</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">):</span>
+    <span class="c1"># ToDo (Sarah): Is theta the closeness? I have change the punctuation. Does ist still mean what you want to say?</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates angle between two EOF vectors to determine their &quot;closeness&quot; :math:`theta = arccos(t . r / (||r||*||t||))`.</span>
+
+<span class="sd">    :param reference: The reference-EOFs. This is usually the EOF pair of the previous or &quot;first&quot; DOY.</span>
+<span class="sd">    :param target: The EOF that you want to find the angle with.</span>
+
+<span class="sd">    :return: A tuple of  the angles between the reference and target EOFs for both EOF1 and EOF2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">angle1</span> <span class="o">=</span> <span class="n">angle_btwn_vectors</span><span class="p">(</span><span class="n">reference</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">)</span>
+    <span class="n">angle2</span> <span class="o">=</span> <span class="n">angle_btwn_vectors</span><span class="p">(</span><span class="n">reference</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">eof2vector</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">angle1</span><span class="p">,</span> <span class="n">angle2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="angle_btwn_vectors"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.angle_btwn_vectors">[docs]</a><span class="k">def</span> <span class="nf">angle_btwn_vectors</span><span class="p">(</span><span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">):</span>
+    <span class="c1"># ToDo (Sarah): Please explicitely describe params ans return values.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the angle between vectors, :math:`theta = arccos(t . r / (||r||*||t||))`.</span>
+
+<span class="sd">    Returns angle in radians</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">)</span>
+                             <span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vector1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vector2</span><span class="p">)),</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Christoph G. Hoffmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-XXXXXXX-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>

@@ -33,12 +33,22 @@ We kindly ask you to cite both papers if you use computed results in your scient
 
 The script may run for about 2 hours on common desktop computers.
 
+This example also produces some diagnostic plots. More evaluation can be done afterwards with the script
+evaluate_omi_reproduction.py.
+
 You can modify this example in order to compute OMI data from other OLR datasets (this is probably what you intend if
 you use this package).  For this, you only have to provide your OLR data as a mjoindices.olr_handling.OLRData object and
 use this object as replacement for the original data in two lines, which is mentioned in the comments below.
 
-This example also produces some diagnostic plots. More evaluation can be done afterwards with the script
-evaluate_omi_reproduction.py.
+Furthermore, we have received first advancements of the OMI algorithm from the community, as a consequence of making the
+implementation freely available. These advancements are not covered by Kiladis (2014), but should mostly be described in other
+scientific publications before their integration into the package. While we design the default settings such that the
+original OMI values are reproduced (which also applies for this example), you might want to check the documentation
+(https://cghoffmann.github.io/mjoindices/index.html) of the major function calls below to get an overview of the available options.
+Also, a list of relevant scientific publications is available (https://cghoffmann.github.io/mjoindices/references.html), on which
+the package is based. So far, this applies for an alternative post-processing approach for the EOFs,
+as well as a possibility to work with data without leap years and might be extended in the future.
+
 """
 
 from pathlib import Path
@@ -91,10 +101,10 @@ if not fig_dir.exists():
 
 # Load the OLR data.
 # This is the first line to replace to use your own OLR data, if you want to compute OMI for a different dataset.
+# ATTENTION: Note that the file format for the original NOAA OLR data has apparently been changed by NOAA
+# from NetCDF3 to NetCDF4 sometime between the years 2019 and 2021. If you are using a recent download of the data and
+# experience problems, you should switch between the following two lines:
 raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
-# ATTENTION: Note that the file format has apparently been changed by NOAA from NetCDF3 to NetCDF4 sometime
-# between the years 2019 and 2021. If you are using a recent download of the data an experience problems
-# with the previous loader method, you should use the following line instead:
 # raw_olr = olr.load_noaa_interpolated_olr_netcdf4(olr_data_filename)
 
 # Restrict dataset to the original length for the EOF calculation (Kiladis, 2014)
@@ -108,17 +118,20 @@ fig = olr.plot_olr_map_for_date(interpolated_olr, np.datetime64("2010-01-01"))
 fig.show()
 fig.savefig(fig_dir / "OLR_map.png")
 
-# Calculate the EOFs. In the postprocessing, the signs of the EOFs are adjusted and the EOFs in a period
-# around DOY 300 are replaced by an interpolation see Kiladis (2014).
-# The switch strict_leap_year_treatment has major implications only for the EOFs calculated for DOY 366 and causes only
-# minor differences for the other DOYs. While the results for setting strict_leap_year_treatment=False are closer to the
-# original values, the calculation strict_leap_year_treatment=True is somewhat more stringently implemented using
-# built-in datetime functionality.
-# See documentation of mjoindices.tools.find_doy_ranges_in_dates() for details.
+# Calculate the EOFs.
+# First a dictionary with parameters for the EOF post-processing function is filled. Then the basic function omi.calc_eofs_from_olr()
+# is called. The settings here are chosen to reproduce the original OMI values. See the API documentation for further options
+# and a description of the parameters (start at https://cghoffmann.github.io/mjoindices/api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr).
+
+kiladis_pp_params = {"sign_doy1reference": True,
+                      "interpolate_eofs": True,
+                      "interpolation_start_doy": 293,
+                      "interpolation_end_doy": 316}
+
 eofs = omi.calc_eofs_from_olr(interpolated_olr,
-                             sign_doy1reference=True,
-                             interpolate_eofs=True,
-                             strict_leap_year_treatment=False)
+                             leap_year_treatment="original",
+                             eofs_postprocessing_type="kiladis2014",
+                             eofs_postprocessing_params=kiladis_pp_params)
 eofs.save_all_eofs_to_npzfile(eofnpzfile)
 
 # ### Some diagnostic plots to evaluate the calculated EOFs.
