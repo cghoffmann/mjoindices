@@ -160,7 +160,7 @@
 
 <span class="sd">    Generally, the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous</span>
 <span class="sd">    DOY. The EOFs for DOY 1 are by default aligned with the original calculation by :ref:`refKiladis2014`, resulting in</span>
-<span class="sd">    an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off, so</span>
+<span class="sd">    an EOF series which is totally comparable to the original Kiladis (2014) calculation. This can be switched off, so</span>
 <span class="sd">    that only the EOFs for the DOYs beginning with DOY 2 are aligned according to the sign of the EOFS for DOY 1.</span>
 
 <span class="sd">    :param eofs: The EOF series for which the signs should be aligned.</span>
@@ -236,7 +236,8 @@
 <div class="viewcode-block" id="interpolate_eofs_between_doys"><a class="viewcode-back" href="../../../api/postprocessing_original_kiladis2014.html#mjoindices.omi.postprocessing_original_kiladis2014.interpolate_eofs_between_doys">[docs]</a><span class="k">def</span> <span class="nf">interpolate_eofs_between_doys</span><span class="p">(</span><span class="n">eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span> <span class="n">start_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">293</span><span class="p">,</span>
                                   <span class="n">end_doy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">316</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.</span>
+<span class="sd">    Replaces the EOF1 and EOF2 functions for the range of DOYS between 2 given DOYs using a linear interpolation </span>
+<span class="sd">    between the 2 boundary DOYs.</span>
 
 <span class="sd">    This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,</span>
 <span class="sd">    the EOFs have also been replaced by an interpolation according to :ref:`refKiladis2014`. However, the period stated in</span>
@@ -248,9 +249,9 @@
 
 <span class="sd">    :param eofs: The complete EOF series, in which the interpolation takes place.</span>
 <span class="sd">    :param start_doy: The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first</span>
-<span class="sd">        element, which will be replaced by the interpolation.</span>
+<span class="sd">        element that will be replaced by the interpolation.</span>
 <span class="sd">    :param end_doy:  The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last</span>
-<span class="sd">        element, which will be replaced by the interpolation.</span>
+<span class="sd">        element that will be replaced by the interpolation.</span>
 
 <span class="sd">    :return: The complete EOF series with the interpolated values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

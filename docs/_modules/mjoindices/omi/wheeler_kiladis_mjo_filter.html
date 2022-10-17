@@ -94,11 +94,11 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.</span>
 
-<span class="sd">Although implemented generically, it is not intended to use this module stand-alone outside the OMI context,</span>
-<span class="sd">since it is only extensively tested for the specific OMI filtering conditions.</span>
+<span class="sd">Although implemented generically, this module is not intended to be used stand-alone outside the OMI context,</span>
+<span class="sd">as it has only been extensively tested for the specific OMI filtering conditions.</span>
 
 <span class="sd">Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.</span>
-<span class="sd">Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.</span>
+<span class="sd">Instead, they probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.</span>
 
 <span class="sd">The complete algorithm is described by :ref:`refKiladis2014`</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -113,7 +113,7 @@
 <span class="sd">    Filters OLR data temporally with a bandwidth particularly selected for the PC calculation.</span>
 
 <span class="sd">    The filter algorithm is the same as for the combined temporal and longitudinal filtering,</span>
-<span class="sd">    but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is</span>
+<span class="sd">    but the longitudinal bandpass filter constants are defined so broadly that effectively no longitudinal filtering is</span>
 <span class="sd">    applied. The temporal filtering constants are chosen to meet the values in the description by :ref:`refKiladis2014`.</span>
 
 <span class="sd">    :param olrdata: The original OLR data.</span>
@@ -130,10 +130,10 @@
 <span class="sd">    Filters OLR data temporally.</span>
 
 <span class="sd">    The filter algorithm is the same as for the combined temporal and longitudinal filtering,</span>
-<span class="sd">    but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is</span>
+<span class="sd">    but the longitudinal bandpass filter constants are defined so broadly that effectively no longitudinal filtering is</span>
 <span class="sd">    applied.</span>
 
-<span class="sd">    Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.</span>
+<span class="sd">    Note that this function has only been strictly tested for filtering constants used by the OMI algorithm.</span>
 
 <span class="sd">    :param olrdata: The original OLR data</span>
 <span class="sd">    :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.</span>
@@ -169,7 +169,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Performs a temporal and longitudinal bandpass filtering of the OLR data with configurable filtering thresholds.</span>
 
-<span class="sd">    Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.</span>
+<span class="sd">    Note that this function has only been strictly tested for filtering constants used by the OMI algorithm.</span>
 
 <span class="sd">    :param olrdata: The original OLR data.</span>
 <span class="sd">    :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.</span>
@@ -268,11 +268,11 @@
 <span class="sd">        Note that the temporal and longitudinal dimension have in principle</span>
 <span class="sd">        different characteristics, so that they are in detail treated a bit</span>
 <span class="sd">        differently:</span>
-<span class="sd">        While the time is evolving into infinity (so that the number of data</span>
+<span class="sd">        While the time variable may evolve to infinity (thus, the number of data</span>
 <span class="sd">        points and the time_spacing variable are needed to calculate the</span>
-<span class="sd">        full temporal coverage), the longitude is periodic with the periodicity</span>
-<span class="sd">        of one globe (so that it is assumed that the data covers exactly one</span>
-<span class="sd">        globe and only passing the number of longitudes provides already the complete information).</span>
+<span class="sd">        full temporal coverage), longitude is periodic with the periodicity</span>
+<span class="sd">        of one globe (thus, it is assumed that the data covers exactly one</span>
+<span class="sd">        globe and only passing the number of longitudes provides complete information).</span>
 
 <span class="sd">        :param data: The OLR data as 2-dim array: first dimension time, second</span>
 <span class="sd">            dimension longitude, both equally spaced.</span>
@@ -286,7 +286,7 @@
 <span class="sd">        :param wn_min: Minimal wavenumber (in cycles per globe) that remains in the dataset.</span>
 <span class="sd">        :param wn_max: Maximal wavenumber (in cycles per globe) that remains in the dataset.</span>
 <span class="sd">        :param do_plot: If ``True``, diagnosis plots will be generated.</span>
-<span class="sd">        :param save_debug: If ``true``, some variables will be filled with values of intermediate processing steps</span>
+<span class="sd">        :param save_debug: If ``True``, some variables will be filled with values of intermediate processing steps</span>
 <span class="sd">            for debugging purposes.</span>
 
 <span class="sd">        :return: The filtered data.</span>

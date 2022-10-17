@@ -72,7 +72,7 @@
   <h1>Source code for mjoindices.omi.postprocessing_rotation_approach</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Contains the post-processing of the EOFs as described in :ref:`refWeidman2022`. This is an alternative post-processing</span>
-<span class="sd">approach and does not lead to the same results as shown in :ref:`refKiladis2014`. It reduces noise avoids</span>
+<span class="sd">approach and does not lead to the same results as shown in :ref:`refKiladis2014`. It reduces noise and avoids</span>
 <span class="sd">potential degeneracy issues.</span>
 
 <span class="sd">The post-processing procedure follows the below steps:</span>
@@ -108,7 +108,8 @@
 
 <span class="sd">    #. Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations between EOFs</span>
 <span class="sd">       on sequential days</span>
-<span class="sd">    #. Rotate the projected EOFs by 1/366 (or 1/365) per day to ensure continuity across January to December</span>
+<span class="sd">    #. Rotate the projected EOFs by 1/366 (or 1/365) of the December --&gt; January discontinuity each day to ensure </span>
+<span class="sd">       continuity across December to January</span>
 <span class="sd">    #. Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical errors).</span>
 
 <span class="sd">    See documentation of the methods :py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series`</span>
@@ -140,37 +141,39 @@
 
 <span class="sd">    Described more in detail in :py:func:&#39;post_process_eofs_rotation&#39;</span>
 
-<span class="sd">    :param orig_eofs: Calculated EOFs, signs have been changed via spontaneous_sign_changes.</span>
+<span class="sd">    :param orig_eofs: Calculated EOFs, which already has algined signs between neighboring DOYs.</span>
 
 <span class="sd">    :return: set of rotated EOFs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">delta</span> <span class="o">=</span> <span class="n">calculate_angle_from_discontinuity</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rotating by &#39;</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
-    <span class="c1"># ToDo (Sarah): Is that a wanted print?</span>
     <span class="k">return</span> <span class="n">rotate_each_eof_by_delta</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="rotation_matrix"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.rotation_matrix">[docs]</a><span class="k">def</span> <span class="nf">rotation_matrix</span><span class="p">(</span><span class="n">delta</span><span class="p">):</span>
-    <span class="c1"># ToDo (Sarah): Please extend description by param and return value (although kind of trivial...)</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Return 2d rotation matrix for corresponding delta</span>
+<span class="sd">    Creates a 2d rotation matrix for corresponding delta.</span>
+
+<span class="sd">    :param delta: Scalar angle, in radians, of desired rotation.</span>
+
+<span class="sd">    :return: 2x2 rotation matrix that can be used to rotate an Nx2 matrix in the x-y plane counterclockwise </span>
+<span class="sd">        by delta.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">delta</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">delta</span><span class="p">)],[</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">delta</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">delta</span><span class="p">)]])</span></div>
 
 
 <div class="viewcode-block" id="calculate_angle_from_discontinuity"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.calculate_angle_from_discontinuity">[docs]</a><span class="k">def</span> <span class="nf">calculate_angle_from_discontinuity</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">):</span>
-    <span class="c1"># ToDo (Sarah): Should it read &quot;day&#39;s&quot; or &quot;DOYs&quot;?</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Project the matrix to align with previous day&#39;s EOFs and calculate the resulting</span>
-<span class="sd">    discontinuity between January 1 and December 31. Divide by number of days in year to </span>
-<span class="sd">    result in delta for rotation matrix. </span>
+<span class="sd">    Project the matrix to align with the EOFs from the previous DOY and calculate the resulting</span>
+<span class="sd">    discontinuity between January 1 and January 1 after one year of projections. Divide by the number of days </span>
+<span class="sd">    in one year to determine the discontinuity used for rotation. </span>
 
-<span class="sd">    :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes</span>
+<span class="sd">    :param orig_eofs: calculated EOFs, after signs have been changed via spontaneous_sign_changes</span>
 
-<span class="sd">    :return: float of (negative) average angular discontinuity between EOF1 and EOF2 on the </span>
-<span class="sd">             first and last day of year, divided by the length of the year.</span>
+<span class="sd">    :return: float of angular discontinuity between EOF1 on DOY1 and EOF1 on DOY1 after a full year of </span>
+<span class="sd">        projection, divided by the length of the year.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -207,16 +210,17 @@
 
 
 <div class="viewcode-block" id="rotate_each_eof_by_delta"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.rotate_each_eof_by_delta">[docs]</a><span class="k">def</span> <span class="nf">rotate_each_eof_by_delta</span><span class="p">(</span><span class="n">orig_eofs</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
-    <span class="c1"># ToDo (Sarah): Maybe spell out once, what delta actually is?</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Use delta calculated by optimization function to rotate original EOFs by delta.</span>
 <span class="sd">    First projects EOFs from DOY n-1 onto EOF space for DOY n, then rotates projected</span>
 <span class="sd">    EOFs by small angle delta. </span>
 
 <span class="sd">    :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes</span>
-<span class="sd">    :param delta: scalar by which to rotate EOFs calculated from discontinuity</span>
+<span class="sd">    :param delta: scalar by which to rotate EOFs. Calculated as the angular discontinuity between EOF1 on DOY1 </span>
+<span class="sd">        and EOF1 on DOY1 after a full year of projection, divided by the length of the year.</span>
 
-<span class="sd">    :returns: new EOFdata with rotated EOFs.  </span>
+<span class="sd">    :return: new EOFdata with projected and rotated EOFs.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">R</span> <span class="o">=</span> <span class="n">rotation_matrix</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
@@ -281,14 +285,13 @@
 
 
 <div class="viewcode-block" id="angle_between_eofs"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.angle_between_eofs">[docs]</a><span class="k">def</span> <span class="nf">angle_between_eofs</span><span class="p">(</span><span class="n">reference</span><span class="p">:</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">eof</span><span class="o">.</span><span class="n">EOFData</span><span class="p">):</span>
-    <span class="c1"># ToDo (Sarah): Is theta the closeness? I have change the punctuation. Does ist still mean what you want to say?</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates angle between two EOF vectors to determine their &quot;closeness&quot; :math:`theta = arccos(t . r / (||r||*||t||))`.</span>
 
 <span class="sd">    :param reference: The reference-EOFs. This is usually the EOF pair of the previous or &quot;first&quot; DOY.</span>
-<span class="sd">    :param target: The EOF that you want to find the angle with.</span>
+<span class="sd">    :param target: The EOF data from the target DOY.</span>
 
-<span class="sd">    :return: A tuple of  the angles between the reference and target EOFs for both EOF1 and EOF2</span>
+<span class="sd">    :return: A tuple of the angles between the reference and target EOFs for both EOF1 and EOF2</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">angle1</span> <span class="o">=</span> <span class="n">angle_btwn_vectors</span><span class="p">(</span><span class="n">reference</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">eof1vector</span><span class="p">)</span>
@@ -298,11 +301,13 @@
 
 
 <div class="viewcode-block" id="angle_btwn_vectors"><a class="viewcode-back" href="../../../api/postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.angle_btwn_vectors">[docs]</a><span class="k">def</span> <span class="nf">angle_btwn_vectors</span><span class="p">(</span><span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">):</span>
-    <span class="c1"># ToDo (Sarah): Please explicitely describe params ans return values.</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the angle between vectors, :math:`theta = arccos(t . r / (||r||*||t||))`.</span>
 
-<span class="sd">    Returns angle in radians</span>
+<span class="sd">    :param vector1: 1d vector, generally corresponding to EOF1 or 2 from some DOY</span>
+<span class="sd">    :param vector2: 1d vector, generally corresponding to EOF1 or 2 from a different DOY</span>
+
+<span class="sd">    :return: scalar angle between vectors 1 and 2, in radians. </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">)</span>

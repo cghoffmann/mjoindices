@@ -82,8 +82,8 @@
              
   <section id="module-mjoindices.omi.postprocessing_rotation_approach">
 <span id="module-mjoindices-omi-postprocessing-rotation-approach"></span><h1>Module mjoindices.omi.postprocessing_rotation_approach<a class="headerlink" href="#module-mjoindices.omi.postprocessing_rotation_approach" title="Permalink to this heading"></a></h1>
-<p>Contains the post-processing of the EOFs as described in <a class="reference internal" href="../references.html#refweidman2022"><span class="std std-ref">Weidmann et al. (2022)</span></a>. This is an alternative post-processing
-approach and does not lead to the same results as shown in <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>. It reduces noise avoids
+<p>Contains the post-processing of the EOFs as described in <a class="reference internal" href="../references.html#refweidman2022"><span class="std std-ref">Weidman et al. (2022)</span></a>. This is an alternative post-processing
+approach and does not lead to the same results as shown in <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>. It reduces noise and avoids
 potential degeneracy issues.</p>
 <p>The post-processing procedure follows the below steps:</p>
 <ol class="arabic simple">
@@ -104,11 +104,11 @@ potential degeneracy issues.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>reference</strong> – The reference-EOFs. This is usually the EOF pair of the previous or “first” DOY.</p></li>
-<li><p><strong>target</strong> – The EOF that you want to find the angle with.</p></li>
+<li><p><strong>target</strong> – The EOF data from the target DOY.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A tuple of  the angles between the reference and target EOFs for both EOF1 and EOF2</p>
+<dd class="field-even"><p>A tuple of the angles between the reference and target EOFs for both EOF1 and EOF2</p>
 </dd>
 </dl>
 </dd></dl>
@@ -117,22 +117,32 @@ potential degeneracy issues.</p>
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.angle_btwn_vectors">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">angle_btwn_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#angle_btwn_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.angle_btwn_vectors" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the angle between vectors, <span class="math notranslate nohighlight">\(theta = arccos(t . r / (||r||*||t||))\)</span>.</p>
-<p>Returns angle in radians</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector1</strong> – 1d vector, generally corresponding to EOF1 or 2 from some DOY</p></li>
+<li><p><strong>vector2</strong> – 1d vector, generally corresponding to EOF1 or 2 from a different DOY</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>scalar angle between vectors 1 and 2, in radians.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.calculate_angle_from_discontinuity">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">calculate_angle_from_discontinuity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#calculate_angle_from_discontinuity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.calculate_angle_from_discontinuity" title="Permalink to this definition"></a></dt>
-<dd><p>Project the matrix to align with previous day’s EOFs and calculate the resulting
-discontinuity between January 1 and December 31. Divide by number of days in year to
-result in delta for rotation matrix.</p>
+<dd><p>Project the matrix to align with the EOFs from the previous DOY and calculate the resulting
+discontinuity between January 1 and January 1 after one year of projections. Divide by the number of days
+in one year to determine the discontinuity used for rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>orig_eofs</strong> – calculated EOFs, signs have been changed via spontaneous_sign_changes</p>
+<dd class="field-odd"><p><strong>orig_eofs</strong> – calculated EOFs, after signs have been changed via spontaneous_sign_changes</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>float of (negative) average angular discontinuity between EOF1 and EOF2 on the
-first and last day of year, divided by the length of the year.</p>
+<dd class="field-even"><p>float of angular discontinuity between EOF1 on DOY1 and EOF1 on DOY1 after a full year of
+projection, divided by the length of the year.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -155,13 +165,14 @@ first and last day of year, divided by the length of the year.</p>
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">post_process_eofs_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign_doy1reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#post_process_eofs_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation" title="Permalink to this definition"></a></dt>
 <dd><p>Executes the complete post-processing of a series of EOF pairs for all DOYs according to the alterntive procedure
-described by <a class="reference internal" href="../references.html#refweidman2022"><span class="std std-ref">Weidmann et al. (2022)</span></a>.</p>
+described by <a class="reference internal" href="../references.html#refweidman2022"><span class="std std-ref">Weidman et al. (2022)</span></a>.</p>
 <p>Postprocessing includes an alignment of EOF signs and a rotation algorithm that rotates the EOFs
 in three steps:</p>
 <ol class="arabic simple">
 <li><p>Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations between EOFs
 on sequential days</p></li>
-<li><p>Rotate the projected EOFs by 1/366 (or 1/365) per day to ensure continuity across January to December</p></li>
+<li><p>Rotate the projected EOFs by 1/366 (or 1/365) of the December –&gt; January discontinuity each day to ensure
+continuity across December to January</p></li>
 <li><p>Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical errors).</p></li>
 </ol>
 <p>See documentation of the methods <a class="reference internal" href="postprocessing_original_kiladis2014.html#mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series" title="mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series"><code class="xref py py-func docutils literal notranslate"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a>
@@ -191,11 +202,12 @@ EOFs by small angle delta.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>orig_eofs</strong> – calculated EOFs, signs have been changed via spontaneous_sign_changes</p></li>
-<li><p><strong>delta</strong> – scalar by which to rotate EOFs calculated from discontinuity</p></li>
+<li><p><strong>delta</strong> – scalar by which to rotate EOFs. Calculated as the angular discontinuity between EOF1 on DOY1
+and EOF1 on DOY1 after a full year of projection, divided by the length of the year.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>new EOFdata with rotated EOFs.</p>
+<dd class="field-even"><p>new EOFdata with projected and rotated EOFs.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -211,7 +223,7 @@ EOFs by small angle delta.</p>
 <p>Described more in detail in :py:func:’post_process_eofs_rotation’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>orig_eofs</strong> – Calculated EOFs, signs have been changed via spontaneous_sign_changes.</p>
+<dd class="field-odd"><p><strong>orig_eofs</strong> – Calculated EOFs, which already has algined signs between neighboring DOYs.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>set of rotated EOFs.</p>
@@ -222,7 +234,16 @@ EOFs by small angle delta.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.rotation_matrix">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">rotation_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#rotation_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.rotation_matrix" title="Permalink to this definition"></a></dt>
-<dd><p>Return 2d rotation matrix for corresponding delta</p>
+<dd><p>Creates a 2d rotation matrix for corresponding delta.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>delta</strong> – Scalar angle, in radians, of desired rotation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>2x2 rotation matrix that can be used to rotate an Nx2 matrix in the x-y plane counterclockwise
+by delta.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

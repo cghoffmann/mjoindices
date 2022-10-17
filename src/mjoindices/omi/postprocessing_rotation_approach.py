@@ -1,6 +1,6 @@
 """
 Contains the post-processing of the EOFs as described in :ref:`refWeidman2022`. This is an alternative post-processing
-approach and does not lead to the same results as shown in :ref:`refKiladis2014`. It reduces noise avoids
+approach and does not lead to the same results as shown in :ref:`refKiladis2014`. It reduces noise and avoids
 potential degeneracy issues.
 
 The post-processing procedure follows the below steps:
@@ -36,7 +36,8 @@ def post_process_eofs_rotation(eofdata: eof.EOFDataForAllDOYs, sign_doy1referenc
 
     #. Projects EOFs at DOY = n-1 onto EOF space for DOY = n. This is done to reduce spurious oscillations between EOFs
        on sequential days
-    #. Rotate the projected EOFs by 1/366 (or 1/365) per day to ensure continuity across January to December
+    #. Rotate the projected EOFs by 1/366 (or 1/365) of the December --> January discontinuity each day to ensure 
+       continuity across December to January
     #. Renormalize the EOFs to have a length of 1 (this is a small adjustment to account for small numerical errors).
 
     See documentation of the methods :py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series`
@@ -68,37 +69,39 @@ def rotate_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
 
     Described more in detail in :py:func:'post_process_eofs_rotation'
 
-    :param orig_eofs: Calculated EOFs, signs have been changed via spontaneous_sign_changes.
+    :param orig_eofs: Calculated EOFs, which already has algined signs between neighboring DOYs.
 
     :return: set of rotated EOFs.
     """
 
     delta = calculate_angle_from_discontinuity(orig_eofs)
 
-    print('Rotating by ', delta)
-    # ToDo (Sarah): Is that a wanted print?
     return rotate_each_eof_by_delta(orig_eofs, delta)
 
 
 def rotation_matrix(delta):
-    # ToDo (Sarah): Please extend description by param and return value (although kind of trivial...)
     """
-    Return 2d rotation matrix for corresponding delta
+    Creates a 2d rotation matrix for corresponding delta.
+
+    :param delta: Scalar angle, in radians, of desired rotation.
+
+    :return: 2x2 rotation matrix that can be used to rotate an Nx2 matrix in the x-y plane counterclockwise 
+        by delta.
+
     """
     return np.array([[np.cos(delta), -np.sin(delta)],[np.sin(delta), np.cos(delta)]])
 
 
 def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs):
-    # ToDo (Sarah): Should it read "day's" or "DOYs"?
     """
-    Project the matrix to align with previous day's EOFs and calculate the resulting
-    discontinuity between January 1 and December 31. Divide by number of days in year to 
-    result in delta for rotation matrix. 
+    Project the matrix to align with the EOFs from the previous DOY and calculate the resulting
+    discontinuity between January 1 and January 1 after one year of projections. Divide by the number of days 
+    in one year to determine the discontinuity used for rotation. 
 
-    :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes
+    :param orig_eofs: calculated EOFs, after signs have been changed via spontaneous_sign_changes
 
-    :return: float of (negative) average angular discontinuity between EOF1 and EOF2 on the 
-             first and last day of year, divided by the length of the year.
+    :return: float of angular discontinuity between EOF1 on DOY1 and EOF1 on DOY1 after a full year of 
+        projection, divided by the length of the year.
 
     """
 
@@ -135,16 +138,17 @@ def calculate_angle_from_discontinuity(orig_eofs: eof.EOFDataForAllDOYs):
 
 
 def rotate_each_eof_by_delta(orig_eofs: eof.EOFDataForAllDOYs, delta: float) -> eof.EOFDataForAllDOYs:
-    # ToDo (Sarah): Maybe spell out once, what delta actually is?
     """
     Use delta calculated by optimization function to rotate original EOFs by delta.
     First projects EOFs from DOY n-1 onto EOF space for DOY n, then rotates projected
     EOFs by small angle delta. 
 
     :param orig_eofs: calculated EOFs, signs have been changed via spontaneous_sign_changes
-    :param delta: scalar by which to rotate EOFs calculated from discontinuity
+    :param delta: scalar by which to rotate EOFs. Calculated as the angular discontinuity between EOF1 on DOY1 
+        and EOF1 on DOY1 after a full year of projection, divided by the length of the year.
 
-    :returns: new EOFdata with rotated EOFs.  
+    :return: new EOFdata with projected and rotated EOFs.
+
     """
 
     R = rotation_matrix(delta)
@@ -209,14 +213,13 @@ def normalize_eofs(orig_eofs: eof.EOFDataForAllDOYs) -> eof.EOFDataForAllDOYs:
 
 
 def angle_between_eofs(reference: eof.EOFData, target=eof.EOFData):
-    # ToDo (Sarah): Is theta the closeness? I have change the punctuation. Does ist still mean what you want to say?
     """
     Calculates angle between two EOF vectors to determine their "closeness" :math:`theta = arccos(t . r / (||r||*||t||))`.
 
     :param reference: The reference-EOFs. This is usually the EOF pair of the previous or "first" DOY.
-    :param target: The EOF that you want to find the angle with.
+    :param target: The EOF data from the target DOY.
 
-    :return: A tuple of  the angles between the reference and target EOFs for both EOF1 and EOF2
+    :return: A tuple of the angles between the reference and target EOFs for both EOF1 and EOF2
     """
 
     angle1 = angle_btwn_vectors(reference.eof1vector, target.eof1vector)
@@ -226,11 +229,13 @@ def angle_between_eofs(reference: eof.EOFData, target=eof.EOFData):
 
 
 def angle_btwn_vectors(vector1, vector2):
-    # ToDo (Sarah): Please explicitely describe params ans return values.
     """
     Calculates the angle between vectors, :math:`theta = arccos(t . r / (||r||*||t||))`.
 
-    Returns angle in radians
+    :param vector1: 1d vector, generally corresponding to EOF1 or 2 from some DOY
+    :param vector2: 1d vector, generally corresponding to EOF1 or 2 from a different DOY
+
+    :return: scalar angle between vectors 1 and 2, in radians. 
     """
 
     return np.arccos(np.clip(np.dot(vector1, vector2)

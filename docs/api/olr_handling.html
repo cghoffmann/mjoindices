@@ -117,7 +117,7 @@ order.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range">
 <span class="sig-name descname"><span class="pre">extract_olr_matrix_for_doy_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center_doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leap_year_treatment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'original'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#OLRData.extract_olr_matrix_for_doy_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range" title="Permalink to this definition"></a></dt>
-<dd><p>Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).</p>
+<dd><p>Extracts a range of OLR data from the DOYs around one center DOY (center_doy +/- windowlength).</p>
 <p>Keep in mind that the OLR time series might span several years. In this case the center DOY is found more than
 once and the respective window in considered for each year.
 Example: 3 full years of data, centerdoy = 20, and window_length = 4 results in 3*(2*4+1) = 27 entries in the
@@ -126,7 +126,7 @@ time axis</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>center_doy</strong> – The center DOY of the window.</p></li>
-<li><p><strong>window_length</strong> – The window length in DOYs on both sides of the center DOY. Hence, if the window is fully
+<li><p><strong>window_length</strong> – The window length of DOYs on both sides of the center DOY. Hence, if the window is fully
 covered by the data, one gets :math:<code class="docutils literal notranslate"><span class="pre">2*window_length</span> <span class="pre">+</span> <span class="pre">1</span></code> entries per year in the result.</p></li>
 <li><p><strong>leap_year_treatment</strong> – see :py:func:<code class="docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator.calc_eofs_from_olr</span></code>.</p></li>
 </ul>
@@ -144,11 +144,11 @@ time, latitude, and longitude, in this order.</p>
 <dd><p>Returns the spatially distributed OLR map for a particular date.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>date</strong> – The date, which hat to be exactly matched by one of the dates in the OLR time grid.</p>
+<dd class="field-odd"><p><strong>date</strong> – The date, which has to be exactly matched by one of the dates in the OLR time grid.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The excerpt of the OLR data as a 2-dim array. The two dimensions correspond to
-latitude, and longitude, in this order. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if the date is not contained in the OLR time series.</p>
+latitude and longitude, in this order. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if the date is not contained in the OLR time series.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -197,8 +197,8 @@ order.</p>
 <dd><p>Interpolates the OLR data linearly onto the given grids.</p>
 <p>No extrapolation will be done. Instead, a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a> is raised if the data does not cover the target
 grid.</p>
-<p>Note that no sophisticated resampling is provided here. So, if some kind of averaging, etc., is needed, it should
-be performed by the user himself before injecting the data into the OMI calculation.</p>
+<p>Note that no sophisticated resampling is provided here. If some kind of averaging, etc., is needed, it should
+be performed by the user before injecting the data into the OMI calculation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -238,8 +238,8 @@ which was used for the original OMI calculation by <a class="reference internal"
 <span class="sig-prename descclassname"><span class="pre">mjoindices.olr_handling.</span></span><span class="sig-name descname"><span class="pre">load_noaa_interpolated_olr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#load_noaa_interpolated_olr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.olr_handling.load_noaa_interpolated_olr" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the standard OLR data product provided by NOAA in NetCDF3 format.
 This is mainly used to load the OLR files originally used for the OMI calculation some years ago.</p>
-<p>ATTENTION: Note that the file format has apparently been changed by NOAA from NetCDF3 to NetCDF4 sometime
-between the years 2019 and 2021. If you are using a recent download of the data an experience problems
+<p>ATTENTION: Note that the file format was changed by NOAA from NetCDF3 to NetCDF4 sometime
+between the years 2019 and 2021. If you are using a recent download of the data and experience problems
 with this loader method, you should use <a class="reference internal" href="#mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4" title="mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_noaa_interpolated_olr_netcdf4()</span></code></a> instead.</p>
 <p>The original OLR data file is contained in the reference data package found at: <a class="reference external" href="https://doi.org/10.5281/zenodo.3746562">https://doi.org/10.5281/zenodo.3746562</a></p>
 <p>The current dataset can be obtained from
@@ -261,7 +261,7 @@ with this loader method, you should use <a class="reference internal" href="#mjo
 <span class="sig-prename descclassname"><span class="pre">mjoindices.olr_handling.</span></span><span class="sig-name descname"><span class="pre">load_noaa_interpolated_olr_netcdf4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#load_noaa_interpolated_olr_netcdf4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the standard OLR data product provided by NOAA in NetCDF4 format.</p>
 <p>ATTENTION: Whereas NetCDF4 seems to be the format of the recent NOAA OLR data files, the files originally used some
-years ago where saved in NetCDF3. So, if you are going to load the original files for reference purposes, you should
+years ago were saved as NetCDF3. So, if you are going to load the original files for reference purposes, you should
 use the loader function <a class="reference internal" href="#mjoindices.olr_handling.load_noaa_interpolated_olr" title="mjoindices.olr_handling.load_noaa_interpolated_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_noaa_interpolated_olr()</span></code></a> instead.</p>
 <p>The dataset can be obtained from
 <a class="reference external" href="https://www.psl.noaa.gov/thredds/catalog/Datasets/interp_OLR/catalog.html?dataset=Datasets/interp_OLR/olr.day.mean.nc">https://www.psl.noaa.gov/thredds/catalog/Datasets/interp_OLR/catalog.html?dataset=Datasets/interp_OLR/olr.day.mean.nc</a></p>
@@ -285,7 +285,7 @@ use the loader function <a class="reference internal" href="#mjoindices.olr_hand
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>olr</strong> – The complete OLR data.</p></li>
-<li><p><strong>date</strong> – The date for which da OLR data should be plotted
+<li><p><strong>date</strong> – The date for which the OLR data should be plotted
 (has to be exactly matched by a date of the OLR time grid).</p></li>
 </ul>
 </dd>
@@ -298,14 +298,14 @@ use the loader function <a class="reference internal" href="#mjoindices.olr_hand
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.olr_handling.remove_leap_years">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.olr_handling.</span></span><span class="sig-name descname"><span class="pre">remove_leap_years</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">olr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#remove_leap_years"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.olr_handling.remove_leap_years" title="Permalink to this definition"></a></dt>
-<dd><p>Removes any leap days (any dates that have both Month = Feb and Day = 29) and returns complete OLRDataset
-with remaining olr data</p>
+<dd><p>Removes any leap days (any instances of February 29) and returns an <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><code class="xref py py-class docutils literal notranslate"><span class="pre">OLRData</span></code></a> object
+with the remaining OLR data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>olr</strong> – The OLR data to restrict.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A new :class:’OLRData’ object with no leap days</p>
+<dd class="field-even"><p>A new <a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><code class="xref py py-class docutils literal notranslate"><span class="pre">OLRData</span></code></a> object with no leap days</p>
 </dd>
 </dl>
 </dd></dl>
@@ -332,7 +332,7 @@ with remaining olr data</p>
 <p>This is useful when the OLR data should be restricted for the EOF calculation, which is based on a subset.
 Of course, it can also be used to limit the PC calculation to a specific period.</p>
 <p>Note that a temporal resampling method is not provided here, since the possible resampling methods,
-which the users might want to apply, are too diverse. Hence, it is assumed that the temporal spacing ist already
+which the users might want to apply, are too diverse. Hence, it is assumed that the temporal spacing is already
 correct (daily averages recommended) and only a restriction of the period is needed before calculation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

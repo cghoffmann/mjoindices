@@ -152,7 +152,7 @@
                        <span class="n">strict_leap_year_treatment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span>
                        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eof</span><span class="o">.</span><span class="n">EOFDataForAllDOYs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    One major function of this module. It performs the complete OMI EOF computation.</span>
+<span class="sd">    One of the major functions of this module. It performs the complete OMI EOF computation.</span>
 
 <span class="sd">    This function executes consistently the preprocessing (filtering), the actual EOF analysis, and the postprocessing.</span>
 
@@ -293,7 +293,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Performs the preprocessing of an OLR dataset to make it suitable for the EOF analysis.</span>
 
-<span class="sd">    This is actually a major step of the OMI algorithm and includes the Wheeler-Kiladis-Filtering.</span>
+<span class="sd">    This is a major step of the OMI algorithm and includes the Wheeler-Kiladis-Filtering.</span>
 
 <span class="sd">    Note that it is recommended to use the function :py:func:`calc_eofs_from_olr` to cover the complete algorithm.</span>
 
@@ -476,7 +476,7 @@
                                                <span class="n">use_quick_temporal_filter</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pc</span><span class="o">.</span><span class="n">PCData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convenience function that calculates the OMI PCs for the original period using the original dataset (which has,</span>
-<span class="sd">    however, to be provided by the user himself).</span>
+<span class="sd">    however, to be provided by the user).</span>
 
 <span class="sd">    :param olrdata: The original OLR data, which can be downloaded from</span>
 <span class="sd">        https://www.psl.noaa.gov/thredds/catalog/Datasets/interp_OLR/catalog.html?dataset=Datasets/interp_OLR/olr.day.mean.nc. It can be read with the</span>
@@ -503,11 +503,11 @@
 <span class="sd">    Finds time-dependent coefficients w.r.t the DOY-dependent EOF basis for time-dependent spatially resolved data.</span>
 
 <span class="sd">    I.e. it finds the PCs for temporally resolved OLR data. But the function can also be used for other datasets,</span>
-<span class="sd">    as long as those datasets have the same structure like the the class :class:`mjoindices.olr_handling.OLRData`.</span>
+<span class="sd">    as long as those datasets have the same structure as the the class :class:`mjoindices.olr_handling.OLRData`.</span>
 
-<span class="sd">    :param data: The data, for which the coefficients are sought. Should be an object of class</span>
+<span class="sd">    :param data: The data used to compute the coefficients. Should be an object of class</span>
 <span class="sd">        :class:`mjoindices.olr_handling.OLRData` or of similar structure.</span>
-<span class="sd">    :param eofdata: The DOY-dependent pairs of EOFs, like computed by, e.g., :func:`calc_eofs_from_olr`</span>
+<span class="sd">    :param eofdata: The DOY-dependent pairs of EOFs, as computed by, e.g., :func:`calc_eofs_from_olr`</span>
 
 <span class="sd">    :return: The time-dependent PCs as :class:`mjoindices.principal_components.PCData`</span>
 <span class="sd">    &quot;&quot;&quot;</span>

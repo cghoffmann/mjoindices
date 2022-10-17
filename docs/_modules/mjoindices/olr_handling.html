@@ -101,7 +101,7 @@
 <span class="kn">import</span> <span class="nn">scipy</span>
 <span class="kn">import</span> <span class="nn">scipy.interpolate</span>
 <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
-<span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">netcdf</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span>
 <span class="kn">import</span> <span class="nn">netCDF4</span> <span class="k">as</span> <span class="nn">netcdf4</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
@@ -191,10 +191,10 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the spatially distributed OLR map for a particular date.</span>
 
-<span class="sd">        :param date: The date, which hat to be exactly matched by one of the dates in the OLR time grid.</span>
+<span class="sd">        :param date: The date, which has to be exactly matched by one of the dates in the OLR time grid.</span>
 
 <span class="sd">        :return: The excerpt of the OLR data as a 2-dim array. The two dimensions correspond to</span>
-<span class="sd">            latitude, and longitude, in this order. Returns ``None`` if the date is not contained in the OLR time series.</span>
+<span class="sd">            latitude and longitude, in this order. Returns ``None`` if the date is not contained in the OLR time series.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">==</span> <span class="n">date</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">cand</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span>  <span class="c1"># noqa: E712</span>
@@ -204,7 +204,7 @@
 
 <div class="viewcode-block" id="OLRData.extract_olr_matrix_for_doy_range"><a class="viewcode-back" href="../../api/olr_handling.html#mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range">[docs]</a>    <span class="k">def</span> <span class="nf">extract_olr_matrix_for_doy_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center_doy</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">window_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">leap_year_treatment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;original&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).</span>
+<span class="sd">        Extracts a range of OLR data from the DOYs around one center DOY (center_doy +/- windowlength).</span>
 
 <span class="sd">        Keep in mind that the OLR time series might span several years. In this case the center DOY is found more than</span>
 <span class="sd">        once and the respective window in considered for each year.</span>
@@ -212,7 +212,7 @@
 <span class="sd">        time axis</span>
 
 <span class="sd">        :param center_doy: The center DOY of the window.</span>
-<span class="sd">        :param window_length: The window length in DOYs on both sides of the center DOY. Hence, if the window is fully</span>
+<span class="sd">        :param window_length: The window length of DOYs on both sides of the center DOY. Hence, if the window is fully</span>
 <span class="sd">            covered by the data, one gets :math:``2*window_length + 1`` entries per year in the result.</span>
 <span class="sd">        :param leap_year_treatment: see :py:func:``mjoindices.omi.omi_calculator.calc_eofs_from_olr``.</span>
 <span class="sd">        :return: The excerpt of the OLR data as a 3-dim array. The three dimensions correspond to</span>
@@ -259,8 +259,8 @@
 <span class="sd">    No extrapolation will be done. Instead, a :py:class:`ValueError` is raised if the data does not cover the target</span>
 <span class="sd">    grid.</span>
 
-<span class="sd">    Note that no sophisticated resampling is provided here. So, if some kind of averaging, etc., is needed, it should</span>
-<span class="sd">    be performed by the user himself before injecting the data into the OMI calculation.</span>
+<span class="sd">    Note that no sophisticated resampling is provided here. If some kind of averaging, etc., is needed, it should</span>
+<span class="sd">    be performed by the user before injecting the data into the OMI calculation.</span>
 
 <span class="sd">    :param olr: The OLR data to resample.</span>
 <span class="sd">    :param target_lat: The new latitude grid.</span>
@@ -284,7 +284,7 @@
 <span class="sd">    Of course, it can also be used to limit the PC calculation to a specific period.</span>
 
 <span class="sd">    Note that a temporal resampling method is not provided here, since the possible resampling methods,</span>
-<span class="sd">    which the users might want to apply, are too diverse. Hence, it is assumed that the temporal spacing ist already</span>
+<span class="sd">    which the users might want to apply, are too diverse. Hence, it is assumed that the temporal spacing is already</span>
 <span class="sd">    correct (daily averages recommended) and only a restriction of the period is needed before calculation.</span>
 
 <span class="sd">    :param olr: The OLR data to restrict.</span>
@@ -305,12 +305,12 @@
 
 <div class="viewcode-block" id="remove_leap_years"><a class="viewcode-back" href="../../api/olr_handling.html#mjoindices.olr_handling.remove_leap_years">[docs]</a><span class="k">def</span> <span class="nf">remove_leap_years</span><span class="p">(</span><span class="n">olr</span><span class="p">:</span> <span class="n">OLRData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OLRData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Removes any leap days (any dates that have both Month = Feb and Day = 29) and returns complete OLRDataset</span>
-<span class="sd">    with remaining olr data</span>
+<span class="sd">    Removes any leap days (any instances of February 29) and returns an :class:`OLRData` object</span>
+<span class="sd">    with the remaining OLR data</span>
 
 <span class="sd">    :param olr: The OLR data to restrict.</span>
 
-<span class="sd">    :return: A new :class:&#39;OLRData&#39; object with no leap days</span>
+<span class="sd">    :return: A new :class:`OLRData` object with no leap days</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">window_inds</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span><span class="o">.</span><span class="n">month</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span><span class="o">.</span><span class="n">day</span> <span class="o">!=</span> <span class="mi">29</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">olr</span><span class="o">.</span><span class="n">time</span><span class="p">]</span>
@@ -323,8 +323,8 @@
 <span class="sd">    Loads the standard OLR data product provided by NOAA in NetCDF3 format.</span>
 <span class="sd">    This is mainly used to load the OLR files originally used for the OMI calculation some years ago.</span>
 
-<span class="sd">    ATTENTION: Note that the file format has apparently been changed by NOAA from NetCDF3 to NetCDF4 sometime</span>
-<span class="sd">    between the years 2019 and 2021. If you are using a recent download of the data an experience problems</span>
+<span class="sd">    ATTENTION: Note that the file format was changed by NOAA from NetCDF3 to NetCDF4 sometime</span>
+<span class="sd">    between the years 2019 and 2021. If you are using a recent download of the data and experience problems</span>
 <span class="sd">    with this loader method, you should use :py:func:`load_noaa_interpolated_olr_netcdf4` instead.</span>
 
 <span class="sd">    The original OLR data file is contained in the reference data package found at: https://doi.org/10.5281/zenodo.3746562</span>
@@ -339,7 +339,7 @@
 
 <span class="sd">    :return: The OLR data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">netcdf</span><span class="o">.</span><span class="n">netcdf_file</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">netcdf_file</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
     <span class="n">lat</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">lon</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="c1"># scaling and offset as given in meta data of nc file</span>
@@ -363,7 +363,7 @@
 <span class="sd">    Loads the standard OLR data product provided by NOAA in NetCDF4 format.</span>
 
 <span class="sd">    ATTENTION: Whereas NetCDF4 seems to be the format of the recent NOAA OLR data files, the files originally used some</span>
-<span class="sd">    years ago where saved in NetCDF3. So, if you are going to load the original files for reference purposes, you should</span>
+<span class="sd">    years ago were saved as NetCDF3. So, if you are going to load the original files for reference purposes, you should</span>
 <span class="sd">    use the loader function :py:func:`load_noaa_interpolated_olr` instead.</span>
 
 <span class="sd">    The dataset can be obtained from</span>
@@ -416,7 +416,7 @@
 <span class="sd">    Plots a map pf the OLR data for a specific date.</span>
 
 <span class="sd">    :param olr: The complete OLR data.</span>
-<span class="sd">    :param date: The date for which da OLR data should be plotted</span>
+<span class="sd">    :param date: The date for which the OLR data should be plotted</span>
 <span class="sd">        (has to be exactly matched by a date of the OLR time grid).</span>
 
 <span class="sd">    :return: The handle to the figure.</span>

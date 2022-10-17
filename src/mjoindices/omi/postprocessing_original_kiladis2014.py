@@ -88,7 +88,7 @@ def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
 
     Generally, the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous
     DOY. The EOFs for DOY 1 are by default aligned with the original calculation by :ref:`refKiladis2014`, resulting in
-    an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off, so
+    an EOF series which is totally comparable to the original Kiladis (2014) calculation. This can be switched off, so
     that only the EOFs for the DOYs beginning with DOY 2 are aligned according to the sign of the EOFS for DOY 1.
 
     :param eofs: The EOF series for which the signs should be aligned.
@@ -164,7 +164,8 @@ def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, t
 def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 293,
                                   end_doy: int = 316) -> eof.EOFDataForAllDOYs:
     """
-    Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
+    Replaces the EOF1 and EOF2 functions for the range of DOYS between 2 given DOYs using a linear interpolation 
+    between the 2 boundary DOYs.
 
     This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,
     the EOFs have also been replaced by an interpolation according to :ref:`refKiladis2014`. However, the period stated in
@@ -176,9 +177,9 @@ def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 
 
     :param eofs: The complete EOF series, in which the interpolation takes place.
     :param start_doy: The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first
-        element, which will be replaced by the interpolation.
+        element that will be replaced by the interpolation.
     :param end_doy:  The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last
-        element, which will be replaced by the interpolation.
+        element that will be replaced by the interpolation.
 
     :return: The complete EOF series with the interpolated values.
     """
