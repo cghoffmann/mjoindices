@@ -94,7 +94,7 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
         guaranteed to be ``2 * window_length + 1``, but can also be ``2 * window_length + 2`` if the window crosses the ending of a leap
         year. The setting ``"strict"`` is somewhat more stringently implemented. The window length is always ``2 * window_length + 1``,
         however, the number of calendar days covered by a window is reduced by approximately a factor of 4 for
-        ``center_doy=366``, since a window is found only during leap years at all. This might cause the EOF to differ quite
+        ``center_doy=366``, since a window is only found during leap years. This might cause the EOF to differ quite
         a lot from those of DOY 365 and DOY 1, which is not wanted. Because of that the recommended setting
         is the default value ``"original"``, except for modeled data that contains no leap years. In this case the setting
         ``"no_leap_years"`` is recommended.

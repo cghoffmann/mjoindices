@@ -101,7 +101,7 @@ which can be improved using this function. As long as this step is performed bef
 change the overall result.</p>
 <p>Generally, the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous
 DOY. The EOFs for DOY 1 are by default aligned with the original calculation by <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>, resulting in
-an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off, so
+an EOF series which is totally comparable to the original Kiladis (2014) calculation. This can be switched off, so
 that only the EOFs for the DOYs beginning with DOY 2 are aligned according to the sign of the EOFS for DOY 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -119,7 +119,8 @@ that only the EOFs for the DOYs beginning with DOY 2 are aligned according to th
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_original_kiladis2014.interpolate_eofs_between_doys">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_original_kiladis2014.</span></span><span class="sig-name descname"><span class="pre">interpolate_eofs_between_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">293</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">316</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_original_kiladis2014.html#interpolate_eofs_between_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_original_kiladis2014.interpolate_eofs_between_doys" title="Permalink to this definition"></a></dt>
-<dd><p>Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.</p>
+<dd><p>Replaces the EOF1 and EOF2 functions for the range of DOYS between 2 given DOYs using a linear interpolation
+between the 2 boundary DOYs.</p>
 <p>This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,
 the EOFs have also been replaced by an interpolation according to <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>. However, the period stated in
 <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a> from 1 November to 8 November is too short. The authors have confirmed that the right
@@ -131,9 +132,9 @@ So these values further on represent the original results of the PCA also for th
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eofs</strong> – The complete EOF series, in which the interpolation takes place.</p></li>
 <li><p><strong>start_doy</strong> – The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first
-element, which will be replaced by the interpolation.</p></li>
+element that will be replaced by the interpolation.</p></li>
 <li><p><strong>end_doy</strong> – The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last
-element, which will be replaced by the interpolation.</p></li>
+element that will be replaced by the interpolation.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

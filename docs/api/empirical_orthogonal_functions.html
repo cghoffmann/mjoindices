@@ -101,8 +101,8 @@ first two EOFs). Can  be set to <code class="docutils literal notranslate"><span
 </ul>
 </dd>
 </dl>
-<p>Note that the explained variances are not independent of the eigenvalues. However, this class is meant to only
-store the data. Hence, we store redundant data here intentionally to be able to have all computation rules together
+<p>Note that the explained variances are not independent of the eigenvalues. However, this class is meant only to
+store the data. Hence, we store redundant data here intentionally to be able to have all computation performed together
 in another location.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.close">
@@ -297,7 +297,7 @@ of this class as a major result of this package.</p>
 <p>The individual EOF pairs are represented by <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> objects.</p>
 <p>Note that the user can choose to consider or to ignore leap years in the data. This is probably of interest for the work
 with modeled data, since models might ignore leap years in idealized setups. Here, this means that the number of
-considered DOYs (and therefore the number of EOF pairs and further variables) can be either 365 or 366, respectively.
+considered DOYs (and therefore the number of EOF pairs and further variables) can be either 365 or 366.
 The code in this package is designed to treat both cases consistently, however, the users should have their own
 choice in mind when working with the results.</p>
 <dl class="field-list simple">
@@ -440,8 +440,8 @@ computation of the EOFs.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir">
 <span class="sig-name descname"><span class="pre">save_all_eofs_to_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.save_all_eofs_to_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir" title="Permalink to this definition"></a></dt>
-<dd><p>Saves the EOF1 and EOF2 functions for each of the DOYs in the given directory.</p>
-<p>For each DOY, one text file will be created, which contains both EOF functions.
+<dd><p>Saves the EOF1 and EOF2 data for each of the DOYs in the given directory.</p>
+<p>For each DOY, one text file will be created, which contains both EOFs.
 Note that the text files do not contain the eigenvalues and explained variance values. To save also those
 values, use the function <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_all_eofs_to_npzfile()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -500,8 +500,8 @@ for all DOYs from the given directory</p>
 <p>The original EOFs are found here: <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/</a> and
 <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</a></p>
 <p>Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the
-individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here
-inserted hardcodedly.</p>
+individual locations on a world map is not obvious without any further knowledge. The corresponding grid is
+hardcoded in here.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>dirname</strong> – Path to the directory, in which the EOFs for all DOYs are stored.
@@ -519,8 +519,8 @@ One file per day of the year.</p>
 <span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">load_original_eofs_for_doy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#load_original_eofs_for_doy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the EOF values for the first 2 EOFs from the original file format.</p>
 <p>Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the
-individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here
-inserted hardcodedly.</p>
+individual locations on a world map is not obvious without any further knowledge. The corresponding grid is
+hardcoded in here.</p>
 <p>The original EOFs are found here: <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/</a> and
 <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</a></p>
 <dl class="field-list simple">

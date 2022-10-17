@@ -20,7 +20,7 @@
 # Contact: christoph.hoffmann@uni-greifswald.de
 
 """
-This module provides a bunch of methods that help to evaluate the agreement of the OMI calculation by this package
+This module provides several methods that help evaluate the agreement of the OMI calculation by this package
 and the original calculation by :ref:`refKiladis2014`.
 It is probably not of major relevance for the user of this package.
 """

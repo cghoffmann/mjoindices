@@ -113,7 +113,7 @@ def load_pcs_from_txt_file(filename: Path) -> PCData:
 def load_original_pcs_from_txt_file(filename: Path) -> PCData:
     """
     Loads the PCs of OMI, which are stored in the original file format.
-    Particularly, the following file can be loaded: https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
+    For example, the following file can be loaded: https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
 
     Note that the present software package stores the PCs slightly different. Those files can be loaded with
     :func:`load_pcs_from_txt_file`.

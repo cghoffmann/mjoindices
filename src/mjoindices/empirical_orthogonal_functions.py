@@ -50,8 +50,8 @@ class EOFData:
     :param eigenvalues: Eigenvalue corresponding to each EOF. Can  be set to ``None``.
     :param no_observations: The number of observations that went into the EOF calculation. Can  be set to ``None``.
 
-    Note that the explained variances are not independent of the eigenvalues. However, this class is meant to only
-    store the data. Hence, we store redundant data here intentionally to be able to have all computation rules together
+    Note that the explained variances are not independent of the eigenvalues. However, this class is meant only to
+    store the data. Hence, we store redundant data here intentionally to be able to have all computation performed together
     in another location.
     """
 
@@ -328,7 +328,7 @@ class EOFDataForAllDOYs:
 
     Note that the user can choose to consider or to ignore leap years in the data. This is probably of interest for the work
     with modeled data, since models might ignore leap years in idealized setups. Here, this means that the number of
-    considered DOYs (and therefore the number of EOF pairs and further variables) can be either 365 or 366, respectively.
+    considered DOYs (and therefore the number of EOF pairs and further variables) can be either 365 or 366.
     The code in this package is designed to treat both cases consistently, however, the users should have their own
     choice in mind when working with the results.
 
@@ -505,9 +505,9 @@ class EOFDataForAllDOYs:
 
     def save_all_eofs_to_dir(self, dirname: Path, create_dir=True) -> None:
         """
-        Saves the EOF1 and EOF2 functions for each of the DOYs in the given directory.
+        Saves the EOF1 and EOF2 data for each of the DOYs in the given directory.
 
-        For each DOY, one text file will be created, which contains both EOF functions.
+        For each DOY, one text file will be created, which contains both EOFs.
         Note that the text files do not contain the eigenvalues and explained variance values. To save also those
         values, use the function :py:func:`save_all_eofs_to_npzfile`.
 
@@ -589,8 +589,8 @@ def load_original_eofs_for_doy(dirname: Path, doy: int) -> EOFData:
     Loads the EOF values for the first 2 EOFs from the original file format.
 
     Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the
-    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here
-    inserted hardcodedly.
+    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is 
+    hardcoded in here.
 
     The original EOFs are found here: ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and
     ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/
@@ -646,8 +646,8 @@ def load_all_original_eofs_from_directory(dirname: Path) -> EOFDataForAllDOYs:
     ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/
 
     Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the
-    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here
-    inserted hardcodedly.
+    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is
+    hardcoded in here.
 
     :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.
         This path should contain the sub directories "eof1" and "eof2", in which the 366 files each are located:

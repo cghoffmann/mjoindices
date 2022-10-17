@@ -33,9 +33,6 @@ We kindly ask you to cite both papers if you use computed results in your scient
 
 The script may run for about 2 hours on common desktop computers.
 
-This example also produces some diagnostic plots. More evaluation can be done afterwards with the script
-evaluate_omi_reproduction.py.
-
 You can modify this example in order to compute OMI data from other OLR datasets (this is probably what you intend if
 you use this package).  For this, you only have to provide your OLR data as a mjoindices.olr_handling.OLRData object and
 use this object as replacement for the original data in two lines, which is mentioned in the comments below.
@@ -49,6 +46,8 @@ Also, a list of relevant scientific publications is available (https://cghoffman
 the package is based. So far, this applies for an alternative post-processing approach for the EOFs,
 as well as a possibility to work with data without leap years and might be extended in the future.
 
+This example also produces some diagnostic plots. More evaluation can be done afterwards with the script
+evaluate_omi_reproduction.py.
 """
 
 from pathlib import Path
@@ -91,8 +90,7 @@ pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
 # Directory in which the figures are saved.
 fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots"
 
-# ############## There should be no need to change anything below (except you intend to use different OLR data as input
-# or you are experiencing problems with the NOAA OLR file NetCDF version.)
+# ############## There should be no need to change anything below (except you intend to use different OLR data as input or you are experiencing problems with the NOAA OLR file NetCDF version.)
 
 # ############## Calculation of the EOFs ###################
 
@@ -101,8 +99,8 @@ if not fig_dir.exists():
 
 # Load the OLR data.
 # This is the first line to replace to use your own OLR data, if you want to compute OMI for a different dataset.
-# ATTENTION: Note that the file format for the original NOAA OLR data has apparently been changed by NOAA
-# from NetCDF3 to NetCDF4 sometime between the years 2019 and 2021. If you are using a recent download of the data and
+# ATTENTION: Note that the file format was changed by NOAA from NetCDF3 to NetCDF4 sometime
+# # between the years 2019 and 2021. If you are using a recent download of the data and
 # experience problems, you should switch between the following two lines:
 raw_olr = olr.load_noaa_interpolated_olr(olr_data_filename)
 # raw_olr = olr.load_noaa_interpolated_olr_netcdf4(olr_data_filename)

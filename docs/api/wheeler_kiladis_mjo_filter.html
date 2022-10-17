@@ -82,10 +82,10 @@
   <section id="module-mjoindices.omi.wheeler_kiladis_mjo_filter">
 <span id="module-mjoindices-omi-wheeler-kiladis-mjo-filter"></span><h1>Module mjoindices.omi.wheeler_kiladis_mjo_filter<a class="headerlink" href="#module-mjoindices.omi.wheeler_kiladis_mjo_filter" title="Permalink to this heading"></a></h1>
 <p>This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.</p>
-<p>Although implemented generically, it is not intended to use this module stand-alone outside the OMI context,
-since it is only extensively tested for the specific OMI filtering conditions.</p>
+<p>Although implemented generically, this module is not intended to be used stand-alone outside the OMI context,
+as it has only been extensively tested for the specific OMI filtering conditions.</p>
 <p>Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
-Instead, they might probably want to use the module <a class="reference internal" href="omi_calculator.html#module-mjoindices.omi.omi_calculator" title="mjoindices.omi.omi_calculator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator</span></code></a> directly.</p>
+Instead, they probably want to use the module <a class="reference internal" href="omi_calculator.html#module-mjoindices.omi.omi_calculator" title="mjoindices.omi.omi_calculator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator</span></code></a> directly.</p>
 <p>The complete algorithm is described by <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter">
@@ -102,11 +102,11 @@ the original Kiladis algorithm.</p>
 <p>Note that the temporal and longitudinal dimension have in principle
 different characteristics, so that they are in detail treated a bit
 differently:
-While the time is evolving into infinity (so that the number of data
+While the time variable may evolve to infinity (thus, the number of data
 points and the time_spacing variable are needed to calculate the
-full temporal coverage), the longitude is periodic with the periodicity
-of one globe (so that it is assumed that the data covers exactly one
-globe and only passing the number of longitudes provides already the complete information).</p>
+full temporal coverage), longitude is periodic with the periodicity
+of one globe (thus, it is assumed that the data covers exactly one
+globe and only passing the number of longitudes provides complete information).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -122,7 +122,7 @@ data points exist per day)).</p></li>
 <li><p><strong>wn_min</strong> – Minimal wavenumber (in cycles per globe) that remains in the dataset.</p></li>
 <li><p><strong>wn_max</strong> – Maximal wavenumber (in cycles per globe) that remains in the dataset.</p></li>
 <li><p><strong>do_plot</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, diagnosis plots will be generated.</p></li>
-<li><p><strong>save_debug</strong> – If <code class="docutils literal notranslate"><span class="pre">true</span></code>, some variables will be filled with values of intermediate processing steps
+<li><p><strong>save_debug</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some variables will be filled with values of intermediate processing steps
 for debugging purposes.</p></li>
 </ul>
 </dd>
@@ -171,7 +171,7 @@ for debugging purposes.</p></li>
 <span class="sig-prename descclassname"><span class="pre">mjoindices.omi.wheeler_kiladis_mjo_filter.</span></span><span class="sig-name descname"><span class="pre">filter_olr_for_mjo_pc_calculation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">olrdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_for_mjo_pc_calculation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_pc_calculation" title="Permalink to this definition"></a></dt>
 <dd><p>Filters OLR data temporally with a bandwidth particularly selected for the PC calculation.</p>
 <p>The filter algorithm is the same as for the combined temporal and longitudinal filtering,
-but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
+but the longitudinal bandpass filter constants are defined so broadly that effectively no longitudinal filtering is
 applied. The temporal filtering constants are chosen to meet the values in the description by <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -191,9 +191,9 @@ applied. The temporal filtering constants are chosen to meet the values in the d
 <span class="sig-prename descclassname"><span class="pre">mjoindices.omi.wheeler_kiladis_mjo_filter.</span></span><span class="sig-name descname"><span class="pre">filter_olr_temporally</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">olrdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_temporally"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally" title="Permalink to this definition"></a></dt>
 <dd><p>Filters OLR data temporally.</p>
 <p>The filter algorithm is the same as for the combined temporal and longitudinal filtering,
-but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
+but the longitudinal bandpass filter constants are defined so broadly that effectively no longitudinal filtering is
 applied.</p>
-<p>Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.</p>
+<p>Note that this function has only been strictly tested for filtering constants used by the OMI algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -213,7 +213,7 @@ applied.</p>
 <dt class="sig sig-object py" id="mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally_and_longitudinally">
 <span class="sig-prename descclassname"><span class="pre">mjoindices.omi.wheeler_kiladis_mjo_filter.</span></span><span class="sig-name descname"><span class="pre">filter_olr_temporally_and_longitudinally</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">olrdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">wn_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">wn_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/wheeler_kiladis_mjo_filter.html#filter_olr_temporally_and_longitudinally"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally_and_longitudinally" title="Permalink to this definition"></a></dt>
 <dd><p>Performs a temporal and longitudinal bandpass filtering of the OLR data with configurable filtering thresholds.</p>
-<p>Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.</p>
+<p>Note that this function has only been strictly tested for filtering constants used by the OMI algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

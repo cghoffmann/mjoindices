@@ -7,7 +7,7 @@ mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI 
 Overview
 --------
 
-mjoindices is a Python package relevant for users of the atmospheric sciences. It provides functionality to compute an 
+mjoindices is a Python package relevant for atmospheric scientists. It provides functionality to compute an 
 index of the Madden-Julian-Oscillation (MJO), particularly the OLR-based MJO index (OMI).
 
 Whereas the package name has been chosen to indicate that further MJO indices should be included in the future, the 
@@ -17,7 +17,7 @@ A scientific description of the package is found in [Hoffmann et al. (2021)](htt
 
 Citation
 --------
-If you use mjoindices in published research, please cite the correspondig paper: Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021.
+If you use mjoindices in published research, please cite the corresponding paper: Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021.
 A Python Package to Calculate the OLR-Based Index of the Madden- Julian-Oscillation (OMI) in Climate Science and Weather Forecasting. 
 Journal of Open Research Software, 9(1), p.9. DOI: http://doi.org/10.5334/jors.331
 
@@ -62,7 +62,7 @@ After you have installed mjoindices, you can download an
   the computed Empirical Orthogonal Functions (EOFs) and the Principal Components (PCs) in two individual files, which
   can also be configured in the source code. In addition, it will save a few plots into a directory, which can
   also be configured in the source. These plots show the agreement with the original OMI values (slight deviations are 
-  expected due to numerical differences. This will be detailed in the corresponding software meta paper).
+  expected due to numerical differences. This is explained in detail in the corresponding software meta paper).
 
   Note that you can use this example also as a template to calculate OMI values with your own OLR data. 
   In order to do that, you have to adapt only two parts of the code, which are also marked in the code documentation.
@@ -70,7 +70,7 @@ After you have installed mjoindices, you can download an
   Note also that this script may run for one or two hours on common personal computer systems.
 
 * evaluate_omi_reproduction.py: This script produces more detailed comparison plots and saves them into a directory.
-  The script recalculate_original_omi.py has to be run before, as the evaluation script is based on the saved results.
+  The script recalculate_original_omi.py has to be run first, since the evaluation script is based on the saved results.
   As for recalculate_original_omi.py, some file and directory names have to be adapted in the beginning of the code.
 
 Both files are also available as Jupyter notebook files.
@@ -83,7 +83,7 @@ your installation using pytest:
 
 * Download the complete test directory to you local file system.
 
-* Download some external input and reference data files from [Zenodo](https://doi.org/10.5281/zenodo.3746562). 
+* Download the external input and reference data files from [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](tests/testdata/README). 
   * Details are given in a separate [Readme file](tests/testdata/README).
   * Note that some necessary data files are already included in the test directory in the repository. Make sure to download
     those files together with the tests. The data files on Zenodo are complementary and not 

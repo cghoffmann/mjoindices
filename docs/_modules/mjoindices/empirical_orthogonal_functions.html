@@ -122,8 +122,8 @@
 <span class="sd">    :param eigenvalues: Eigenvalue corresponding to each EOF. Can  be set to ``None``.</span>
 <span class="sd">    :param no_observations: The number of observations that went into the EOF calculation. Can  be set to ``None``.</span>
 
-<span class="sd">    Note that the explained variances are not independent of the eigenvalues. However, this class is meant to only</span>
-<span class="sd">    store the data. Hence, we store redundant data here intentionally to be able to have all computation rules together</span>
+<span class="sd">    Note that the explained variances are not independent of the eigenvalues. However, this class is meant only to</span>
+<span class="sd">    store the data. Hence, we store redundant data here intentionally to be able to have all computation performed together</span>
 <span class="sd">    in another location.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -400,7 +400,7 @@
 
 <span class="sd">    Note that the user can choose to consider or to ignore leap years in the data. This is probably of interest for the work</span>
 <span class="sd">    with modeled data, since models might ignore leap years in idealized setups. Here, this means that the number of</span>
-<span class="sd">    considered DOYs (and therefore the number of EOF pairs and further variables) can be either 365 or 366, respectively.</span>
+<span class="sd">    considered DOYs (and therefore the number of EOF pairs and further variables) can be either 365 or 366.</span>
 <span class="sd">    The code in this package is designed to treat both cases consistently, however, the users should have their own</span>
 <span class="sd">    choice in mind when working with the results.</span>
 
@@ -577,9 +577,9 @@
 
 <div class="viewcode-block" id="EOFDataForAllDOYs.save_all_eofs_to_dir"><a class="viewcode-back" href="../../api/empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir">[docs]</a>    <span class="k">def</span> <span class="nf">save_all_eofs_to_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirname</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">create_dir</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Saves the EOF1 and EOF2 functions for each of the DOYs in the given directory.</span>
+<span class="sd">        Saves the EOF1 and EOF2 data for each of the DOYs in the given directory.</span>
 
-<span class="sd">        For each DOY, one text file will be created, which contains both EOF functions.</span>
+<span class="sd">        For each DOY, one text file will be created, which contains both EOFs.</span>
 <span class="sd">        Note that the text files do not contain the eigenvalues and explained variance values. To save also those</span>
 <span class="sd">        values, use the function :py:func:`save_all_eofs_to_npzfile`.</span>
 
@@ -661,8 +661,8 @@
 <span class="sd">    Loads the EOF values for the first 2 EOFs from the original file format.</span>
 
 <span class="sd">    Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the</span>
-<span class="sd">    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here</span>
-<span class="sd">    inserted hardcodedly.</span>
+<span class="sd">    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is </span>
+<span class="sd">    hardcoded in here.</span>
 
 <span class="sd">    The original EOFs are found here: ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and</span>
 <span class="sd">    ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</span>
@@ -718,8 +718,8 @@
 <span class="sd">    ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</span>
 
 <span class="sd">    Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the</span>
-<span class="sd">    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here</span>
-<span class="sd">    inserted hardcodedly.</span>
+<span class="sd">    individual locations on a world map is not obvious without any further knowledge. The corresponding grid is</span>
+<span class="sd">    hardcoded in here.</span>
 
 <span class="sd">    :param dirname: Path to the directory, in which the EOFs for all DOYs are stored.</span>
 <span class="sd">        This path should contain the sub directories &quot;eof1&quot; and &quot;eof2&quot;, in which the 366 files each are located:</span>
