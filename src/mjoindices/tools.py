@@ -91,7 +91,7 @@ def find_doy_ranges_in_dates(dates: np.ndarray, center_doy: int, window_length: 
         only for the EOFs calculated for DOY 366 and causes only minor differences for the other DOYs. The results for
         the setting ``"original"`` are closer to the original values, and approximately the same total number of calendar days
         covered by the window is found for each center DOY including DOY 366. However, the length of the window is not
-        guaranteed to be ``2 * window_length + 1``, but can also be ``2 * window_length + 2`` if the window crosses a leap
+        guaranteed to be ``2 * window_length + 1``, but can also be ``2 * window_length + 2`` if the window crosses the ending of a leap
         year. The setting ``"strict"`` is somewhat more stringently implemented. The window length is always ``2 * window_length + 1``,
         however, the number of calendar days covered by a window is reduced by approximately a factor of 4 for
         ``center_doy=366``, since a window is only found during leap years. This might cause the EOF to differ quite
