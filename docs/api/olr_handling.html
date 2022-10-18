@@ -235,7 +235,7 @@ which was used for the original OMI calculation by <a class="reference internal"
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.olr_handling.load_noaa_interpolated_olr">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.olr_handling.</span></span><span class="sig-name descname"><span class="pre">load_noaa_interpolated_olr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#load_noaa_interpolated_olr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.olr_handling.load_noaa_interpolated_olr" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.olr_handling.</span></span><span class="sig-name descname"><span class="pre">load_noaa_interpolated_olr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_xarray</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#load_noaa_interpolated_olr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.olr_handling.load_noaa_interpolated_olr" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the standard OLR data product provided by NOAA in NetCDF3 format.
 This is mainly used to load the OLR files originally used for the OMI calculation some years ago.</p>
 <p>ATTENTION: Note that the file format was changed by NOAA from NetCDF3 to NetCDF4 sometime
@@ -248,7 +248,14 @@ with this loader method, you should use <a class="reference internal" href="#mjo
 <a class="reference external" href="https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html">https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – Full filename of a local copy of OLR data file.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – Full filename of a local copy of OLR data file.</p></li>
+<li><p><strong>use_xarray</strong> – Option to use xarray instead of SciPy netcdf for faster loading of data and timestamps. Note that OMI values
+based on this parameter have not been validated. The respective unit tests currently fail when this option is activated,
+however, this is probably only caused by very small numerical differences, which are irrelevant for the actual use.
+Still make sure that you trust the values when activating the option. A further advantage of this option is that is works for
+NetCDF3 and NetCDF4 files, hence for the older and the newer NOAA OLR datafiles.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The OLR data.</p>
@@ -258,7 +265,7 @@ with this loader method, you should use <a class="reference internal" href="#mjo
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.olr_handling.</span></span><span class="sig-name descname"><span class="pre">load_noaa_interpolated_olr_netcdf4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#load_noaa_interpolated_olr_netcdf4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.olr_handling.</span></span><span class="sig-name descname"><span class="pre">load_noaa_interpolated_olr_netcdf4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_xarray</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/olr_handling.html#load_noaa_interpolated_olr_netcdf4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4" title="Permalink to this definition"></a></dt>
 <dd><p>Loads the standard OLR data product provided by NOAA in NetCDF4 format.</p>
 <p>ATTENTION: Whereas NetCDF4 seems to be the format of the recent NOAA OLR data files, the files originally used some
 years ago were saved as NetCDF3. So, if you are going to load the original files for reference purposes, you should
@@ -269,7 +276,13 @@ use the loader function <a class="reference internal" href="#mjoindices.olr_hand
 <a class="reference external" href="https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html">https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – Full filename of a local copy of OLR data file.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – Full filename of a local copy of OLR data file.</p></li>
+<li><p><strong>use_xarray</strong> – Option to use xarray instead of NetCDF4 for faster loading of data and timestamps. If you consider
+activating this parameter, you should call instead <a class="reference internal" href="#mjoindices.olr_handling.load_noaa_interpolated_olr" title="mjoindices.olr_handling.load_noaa_interpolated_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_noaa_interpolated_olr()</span></code></a>, since it works for NetCDF
+3 and 4. Later on, when the xarray option is established, the present function particularly for NetCDF4 will be removed.
+Please also take into account the warnings in the docs of <a class="reference internal" href="#mjoindices.olr_handling.load_noaa_interpolated_olr" title="mjoindices.olr_handling.load_noaa_interpolated_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_noaa_interpolated_olr()</span></code></a>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The OLR data.</p>
