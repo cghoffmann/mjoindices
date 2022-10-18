@@ -244,9 +244,10 @@ def remove_leap_years(olr: OLRData) -> OLRData:
     window_inds = [(i.astype(object).month != 2) | (i.astype(object).day != 29) for i in olr.time]
 
     return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long) 
+    
 
 
-def load_noaa_interpolated_olr(filename: Path) -> OLRData:
+def load_noaa_interpolated_olr(filename: Path, use_xarray: bool = False) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF3 format.
     This is mainly used to load the OLR files originally used for the OMI calculation some years ago.
@@ -264,29 +265,46 @@ def load_noaa_interpolated_olr(filename: Path) -> OLRData:
     https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html
 
     :param filename: Full filename of a local copy of OLR data file.
+    :param use_xarray: Option to use xarray instead of SciPy netcdf for faster loading of data and timestamps. Note that OMI values
+        based on this parameter have not been validated. The respective unit tests currently fail when this option is activated,
+        however, this is probably only caused by very small numerical differences, which are irrelevant for the actual use.
+        Still make sure that you trust the values when activating the option. A further advantage of this option is that is works for
+        NetCDF3 and NetCDF4 files, hence for the older and the newer NOAA OLR datafiles.
 
     :return: The OLR data.
     """
-    f = scipy.io.netcdf_file(str(filename), 'r')
-    lat = f.variables['lat'].data.copy()
-    lon = f.variables['lon'].data.copy()
-    # scaling and offset as given in meta data of nc file
-    olr = f.variables['olr'].data.copy() / 100. + 327.65
-    hours_since1800 = f.variables['time'].data.copy()
-    f.close()
+    # ToDo: Validate the complete OMI calculation chain with OLR data loaded using the xarray option (Quick tests showed
+    # that the OMI values are probably essentially the same but numerical differeces lead to failiures of the integration tests).
+    # If the values are ok, make the xarray option the default (which also means that Python 3.8 is at least needed) and remove the
+    # special function for NetCDF 4 below.
+    if use_xarray:
+        import xarray as xr
+        f = xr.open_dataset(filename)
+        lat = f.lat.data.copy()
+        lon = f.lon.data.copy()
+        olr = f.olr.data.copy()
+        time = np.array(f.olr.time.values, dtype='datetime64[D]')
+    else:
+        f = scipy.io.netcdf_file(str(filename), 'r')
+        lat = f.variables['lat'].data.copy()
+        lon = f.variables['lon'].data.copy()
+        # scaling and offset as given in meta data of nc file
+        olr = f.variables['olr'].data.copy() / 100. + 327.65
+        hours_since1800 = f.variables['time'].data.copy()
+        f.close()
 
-    temptime = []
-    for item in hours_since1800:
-        delta = np.timedelta64(int(item / 24), 'D')
-        day = np.datetime64('1800-01-01') + delta
-        temptime.append(day)
-    time = np.array(temptime, dtype=np.datetime64)
+        temptime = []
+        for item in hours_since1800:
+            delta = np.timedelta64(int(item / 24), 'D')
+            day = np.datetime64('1800-01-01') + delta
+            temptime.append(day)
+        time = np.array(temptime, dtype=np.datetime64)
     result = OLRData(np.squeeze(olr), time, lat, lon)
 
     return result
 
 
-def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
+def load_noaa_interpolated_olr_netcdf4(filename: Path, use_xarray: bool = False) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF4 format.
 
@@ -301,23 +319,29 @@ def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
     https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html
 
     :param filename: Full filename of a local copy of OLR data file.
-
+    :param use_xarray: Option to use xarray instead of NetCDF4 for faster loading of data and timestamps. If you consider
+        activating this parameter, you should call instead :py:func:`load_noaa_interpolated_olr`, since it works for NetCDF
+        3 and 4. Later on, when the xarray option is established, the present function particularly for NetCDF4 will be removed.
+        Please also take into account the warnings in the docs of :py:func:`load_noaa_interpolated_olr`.
     :return: The OLR data.
     """
-    f = netcdf4.Dataset(filename, "r")
-    lat = f.variables['lat'][:].data.copy()
-    lon = f.variables['lon'][:].data.copy()
-    olr = f.variables['olr'][:].data.copy()
-    hours_since1800 = f.variables['time'][:].data.copy()
-    f.close()
+    if use_xarray:
+        result = load_noaa_interpolated_olr(filename=filename, use_xarray=True)
+    else:
+        f = netcdf4.Dataset(filename, "r")
+        lat = f.variables['lat'][:].data.copy()
+        lon = f.variables['lon'][:].data.copy()
+        olr = f.variables['olr'][:].data.copy()
+        hours_since1800 = f.variables['time'][:].data.copy()
+        f.close()
 
-    temptime = []
-    for item in hours_since1800:
-        delta = np.timedelta64(int(item / 24), 'D')
-        day = np.datetime64('1800-01-01') + delta
-        temptime.append(day)
-    time = np.array(temptime, dtype=np.datetime64)
-    result = OLRData(np.squeeze(olr), time, lat, lon)
+        temptime = []
+        for item in hours_since1800:
+            delta = np.timedelta64(int(item / 24), 'D')
+            day = np.datetime64('1800-01-01') + delta
+            temptime.append(day)
+        time = np.array(temptime, dtype=np.datetime64)
+        result = OLRData(np.squeeze(olr), time, lat, lon)
 
     return result
 

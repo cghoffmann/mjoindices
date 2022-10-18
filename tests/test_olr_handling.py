@@ -119,11 +119,55 @@ def test_loadNOAAInterpolatedOLR():
 
     assert not errors, "errors occurred:\n{}".format("\n".join(errors))
 
+@pytest.mark.skipif(not olr_data_filename.is_file(), reason="OLR data file not available")
+def test_loadNOAAInterpolatedOLR_UseXarray():
+    errors = []
+    target = olr.load_noaa_interpolated_olr(olr_data_filename, use_xarray=True)
+
+    # Check time grid
+    # Period always starts on 1974/06/01, whereas the ending date
+    # changes when file is updated
+    if not target.time[0] == np.datetime64("1974-06-01"):
+        errors.append("First date does not match")
+    if not ((target.time[1] - target.time[0]).astype('timedelta64[D]') / np.timedelta64(1, "D")) == 1:
+        errors.append("Temporal spacing does not match 1 day")
+
+    # Check latitude grid
+    if not target.lat[0] == 90:
+        errors.append("First latitude entry does not match.")
+    if not target.lat[3] == 82.5:
+        errors.append("Forth latitude entry does not match.")
+    if not target.lat[-1] == -90:
+        errors.append("Last latitude entry does not match.")
+    if not (target.lat[0] - target.lat[1]) == 2.5:
+        errors.append("Latitudinal spacing does not meet the expectation")
+
+    # Check longitude grid
+    if not target.long[0] == 0:
+        errors.append("First longitude entry does not match.")
+    if not target.long[-1] == 357.5:
+        errors.append("Last longitude entry does not match.")
+    if not target.long[1] - target.long[0] == 2.5:
+        errors.append("Longitudinal spacing does not meet the expectation")
+
+    # Check OLR Data
+    # OLR samples extracted from file using Panoply viewer, which directly
+    # applies scaling and offset values
+    if not math.isclose(target.olr[0, 0, 0], 205.450, abs_tol=1e-5):
+        errors.append("First OLR sample value does not match")
+    if not math.isclose(target.olr[0, 3, 0], 207.860, abs_tol=1e-4):
+        errors.append("Second OLR sample value does not match")
+    if not math.isclose(target.olr[4, 3, 15], 216.700, abs_tol=1e-5):
+        errors.append("Third OLR sample value does not match")
+
+    assert not errors, "errors occurred:\n{}".format("\n".join(errors))
+
 
 @pytest.mark.skipif(not olr_data_netcdf4_filename.is_file(), reason="OLR data file in NetCDF4 is not available")
-def test_loadNOAAInterpolatedOLRNetCDF4():
+@pytest.mark.parametrize("use_xarray", [True, False])
+def test_loadNOAAInterpolatedOLRNetCDF4(use_xarray):
     errors = []
-    target = olr.load_noaa_interpolated_olr_netcdf4(olr_data_netcdf4_filename)
+    target = olr.load_noaa_interpolated_olr_netcdf4(olr_data_netcdf4_filename, use_xarray=use_xarray)
 
     # Check time grid
     # Period always starts on 1974/06/01, whereas the ending date
