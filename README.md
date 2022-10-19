@@ -26,8 +26,10 @@ implementation of the package is based. It is likely that some of these publicat
 
 Requirements
 ------------
-mjoindices is written for Python 3 (version > 3.6) and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
+mjoindices is written for Python 3 (version >= 3.7) and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
 and Windows. Other operating systems have not been tested. 
+
+The next release of mjoindices will probably require Python 3.8 or greater.
 
 Installation
 ------------
@@ -48,6 +50,10 @@ folder of the [source](docs/index.html).
     
 Getting started / examples
 --------------------------
+*Note for experienced users: We have slightly changed the API for the EOF calculation with version 1.4. to be more flexible 
+for changes in the future. Please read the API docs or compare your code with the current example. The old API is still
+working but will deprecate with one of the next releases. Adapting to the new interface will only take a few minutes.*
+
 There are three basic entry points, of which you should read the documentation:
 
 * Calculation of the EOFs: [calc_eofs_from_olr](https://cghoffmann.github.io/mjoindices/api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr).
