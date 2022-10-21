@@ -24,10 +24,19 @@ Journal of Open Research Software, 9(1), p.9. DOI: http://doi.org/10.5334/jors.3
 Please check our [list of further scientific publications](https://cghoffmann.github.io/mjoindices/references.html), on which the
 implementation of the package is based. It is likely that some of these publications should also be cited.
 
+Contributors
+------------
+Thanks for the contributions from the community!
+
+[![Contributors](https://contrib.rocks/image?repo=cghoffmann/mjoindices)](https://github.com/cghoffmann/mjoindices/graphs/contributors)
+
+
 Requirements
 ------------
 mjoindices is written for Python 3 (version >= 3.7) and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
 and Windows. Other operating systems have not been tested. 
+
+Optional requirements are the packages eofs, xarray, pytest, and pytest-pep8.
 
 The next release of mjoindices will probably require Python 3.8 or greater.
 
