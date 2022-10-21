@@ -36,9 +36,7 @@ Requirements
 mjoindices is written for Python 3 (version >= 3.7) and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
 and Windows. Other operating systems have not been tested. 
 
-Optional requirements are the packages eofs, xarray, pytest, and pytest-pep8.
-
-The next release of mjoindices will probably require Python 3.8 or greater.
+There are optional requirements, which can be installed along with mjoindices (see below)
 
 Installation
 ------------
@@ -50,13 +48,22 @@ e.g., pip.
 It can also be installed from the source, which is available on [Zenodo](http://dx.doi.org/10.5281/zenodo.3613752) and [GitHub](https://github.com/cghoffmann/mjoindices). 
 Download the source, move into the directory containing the file setup.py and run
 
-    python3 setup.py install
-    
-Documentation
------------------
-The documentation is found on [GitHub Pages](https://cghoffmann.github.io/mjoindices/index.html) and also in the docs
-folder of the [source](docs/index.html).
-    
+    pip3 install .
+
+The following optional dependency sets can additionaly be installed by adding ["set_name"] behind the above commands:
+  * *full_func*: Install these packages to be sure that all options are really available. This might 
+    require a higher Python version than for the core functionality alone. OMI will be computable without these
+    additional packages, but the number of alternative approaches is limited.
+  * *dev*: packages that are needed for the further development, documentation and testing of mjoindices.
+
+Examples: 
+
+    pip3 install mjoindices[full_func]
+
+or
+
+    pip3 install -e .[dev]
+ 
 Getting started / examples
 --------------------------
 *Note for experienced users: We have slightly changed the API for the EOF calculation with version 1.4. to be more flexible 
@@ -90,6 +97,11 @@ After you have installed mjoindices, you can download an
 
 Both files are also available as Jupyter notebook files.
 
+Documentation
+-----------------
+The documentation is found on [GitHub Pages](https://cghoffmann.github.io/mjoindices/index.html) and also in the docs
+folder of the [source](docs/index.html).
+
 Automated testing
 -----------------
 After you have installed mjoindices, you can also download
@@ -103,6 +115,10 @@ your installation using pytest:
   * Note that some necessary data files are already included in the test directory in the repository. Make sure to download
     those files together with the tests. The data files on Zenodo are complementary and not 
     included in the repository for reasons of file size and ownership.
+
+* Install the pytest package or simply install the mjoindices development dependencies with 
+
+      pip3 install mjoindices[dev]
 
 * Move into your local test directory and run
 
