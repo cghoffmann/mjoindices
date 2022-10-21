@@ -1,36 +1,77 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Module mjoindices.omi.postprocessing_rotation_approach &mdash; mjoindices  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Module mjoindices.principal_components" href="principal_components.html" />
     <link rel="prev" title="Module mjoindices.omi.postprocessing_original_kiladis2014" href="postprocessing_original_kiladis2014.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> mjoindices
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -38,7 +79,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
@@ -46,7 +98,17 @@
 <li class="toctree-l2"><a class="reference internal" href="omi_calculator.html">Module mjoindices.omi.omi_calculator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="olr_handling.html">Module mjoindices.olr_handling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="postprocessing_original_kiladis2014.html">Module mjoindices.omi.postprocessing_original_kiladis2014</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.omi.postprocessing_rotation_approach</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.omi.postprocessing_rotation_approach</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.postprocessing_rotation_approach.angle_between_eofs"><code class="docutils literal notranslate"><span class="pre">angle_between_eofs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.postprocessing_rotation_approach.angle_btwn_vectors"><code class="docutils literal notranslate"><span class="pre">angle_btwn_vectors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.postprocessing_rotation_approach.calculate_angle_from_discontinuity"><code class="docutils literal notranslate"><span class="pre">calculate_angle_from_discontinuity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.postprocessing_rotation_approach.normalize_eofs"><code class="docutils literal notranslate"><span class="pre">normalize_eofs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation"><code class="docutils literal notranslate"><span class="pre">post_process_eofs_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.postprocessing_rotation_approach.rotate_each_eof_by_delta"><code class="docutils literal notranslate"><span class="pre">rotate_each_eof_by_delta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.postprocessing_rotation_approach.rotate_eofs"><code class="docutils literal notranslate"><span class="pre">rotate_eofs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.postprocessing_rotation_approach.rotation_matrix"><code class="docutils literal notranslate"><span class="pre">rotation_matrix()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
@@ -55,33 +117,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mjoindices</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="apidoc.html">API documentation (for running calculations)</a> &raquo;</li>
+        
       <li>Module mjoindices.omi.postprocessing_rotation_approach</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/api/postprocessing_rotation_approach.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="module-mjoindices.omi.postprocessing_rotation_approach">
-<span id="module-mjoindices-omi-postprocessing-rotation-approach"></span><h1>Module mjoindices.omi.postprocessing_rotation_approach<a class="headerlink" href="#module-mjoindices.omi.postprocessing_rotation_approach" title="Permalink to this heading"></a></h1>
+<span id="module-mjoindices-omi-postprocessing-rotation-approach"></span><h1>Module mjoindices.omi.postprocessing_rotation_approach<a class="headerlink" href="#module-mjoindices.omi.postprocessing_rotation_approach" title="Permalink to this heading">¶</a></h1>
 <p>Contains the post-processing of the EOFs as described in <a class="reference internal" href="../references.html#refweidman2022"><span class="std std-ref">Weidman et al. (2022)</span></a>. This is an alternative post-processing
 approach and does not lead to the same results as shown in <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>. It reduces noise and avoids
 potential degeneracy issues.</p>
@@ -98,16 +202,16 @@ potential degeneracy issues.</p>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.angle_between_eofs">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">angle_between_eofs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference:</span> <span class="pre">~mjoindices.empirical_orthogonal_functions.EOFData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target=&lt;class</span> <span class="pre">'mjoindices.empirical_orthogonal_functions.EOFData'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#angle_between_eofs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.angle_between_eofs" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">angle_between_eofs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference:</span> <span class="pre">~mjoindices.empirical_orthogonal_functions.EOFData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target=&lt;class</span> <span class="pre">'mjoindices.empirical_orthogonal_functions.EOFData'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#angle_between_eofs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.angle_between_eofs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates angle between two EOF vectors to determine their “closeness” <span class="math notranslate nohighlight">\(theta = arccos(t . r / (||r||*||t||))\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>reference</strong> – The reference-EOFs. This is usually the EOF pair of the previous or “first” DOY.</p></li>
 <li><p><strong>target</strong> – The EOF data from the target DOY.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tuple of the angles between the reference and target EOFs for both EOF1 and EOF2</p>
 </dd>
 </dl>
@@ -115,16 +219,16 @@ potential degeneracy issues.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.angle_btwn_vectors">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">angle_btwn_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#angle_btwn_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.angle_btwn_vectors" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">angle_btwn_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#angle_btwn_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.angle_btwn_vectors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the angle between vectors, <span class="math notranslate nohighlight">\(theta = arccos(t . r / (||r||*||t||))\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vector1</strong> – 1d vector, generally corresponding to EOF1 or 2 from some DOY</p></li>
 <li><p><strong>vector2</strong> – 1d vector, generally corresponding to EOF1 or 2 from a different DOY</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>scalar angle between vectors 1 and 2, in radians.</p>
 </dd>
 </dl>
@@ -132,15 +236,15 @@ potential degeneracy issues.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.calculate_angle_from_discontinuity">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">calculate_angle_from_discontinuity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#calculate_angle_from_discontinuity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.calculate_angle_from_discontinuity" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">calculate_angle_from_discontinuity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#calculate_angle_from_discontinuity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.calculate_angle_from_discontinuity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project the matrix to align with the EOFs from the previous DOY and calculate the resulting
 discontinuity between January 1 and January 1 after one year of projections. Divide by the number of days
 in one year to determine the discontinuity used for rotation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>orig_eofs</strong> – calculated EOFs, after signs have been changed via spontaneous_sign_changes</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>float of angular discontinuity between EOF1 on DOY1 and EOF1 on DOY1 after a full year of
 projection, divided by the length of the year.</p>
 </dd>
@@ -149,13 +253,13 @@ projection, divided by the length of the year.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.normalize_eofs">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">normalize_eofs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#normalize_eofs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.normalize_eofs" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">normalize_eofs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#normalize_eofs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.normalize_eofs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize all EOFs to have a magnitude of 1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>eofdata</strong> – The rotated EOF series.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>normalized EOFdata for all days.</p>
 </dd>
 </dl>
@@ -163,7 +267,7 @@ projection, divided by the length of the year.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">post_process_eofs_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign_doy1reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#post_process_eofs_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">post_process_eofs_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sign_doy1reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#post_process_eofs_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes the complete post-processing of a series of EOF pairs for all DOYs according to the alterntive procedure
 described by <a class="reference internal" href="../references.html#refweidman2022"><span class="std std-ref">Weidman et al. (2022)</span></a>.</p>
 <p>Postprocessing includes an alignment of EOF signs and a rotation algorithm that rotates the EOFs
@@ -180,13 +284,13 @@ for EOF sign flipping</p>
 <p>Note that it is recommended to use the function <a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a> to cover
 the complete algorithm.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eofdata</strong> – The EOF series, which should be post processed.</p></li>
 <li><p><strong>sign_doy1reference</strong> – See <a class="reference internal" href="postprocessing_original_kiladis2014.html#mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series" title="mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series"><code class="xref py py-func docutils literal notranslate"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The postprocessed series of EOFs</p>
 </dd>
 </dl>
@@ -194,19 +298,19 @@ the complete algorithm.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.rotate_each_eof_by_delta">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">rotate_each_eof_by_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#rotate_each_eof_by_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.rotate_each_eof_by_delta" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">rotate_each_eof_by_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#rotate_each_eof_by_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.rotate_each_eof_by_delta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use delta calculated by optimization function to rotate original EOFs by delta.
 First projects EOFs from DOY n-1 onto EOF space for DOY n, then rotates projected
 EOFs by small angle delta.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>orig_eofs</strong> – calculated EOFs, signs have been changed via spontaneous_sign_changes</p></li>
 <li><p><strong>delta</strong> – scalar by which to rotate EOFs. Calculated as the angular discontinuity between EOF1 on DOY1
 and EOF1 on DOY1 after a full year of projection, divided by the length of the year.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>new EOFdata with projected and rotated EOFs.</p>
 </dd>
 </dl>
@@ -214,7 +318,7 @@ and EOF1 on DOY1 after a full year of projection, divided by the length of the y
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.rotate_eofs">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">rotate_eofs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#rotate_eofs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.rotate_eofs" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">rotate_eofs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#rotate_eofs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.rotate_eofs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rotate EOFs at each DOY to</p>
 <ol class="arabic simple">
 <li><p>align with the EOFs of the previous day and</p></li>
@@ -222,10 +326,10 @@ and EOF1 on DOY1 after a full year of projection, divided by the length of the y
 </ol>
 <p>Described more in detail in :py:func:’post_process_eofs_rotation’</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>orig_eofs</strong> – Calculated EOFs, which already has algined signs between neighboring DOYs.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>set of rotated EOFs.</p>
 </dd>
 </dl>
@@ -233,13 +337,13 @@ and EOF1 on DOY1 after a full year of projection, divided by the length of the y
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.postprocessing_rotation_approach.rotation_matrix">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">rotation_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#rotation_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.rotation_matrix" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.postprocessing_rotation_approach.</span></span><span class="sig-name descname"><span class="pre">rotation_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/omi/postprocessing_rotation_approach.html#rotation_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.postprocessing_rotation_approach.rotation_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a 2d rotation matrix for corresponding delta.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>delta</strong> – Scalar angle, in radians, of desired rotation.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>2x2 rotation matrix that can be used to rotate an Nx2 matrix in the x-y plane counterclockwise
 by delta.</p>
 </dd>
@@ -250,44 +354,63 @@ by delta.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="postprocessing_original_kiladis2014.html" class="btn btn-neutral float-left" title="Module mjoindices.omi.postprocessing_original_kiladis2014" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="principal_components.html" class="btn btn-neutral float-right" title="Module mjoindices.principal_components" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="postprocessing_original_kiladis2014.html" class="btn btn-neutral float-left" title="Module mjoindices.omi.postprocessing_original_kiladis2014" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020, Christoph G. Hoffmann.</p>
-  </div>
+    <p>
+        &#169; Copyright 2020, Christoph G. Hoffmann.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-    <!-- Theme Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'UA-XXXXXXX-1', {
-          'anonymize_ip': false,
-      });
-    </script> 
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    
+    ga('send', 'pageview');
+    </script>
+
+    
+   
 
 </body>
 </html>

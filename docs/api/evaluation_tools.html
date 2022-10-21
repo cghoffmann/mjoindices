@@ -1,35 +1,76 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Module mjoindices.evaluation_tools &mdash; mjoindices  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="References and citation hints" href="../references.html" />
     <link rel="prev" title="Module mjoindices.tools" href="tools.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> mjoindices
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +78,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
@@ -47,49 +99,106 @@
 <li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html">Module mjoindices.omi.wheeler_kiladis_mjo_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quick_temporal_filter.html">Module mjoindices.omi.quick_temporal_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools.html">Module mjoindices.tools</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.evaluation_tools</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.evaluation_tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys"><code class="docutils literal notranslate"><span class="pre">calc_comparison_stats_for_eofs_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.calc_comparison_stats_for_explained_variance"><code class="docutils literal notranslate"><span class="pre">calc_comparison_stats_for_explained_variance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.calc_timeseries_agreement"><code class="docutils literal notranslate"><span class="pre">calc_timeseries_agreement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.calc_vector_agreement"><code class="docutils literal notranslate"><span class="pre">calc_vector_agreement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.compute_vector_difference_quantity"><code class="docutils literal notranslate"><span class="pre">compute_vector_difference_quantity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.load_omi_explained_variance"><code class="docutils literal notranslate"><span class="pre">load_omi_explained_variance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs"><code class="docutils literal notranslate"><span class="pre">plot_comparison_orig_calc_pcs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys"><code class="docutils literal notranslate"><span class="pre">plot_comparison_stats_for_eofs_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance"><code class="docutils literal notranslate"><span class="pre">plot_comparison_stats_for_explained_variance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.plot_correlation_for_eofs_all_doys"><code class="docutils literal notranslate"><span class="pre">plot_correlation_for_eofs_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.plot_individual_eof_map_comparison"><code class="docutils literal notranslate"><span class="pre">plot_individual_eof_map_comparison()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.plot_timeseries_agreement"><code class="docutils literal notranslate"><span class="pre">plot_timeseries_agreement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.evaluation_tools.plot_vector_agreement"><code class="docutils literal notranslate"><span class="pre">plot_vector_agreement()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References and citation hints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mjoindices</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="apidoc.html">API documentation (for running calculations)</a> &raquo;</li>
+        
       <li>Module mjoindices.evaluation_tools</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/api/evaluation_tools.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="module-mjoindices.evaluation_tools">
-<span id="module-mjoindices-evaluation-tools"></span><h1>Module mjoindices.evaluation_tools<a class="headerlink" href="#module-mjoindices.evaluation_tools" title="Permalink to this heading"></a></h1>
+<span id="module-mjoindices-evaluation-tools"></span><h1>Module mjoindices.evaluation_tools<a class="headerlink" href="#module-mjoindices.evaluation_tools" title="Permalink to this heading">¶</a></h1>
 <p>This module provides several methods that help evaluate the agreement of the OMI calculation by this package
 and the original calculation by <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>.
 It is probably not of major relevance for the user of this package.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">calc_comparison_stats_for_eofs_all_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofs_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eof_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#calc_comparison_stats_for_eofs_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">calc_comparison_stats_for_eofs_all_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofs_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eof_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#calc_comparison_stats_for_eofs_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates extended comparison statistics between calculated EOFs and reference EOFs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>recalc_eof</strong> – The EOFs to validate.</p></li>
 <li><p><strong>orig_eof</strong> – The reference EOFs.</p></li>
@@ -99,7 +208,7 @@ the leap year treatment mode).</p></li>
 <li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some characteristic values will we printed to the console.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tuple containing arrays with 366 or 365 elements each for the following quantities: correlation, mean
 of the differences, standard deviation of the differences, and percentiles of the absolute differences
 for 68%, 95%, and 99%.</p>
@@ -109,10 +218,10 @@ for 68%, 95%, and 99%.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.calc_comparison_stats_for_explained_variance">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">calc_comparison_stats_for_explained_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#calc_comparison_stats_for_explained_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.calc_comparison_stats_for_explained_variance" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">calc_comparison_stats_for_explained_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#calc_comparison_stats_for_explained_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.calc_comparison_stats_for_explained_variance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the comparison statistics of the explained variances for one EOF and all DOYs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_var</strong> – The reference variances.</p></li>
 <li><p><strong>calc_var</strong> – The variances to compare.</p></li>
@@ -120,7 +229,7 @@ for 68%, 95%, and 99%.</p>
 <li><p><strong>exclude_doy366</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data for DOY 366 will not be considered in the statistics.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tuple containing values for the following quantities: correlation, mean of the differences,
 standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.</p>
 </dd>
@@ -129,10 +238,10 @@ standard deviation of the differences, and percentiles of the absolute differenc
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.calc_timeseries_agreement">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">calc_timeseries_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#calc_timeseries_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.calc_timeseries_agreement" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">calc_timeseries_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#calc_timeseries_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.calc_timeseries_agreement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates comparison values of two time series.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_data</strong> – The reference time series vector.</p></li>
 <li><p><strong>ref_time</strong> – The time grid of the reference.</p></li>
@@ -143,7 +252,7 @@ of the reference.</p></li>
 <li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistical values will also be shown in the console.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tuple containing values for the following quantities: correlation, mean of the differences,
 standard deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.</p>
 </dd>
@@ -152,10 +261,10 @@ standard deviation of the differences, and percentiles of the absolute differenc
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.calc_vector_agreement">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">calc_vector_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#calc_vector_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.calc_vector_agreement" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">calc_vector_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#calc_vector_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.calc_vector_agreement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates extended comparison statistics between two vectors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_vec</strong> – The reference vector.</p></li>
 <li><p><strong>vec</strong> – The vector to validate.</p></li>
@@ -163,7 +272,7 @@ standard deviation of the differences, and percentiles of the absolute differenc
 <li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistical values will we printed to the console.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tuple containing values for the following quantities: correlation, mean of the differences, standard
 deviation of the differences, and percentiles of the absolute differences for 68%, 95%, and 99%.</p>
 </dd>
@@ -172,17 +281,17 @@ deviation of the differences, and percentiles of the absolute differences for 68
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.compute_vector_difference_quantity">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">compute_vector_difference_quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#compute_vector_difference_quantity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.compute_vector_difference_quantity" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">compute_vector_difference_quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#compute_vector_difference_quantity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.compute_vector_difference_quantity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a standardized difference between two vectors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_vec</strong> – The reference vector.</p></li>
 <li><p><strong>vec</strong> – The vector to validate.</p></li>
 <li><p><strong>percentage</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>: calculation results will be in percent of the mean of the absolute reference values.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A vector containing the difference.</p>
 </dd>
 </dl>
@@ -190,13 +299,13 @@ deviation of the differences, and percentiles of the absolute differences for 68
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.load_omi_explained_variance">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">load_omi_explained_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#load_omi_explained_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.load_omi_explained_variance" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">load_omi_explained_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.10)"><span class="pre">Tuple</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#load_omi_explained_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.load_omi_explained_variance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads original explained variance files provided by Juliana Dias.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> – The file to load.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tuple containing two arrays, for EOF1 and EOF2, respectively.</p>
 </dd>
 </dl>
@@ -204,11 +313,11 @@ deviation of the differences, and percentiles of the absolute differences for 68
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_comparison_orig_calc_pcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calc_pcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData" title="mjoindices.principal_components.PCData"><span class="pre">PCData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_pcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData" title="mjoindices.principal_components.PCData"><span class="pre">PCData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">datetime64</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">datetime64</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_comparison_orig_calc_pcs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_comparison_orig_calc_pcs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calc_pcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData" title="mjoindices.principal_components.PCData"><span class="pre">PCData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_pcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData" title="mjoindices.principal_components.PCData"><span class="pre">PCData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">datetime64</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">datetime64</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_comparison_orig_calc_pcs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots both PC time series (one in a subplot each) of the recalculation and a reference.</p>
 <p>The period to plot can be adjusted.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>calc_pcs</strong> – The recalculated PC time series.</p></li>
 <li><p><strong>orig_pcs</strong> – The reference PC time series.</p></li>
@@ -216,7 +325,7 @@ deviation of the differences, and percentiles of the absolute differences for 68
 <li><p><strong>end_date</strong> – End of the period to plot. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the whole period will be plotted.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The figure handle.</p>
 </dd>
 </dl>
@@ -224,12 +333,12 @@ deviation of the differences, and percentiles of the absolute differences for 68
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_comparison_stats_for_eofs_all_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recalc_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_comparison_stats_for_eofs_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_comparison_stats_for_eofs_all_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recalc_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_comparison_stats_for_eofs_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots extended comparison statistics between calculated EOFs and references EOFs.</p>
 <p>Statistics of the differences will be shown for each DOY (DOY on the abscissa) and with one line each for EOF1 and
 EOF2.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>recalc_eof</strong> – The EOFs to compare.</p></li>
 <li><p><strong>orig_eof</strong> – The reference eofs.</p></li>
@@ -238,7 +347,7 @@ leap year treatment mode).</p></li>
 <li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some characteristic values will we printed to the console.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The figure handle</p>
 </dd>
 </dl>
@@ -246,10 +355,10 @@ leap year treatment mode).</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_comparison_stats_for_explained_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_comparison_stats_for_explained_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_comparison_stats_for_explained_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc_var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_comparison_stats_for_explained_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the comparison of the explained variances for one EOF and for all DOYs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_var</strong> – The reference variances.</p></li>
 <li><p><strong>calc_var</strong> – The variances to validate.</p></li>
@@ -258,7 +367,7 @@ leap year treatment mode).</p></li>
 <li><p><strong>exclude_doy366</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the data for DOY 366 will not be considered in the statistics.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The figure handle</p>
 </dd>
 </dl>
@@ -266,11 +375,11 @@ leap year treatment mode).</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.plot_correlation_for_eofs_all_doys">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_correlation_for_eofs_all_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recalc_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_value_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_correlation_for_eofs_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_correlation_for_eofs_all_doys" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_correlation_for_eofs_all_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recalc_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_doy366</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_value_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_correlation_for_eofs_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_correlation_for_eofs_all_doys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the correlations between calculated EOFs and reference EOFs.</p>
 <p>Correlations will be shown for each DOY (DOY on the abscissa) and with one line each for EOF1 and EOF2.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>recalc_eof</strong> – The EOFs to validate.</p></li>
 <li><p><strong>orig_eof</strong> – The reference EOFs.</p></li>
@@ -280,7 +389,7 @@ leap year treatment mode).</p></li>
 <li><p><strong>full_value_range</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the ordinate spans the range from 0 to 1 instead of the used value range only.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A handle to the figure.</p>
 </dd>
 </dl>
@@ -288,17 +397,17 @@ leap year treatment mode).</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.plot_individual_eof_map_comparison">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_individual_eof_map_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_individual_eof_map_comparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_individual_eof_map_comparison" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_individual_eof_map_comparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare_eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_individual_eof_map_comparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_individual_eof_map_comparison" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shows the maps of EOFs 1 and 2 and a respective reference together with a map of differences between both.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>orig_eof</strong> – The reference EOF data.</p></li>
 <li><p><strong>compare_eof</strong> – The EOF data to validate.</p></li>
 <li><p><strong>doy</strong> – The DOY, which is evaluated (only used for the figure title).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The figure handle.</p>
 </dd>
 </dl>
@@ -306,12 +415,12 @@ leap year treatment mode).</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.plot_timeseries_agreement">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_timeseries_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_timeseries_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_timeseries_agreement" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_timeseries_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_timeseries_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_timeseries_agreement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a graphical comparison of 2 time series.</p>
 <p>Shows 4 subplots with 1) the data, 2) the difference, 3) a scatterplot of the data, and 4) a histogram of the
 differences.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_data</strong> – The time series reference vector.</p></li>
 <li><p><strong>ref_time</strong> – The time grid of the reference.</p></li>
@@ -321,7 +430,7 @@ differences.</p>
 <li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistical values will also be shown in the console.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The figure handle.</p>
 </dd>
 </dl>
@@ -329,12 +438,12 @@ differences.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.evaluation_tools.plot_vector_agreement">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_vector_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_vector_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_vector_agreement" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.evaluation_tools.</span></span><span class="sig-name descname"><span class="pre">plot_vector_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_print</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/evaluation_tools.html#plot_vector_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.evaluation_tools.plot_vector_agreement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a graphical comparison of 2 vectors.</p>
 <p>Shows 4 subplots with 1) the data, 2) the difference, 3) a scatterplot of the data, and 4) a histogram of
 the differences.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_data</strong> – The reference vector.</p></li>
 <li><p><strong>data</strong> – The vector to validate.</p></li>
@@ -342,7 +451,7 @@ the differences.</p>
 <li><p><strong>do_print</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, some statistics values will also be shown in the console.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The figure handle.</p>
 </dd>
 </dl>
@@ -352,44 +461,63 @@ the differences.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="tools.html" class="btn btn-neutral float-left" title="Module mjoindices.tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="../references.html" class="btn btn-neutral float-right" title="References and citation hints" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tools.html" class="btn btn-neutral float-left" title="Module mjoindices.tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020, Christoph G. Hoffmann.</p>
-  </div>
+    <p>
+        &#169; Copyright 2020, Christoph G. Hoffmann.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-    <!-- Theme Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'UA-XXXXXXX-1', {
-          'anonymize_ip': false,
-      });
-    </script> 
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    
+    ga('send', 'pageview');
+    </script>
+
+    
+   
 
 </body>
 </html>

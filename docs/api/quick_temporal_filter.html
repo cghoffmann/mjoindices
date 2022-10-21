@@ -1,35 +1,76 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Module mjoindices.omi.quick_temporal_filter &mdash; mjoindices  documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Module mjoindices.tools" href="tools.html" />
     <link rel="prev" title="Module mjoindices.omi.wheeler_kiladis_mjo_filter" href="wheeler_kiladis_mjo_filter.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> mjoindices
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -37,7 +78,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
@@ -45,7 +97,11 @@
 <li class="toctree-l1"><a class="reference internal" href="apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html">Module mjoindices.omi.wheeler_kiladis_mjo_filter</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.omi.quick_temporal_filter</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.omi.quick_temporal_filter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing"><code class="docutils literal notranslate"><span class="pre">filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.omi.quick_temporal_filter.filter_olr_temporally_1d_spectral_smoothing"><code class="docutils literal notranslate"><span class="pre">filter_olr_temporally_1d_spectral_smoothing()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="tools.html">Module mjoindices.tools</a></li>
 <li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html">Module mjoindices.evaluation_tools</a></li>
 </ul>
@@ -54,33 +110,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mjoindices</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="apidoc.html">API documentation (for running calculations)</a> &raquo;</li>
+        
       <li>Module mjoindices.omi.quick_temporal_filter</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/api/quick_temporal_filter.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="module-mjoindices.omi.quick_temporal_filter">
-<span id="module-mjoindices-omi-quick-temporal-filter"></span><h1>Module mjoindices.omi.quick_temporal_filter<a class="headerlink" href="#module-mjoindices.omi.quick_temporal_filter" title="Permalink to this heading"></a></h1>
+<span id="module-mjoindices-omi-quick-temporal-filter"></span><h1>Module mjoindices.omi.quick_temporal_filter<a class="headerlink" href="#module-mjoindices.omi.quick_temporal_filter" title="Permalink to this heading">¶</a></h1>
 <p>This module provides a simple 1-dim filtering algorithm, which can be used during the PC calculation instead of the
 full 2-dim Wheeler-Kiladis-Filter.</p>
 <p>This module is not intended to be used stand-alone outside the OMI context, as it has only been extensively
@@ -89,14 +187,14 @@ tested for the specific OMI filtering conditions.</p>
 Instead, they probably want to use the module <a class="reference internal" href="omi_calculator.html#module-mjoindices.omi.omi_calculator" title="mjoindices.omi.omi_calculator"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator</span></code></a> directly.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.quick_temporal_filter.</span></span><span class="sig-name descname"><span class="pre">filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">olrdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/quick_temporal_filter.html#filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.quick_temporal_filter.</span></span><span class="sig-name descname"><span class="pre">filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">olrdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/quick_temporal_filter.html#filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters OLR data temporally using a 1d Fourier transform filter.</p>
 <p>The temporal filtering constants are chosen to meet the values in the description by <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>olrdata</strong> – The original OLR data</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The filtered OLR.</p>
 </dd>
 </dl>
@@ -104,17 +202,17 @@ Instead, they probably want to use the module <a class="reference internal" href
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mjoindices.omi.quick_temporal_filter.filter_olr_temporally_1d_spectral_smoothing">
-<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.quick_temporal_filter.</span></span><span class="sig-name descname"><span class="pre">filter_olr_temporally_1d_spectral_smoothing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">olrdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/quick_temporal_filter.html#filter_olr_temporally_1d_spectral_smoothing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.quick_temporal_filter.filter_olr_temporally_1d_spectral_smoothing" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mjoindices.omi.quick_temporal_filter.</span></span><span class="sig-name descname"><span class="pre">filter_olr_temporally_1d_spectral_smoothing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">olrdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData" title="mjoindices.olr_handling.OLRData"><span class="pre">OLRData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/omi/quick_temporal_filter.html#filter_olr_temporally_1d_spectral_smoothing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.omi.quick_temporal_filter.filter_olr_temporally_1d_spectral_smoothing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filters OLR data temporally using a 1d Fourier transform filter.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>olrdata</strong> – The original OLR data</p></li>
 <li><p><strong>period_min</strong> – Temporal filter constant: Only greater periods (in days) remain in the data.</p></li>
 <li><p><strong>period_max</strong> – Temporal filter constant: Only lower periods (in days) remain in the data.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The filtered OLR.</p>
 </dd>
 </dl>
@@ -124,44 +222,63 @@ Instead, they probably want to use the module <a class="reference internal" href
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="wheeler_kiladis_mjo_filter.html" class="btn btn-neutral float-left" title="Module mjoindices.omi.wheeler_kiladis_mjo_filter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="tools.html" class="btn btn-neutral float-right" title="Module mjoindices.tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="wheeler_kiladis_mjo_filter.html" class="btn btn-neutral float-left" title="Module mjoindices.omi.wheeler_kiladis_mjo_filter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2020, Christoph G. Hoffmann.</p>
-  </div>
+    <p>
+        &#169; Copyright 2020, Christoph G. Hoffmann.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-    <!-- Theme Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'UA-XXXXXXX-1', {
-          'anonymize_ip': false,
-      });
-    </script> 
+  
+  
+    
+    <!-- Theme Analytics -->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXXXX-1', 'auto');
+    
+    ga('send', 'pageview');
+    </script>
+
+    
+   
 
 </body>
 </html>
