@@ -226,7 +226,7 @@ Download the source, move into the directory containing the file setup.py and ru
 <p>The following optional dependency sets can additionaly be installed by adding [“set_name”] behind the above commands:</p>
 <ul class="simple">
 <li><p><em>full_func</em>: Install these packages to be sure that all options are really available. This might
-require a higher Python version than for the core functionality alone. OMI will be computable without these
+require a higher Python version than for the core functionality alone. OMI may still be computed without these
 additional packages, but the number of alternative approaches is limited.</p></li>
 <li><p><em>dev</em>: packages that are needed for the further development, documentation and testing of mjoindices.</p></li>
 </ul>
@@ -260,7 +260,7 @@ can also be configured in the source code. In addition, it will save a few plots
 also be configured in the source. These plots show the agreement with the original OMI values (slight deviations are
 expected due to numerical differences. This is explained in detail in the corresponding software meta paper).</p>
 <p>Note that you can use this example also as a template to calculate OMI values with your own OLR data.
-In order to do that, you have to adapt only two parts of the code, which are also marked in the code documentation.</p>
+In order to do that, you only have to adapt two parts of the code, which are also marked in the code documentation.</p>
 <p>Note also that this script may run for one or two hours on common personal computer systems.</p>
 </li>
 <li><p>evaluate_omi_reproduction.py: This script produces more detailed comparison plots and saves them into a directory.
@@ -283,7 +283,6 @@ your installation using pytest:</p>
 <li><p>Download the complete test directory to you local file system.</p></li>
 <li><p>Download the external input and reference data files from <a class="reference external" href="https://doi.org/10.5281/zenodo.3746562">Zenodo</a>. Details are given in a separate <a class="reference external" href="tests/testdata/README">Readme file</a>.</p>
 <ul class="simple">
-<li><p>Details are given in a separate <a class="reference external" href="tests/testdata/README">Readme file</a>.</p></li>
 <li><p>Note that some necessary data files are already included in the test directory in the repository. Make sure to download
 those files together with the tests. The data files on Zenodo are complementary and not
 included in the repository for reasons of file size and ownership.</p></li>
@@ -299,8 +298,8 @@ included in the repository for reasons of file size and ownership.</p></li>
 </pre></div>
 </div>
 </li>
-<li><p>In case that some tests are failing with FileNotFoundErrors, it is likely that the package code is actually working, but that the test
-environment is not setup properly. You should check the following before contacting us:</p>
+<li><p>In the case that some tests are failing with FileNotFoundErrors, it is likely that the package code is actually working, but that the test
+environment is not set up properly. You should check the following before contacting us:</p>
 <ul class="simple">
 <li><p>Did you download the data files from the repository?</p></li>
 <li><p>Did you download the data files from Zenodo?</p></li>
