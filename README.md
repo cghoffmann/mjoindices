@@ -52,7 +52,7 @@ Download the source, move into the directory containing the file setup.py and ru
 
 The following optional dependency sets can additionaly be installed by adding ["set_name"] behind the above commands:
   * *full_func*: Install these packages to be sure that all options are really available. This might 
-    require a higher Python version than for the core functionality alone. OMI will be computable without these
+    require a higher Python version than for the core functionality alone. OMI may still be computed without these
     additional packages, but the number of alternative approaches is limited.
   * *dev*: packages that are needed for the further development, documentation and testing of mjoindices.
 
@@ -87,7 +87,7 @@ After you have installed mjoindices, you can download an
   expected due to numerical differences. This is explained in detail in the corresponding software meta paper).
 
   Note that you can use this example also as a template to calculate OMI values with your own OLR data. 
-  In order to do that, you have to adapt only two parts of the code, which are also marked in the code documentation.
+  In order to do that, you only have to adapt two parts of the code, which are also marked in the code documentation.
 
   Note also that this script may run for one or two hours on common personal computer systems.
 
@@ -111,7 +111,6 @@ your installation using pytest:
 * Download the complete test directory to you local file system.
 
 * Download the external input and reference data files from [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](tests/testdata/README). 
-  * Details are given in a separate [Readme file](tests/testdata/README).
   * Note that some necessary data files are already included in the test directory in the repository. Make sure to download
     those files together with the tests. The data files on Zenodo are complementary and not 
     included in the repository for reasons of file size and ownership.
@@ -124,8 +123,8 @@ your installation using pytest:
 
       pytest
 
-* In case that some tests are failing with FileNotFoundErrors, it is likely that the package code is actually working, but that the test 
-  environment is not setup properly. You should check the following before contacting us:
+* In the case that some tests are failing with FileNotFoundErrors, it is likely that the package code is actually working, but that the test 
+  environment is not set up properly. You should check the following before contacting us:
    * Did you download the data files from the repository?
    * Did you download the data files from Zenodo?
    * Did you preserve the directory structure?

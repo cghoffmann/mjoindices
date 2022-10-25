@@ -31,19 +31,19 @@ Journal of Open Research Software, 9(1), p.9. DOI: https://doi.org/10.5334/jors.
 
 We kindly ask you to cite both papers if you use computed results in your scientific publications.
 
-Furthermore, we have received first adaptions of the OMI algorithm from the community. These modifications are not
+Furthermore, we have received the first adaptions of the OMI algorithm from the community. These modifications are not
 covered by Kiladis (2014), but are typically described in other scientific publications before their integration into the
 package (if they are not only of technical nature). While we designed the default settings such that the original OMI values
-are reproduced (which also applies for this example), you might want to check the documentation
+will be reproduced (which also applies to this example), you might want to check the documentation
 (https://cghoffmann.github.io/mjoindices/index.html) of the major function calls below to get an overview of the available
-options. Furthermore, a list of all scientific publications, on which the package is based, is available
-(https://cghoffmann.github.io/mjoindices/references.html). Please also cite those papers of the list, which describe options
-that you activated for the calculations. So far, possible options are an alternative post-processing approach for the EOFs,
+options. Furthermore, a list of all scientific publications on which the package is based is available
+(https://cghoffmann.github.io/mjoindices/references.html). Please also cite any papers on the list that describe the options
+you used for the calculations. So far, possible options include an alternative post-processing approach for the EOFs,
 and a possibility to work with data without leap years.
 
 You can modify this example in order to compute OMI data from other OLR datasets (this is probably what you intend if
-you use this package). For this, you only have to provide your OLR data as a mjoindices.olr_handling.OLRData object and
-use this object as replacement for the original data in two lines, which is mentioned in the comments below.
+you use this package). For this, you only have to provide your OLR data as an mjoindices.olr_handling.OLRData object and
+use this object as a replacement for the original data in two lines, which is mentioned in the comments below.
 
 This example script may run for about 2 hours on common desktop computers.
 
@@ -92,7 +92,7 @@ pctxtfile = Path(os.path.abspath('')) / "example_data" / "PCs.txt"
 # Directory in which the figures are saved.
 fig_dir = Path(os.path.abspath('')) / "example_data" / "omi_recalc_example_plots"
 
-# ############## There should be no need to change anything below (except you intend to use different OLR data as input or you are experiencing problems with the NOAA OLR file NetCDF version.)
+# ############## There should be no need to change anything below (except if you intend to use a different OLR data as input or you are experiencing problems with the NOAA OLR file NetCDF version.)
 
 # ############## Calculation of the EOFs ###################
 
