@@ -22,15 +22,13 @@
 """
 This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.
 
-Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,
-since it is only extensively tested for the specific OMI filtering conditions.
+Although implemented generically, this module is not intended to be used stand-alone outside the OMI context,
+as it has only been extensively tested for the specific OMI filtering conditions.
 
 Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.
-Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.
+Instead, they probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.
 
-The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
-Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
-Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
+The complete algorithm is described by :ref:`refKiladis2014`
 """
 
 import matplotlib.pyplot as plt
@@ -40,15 +38,14 @@ import mjoindices.olr_handling as olr
 
 def filter_olr_for_mjo_pc_calculation(olrdata: olr.OLRData, do_plot: bool = False):
     """
-    Filters OLR data temporally.
+    Filters OLR data temporally with a bandwidth particularly selected for the PC calculation.
 
     The filter algorithm is the same as for the combined temporal and longitudinal filtering,
-    but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
-    applied.
-    The temporal filtering constants are chosen to meet the values in the description by Kiladis (2014).
+    but the longitudinal bandpass filter constants are defined so broadly that effectively no longitudinal filtering is
+    applied. The temporal filtering constants are chosen to meet the values in the description by :ref:`refKiladis2014`.
 
     :param olrdata: The original OLR data.
-    :param do_plot: If True, diagnosis plots will be generated.
+    :param do_plot: If ``True``, diagnosis plots will be generated.
 
     :return: The filtered OLR.
     """
@@ -61,15 +58,15 @@ def filter_olr_temporally(olrdata: olr.OLRData, period_min: float, period_max: f
     Filters OLR data temporally.
 
     The filter algorithm is the same as for the combined temporal and longitudinal filtering,
-    but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is
+    but the longitudinal bandpass filter constants are defined so broadly that effectively no longitudinal filtering is
     applied.
 
-    Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.
+    Note that this function has only been strictly tested for filtering constants used by the OMI algorithm.
 
     :param olrdata: The original OLR data
     :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.
     :param period_max: Temporal filter constant: Only lower periods (in days) remain in the data.
-    :param do_plot: If True, diagnosis plots will be generated.
+    :param do_plot: If ``True``, diagnosis plots will be generated.
 
     :return: The filtered OLR.
     """
@@ -78,12 +75,12 @@ def filter_olr_temporally(olrdata: olr.OLRData, period_min: float, period_max: f
 
 def filter_olr_for_mjo_eof_calculation(olrdata: olr.OLRData, do_plot: bool = False) -> olr.OLRData:
     """
-    Filters OLR data temporally and longitudinally.
+    Filters OLR data temporally and longitudinally with a bandwidth particularly selected for the EOF calculation.
 
     The filter setup meets the description of Kiladis (2014) for the EOF calculation.
 
     :param olrdata: The original OLR data
-    :param do_plot: If True, diagnosis plots will be generated.
+    :param do_plot: If ``True``, diagnosis plots will be generated.
 
     :return: The filtered OLR data.
     """
@@ -100,14 +97,14 @@ def filter_olr_temporally_and_longitudinally(olrdata: olr.OLRData,
     """
     Performs a temporal and longitudinal bandpass filtering of the OLR data with configurable filtering thresholds.
 
-    Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.
+    Note that this function has only been strictly tested for filtering constants used by the OMI algorithm.
 
     :param olrdata: The original OLR data.
     :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.
     :param period_max: Temporal filter constant: Only lower periods (in days) remain in the data.
     :param wn_min: Longitudinal filter constant: Only greater wave numbers (in cycles per globe) remain in the data.
     :param wn_max:  Longitudinal filter constant: Only lower wave numbers (in cycles per globe) remain in the data.
-    :param do_plot: If True, diagnosis plots will be generated.
+    :param do_plot: If ``True``, diagnosis plots will be generated.
 
     :return: The filtered OLR.
     """
@@ -170,7 +167,7 @@ class WKFilter:
     This class contains the major Wheeler-Kiladis-Filtering functionality.
     The functionality is encapsulated in a class because values of intermediate processing steps
     are saved as class members for debugging purposes.
-    To run the filtering, only the method :func:`perform_2dim_spectral_filtering` has to be executed.
+    To run the filtering, only the method :py:func:`perform_2dim_spectral_filtering` has to be executed.
     """
     def __init__(self):
         self.DebugInputOLR = []
@@ -199,11 +196,11 @@ class WKFilter:
         Note that the temporal and longitudinal dimension have in principle
         different characteristics, so that they are in detail treated a bit
         differently:
-        While the time is evolving into infinity (so that the number of data
+        While the time variable may evolve to infinity (thus, the number of data
         points and the time_spacing variable are needed to calculate the
-        full temporal coverage), the longitude is periodic with the periodicity
-        of one globe (so that it is assumed that the data covers exactly one
-        globe and only passing the number of longitudes provides already the complete information).
+        full temporal coverage), longitude is periodic with the periodicity
+        of one globe (thus, it is assumed that the data covers exactly one
+        globe and only passing the number of longitudes provides complete information).
 
         :param data: The OLR data as 2-dim array: first dimension time, second
             dimension longitude, both equally spaced.
@@ -216,8 +213,8 @@ class WKFilter:
         :param period_max: Maximal period (in days) that remains in the dataset.
         :param wn_min: Minimal wavenumber (in cycles per globe) that remains in the dataset.
         :param wn_max: Maximal wavenumber (in cycles per globe) that remains in the dataset.
-        :param do_plot: If True, diagnosis plots will be generated.
-        :param save_debug: If true, some variables will be filled with values of intermediate processing steps
+        :param do_plot: If ``True``, diagnosis plots will be generated.
+        :param save_debug: If ``True``, some variables will be filled with values of intermediate processing steps
             for debugging purposes.
 
         :return: The filtered data.

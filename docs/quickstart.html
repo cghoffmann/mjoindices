@@ -1,38 +1,47 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Quickstart &mdash; mjoindices  documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API documentation (for running calculations)" href="api/apidoc.html" />
@@ -73,6 +82,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -80,16 +90,17 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#citation">Citation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#contributors">Contributors</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#api-documentation">API documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#getting-started-examples">Getting started / examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#automated-testing">Automated testing</a></li>
 </ul>
 </li>
@@ -98,12 +109,14 @@
 <li class="toctree-l1"><a class="reference internal" href="api/apidoc.html">API documentation (for running calculations)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References and citation hints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="indices.html">Indices and tables</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -138,18 +151,20 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Quickstart</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -163,34 +178,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="quickstart">
-<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">
-<h2>mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index<a class="headerlink" href="#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index" title="Permalink to this headline">¶</a></h2>
+  <section id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">¶</a></h1>
+<section id="mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index">
+<h2>mjoindices - A python package for calculating the Madden-Julian-Oscillation OMI index<a class="headerlink" href="#mjoindices-a-python-package-for-calculating-the-madden-julian-oscillation-omi-index" title="Permalink to this heading">¶</a></h2>
 <a class="reference external image-reference" href="https://doi.org/10.5334/jors.331"><img alt="DOI (paper)" src="https://img.shields.io/badge/DOI%20%28paper%29-10.5334%2Fjors.331-blue.svg" /></a>
 <a class="reference external image-reference" href="https://zenodo.org/badge/latestdoi/197774253"><img alt="DOI" src="https://zenodo.org/badge/197774253.svg" /></a>
-<div class="section" id="overview">
-<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
-<p>mjoindices is a Python package relevant for users of the atmospheric sciences. It provides functionality to compute an
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h3>
+<p>mjoindices is a Python package relevant for atmospheric scientists. It provides functionality to compute an
 index of the Madden-Julian-Oscillation (MJO), particularly the OLR-based MJO index (OMI).</p>
-<p>Whereas the package name has been chosen to indicate that further MJO indices should be included in future, the
+<p>Whereas the package name has been chosen to indicate that further MJO indices should be included in the future, the
 implementation is currently limited to the OMI algorithm.</p>
-<p>A scientific description of the packge is found in <a class="reference external" href="https://doi.org/10.5334/jors.331">Hoffmann et al. (2021)</a>.</p>
-</div>
-<div class="section" id="citation">
-<h3>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h3>
-<p>If you use mjoindices in published research, please cite the correspondig paper: Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021.
+<p>A scientific description of the package is found in <a class="reference external" href="https://doi.org/10.5334/jors.331">Hoffmann et al. (2021)</a>.</p>
+</section>
+<section id="citation">
+<h3>Citation<a class="headerlink" href="#citation" title="Permalink to this heading">¶</a></h3>
+<p>If you use mjoindices in published research, please cite the corresponding paper: Hoffmann, C.G., Kiladis, G.N., Gehne, M. and von Savigny, C., 2021.
 A Python Package to Calculate the OLR-Based Index of the Madden- Julian-Oscillation (OMI) in Climate Science and Weather Forecasting.
 Journal of Open Research Software, 9(1), p.9. DOI: <a class="reference external" href="http://doi.org/10.5334/jors.331">http://doi.org/10.5334/jors.331</a></p>
-<p>In addition, you can also cite the Zenodo DOI <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">http://dx.doi.org/10.5281/zenodo.3613752</a>.</p>
-</div>
-<div class="section" id="requirements">
-<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
-<p>mjoindices is written for Python 3 (version &gt; 3.6) and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
+<p>Please check our <a class="reference external" href="https://cghoffmann.github.io/mjoindices/references.html">list of further scientific publications</a>, on which the
+implementation of the package is based. It is likely that some of these publications should also be cited.</p>
+</section>
+<section id="contributors">
+<h3>Contributors<a class="headerlink" href="#contributors" title="Permalink to this heading">¶</a></h3>
+<p>Thanks for the contributions from the community!</p>
+<a class="reference external image-reference" href="https://github.com/cghoffmann/mjoindices/graphs/contributors"><img alt="Contributors" src="https://contrib.rocks/image?repo=cghoffmann/mjoindices" /></a>
+</section>
+<section id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading">¶</a></h3>
+<p>mjoindices is written for Python 3 (version &gt;= 3.7) and depends on the packages NumPy, Pandas, SciPy, and Matplotlib. It runs on Linux
 and Windows. Other operating systems have not been tested.</p>
-</div>
-<div class="section" id="installation">
-<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>There are optional requirements, which can be installed along with mjoindices (see below)</p>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h3>
 <p>mjoindices is available in the <a class="reference external" href="https://pypi.org/project/mjoindices/">Python Package Index (PyPI)</a>. It can be installed using,
 e.g., pip.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">mjoindices</span>
@@ -198,87 +220,136 @@ e.g., pip.</p>
 </div>
 <p>It can also be installed from the source, which is available on <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.3613752">Zenodo</a> and <a class="reference external" href="https://github.com/cghoffmann/mjoindices">GitHub</a>.
 Download the source, move into the directory containing the file setup.py and run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">.</span>
 </pre></div>
 </div>
+<p>The following optional dependency sets can additionaly be installed by adding [“set_name”] behind the above commands:</p>
+<ul class="simple">
+<li><p><em>full_func</em>: Install these packages to be sure that all options are really available. This might
+require a higher Python version than for the core functionality alone. OMI may still be computed without these
+additional packages, but the number of alternative approaches is limited.</p></li>
+<li><p><em>dev</em>: packages that are needed for the further development, documentation and testing of mjoindices.</p></li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">mjoindices</span><span class="p">[</span><span class="n">full_func</span><span class="p">]</span>
+</pre></div>
 </div>
-<div class="section" id="api-documentation">
-<h3>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h3>
-<p>The API documentation is found on <a class="reference external" href="https://cghoffmann.github.io/mjoindices/index.html">GitHub Pages</a> and also in the docs
-folder of the <a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/docs">source</a>.</p>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+</pre></div>
 </div>
-<div class="section" id="getting-started-examples">
-<h3>Getting started / examples<a class="headerlink" href="#getting-started-examples" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="getting-started-examples">
+<h3>Getting started / examples<a class="headerlink" href="#getting-started-examples" title="Permalink to this heading">¶</a></h3>
+<p><em>Note for experienced users: We have slightly changed the API for the EOF calculation with version 1.4. to be more flexible
+for changes in the future. Please read the API docs or compare your code with the current example. The old API is still
+working but will deprecate with one of the next releases. Adapting to the new interface will only take a few minutes.</em></p>
+<p>There are three basic entry points, of which you should read the documentation:</p>
+<ul class="simple">
+<li><p>Calculation of the EOFs: <a class="reference external" href="https://cghoffmann.github.io/mjoindices/api/omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr">calc_eofs_from_olr</a>.</p></li>
+<li><p>Calculation of the PCs: <a class="reference external" href="https://cghoffmann.github.io/mjoindices/api/omi_calculator.html#mjoindices.omi.omi_calculator.calculate_pcs_from_olr">calculate_pcs_from_olr</a>.</p></li>
+<li><p>An OLR data container class, which has to be provided for the calculations: <a class="reference external" href="https://cghoffmann.github.io/mjoindices/api/olr_handling.html#mjoindices.olr_handling.OLRData">OLRData</a></p></li>
+</ul>
 <p>After you have installed mjoindices, you can download an
-<a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/examples">example</a> from the source, which consists of two files:</p>
+<a class="reference external" href="examples/">example</a> from the source, which consists of two files:</p>
 <ul>
 <li><p>recalculate_original_omi.py: After downloading some data files, which are mentioned and linked in the source
 documentation of the example, you can run this example to recalculate the original OMI values. The script will save
 the computed Empirical Orthogonal Functions (EOFs) and the Principal Components (PCs) in two individual files, which
 can also be configured in the source code. In addition, it will save a few plots into a directory, which can
 also be configured in the source. These plots show the agreement with the original OMI values (slight deviations are
-expected due to numerical differences. This will be detailed in the corresponding software meta paper).</p>
-<blockquote>
-<div><p>Note that you can use this example also as a template to calculate OMI values with your own OLR data.</p>
-</div></blockquote>
-<p>In order to do that, you have to adapt only two parts of the code, which are also marked in the code documentation.</p>
-<blockquote>
-<div><p>Note also that this script may run for one or two hours on common personal computer systems.</p>
-</div></blockquote>
+expected due to numerical differences. This is explained in detail in the corresponding software meta paper).</p>
+<p>Note that you can use this example also as a template to calculate OMI values with your own OLR data.
+In order to do that, you only have to adapt two parts of the code, which are also marked in the code documentation.</p>
+<p>Note also that this script may run for one or two hours on common personal computer systems.</p>
 </li>
 <li><p>evaluate_omi_reproduction.py: This script produces more detailed comparison plots and saves them into a directory.
-The script recalculate_original_omi.py has to be run before, as the evaluation script is based on the saved results.
+The script recalculate_original_omi.py has to be run first, since the evaluation script is based on the saved results.
 As for recalculate_original_omi.py, some file and directory names have to be adapted in the beginning of the code.</p></li>
 </ul>
 <p>Both files are also available as Jupyter notebook files.</p>
-</div>
-<div class="section" id="automated-testing">
-<h3>Automated testing<a class="headerlink" href="#automated-testing" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h3>
+<p>The documentation is found on <a class="reference external" href="https://cghoffmann.github.io/mjoindices/index.html">GitHub Pages</a> and also in the docs
+folder of the <a class="reference external" href="docs/index.html">source</a>.</p>
+</section>
+<section id="automated-testing">
+<h3>Automated testing<a class="headerlink" href="#automated-testing" title="Permalink to this heading">¶</a></h3>
 <p>After you have installed mjoindices, you can also download
-<a class="reference external" href="https://github.com/cghoffmann/mjoindices/tree/master/tests">unit and integration tests</a> from the source to check
-your installation using pytest.</p>
+<a class="reference external" href="tests/">unit and integration tests</a> from the source to check
+your installation using pytest:</p>
 <ul>
 <li><p>Download the complete test directory to you local file system.</p></li>
-<li><p>Download some external input and reference data files from  <a class="reference external" href="https://doi.org/10.5281/zenodo.3746562">Zenodo</a>. Details are given in a separate <a class="reference external" href="https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README">Readme file</a>.</p></li>
+<li><p>Download the external input and reference data files from <a class="reference external" href="https://doi.org/10.5281/zenodo.3746562">Zenodo</a>. Details are given in a separate <a class="reference external" href="tests/testdata/README">Readme file</a>.</p>
+<ul class="simple">
+<li><p>Note that some necessary data files are already included in the test directory in the repository. Make sure to download
+those files together with the tests. The data files on Zenodo are complementary and not
+included in the repository for reasons of file size and ownership.</p></li>
+</ul>
+</li>
+<li><p>Install the pytest package or simply install the mjoindices development dependencies with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">mjoindices</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
 <li><p>Move into your local test directory and run</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span>
 </pre></div>
 </div>
 </li>
+<li><p>In the case that some tests are failing with FileNotFoundErrors, it is likely that the package code is actually working, but that the test
+environment is not set up properly. You should check the following before contacting us:</p>
+<ul class="simple">
+<li><p>Did you download the data files from the repository?</p></li>
+<li><p>Did you download the data files from Zenodo?</p></li>
+<li><p>Did you preserve the directory structure?</p></li>
+<li><p>Did you execute pytest in the tests/ subdirectory (where pytest.ini is located)?</p></li>
 </ul>
-<p>Note that the tests may run for a few hours on a common personal computer.</p>
+</li>
+<li><p>Note that the tests may run for a few hours on a common personal computer.</p>
+<ul>
+<li><p>To get a quicker impression, you can omit slow tests by executing the following command. However, this will
+not check the core OMI computation, which is most important, of course.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="o">-</span><span class="n">m</span> <span class="s1">&#39;not slow&#39;</span>
+</pre></div>
 </div>
-</div>
-</div>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
 
 
            </div>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="api/apidoc.html" class="btn btn-neutral float-right" title="API documentation (for running calculations)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to mjoindices’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="api/apidoc.html" class="btn btn-neutral float-right" title="API documentation (for running calculations)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to mjoindices’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Christoph G. Hoffmann
+        &#169; Copyright 2020, Christoph G. Hoffmann.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -286,7 +357,6 @@ your installation using pytest.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
@@ -305,6 +375,7 @@ your installation using pytest.</p>
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-XXXXXXX-1', 'auto');
+    
     ga('send', 'pageview');
     </script>
 

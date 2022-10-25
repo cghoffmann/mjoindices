@@ -1,38 +1,47 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>API documentation (for running calculations) &mdash; mjoindices  documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Module mjoindices.omi.omi_calculator" href="omi_calculator.html" />
@@ -73,6 +82,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -80,12 +90,14 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API documentation (for running calculations)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="omi_calculator.html">Module mjoindices.omi.omi_calculator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="olr_handling.html">Module mjoindices.olr_handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_original_kiladis2014.html">Module mjoindices.omi.postprocessing_original_kiladis2014</a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_rotation_approach.html">Module mjoindices.omi.postprocessing_rotation_approach</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#api-documentation-for-working-with-results">API documentation (for working with results)</a><ul>
@@ -100,12 +112,14 @@
 <li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html">Module mjoindices.evaluation_tools</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References and citation hints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -140,18 +154,20 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>API documentation (for running calculations)</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/api/apidoc.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -165,67 +181,217 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="api-documentation-for-running-calculations">
-<h1>API documentation (for running calculations)<a class="headerlink" href="#api-documentation-for-running-calculations" title="Permalink to this headline">¶</a></h1>
+  <section id="api-documentation-for-running-calculations">
+<h1>API documentation (for running calculations)<a class="headerlink" href="#api-documentation-for-running-calculations" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="omi_calculator.html">Module mjoindices.omi.omi_calculator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="olr_handling.html">Module mjoindices.olr_handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="omi_calculator.html">Module mjoindices.omi.omi_calculator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_for_doy"><code class="docutils literal notranslate"><span class="pre">calc_eofs_for_doy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_for_doy_using_eofs_package"><code class="docutils literal notranslate"><span class="pre">calc_eofs_for_doy_using_eofs_package()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="docutils literal notranslate"><span class="pre">calc_eofs_from_olr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_preprocessed_olr"><code class="docutils literal notranslate"><span class="pre">calc_eofs_from_preprocessed_olr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calculate_pcs_from_olr"><code class="docutils literal notranslate"><span class="pre">calculate_pcs_from_olr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calculate_pcs_from_olr_original_conditions"><code class="docutils literal notranslate"><span class="pre">calculate_pcs_from_olr_original_conditions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.initiate_eof_post_processing"><code class="docutils literal notranslate"><span class="pre">initiate_eof_post_processing()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.preprocess_olr"><code class="docutils literal notranslate"><span class="pre">preprocess_olr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.regress_3dim_data_onto_eofs"><code class="docutils literal notranslate"><span class="pre">regress_3dim_data_onto_eofs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.regress_vector_onto_eofs"><code class="docutils literal notranslate"><span class="pre">regress_vector_onto_eofs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="olr_handling.html">Module mjoindices.olr_handling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData"><code class="docutils literal notranslate"><span class="pre">OLRData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData.close"><code class="docutils literal notranslate"><span class="pre">OLRData.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData.extract_olr_matrix_for_doy_range"><code class="docutils literal notranslate"><span class="pre">OLRData.extract_olr_matrix_for_doy_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData.get_olr_for_date"><code class="docutils literal notranslate"><span class="pre">OLRData.get_olr_for_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData.lat"><code class="docutils literal notranslate"><span class="pre">OLRData.lat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData.long"><code class="docutils literal notranslate"><span class="pre">OLRData.long</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData.olr"><code class="docutils literal notranslate"><span class="pre">OLRData.olr</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData.save_to_npzfile"><code class="docutils literal notranslate"><span class="pre">OLRData.save_to_npzfile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.OLRData.time"><code class="docutils literal notranslate"><span class="pre">OLRData.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.interpolate_spatial_grid"><code class="docutils literal notranslate"><span class="pre">interpolate_spatial_grid()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.interpolate_spatial_grid_to_original"><code class="docutils literal notranslate"><span class="pre">interpolate_spatial_grid_to_original()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.load_noaa_interpolated_olr"><code class="docutils literal notranslate"><span class="pre">load_noaa_interpolated_olr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4"><code class="docutils literal notranslate"><span class="pre">load_noaa_interpolated_olr_netcdf4()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.plot_olr_map_for_date"><code class="docutils literal notranslate"><span class="pre">plot_olr_map_for_date()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.remove_leap_years"><code class="docutils literal notranslate"><span class="pre">remove_leap_years()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.restore_from_npzfile"><code class="docutils literal notranslate"><span class="pre">restore_from_npzfile()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="olr_handling.html#mjoindices.olr_handling.restrict_time_coverage"><code class="docutils literal notranslate"><span class="pre">restrict_time_coverage()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="postprocessing_original_kiladis2014.html">Module mjoindices.omi.postprocessing_original_kiladis2014</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_original_kiladis2014.html#mjoindices.omi.postprocessing_original_kiladis2014.correct_spontaneous_sign_changes_in_eof_series"><code class="docutils literal notranslate"><span class="pre">correct_spontaneous_sign_changes_in_eof_series()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_original_kiladis2014.html#mjoindices.omi.postprocessing_original_kiladis2014.interpolate_eofs_between_doys"><code class="docutils literal notranslate"><span class="pre">interpolate_eofs_between_doys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_original_kiladis2014.html#mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach"><code class="docutils literal notranslate"><span class="pre">post_process_eofs_original_kiladis_approach()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="postprocessing_rotation_approach.html">Module mjoindices.omi.postprocessing_rotation_approach</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.angle_between_eofs"><code class="docutils literal notranslate"><span class="pre">angle_between_eofs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.angle_btwn_vectors"><code class="docutils literal notranslate"><span class="pre">angle_btwn_vectors()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.calculate_angle_from_discontinuity"><code class="docutils literal notranslate"><span class="pre">calculate_angle_from_discontinuity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.normalize_eofs"><code class="docutils literal notranslate"><span class="pre">normalize_eofs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation"><code class="docutils literal notranslate"><span class="pre">post_process_eofs_rotation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.rotate_each_eof_by_delta"><code class="docutils literal notranslate"><span class="pre">rotate_each_eof_by_delta()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.rotate_eofs"><code class="docutils literal notranslate"><span class="pre">rotate_eofs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="postprocessing_rotation_approach.html#mjoindices.omi.postprocessing_rotation_approach.rotation_matrix"><code class="docutils literal notranslate"><span class="pre">rotation_matrix()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
-</div>
-<div class="section" id="api-documentation-for-working-with-results">
-<h1>API documentation (for working with results)<a class="headerlink" href="#api-documentation-for-working-with-results" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="api-documentation-for-working-with-results">
+<h1>API documentation (for working with results)<a class="headerlink" href="#api-documentation-for-working-with-results" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="principal_components.html">Module mjoindices.principal_components</a></li>
-<li class="toctree-l1"><a class="reference internal" href="empirical_orthogonal_functions.html">Module mjoindices.empirical_orthogonal_functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="principal_components.html">Module mjoindices.principal_components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData"><code class="docutils literal notranslate"><span class="pre">PCData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData.pc1"><code class="docutils literal notranslate"><span class="pre">PCData.pc1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData.pc2"><code class="docutils literal notranslate"><span class="pre">PCData.pc2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData.save_pcs_to_txt_file"><code class="docutils literal notranslate"><span class="pre">PCData.save_pcs_to_txt_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.PCData.time"><code class="docutils literal notranslate"><span class="pre">PCData.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.load_original_pcs_from_txt_file"><code class="docutils literal notranslate"><span class="pre">load_original_pcs_from_txt_file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="principal_components.html#mjoindices.principal_components.load_pcs_from_txt_file"><code class="docutils literal notranslate"><span class="pre">load_pcs_from_txt_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="empirical_orthogonal_functions.html">Module mjoindices.empirical_orthogonal_functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData"><code class="docutils literal notranslate"><span class="pre">EOFData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.close"><code class="docutils literal notranslate"><span class="pre">EOFData.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof1"><code class="docutils literal notranslate"><span class="pre">EOFData.eigenvalue_eof1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof2"><code class="docutils literal notranslate"><span class="pre">EOFData.eigenvalue_eof2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalues"><code class="docutils literal notranslate"><span class="pre">EOFData.eigenvalues</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.eof1map"><code class="docutils literal notranslate"><span class="pre">EOFData.eof1map</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.eof1vector"><code class="docutils literal notranslate"><span class="pre">EOFData.eof1vector</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.eof2map"><code class="docutils literal notranslate"><span class="pre">EOFData.eof2map</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.eof2vector"><code class="docutils literal notranslate"><span class="pre">EOFData.eof2vector</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof1"><code class="docutils literal notranslate"><span class="pre">EOFData.explained_variance_eof1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof2"><code class="docutils literal notranslate"><span class="pre">EOFData.explained_variance_eof2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.explained_variances"><code class="docutils literal notranslate"><span class="pre">EOFData.explained_variances</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.lat"><code class="docutils literal notranslate"><span class="pre">EOFData.lat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.long"><code class="docutils literal notranslate"><span class="pre">EOFData.long</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.no_observations"><code class="docutils literal notranslate"><span class="pre">EOFData.no_observations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_map"><code class="docutils literal notranslate"><span class="pre">EOFData.reshape_to_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_vector"><code class="docutils literal notranslate"><span class="pre">EOFData.reshape_to_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.save_eofs_to_txt_file"><code class="docutils literal notranslate"><span class="pre">EOFData.save_eofs_to_txt_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFData.sum_of_explained_variances"><code class="docutils literal notranslate"><span class="pre">EOFData.sum_of_explained_variances</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eigenvalue1_for_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eigenvalue2_for_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof1vector_for_doy"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eof1vector_for_doy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof2vector_for_doy"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eof2vector_for_doy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof_list"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eof_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eofdata_for_doy"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eofdata_for_doy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.explained_variance1_for_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.explained_variance2_for_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.lat"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.lat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.len_eof_list"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.len_eof_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.long"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.long</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_leap_years"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.no_leap_years</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.no_observations_for_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.save_all_eofs_to_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.save_all_eofs_to_npzfile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.total_explained_variance_for_all_doys()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.load_all_eofs_from_directory"><code class="docutils literal notranslate"><span class="pre">load_all_eofs_from_directory()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.load_all_original_eofs_from_directory"><code class="docutils literal notranslate"><span class="pre">load_all_original_eofs_from_directory()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy"><code class="docutils literal notranslate"><span class="pre">load_original_eofs_for_doy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file"><code class="docutils literal notranslate"><span class="pre">load_single_eofs_from_txt_file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.plot_eigenvalues_for_all_doys"><code class="docutils literal notranslate"><span class="pre">plot_eigenvalues_for_all_doys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.plot_explained_variance_for_all_doys"><code class="docutils literal notranslate"><span class="pre">plot_explained_variance_for_all_doys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.plot_individual_eof_map"><code class="docutils literal notranslate"><span class="pre">plot_individual_eof_map()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.plot_individual_eof_map_from_file"><code class="docutils literal notranslate"><span class="pre">plot_individual_eof_map_from_file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.plot_individual_explained_variance_all_eofs"><code class="docutils literal notranslate"><span class="pre">plot_individual_explained_variance_all_eofs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.plot_original_individual_eof_map"><code class="docutils literal notranslate"><span class="pre">plot_original_individual_eof_map()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="empirical_orthogonal_functions.html#mjoindices.empirical_orthogonal_functions.restore_all_eofs_from_npzfile"><code class="docutils literal notranslate"><span class="pre">restore_all_eofs_from_npzfile()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
-</div>
-<div class="section" id="api-documentation-minor-relevance-for-users">
-<h1>API documentation (minor relevance for users)<a class="headerlink" href="#api-documentation-minor-relevance-for-users" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="api-documentation-minor-relevance-for-users">
+<h1>API documentation (minor relevance for users)<a class="headerlink" href="#api-documentation-minor-relevance-for-users" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html">Module mjoindices.omi.wheeler_kiladis_mjo_filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quick_temporal_filter.html">Module mjoindices.omi.quick_temporal_filter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tools.html">Module mjoindices.tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="evaluation_tools.html">Module mjoindices.evaluation_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html">Module mjoindices.omi.wheeler_kiladis_mjo_filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter"><code class="docutils literal notranslate"><span class="pre">WKFilter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.WKFilter.perform_2dim_spectral_filtering"><code class="docutils literal notranslate"><span class="pre">WKFilter.perform_2dim_spectral_filtering()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.detrend_vector"><code class="docutils literal notranslate"><span class="pre">detrend_vector()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_eof_calculation"><code class="docutils literal notranslate"><span class="pre">filter_olr_for_mjo_eof_calculation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_pc_calculation"><code class="docutils literal notranslate"><span class="pre">filter_olr_for_mjo_pc_calculation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally"><code class="docutils literal notranslate"><span class="pre">filter_olr_temporally()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_temporally_and_longitudinally"><code class="docutils literal notranslate"><span class="pre">filter_olr_temporally_and_longitudinally()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.taper_vector_to_zero"><code class="docutils literal notranslate"><span class="pre">taper_vector_to_zero()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quick_temporal_filter.html">Module mjoindices.omi.quick_temporal_filter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quick_temporal_filter.html#mjoindices.omi.quick_temporal_filter.filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing"><code class="docutils literal notranslate"><span class="pre">filter_olr_for_mjo_pc_calculation_1d_spectral_smoothing()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_temporal_filter.html#mjoindices.omi.quick_temporal_filter.filter_olr_temporally_1d_spectral_smoothing"><code class="docutils literal notranslate"><span class="pre">filter_olr_temporally_1d_spectral_smoothing()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Module mjoindices.tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#mjoindices.tools.calc_day_of_year"><code class="docutils literal notranslate"><span class="pre">calc_day_of_year()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#mjoindices.tools.doy_list"><code class="docutils literal notranslate"><span class="pre">doy_list()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#mjoindices.tools.find_doy_ranges_in_dates"><code class="docutils literal notranslate"><span class="pre">find_doy_ranges_in_dates()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="evaluation_tools.html">Module mjoindices.evaluation_tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.calc_comparison_stats_for_eofs_all_doys"><code class="docutils literal notranslate"><span class="pre">calc_comparison_stats_for_eofs_all_doys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.calc_comparison_stats_for_explained_variance"><code class="docutils literal notranslate"><span class="pre">calc_comparison_stats_for_explained_variance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.calc_timeseries_agreement"><code class="docutils literal notranslate"><span class="pre">calc_timeseries_agreement()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.calc_vector_agreement"><code class="docutils literal notranslate"><span class="pre">calc_vector_agreement()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.compute_vector_difference_quantity"><code class="docutils literal notranslate"><span class="pre">compute_vector_difference_quantity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.load_omi_explained_variance"><code class="docutils literal notranslate"><span class="pre">load_omi_explained_variance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.plot_comparison_orig_calc_pcs"><code class="docutils literal notranslate"><span class="pre">plot_comparison_orig_calc_pcs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.plot_comparison_stats_for_eofs_all_doys"><code class="docutils literal notranslate"><span class="pre">plot_comparison_stats_for_eofs_all_doys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.plot_comparison_stats_for_explained_variance"><code class="docutils literal notranslate"><span class="pre">plot_comparison_stats_for_explained_variance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.plot_correlation_for_eofs_all_doys"><code class="docutils literal notranslate"><span class="pre">plot_correlation_for_eofs_all_doys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.plot_individual_eof_map_comparison"><code class="docutils literal notranslate"><span class="pre">plot_individual_eof_map_comparison()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.plot_timeseries_agreement"><code class="docutils literal notranslate"><span class="pre">plot_timeseries_agreement()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluation_tools.html#mjoindices.evaluation_tools.plot_vector_agreement"><code class="docutils literal notranslate"><span class="pre">plot_vector_agreement()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
-</div>
+</section>
 
 
            </div>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="omi_calculator.html" class="btn btn-neutral float-right" title="Module mjoindices.omi.omi_calculator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="omi_calculator.html" class="btn btn-neutral float-right" title="Module mjoindices.omi.omi_calculator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Christoph G. Hoffmann
+        &#169; Copyright 2020, Christoph G. Hoffmann.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -233,7 +399,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
@@ -252,6 +417,7 @@
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-XXXXXXX-1', 'auto');
+    
     ga('send', 'pageview');
     </script>
 

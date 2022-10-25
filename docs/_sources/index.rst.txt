@@ -12,6 +12,7 @@ Welcome to mjoindices's documentation!
 
    quickstart
    api/apidoc
+   references
    indices
 
 Important abbreviations

@@ -23,35 +23,41 @@
 This major module provides the execution of the algorithm of the OMI calculation.
 
 First, the algorithm can be used to compute the empirical orthogonal functions (EOFs), which serve as a new basis for
-the OLR data. Second, the time-dependent coefficients of the OLR maps w.r.t the EOFs are computed. These coefficients
-are called the principal components (PCs).
+the OLR data. According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY). Second,
+the time-dependent coefficients of the OLR maps w.r.t the EOFs are computed. These coefficients are called the
+principal components (PCs).
 
-According to the OMI algorithm, the EOFs have to be computed for each day of the year (DOY).
+The complete algorithm is described in :ref:`refKiladis2014`.
 
-Basically, only OLR data on a suitable spatial grid is needed. With that, the the OMI EOFs and afterwards the PCs are
+Basically, only OLR data on a suitable spatial grid is needed. With that, the OMI EOFs and afterwards the PCs are
 computed using the functions :func:`calc_eofs_from_olr` and :func:`calculate_pcs_from_olr`, respectively.
 
-The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.
-Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.
-Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1
+In terms of the post-processing of the EOFs (before the PCs are calculated), the following options are available.
+They are selected with the parameter ``eofs_postprocessing_type`` of the function :py:func:`calc_eofs_from_olr`
+
+* The original approach is described in :ref:`refKiladis2014`.
+  Details are found in :py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach`
+
+* An alternative post-processing procedure may be used to reduce noise and potential degeneracy issues. This algorithm is
+  described in :ref:`refWeidman2022`. The alternative post-processing procedure is explained
+  in :py:func:`~mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`.
 
 """
 
 from pathlib import Path
 from typing import Tuple
-import os.path
-import inspect
 
 import numpy as np
 import warnings
 import importlib
-import scipy.interpolate
 
 import mjoindices.empirical_orthogonal_functions as eof
 import mjoindices.olr_handling as olr
 import mjoindices.principal_components as pc
 import mjoindices.omi.wheeler_kiladis_mjo_filter as wkfilter
 import mjoindices.omi.quick_temporal_filter as qfilter
+import mjoindices.omi.postprocessing_original_kiladis2014 as pp_kil2014
+import mjoindices.omi.postprocessing_rotation_approach as pp_rotation
 import mjoindices.tools as tools
 
 eofs_spec = importlib.util.find_spec("eofs")
@@ -62,42 +68,164 @@ if eofs_package_available:
 
 # #################EOF calculation
 
-def calc_eofs_from_olr(olrdata: olr.OLRData, implementation: str = "internal", sign_doy1reference: bool = True,
-                       interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
-                       interpolation_end_doy: int = 316, strict_leap_year_treatment: bool = False) -> eof.EOFDataForAllDOYs:
+def calc_eofs_from_olr(olrdata: olr.OLRData,
+                       implementation: str = "internal",
+                       leap_year_treatment: str = "original",
+                       eofs_postprocessing_type: str ="kiladis2014",
+                       eofs_postprocessing_params: dict=None,
+                       sign_doy1reference: bool = None,
+                       interpolate_eofs: bool = None,
+                       interpolation_start_doy: int = None,
+                       interpolation_end_doy: int = None,
+                       strict_leap_year_treatment: bool = None
+                       ) -> eof.EOFDataForAllDOYs:
     """
-    One major function of this module. It performs the complete OMI EOF computation.
+    One of the major functions of this module. It performs the complete OMI EOF computation.
 
     This function executes consistently the preprocessing (filtering), the actual EOF analysis, and the postprocessing.
 
     :param olrdata: The OLR dataset, from which OMI should be calculated. Note that OLR values are assumed to be given
         in positive values. The spatial grid of the OLR datasets defines also the spatial grid of the complete OMI
         calculation.
-    :param implementation: See :meth:`calc_eofs_from_preprocessed_olr`.
-    :param sign_doy1reference: See :meth:`correct_spontaneous_sign_changes_in_eof_series`.
-    :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.
-    :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.
-    :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
-    :param strict_leap_year_treatment: See description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-    :return:
+    :param implementation: Choose one of the following values:
+
+        * ``"internal"``: uses the internal implementation of the EOF approach.
+        * ``"eofs_package"``: Uses the implementation of the external package :py:mod:`eofs`.
+
+    :param leap_year_treatment: Choose one of the following values:
+
+        * ``"original"`` will be as close to the original version of :ref:`refKiladis2014` as possible.
+        * ``"strict"`` (not recommended) will treat leap years somewhat more strictly, which might, however,
+          cause the results to deviate from the original.
+          See also description in :meth:`~mjoindices.tools.find_doy_ranges_in_dates`.
+        * ``"no_leap_years"`` will act as if there are no leap years in the dataset (365 days consistently),
+          which might be useful for modeled data.
+
+    :param eofs_postprocessing_type: Different approaches of the post-processing of the EOFs are available:
+
+        * ``"kiladis2014"`` for the original post-processing described in :ref:`refKiladis2014`.
+        * ``"eof_rotation"`` for the post-processing rotation algorithm described in :ref:`refWeidman2022`;
+        * ``None`` for no post-processing.
+
+    :param eofs_postprocessing_params: dict of specific parameters, which will be passed as keyword parameters to the
+        respective post-processing function. See the descriptions of the respective functions for details
+        (:py:func:`~mjoindices.omi.postprocessing_original_kiladis2014.post_process_eofs_original_kiladis_approach`
+        or :py:func:`~mjoindices.omi.postprocessing_rotation_approach.post_process_eofs_rotation`).
+
+    :param sign_doy1reference: .. deprecated:: 1.4
+    :param interpolate_eofs: .. deprecated:: 1.4
+    :param interpolation_start_doy: .. deprecated:: 1.4
+    :param interpolation_end_doy: .. deprecated:: 1.4
+    :param strict_leap_year_treatment: .. deprecated:: 1.4
+
+    :return: The computed EOFs.
+
     """
+    # ######The following lines are only for backwards compatibility of the interface and can be deleted in one of the next releases
+    deprecated_pp_interface_used = False
+    if sign_doy1reference is not None:
+        deprecated_pp_interface_used = True
+        warntext = "Argument 'sign_doy1reference' is deprecated and will be removed soon. Use 'eofs_postprocessing_type' and 'eofs_postprocessing_params' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+    if interpolate_eofs is not None:
+        deprecated_pp_interface_used = True
+        warntext = "Argument 'interpolate_eofs' is deprecated and will be removed soon. Use 'eofs_postprocessing_type' and 'eofs_postprocessing_params' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+    if interpolation_start_doy is not None:
+        deprecated_pp_interface_used = True
+        warntext = "Argument 'interpolation_start_doy' is deprecated and will be removed soon. Use 'eofs_postprocessing_type' and 'eofs_postprocessing_params' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+    if interpolation_end_doy is not None:
+        deprecated_pp_interface_used = True
+        warntext = "Argument 'interpolation_end_doy' is deprecated and will be removed soon. Use 'eofs_postprocessing_type' and 'eofs_postprocessing_params' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+    if strict_leap_year_treatment is not None:
+        warntext = "Argument 'strict_leap_year_treatment' is deprecated and will be removed soon. Use 'leap_year_treatment' instead."
+        warnings.warn(warntext, DeprecationWarning, stacklevel=2)
+        print(warntext)
+        if strict_leap_year_treatment is True:
+            leap_year_treatment = "strict"
+        else:
+            leap_year_treatment = "original"
+
+    if deprecated_pp_interface_used:
+        eofs_postprocessing_type = "kiladis2014"
+        if sign_doy1reference is None:
+            temp_sign_doy1reference = True
+        else:
+            temp_sign_doy1reference = sign_doy1reference
+        if interpolate_eofs is None:
+            temp_interpolate_eofs = False
+        else:
+            temp_interpolate_eofs = interpolate_eofs
+        if interpolation_start_doy is None:
+            temp_interpolation_start_doy = 293
+        else:
+            temp_interpolation_start_doy = interpolation_start_doy
+        if interpolation_end_doy is None:
+            temp_interpolation_end_doy = 316
+        else:
+            temp_interpolation_end_doy = interpolation_end_doy
+
+        eofs_postprocessing_params = {"sign_doy1reference": temp_sign_doy1reference,
+                                      "interpolate_eofs": temp_interpolate_eofs,
+                                      "interpolation_start_doy": temp_interpolation_start_doy,
+                                      "interpolation_end_doy": temp_interpolation_end_doy}
+
+    # ###### end of backward compatibility section.
+
+
     preprocessed_olr = preprocess_olr(olrdata)
-    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation, strict_leap_year_treatment=strict_leap_year_treatment)
-    result = post_process_eofs(raw_eofs, sign_doy1reference=sign_doy1reference, interpolate_eofs=interpolate_eofs,
-                               interpolation_start_doy=interpolation_start_doy,
-                               interpolation_end_doy=interpolation_end_doy)
+    raw_eofs = calc_eofs_from_preprocessed_olr(preprocessed_olr, implementation=implementation,
+                                               leap_year_treatment=leap_year_treatment)
+    result = initiate_eof_post_processing(raw_eofs, eofs_postprocessing_type, eofs_postprocessing_params)
     return result
 
+
+def initiate_eof_post_processing(raw_eofs: eof.EOFDataForAllDOYs,
+                                 eofs_postprocessing_type: str = "kiladis2014",
+                                 eofs_postprocessing_params: dict = None) -> eof.EOFDataForAllDOYs:
+    """
+    Helper function that starts the selected post-processing routine and applies default post-processing parameters
+    if none are given.
+
+    :param raw_eofs: The EOFs, which have not been post-processed.
+    :param eofs_postprocessing_type: see :py:func:`calc_eofs_from_olr`.
+    :param eofs_postprocessing_params: see :py:func:`calc_eofs_from_olr`.
+
+    :return: The post-processed EOFs.
+    """
+    if eofs_postprocessing_type is None:
+        result = raw_eofs
+    elif eofs_postprocessing_type == "kiladis2014":
+        if eofs_postprocessing_params is None:
+            eofs_postprocessing_params = {"sign_doy1reference": True,
+                                          "interpolate_eofs": True,
+                                          "interpolation_start_doy": 293,
+                                          "interpolation_end_doy": 316}
+        result = pp_kil2014.post_process_eofs_original_kiladis_approach(raw_eofs, **eofs_postprocessing_params)
+    elif eofs_postprocessing_type == "eof_rotation":
+        if eofs_postprocessing_params is None:
+            eofs_postprocessing_params = {"sign_doy1reference": True}
+        result = pp_rotation.post_process_eofs_rotation(raw_eofs, **eofs_postprocessing_params)
+
+    else:
+        raise ValueError("EOF post-processing type unknown.")
+    return result
 
 def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
     """
     Performs the preprocessing of an OLR dataset to make it suitable for the EOF analysis.
 
-    This is actually a major step of the OMI algorithm and includes the Wheeler-Kiladis-Filtering.
+    This is a major step of the OMI algorithm and includes the Wheeler-Kiladis-Filtering.
 
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    Note that it is recommended to use the function :py:func:`calc_eofs_from_olr` to cover the complete algorithm.
 
-    :param olrdata: The OLR dataset, which should be preprocessed. Note that OLR values are assumed to be given in
+    :param olrdata: The original OLR dataset to be preprocessed. Note that OLR values are assumed to be given in
         positive values.
 
     :return: The filtered OLR dataset.
@@ -109,86 +237,58 @@ def preprocess_olr(olrdata: olr.OLRData) -> olr.OLRData:
 
 
 def calc_eofs_from_preprocessed_olr(olrdata: olr.OLRData, implementation: str = "internal",
-                                    strict_leap_year_treatment: bool = False) -> eof.EOFDataForAllDOYs:
+                                    leap_year_treatment: str = "original") -> eof.EOFDataForAllDOYs:
     """
     Calculates a series of EOF pairs: one pair for each DOY.
 
     This is based on already preprocessed OLR. Note that it is recommended to use the function
-    :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    :py:func:`calc_eofs_from_olr` to cover the complete algorithm.
 
     :param olrdata: the preprocessed OLR data, from which the EOFs are calculated.
-    :param implementation: Two options are available: First, "internal": uses the internal implementation of the EOF
-        approach. Second, "eofs_package": Uses the implementation of the external package :py:mod:`eofs`.
-    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-
+    :param implementation: see :py:func:`calc_eofs_from_olr`.
+    :param leap_year_treatment: see :py:func:`calc_eofs_from_olr`.
     :return: A pair of EOFs for each DOY. This series of EOFs has probably still to be postprocessed.
     """
     if implementation == "eofs_package" and not eofs_package_available:
         raise ValueError("Selected calculation with external eofs package, but package not available. Use "
                          "internal implementation or install eofs package")
-    doys = tools.doy_list()
+    no_leap_years = False
+    if leap_year_treatment == "no_leap_years":
+        no_leap_years = True
+    doys = tools.doy_list(no_leap_years)
     eofs = []
     for doy in doys:
         print("Calculating EOFs for DOY %i" % doy)
         if (implementation == "eofs_package"):
-            singleeof = calc_eofs_for_doy_using_eofs_package(olrdata, doy,
-                                                             strict_leap_year_treatment=strict_leap_year_treatment)
+            singleeof = calc_eofs_for_doy_using_eofs_package(olrdata, doy, leap_year_treatment=leap_year_treatment)
         else:
-            singleeof = calc_eofs_for_doy(olrdata, doy, strict_leap_year_treatment=strict_leap_year_treatment)
+            singleeof = calc_eofs_for_doy(olrdata, doy, leap_year_treatment=leap_year_treatment)
         eofs.append(singleeof)
-    return eof.EOFDataForAllDOYs(eofs)
+    return eof.EOFDataForAllDOYs(eofs, no_leap_years)
 
 
-def post_process_eofs(eofdata: eof.EOFDataForAllDOYs, sign_doy1reference: bool = True,
-                      interpolate_eofs: bool = False, interpolation_start_doy: int = 293,
-                      interpolation_end_doy: int = 316) -> eof.EOFDataForAllDOYs:
-    """
-    Post processes a series of EOF pairs for all DOYs.
-
-    Postprocessing includes an alignment of EOF signs and an interpolation of the EOF functions in a given DOY
-    window. Both steps are part of the original OMI algorithm described by Kiladis (2014).
-
-    See documentation of  the methods :meth:`correct_spontaneous_sign_changes_in_eof_series` and
-    :meth:`interpolate_eofs_between_doys` for further information.
-
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
-
-    :param eofdata: The EOF series, which should be post processed.
-    :param sign_doy1reference: See description of :meth:`correct_spontaneous_sign_changes_in_eof_series`.
-    :param interpolate_eofs: If true, the EOF sub-series between the given DOYs will be interpolated.
-    :param interpolation_start_doy: See description of :meth:`interpolate_eofs_between_doys`.
-    :param interpolation_end_doy: See description of :meth:`interpolate_eofs_between_doys`.
-
-    :return: the postprocessed series of EOFs
-    """
-    pp_eofs = correct_spontaneous_sign_changes_in_eof_series(eofdata, doy1reference=sign_doy1reference)
-    if interpolate_eofs:
-        pp_eofs = interpolate_eofs_between_doys(pp_eofs, start_doy=interpolation_start_doy,
-                                                end_doy=interpolation_end_doy)
-    return pp_eofs
-
-
-def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment: bool = False) -> eof.EOFData:
+def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, leap_year_treatment: str = "original") -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
     An explicit internal implementation of the EOF approach is used.
 
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    Note that it is recommended for the end user to call the function py:func:`calc_eofs_from_olr` to cover the
+    complete algorithm.
 
     :param olrdata: The filtered OLR data to calculate the EOFs from.
     :param doy: The DOY for which the EOFs are calculated.
-    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    :param leap_year_treatment: see :py:func:`calc_eofs_from_olr`.
 
     :return: An object containing the pair of EOFs together with diagnostic values.
 
-    .. seealso:: :meth:`calc_eofs_for_doy_using_eofs_package`
+    .. seealso:: :py:func:`calc_eofs_for_doy_using_eofs_package`
 
     """
     nlat = olrdata.lat.size
     nlong = olrdata.long.size
     olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60,
-                                                                strict_leap_year_treatment=strict_leap_year_treatment)
+                                                                leap_year_treatment=leap_year_treatment)
     N = olr_maps_for_doy.shape[0]
     M = nlat * nlong
     F = np.reshape(olr_maps_for_doy, [N, M]).T  # vector: only one dimension. Length given by original longitude and latitude bins
@@ -217,28 +317,28 @@ def calc_eofs_for_doy(olrdata: olr.OLRData, doy: int, strict_leap_year_treatment
 
 
 def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
-                                         strict_leap_year_treatment: bool = False) -> eof.EOFData:
+                                         leap_year_treatment: str = "original") -> eof.EOFData:
     """
     Calculates a pair of EOFs for a particular DOY.
 
-    The external package :py:mod:`eofs` is used for the core calculation
+    The external package :py:mod:`eofs` is used for the core calculation.
 
-    Note that it is recommended to use the function :meth:`calc_eofs_from_olr` to cover the complete algorithm.
+    Note that it is recommended to use the function :py:func:`calc_eofs_from_olr` to cover the complete algorithm.
 
     :param olrdata: The filtered OLR data to calculate the EOFs from.
     :param doy: The DOY for which the EOFs are calculated.
-    :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
+    :param leap_year_treatment: see :py:func:`calc_eofs_from_olr`.
 
     :return: An object containing the pair of EOFs together with diagnostic values.
 
-    .. seealso:: :meth:`calc_eofs_for_doy`
+    .. seealso:: :py:func:`calc_eofs_for_doy`
 
     """
     if eofs_package_available:
         nlat = olrdata.lat.size
         nlong = olrdata.long.size
         olr_maps_for_doy = olrdata.extract_olr_matrix_for_doy_range(doy, window_length=60,
-                                                                    strict_leap_year_treatment=strict_leap_year_treatment)
+                                                                    leap_year_treatment=leap_year_treatment)
 
         ntime = olr_maps_for_doy.shape[0]
         N = ntime
@@ -262,140 +362,6 @@ def calc_eofs_for_doy_using_eofs_package(olrdata: olr.OLRData, doy: int,
     else:
         raise ModuleNotFoundError("eofs")
 
-
-def correct_spontaneous_sign_changes_in_eof_series(eofs: eof.EOFDataForAllDOYs,
-                                                   doy1reference: bool = False) -> eof.EOFDataForAllDOYs:
-    """
-    Switches the signs of all pairs of EOFs (for all DOYs) if necessary, so that the signs are consistent for all DOYs.
-
-    Note that the sign of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
-    which can be improved using this function. As long as this step is performed before computing the PCs, it will not
-    change the overall result.
-
-    Generally, the sign of the EOFs for a specific DOY is changed if it differs from the sign of the EOF for the previous
-    DOY. The EOFs for DOY 1 are by default aligned with the original calculation by Kiladis (2014), resulting in a
-    an EOF series, which is totally comparable to the original Kiladis (2014) calculation. This can be switched off.
-
-    :param eofs: The EOF series for which the signs should be aligned.
-    :param doy1reference: If true, the EOFs of DOY 1 are aligned w.r.t to the original Kiladis (2014) calculation.
-
-    :return: The EOFs with aligned signs.
-    """
-    switched_eofs = []
-    if doy1reference is True:
-        reference_path = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))) / "sign_reference"
-        reference_eofs = eof.load_original_eofs_for_doy(reference_path, 1)
-        if not reference_eofs.lat.size == eofs.lat.size \
-                or not reference_eofs.long.size == eofs.long.size \
-                or not np.all(reference_eofs.lat == eofs.lat) \
-                or not np.all(reference_eofs.long == eofs.long):
-            warnings.warn("References for the sign of the EOFs for DOY1 have to be interpolated to spatial grid of the"
-                          " target EOFs. Treat results with caution.")
-            f1 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof1map,
-                                            kind='linear')
-            eof1map_interpol = f1(eofs.long, eofs.lat)
-            f2 = scipy.interpolate.interp2d(reference_eofs.long, reference_eofs.lat, reference_eofs.eof2map,
-                                            kind='linear')
-            eof2map_interpol = f2(eofs.long, eofs.lat)
-            reference_eofs = eof.EOFData(eofs.lat, eofs.long, eof1map_interpol, eof2map_interpol)
-        corrected_doy1 = _correct_spontaneous_sign_change_of_individual_eof(reference_eofs, eofs.eofdata_for_doy(1))
-    else:
-        corrected_doy1 = eofs.eofdata_for_doy(1)
-    switched_eofs.append(corrected_doy1)
-    previous_eof = corrected_doy1
-    for doy in tools.doy_list()[1:]:
-        corrected_eof = _correct_spontaneous_sign_change_of_individual_eof(previous_eof, eofs.eofdata_for_doy(doy))
-        switched_eofs.append(corrected_eof)
-        previous_eof = corrected_eof
-    return eof.EOFDataForAllDOYs(switched_eofs)
-
-
-def _correct_spontaneous_sign_change_of_individual_eof(reference: eof.EOFData, target=eof.EOFData) -> eof.EOFData:
-    """
-    Switches the sign of a particular pair of EOFs (for a particular DOY) if necessary, so that is aligned with the
-    reference.
-
-    Note that the signs of the EOFs is not uniquely defined by the PCA. Hence, the sign may jump from one DOY to another,
-    which can be improved using this function. As long as this step is performed before computing the PCs, it will not
-    change the overall result.
-
-    :param reference: The reference-EOFs. This is usually the EOF pair of the previous DOY.
-    :param target: The EOFs of which the signs should be switched
-
-    :return: The target EOFs with aligned signs.
-    """
-    if (np.mean(np.abs(target.eof1vector + reference.eof1vector))
-            < np.mean(np.abs(
-                target.eof1vector - reference.eof1vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
-        eof1_switched = -1 * target.eof1vector
-    else:
-        eof1_switched = target.eof1vector
-    if (np.mean(np.abs(target.eof2vector + reference.eof2vector))
-            < np.mean(np.abs(
-                target.eof2vector - reference.eof2vector))):  # if abs(sum) is lower than abs(diff), than the signs are different...
-        eof2_switched = -1 * target.eof2vector
-    else:
-        eof2_switched = target.eof2vector
-    return eof.EOFData(target.lat,
-                       target.long,
-                       eof1_switched,
-                       eof2_switched,
-                       eigenvalues=target.eigenvalues,
-                       explained_variances=target.explained_variances,
-                       no_observations=target.no_observations)
-
-
-def interpolate_eofs_between_doys(eofs: eof.EOFDataForAllDOYs, start_doy: int = 293,
-                                  end_doy: int = 316) -> eof.EOFDataForAllDOYs:
-    """
-    Replaces the EOF1 and EOF2 functions between 2 DOYs by a linear interpolation between these 2 DOYs.
-
-    This should only rarely be used and has only been implemented to closely reproduce the original OMI values. There,
-    the EOFs have also been replaced by an interpolation according to Kiladis (2014). However, the period stated in
-    Kiladis (2014) from 1 November to 8 November is too short. The authors have confirmed that the right
-    interpolation period is from DOY 294 to DOY 315, which is used here as default value.
-
-    ATTENTION: The corresponding statistical values (e.g., the explained variances) are not changed by this routine.
-    So these values further on represent the original results of the PCA also for the interpolated EOFs.
-
-    :param eofs: The complete EOF series, in which the interpolation takes place.
-    :param start_doy: The DOY, which is used as the first point of the interpolation (i.e. start_doy + 1 is the first
-        element, which will be replaced by the interpolation.
-    :param end_doy:  The DOY, which is used as the last point of the interpolation (i.e. end_doy - 1 is the last
-        element, which will be replaced by the interpolation.
-
-    :return: The complete EOF series with the interpolated values.
-    """
-    doys = tools.doy_list()
-    start_idx = start_doy - 1
-    end_idx = end_doy - 1
-    eof_len = eofs.lat.size * eofs.long.size
-    eofs1 = np.empty((doys.size, eof_len))
-    eofs2 = np.empty((doys.size, eof_len))
-    # Todo: Maybe this could be solved more efficiently
-    # by using internal numpy functions for multidimenasional operations
-    for (idx, doy) in enumerate(doys):
-        eofs1[idx, :] = eofs.eof1vector_for_doy(doy)
-        eofs2[idx, :] = eofs.eof2vector_for_doy(doy)
-
-    for i in range(0, eof_len):
-        eofs1[start_idx + 1:end_idx - 1, i] = np.interp(doys[start_idx + 1:end_idx - 1],
-                                                        [doys[start_idx], doys[end_idx]],
-                                                        [eofs1[start_idx, i], eofs1[end_idx, i]])
-        eofs2[start_idx + 1:end_idx - 1, i] = np.interp(doys[start_idx + 1:end_idx - 1],
-                                                        [doys[start_idx], doys[end_idx]],
-                                                        [eofs2[start_idx, i], eofs2[end_idx, i]])
-    interpolated_eofs = []
-    for (idx, doy) in enumerate(doys):
-        orig_eof = eofs.eofdata_for_doy(doy)
-        interpolated_eofs.append(eof.EOFData(orig_eof.lat, orig_eof.long, np.squeeze(eofs1[idx, :]),
-                                             np.squeeze(eofs2[idx, :]),
-                                             explained_variances=orig_eof.explained_variances,
-                                             eigenvalues=orig_eof.eigenvalues, no_observations=orig_eof.no_observations)
-                                 )
-    return eof.EOFDataForAllDOYs(interpolated_eofs)
-
-
 # #################PC Calculation
 
 def calculate_pcs_from_olr(olrdata: olr.OLRData,
@@ -407,16 +373,18 @@ def calculate_pcs_from_olr(olrdata: olr.OLRData,
     This major function computes PCs according to the OMI algorithm based on given OLR data and previously calculated
     EOFs.
 
-    :param olrdata: The OLR dataset. The spatial grid must fit to that of the EOFs
+    :param olrdata: The OLR dataset. The spatial grid must fit to that of the EOFs.
     :param eofdata: The previously calculated DOY-dependent EOFs.
     :param period_start: the beginning of the period, for which the PCs should be calculated.
     :param period_end: the ending of the period, for which the PCs should be calculated.
-    :param use_quick_temporal_filter: There are two implementations of the temporal filtering: First, the original
-        Wheeler-Kiladis-Filter, which is closer to the original implementation while being slower (because it is based
-        on a 2-dim FFT) or a 1-dim FFT Filter. Setting this parameter to True uses the quicker 1-dim implementation. The
-        results are quite similar.
+    :param use_quick_temporal_filter: There are two implementations of the temporal filtering
+        available (the results of both methods are quite similar):
 
-    :return: The PC time series.
+        * ``False``: the original Wheeler-Kiladis-Filter, which is closer to the original implementation while being
+          slower (because it is based on a 2-dim FFT).
+        * ``True``: 1-dim FFT Filter, which results in a quicker computation.
+
+    :return: The PC time series. Normalized by the full PC time series
     """
     resticted_olr_data = olr.restrict_time_coverage(olrdata, period_start, period_end)
     resampled_olr_data = olr.interpolate_spatial_grid(resticted_olr_data, eofdata.lat, eofdata.long)
@@ -435,15 +403,16 @@ def calculate_pcs_from_olr_original_conditions(olrdata: olr.OLRData,
                                                original_eof_dirname: Path,
                                                use_quick_temporal_filter=False) -> pc.PCData:
     """
-    Calculates the OMI PCs for the original period using the original dataset (which has, however, to be provided
-    by the user himself).
+    Convenience function that calculates the OMI PCs for the original period using the original dataset (which has,
+    however, to be provided by the user).
 
     :param olrdata: The original OLR data, which can be downloaded from
-        ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
+        https://www.psl.noaa.gov/thredds/catalog/Datasets/interp_OLR/catalog.html?dataset=Datasets/interp_OLR/olr.day.mean.nc. It can be read with the
+        function :py:func:`mjoindices.olr_handling.load_noaa_interpolated_olr_netcdf4`.
     :param original_eof_dirname: Path to the original EOFs, which can be downloaded
         from ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/ and ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/ .
         The contents of both remote directories should again be placed into sub directories *eof1* and *eof2*
-    :param use_quick_temporal_filter: see :func:`calculate_pcs_from_olr`
+    :param use_quick_temporal_filter: See :py:func:`calculate_pcs_from_olr`
 
     :return: The PCs, which should be similar to the original ones.
     """
@@ -462,11 +431,11 @@ def regress_3dim_data_onto_eofs(data: object, eofdata: eof.EOFDataForAllDOYs) ->
     Finds time-dependent coefficients w.r.t the DOY-dependent EOF basis for time-dependent spatially resolved data.
 
     I.e. it finds the PCs for temporally resolved OLR data. But the function can also be used for other datasets,
-    as long as those datasets have the same structure like the the class :class:`mjoindices.olr_handling.OLRData`.
+    as long as those datasets have the same structure as the the class :class:`mjoindices.olr_handling.OLRData`.
 
-    :param data: The data, for which the coefficients are sought. Should be an object of class
+    :param data: The data used to compute the coefficients. Should be an object of class
         :class:`mjoindices.olr_handling.OLRData` or of similar structure.
-    :param eofdata: The DOY-dependent pairs of EOFs, like computed by, e.g., :func:`calc_eofs_from_olr`
+    :param eofdata: The DOY-dependent pairs of EOFs, as computed by, e.g., :func:`calc_eofs_from_olr`
 
     :return: The time-dependent PCs as :class:`mjoindices.principal_components.PCData`
     """
@@ -480,7 +449,7 @@ def regress_3dim_data_onto_eofs(data: object, eofdata: eof.EOFDataForAllDOYs) ->
     for idx, val in enumerate(data.time):
         day = val
         olr_singleday = data.get_olr_for_date(day)
-        doy = tools.calc_day_of_year(day)
+        doy = tools.calc_day_of_year(day, eofdata.no_leap_years)
         (pc1_single, pc2_single) = regress_vector_onto_eofs(
             eofdata.eofdata_for_doy(doy).reshape_to_vector(olr_singleday),
             eofdata.eof1vector_for_doy(doy),
@@ -513,3 +482,4 @@ def regress_vector_onto_eofs(vector: np.ndarray, eof1: np.ndarray, eof2: np.ndar
     # pseudo_inverse = np.linalg.pinv(eof_mat)
     # pcs = np.matmul(pseudo_inverse, vector)
     # return pcs[0], pcs[1]
+

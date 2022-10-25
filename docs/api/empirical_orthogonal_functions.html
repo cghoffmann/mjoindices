@@ -1,38 +1,47 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Module mjoindices.empirical_orthogonal_functions &mdash; mjoindices  documentation</title>
   
 
   
-  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Module mjoindices.omi.wheeler_kiladis_mjo_filter" href="wheeler_kiladis_mjo_filter.html" />
@@ -73,6 +82,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -80,22 +90,77 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc.html">API documentation (for running calculations)</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="principal_components.html">Module mjoindices.principal_components</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.empirical_orthogonal_functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module mjoindices.empirical_orthogonal_functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData"><code class="docutils literal notranslate"><span class="pre">EOFData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.close"><code class="docutils literal notranslate"><span class="pre">EOFData.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof1"><code class="docutils literal notranslate"><span class="pre">EOFData.eigenvalue_eof1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof2"><code class="docutils literal notranslate"><span class="pre">EOFData.eigenvalue_eof2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalues"><code class="docutils literal notranslate"><span class="pre">EOFData.eigenvalues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof1map"><code class="docutils literal notranslate"><span class="pre">EOFData.eof1map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof1vector"><code class="docutils literal notranslate"><span class="pre">EOFData.eof1vector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof2map"><code class="docutils literal notranslate"><span class="pre">EOFData.eof2map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof2vector"><code class="docutils literal notranslate"><span class="pre">EOFData.eof2vector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof1"><code class="docutils literal notranslate"><span class="pre">EOFData.explained_variance_eof1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof2"><code class="docutils literal notranslate"><span class="pre">EOFData.explained_variance_eof2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.explained_variances"><code class="docutils literal notranslate"><span class="pre">EOFData.explained_variances</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.lat"><code class="docutils literal notranslate"><span class="pre">EOFData.lat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.long"><code class="docutils literal notranslate"><span class="pre">EOFData.long</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.no_observations"><code class="docutils literal notranslate"><span class="pre">EOFData.no_observations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_map"><code class="docutils literal notranslate"><span class="pre">EOFData.reshape_to_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_vector"><code class="docutils literal notranslate"><span class="pre">EOFData.reshape_to_vector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.save_eofs_to_txt_file"><code class="docutils literal notranslate"><span class="pre">EOFData.save_eofs_to_txt_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.sum_of_explained_variances"><code class="docutils literal notranslate"><span class="pre">EOFData.sum_of_explained_variances</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eigenvalue1_for_all_doys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eigenvalue2_for_all_doys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof1vector_for_doy"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eof1vector_for_doy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof2vector_for_doy"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eof2vector_for_doy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof_list"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eof_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eofdata_for_doy"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.eofdata_for_doy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.explained_variance1_for_all_doys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.explained_variance2_for_all_doys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.lat"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.lat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.len_eof_list"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.len_eof_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.long"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.long</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_leap_years"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.no_leap_years</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.no_observations_for_all_doys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.save_all_eofs_to_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.save_all_eofs_to_npzfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys"><code class="docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.total_explained_variance_for_all_doys()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_all_eofs_from_directory"><code class="docutils literal notranslate"><span class="pre">load_all_eofs_from_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_all_original_eofs_from_directory"><code class="docutils literal notranslate"><span class="pre">load_all_original_eofs_from_directory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy"><code class="docutils literal notranslate"><span class="pre">load_original_eofs_for_doy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file"><code class="docutils literal notranslate"><span class="pre">load_single_eofs_from_txt_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.plot_eigenvalues_for_all_doys"><code class="docutils literal notranslate"><span class="pre">plot_eigenvalues_for_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.plot_explained_variance_for_all_doys"><code class="docutils literal notranslate"><span class="pre">plot_explained_variance_for_all_doys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.plot_individual_eof_map"><code class="docutils literal notranslate"><span class="pre">plot_individual_eof_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.plot_individual_eof_map_from_file"><code class="docutils literal notranslate"><span class="pre">plot_individual_eof_map_from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.plot_individual_explained_variance_all_eofs"><code class="docutils literal notranslate"><span class="pre">plot_individual_explained_variance_all_eofs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.plot_original_individual_eof_map"><code class="docutils literal notranslate"><span class="pre">plot_original_individual_eof_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.restore_all_eofs_from_npzfile"><code class="docutils literal notranslate"><span class="pre">restore_all_eofs_from_npzfile()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References and citation hints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../indices.html">Indices and tables</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -130,11 +195,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="apidoc.html">API documentation (for running calculations)</a> &raquo;</li>
         
@@ -143,7 +210,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/api/empirical_orthogonal_functions.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -157,210 +224,210 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-mjoindices.empirical_orthogonal_functions">
-<span id="module-mjoindices-empirical-orthogonal-functions"></span><h1>Module mjoindices.empirical_orthogonal_functions<a class="headerlink" href="#module-mjoindices.empirical_orthogonal_functions" title="Permalink to this headline">¶</a></h1>
+  <section id="module-mjoindices.empirical_orthogonal_functions">
+<span id="module-mjoindices-empirical-orthogonal-functions"></span><h1>Module mjoindices.empirical_orthogonal_functions<a class="headerlink" href="#module-mjoindices.empirical_orthogonal_functions" title="Permalink to this heading">¶</a></h1>
 <p>This module provides basic functionality to handle EOF data, which is a basic output of the OMI calculation.</p>
 <dl class="py class">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData">
-<em class="property">class </em><code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">EOFData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lat</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">long</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">eof1</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">eof2</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">explained_variances</span><span class="p">:</span> <span class="n">numpy.ndarray</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eigenvalues</span><span class="p">:</span> <span class="n">numpy.ndarray</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">no_observations</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">EOFData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">long</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eof1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eof2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explained_variances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigenvalues</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_observations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class serves as a container for the EOF data of one pair of EOFs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lat</strong> – The latitude grid of the EOF data.</p></li>
 <li><p><strong>long</strong> – The longitude grid of the EOF data.</p></li>
 <li><p><strong>eof1</strong> – Values of the first EOF. Can either be a 1-dim vector with
-lat.size*long.size elements (Start with all values of the first latitude, then all values of the second
+<code class="docutils literal notranslate"><span class="pre">lat.size</span> <span class="pre">*</span> <span class="pre">long.size</span></code> elements (Start with all values of the first latitude, then all values of the second
 latitude, etc.) or a 2-dim map with the first index representing the latitude axis and the second index
 representing longitude axis.</p></li>
-<li><p><strong>eof2</strong> – Values of the second EOF. Structure similar to <em>eof1</em></p></li>
+<li><p><strong>eof2</strong> – Values of the second EOF. Structure similar to <code class="docutils literal notranslate"><span class="pre">eof1</span></code></p></li>
 <li><p><strong>explained_variances</strong> – Fraction of data variance that is explained by each EOF (for all EOFs and not only the
-first two EOFs). May be None.</p></li>
-<li><p><strong>eigenvalues</strong> – Eigenvalue corresponding to each EOF. May be None.</p></li>
-<li><p><strong>no_observations</strong> – The number of observations that went into the EOF calculation. May be None.</p></li>
+first two EOFs). Can  be set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>eigenvalues</strong> – Eigenvalue corresponding to each EOF. Can  be set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>no_observations</strong> – The number of observations that went into the EOF calculation. Can  be set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
-<p>Note that the explained variances are not independent from the eigenvalues. However, this class is meant to only
-store the data. Hence, we store redundant data here intentionally to be able to have all computation rules together
+<p>Note that the explained variances are not independent of the eigenvalues. However, this class is meant only to
+store the data. Hence, we store redundant data here intentionally to be able to have all computation performed together
 in another location.</p>
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.close">
-<code class="sig-name descname">close</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData">mjoindices.empirical_orthogonal_functions.EOFData</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.close" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks equality of two <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> objects, but allows for numerical tolerances.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>other</strong> – The object to compare with.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Equality of all members considering the default tolerances of <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.allclose()</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof1">
-<em class="property">property </em><code class="sig-name descname">eigenvalue_eof1</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof1" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eigenvalue_eof1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof1" title="Permalink to this definition">¶</a></dt>
 <dd><p>The eigenvalue of EOF1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The eigenvalue. Might be None.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The eigenvalue. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof2">
-<em class="property">property </em><code class="sig-name descname">eigenvalue_eof2</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof2" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eigenvalue_eof2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalue_eof2" title="Permalink to this definition">¶</a></dt>
 <dd><p>The eigenvalue of EOF2.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The eigenvalue. Might be None.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The eigenvalue. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.eigenvalues">
-<em class="property">property </em><code class="sig-name descname">eigenvalues</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalues" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.eigenvalues">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eigenvalues</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eigenvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>The eigenvalues of all EOFs (not only the first two ones).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The eigenvalues. Might be None.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The eigenvalues. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.eof1map">
-<em class="property">property </em><code class="sig-name descname">eof1map</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof1map" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.eof1map">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eof1map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof1map" title="Permalink to this definition">¶</a></dt>
 <dd><p>EOF1 as a 2-dimensional map.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.eof1vector">
-<em class="property">property </em><code class="sig-name descname">eof1vector</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof1vector" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.eof1vector">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eof1vector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof1vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>EOF1 as a vector (and not a matrix).</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.eof2map">
-<em class="property">property </em><code class="sig-name descname">eof2map</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof2map" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.eof2map">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eof2map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof2map" title="Permalink to this definition">¶</a></dt>
 <dd><p>EOF2 as a 2-dimensional map.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.eof2vector">
-<em class="property">property </em><code class="sig-name descname">eof2vector</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof2vector" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.eof2vector">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eof2vector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.eof2vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>EOF2 as a vector (and not a matrix).</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof1">
-<em class="property">property </em><code class="sig-name descname">explained_variance_eof1</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof1" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">explained_variance_eof1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof1" title="Permalink to this definition">¶</a></dt>
 <dd><p>The explained variance of EOF1 as fraction between 0 and 1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The variance. Might be None.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The variance. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof2">
-<em class="property">property </em><code class="sig-name descname">explained_variance_eof2</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof2" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">explained_variance_eof2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.explained_variance_eof2" title="Permalink to this definition">¶</a></dt>
 <dd><p>The explained variance of EOF2 as fraction between 0 and 1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The variance. Might be None.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The variance. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.explained_variances">
-<em class="property">property </em><code class="sig-name descname">explained_variances</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.explained_variances" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.explained_variances">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">explained_variances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.explained_variances" title="Permalink to this definition">¶</a></dt>
 <dd><p>The explained variances of all EOFs (not only the first two ones).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Explained Variances. Might be None.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Explained Variances. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.lat">
-<em class="property">property </em><code class="sig-name descname">lat</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.lat" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.lat">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.lat" title="Permalink to this definition">¶</a></dt>
 <dd><p>The latitude grid of the EOFs.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.long">
-<em class="property">property </em><code class="sig-name descname">long</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.long" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.long">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">long</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.long" title="Permalink to this definition">¶</a></dt>
 <dd><p>The longitude grid of the EOFs.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.no_observations">
-<em class="property">property </em><code class="sig-name descname">no_observations</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.no_observations" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.no_observations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">no_observations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.no_observations" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of observations that went into the calculation of the EOFs.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_map">
-<code class="sig-name descname">reshape_to_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vector</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData.reshape_to_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_map" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_map">
+<span class="sig-name descname"><span class="pre">reshape_to_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData.reshape_to_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reshapes data in a vector to fit into a matrix, which corresponds to the present latitude/longitude grid.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>vector</strong> – The vector with the data. Must have the length lat.size*long.size.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vector</strong> – The vector with the data. Must have the length <code class="docutils literal notranslate"><span class="pre">lat.size</span> <span class="pre">*</span> <span class="pre">long.size</span></code>.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The map. The first index corresponds to the latitude grid, the second to longitude grid.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_vector">
-<code class="sig-name descname">reshape_to_vector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">map</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData.reshape_to_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_vector" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_vector">
+<span class="sig-name descname"><span class="pre">reshape_to_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData.reshape_to_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.reshape_to_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reshapes the horizontally distributed data to fit into a vector.</p>
 <p>The vector elements will contain the values of all longitudes for the first latitude,
 and then the values of all longitudes for the second latitude, etc.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>map</strong> – The 2-dim data. The first dimension must correspond to the latitude grid, the second to the
 longitude grid.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The data as a vector.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.save_eofs_to_txt_file">
-<code class="sig-name descname">save_eofs_to_txt_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData.save_eofs_to_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.save_eofs_to_txt_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.save_eofs_to_txt_file">
+<span class="sig-name descname"><span class="pre">save_eofs_to_txt_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFData.save_eofs_to_txt_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.save_eofs_to_txt_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves both EOFs to a .txt file.</p>
 <p>Note that the file format is not exactly that of the original data files. Particularly, both EOFs are written
 into the same file instead of 2 separate files. Furthermore, the lat/long-grids are also explicitly saved.</p>
 <p>A suitable reader is provided by the function
-<a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file" title="mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file()</span></code></a>, whereas a reader for the
-original files is provided by <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy" title="mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy()</span></code></a></p>
+<a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file" title="mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_single_eofs_from_txt_file()</span></code></a>, whereas a reader for the
+original files is provided by <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy" title="mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_original_eofs_for_doy()</span></code></a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> – The full path- and filename.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFData.sum_of_explained_variances">
-<em class="property">property </em><code class="sig-name descname">sum_of_explained_variances</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.sum_of_explained_variances" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFData.sum_of_explained_variances">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sum_of_explained_variances</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFData.sum_of_explained_variances" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the total variance explained by all EOFs.</p>
 <p>This should be close to 1 if the calculation was successful.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The total explained variance. Might be None.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The total explained variance. Might be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -368,169 +435,189 @@ original files is provided by <a class="reference internal" href="#mjoindices.em
 </dd></dl>
 
 <dl class="py class">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">
-<em class="property">class </em><code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">EOFDataForAllDOYs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eof_list</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData">mjoindices.empirical_orthogonal_functions.EOFData</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class serves as a container for a series of EOF pairs, which covers all 366 DOYs and provides some overall
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">EOFDataForAllDOYs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eof_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_leap_years</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class serves as a container for a series of EOF pairs, which covers all DOYs and provides some overall
 statistical quantities.</p>
-<p>The basic EOF computation <code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator.calc_eofs_from_olr()</span></code> will return an object of this
-class as a major result of this package.</p>
+<p>The basic EOF computation function <a class="reference internal" href="omi_calculator.html#mjoindices.omi.omi_calculator.calc_eofs_from_olr" title="mjoindices.omi.omi_calculator.calc_eofs_from_olr"><code class="xref py py-func docutils literal notranslate"><span class="pre">mjoindices.omi.omi_calculator.calc_eofs_from_olr()</span></code></a> will return an object
+of this class as a major result of this package.</p>
 <p>The individual EOF pairs are represented by <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> objects.</p>
+<p>Note that the user can choose to consider or to ignore leap years in the data. This is probably of interest for the work
+with modeled data, since models might ignore leap years in idealized setups. Here, this means that the number of
+considered DOYs (and therefore the number of EOF pairs and further variables) can be either 365 or 366.
+The code in this package is designed to treat both cases consistently, however, the users should have their own
+choice in mind when working with the results.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>eof_list</strong> – A list with the 366 <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> objects.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eof_list</strong> – A list with one <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> object for each DOY.</p></li>
+<li><p><strong>no_leap_years</strong> – <code class="docutils literal notranslate"><span class="pre">True</span></code> if every year has 365 days, <code class="docutils literal notranslate"><span class="pre">False</span></code> if dataset contains leap years.</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys">
-<code class="sig-name descname">eigenvalue1_for_all_doys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eigenvalue1_for_all_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a vector with 366 elements containing the eigenvalues of EOF1 for each DOY.</p>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys">
+<span class="sig-name descname"><span class="pre">eigenvalue1_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eigenvalue1_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue1_for_all_doys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector containing the eigenvalues of EOF1 for each DOY.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The eigenvalue vector.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys">
-<code class="sig-name descname">eigenvalue2_for_all_doys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eigenvalue2_for_all_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a vector with 366 elements containing the eigenvalues of EOF2 for each DOY.</p>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys">
+<span class="sig-name descname"><span class="pre">eigenvalue2_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eigenvalue2_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eigenvalue2_for_all_doys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector containing the eigenvalues of EOF2 for each DOY.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The eigenvalue vector.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof1vector_for_doy">
-<code class="sig-name descname">eof1vector_for_doy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eof1vector_for_doy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof1vector_for_doy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof1vector_for_doy">
+<span class="sig-name descname"><span class="pre">eof1vector_for_doy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eof1vector_for_doy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof1vector_for_doy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut to the EOF1 vector of a particular DOY.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>doy</strong> – The DOY.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The vector.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof2vector_for_doy">
-<code class="sig-name descname">eof2vector_for_doy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eof2vector_for_doy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof2vector_for_doy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof2vector_for_doy">
+<span class="sig-name descname"><span class="pre">eof2vector_for_doy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eof2vector_for_doy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof2vector_for_doy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shortcut to the EOF2 vector of a particular DOY.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>doy</strong> – The DOY.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The vector.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof_list">
-<em class="property">property </em><code class="sig-name descname">eof_list</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof_list" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eof_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eof_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>EOF data for all DOYs as a list.</p>
 <p>Remember that DOY 1 corresponds to list entry 0.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eofdata_for_doy">
-<code class="sig-name descname">eofdata_for_doy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData">mjoindices.empirical_orthogonal_functions.EOFData</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eofdata_for_doy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eofdata_for_doy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eofdata_for_doy">
+<span class="sig-name descname"><span class="pre">eofdata_for_doy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.eofdata_for_doy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.eofdata_for_doy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> object for a particular DOY.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>doy</strong> – The DOY</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><code class="xref py py-class docutils literal notranslate"><span class="pre">EOFData</span></code></a> object</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys">
-<code class="sig-name descname">explained_variance1_for_all_doys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.explained_variance1_for_all_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a vector with 366 elements containing the explained variance of EOF1 for each DOY.</p>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys">
+<span class="sig-name descname"><span class="pre">explained_variance1_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.explained_variance1_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance1_for_all_doys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector containing the explained variance of EOF1 for each DOY.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The variance vector.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys">
-<code class="sig-name descname">explained_variance2_for_all_doys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.explained_variance2_for_all_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a vector with 366 elements containing the explained variance of EOF2 for each DOY.</p>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys">
+<span class="sig-name descname"><span class="pre">explained_variance2_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.explained_variance2_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.explained_variance2_for_all_doys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector containing the explained variance of EOF2 for each DOY.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The variance vector.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.lat">
-<em class="property">property </em><code class="sig-name descname">lat</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.lat" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.lat">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.lat" title="Permalink to this definition">¶</a></dt>
 <dd><p>The latitude grid common to the EOFs of all DOYs.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.long">
-<em class="property">property </em><code class="sig-name descname">long</code><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.long" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.len_eof_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">len_eof_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.len_eof_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of the <code class="docutils literal notranslate"><span class="pre">eof_list</span></code>, based on <code class="docutils literal notranslate"><span class="pre">no_leap_years</span></code>, i.e. the number of considered DOYs.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.long">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">long</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.long" title="Permalink to this definition">¶</a></dt>
 <dd><p>The longitude grid common to the EOFs of all DOYs.</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_leap_years">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">no_leap_years</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></em><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_leap_years" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if every year has 365 days, <code class="docutils literal notranslate"><span class="pre">False</span></code> if dataset contains leap years.</p>
+</dd></dl>
+
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys">
-<code class="sig-name descname">no_observations_for_all_doys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.no_observations_for_all_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a vector with 366 elements containing for each DOY the number of observations that went into the
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys">
+<span class="sig-name descname"><span class="pre">no_observations_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.no_observations_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.no_observations_for_all_doys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector containing -for each DOY- the number of observations that went into the
 computation of the EOFs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of observations vector.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir">
-<code class="sig-name descname">save_all_eofs_to_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dirname</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em>, <em class="sig-param"><span class="n">create_dir</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.save_all_eofs_to_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the EOF1 and EOF2 functions for each of the DOYs in the given directory.</p>
-<p>For each DOY, one text file will be created, which contains both EOF functions.
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir">
+<span class="sig-name descname"><span class="pre">save_all_eofs_to_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.save_all_eofs_to_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the EOF1 and EOF2 data for each of the DOYs in the given directory.</p>
+<p>For each DOY, one text file will be created, which contains both EOFs.
 Note that the text files do not contain the eigenvalues and explained variance values. To save also those
 values, use the function <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_all_eofs_to_npzfile()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dirname</strong> – The directory, where the files will be saved into.</p></li>
-<li><p><strong>create_dir</strong> – If True, the directory (and parent directories) will be created, if not existing.</p></li>
+<li><p><strong>create_dir</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the directory (and parent directories) will be created, if not existing.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile">
-<code class="sig-name descname">save_all_eofs_to_npzfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.save_all_eofs_to_npzfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile">
+<span class="sig-name descname"><span class="pre">save_all_eofs_to_npzfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.save_all_eofs_to_npzfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the complete EOF data to a numpy file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> – The filename.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys">
-<code class="sig-name descname">total_explained_variance_for_all_doys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.total_explained_variance_for_all_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a vector with 366 elements containing for each DOY the sum of the explained variance over all EOFs.</p>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys">
+<span class="sig-name descname"><span class="pre">total_explained_variance_for_all_doys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#EOFDataForAllDOYs.total_explained_variance_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.total_explained_variance_for_all_doys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a vector containing -for each DOY- the sum of the explained variance over all EOFs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The variance vector. Should by close to 1 for each DOY if computation was successful.</p>
 </dd>
 </dl>
@@ -539,222 +626,223 @@ values, use the function <a class="reference internal" href="#mjoindices.empiric
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.load_all_eofs_from_directory">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">load_all_eofs_from_directory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dirname</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#load_all_eofs_from_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.load_all_eofs_from_directory" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.load_all_eofs_from_directory">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">load_all_eofs_from_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#load_all_eofs_from_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.load_all_eofs_from_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the EOF functions (created with the function <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.save_all_eofs_to_dir()</span></code></a>)
 for all DOYs from the given directory</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>dirname</strong> – The directory in which the files are stored.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The EOFs for all DOYs.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.load_all_original_eofs_from_directory">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">load_all_original_eofs_from_directory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dirname</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#load_all_original_eofs_from_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.load_all_original_eofs_from_directory" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.load_all_original_eofs_from_directory">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">load_all_original_eofs_from_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#load_all_original_eofs_from_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.load_all_original_eofs_from_directory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the EOF functions for all DOYs from the original file format.</p>
 <p>The original EOFs are found here: <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/</a> and
 <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</a></p>
 <p>Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the
-individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here
-inserted hardcodedly.</p>
+individual locations on a world map is not obvious without any further knowledge. The corresponding grid is
+hardcoded in here.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>dirname</strong> – Path to the directory, in which the EOFs for all DOYs are stored.
-This path should contain the sub directories <em>eof1</em> and <em>eof2</em>, in which the 366 files each are located:
+This path should contain the sub directories “eof1” and “eof2”, in which the 366 files each are located:
 One file per day of the year.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The original EOFs for all DOYs.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">load_original_eofs_for_doy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dirname</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em>, <em class="sig-param"><span class="n">doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData">mjoindices.empirical_orthogonal_functions.EOFData</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#load_original_eofs_for_doy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">load_original_eofs_for_doy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#load_original_eofs_for_doy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the EOF values for the first 2 EOFs from the original file format.</p>
 <p>Note that the EOFs are represented as pure vectors in the original treatment, so that a connection to the
-individual locations on a world map is not obvious without any further knowledge. The corresponding grid is here
-inserted hardcodedly.</p>
+individual locations on a world map is not obvious without any further knowledge. The corresponding grid is
+hardcoded in here.</p>
 <p>The original EOFs are found here: <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof1/</a> and
 <a class="reference external" href="ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/">ftp://ftp.cdc.noaa.gov/Datasets.other/MJO/eof2/</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dirname</strong> – Path to the directory, in which the EOFs for all DOYs are stored.
-This path should contain the sub directories <em>eof1</em> and <em>eof2</em>, in which the 366 files each are located:
-One file per day of the year.</p></li>
+This path should contain the sub directories “eof1” and “eof2”, in which the 365 or 366 files each are located:
+One file per DOY.</p></li>
 <li><p><strong>doy</strong> – DOY for which the 2 EOFs are loaded (number between 1 and 366).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The pair of EOFs.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">load_single_eofs_from_txt_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData">mjoindices.empirical_orthogonal_functions.EOFData</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#load_single_eofs_from_txt_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">load_single_eofs_from_txt_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#load_single_eofs_from_txt_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.load_single_eofs_from_txt_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a pair of EOFs, which was previously saved with this package (function <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData.save_eofs_to_txt_file" title="mjoindices.empirical_orthogonal_functions.EOFData.save_eofs_to_txt_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">EOFData.save_eofs_to_txt_file()</span></code></a>).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> – Path to the  EOF file.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The pair of EOFs.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.plot_eigenvalues_for_all_doys">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">plot_eigenvalues_for_all_doys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eofs</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</a></span></em><span class="sig-paren">)</span> &#x2192; matplotlib.figure.Figure<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_eigenvalues_for_all_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_eigenvalues_for_all_doys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.plot_eigenvalues_for_all_doys">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">plot_eigenvalues_for_all_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_eigenvalues_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_eigenvalues_for_all_doys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the Eigenvalues for EOF1 and EOF2 for all DOYs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>eofs</strong> – The EOF data to plot.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Handle to the figure.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.plot_explained_variance_for_all_doys">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">plot_explained_variance_for_all_doys</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eofs</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</a></span></em>, <em class="sig-param"><span class="n">include_total_variance</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">include_no_observations</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; matplotlib.figure.Figure<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_explained_variance_for_all_doys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_explained_variance_for_all_doys" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.plot_explained_variance_for_all_doys">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">plot_explained_variance_for_all_doys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_total_variance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_no_observations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_explained_variance_for_all_doys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_explained_variance_for_all_doys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the explained variance values for EOF1 and EOF2 for all DOYs.</p>
-<p>Comparable to Kiladis (2014), Fig. 1 (although the values there are to high by a factor of 2).</p>
+<p>Comparable to <a class="reference internal" href="../references.html#refkiladis2014"><span class="std std-ref">Kiladis et al. (2014)</span></a>, Fig. 1 (although the values there are too high by a factor of 2). See
+<a class="reference internal" href="../references.html#refkiladis2020"><span class="std std-ref">Kiladis et al. (2020)</span></a> for the correct original values.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>eofs</strong> – The EOF data to plot.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Handle to the figure.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.plot_individual_eof_map">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">plot_individual_eof_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eofdata</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData">mjoindices.empirical_orthogonal_functions.EOFData</a></span></em>, <em class="sig-param"><span class="n">doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; matplotlib.figure.Figure<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_individual_eof_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_individual_eof_map" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.plot_individual_eof_map">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">plot_individual_eof_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eofdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_individual_eof_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_individual_eof_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a pair of EOFs for a particular DOY in two maps.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eofdata</strong> – The EOF data to plot.</p></li>
 <li><p><strong>doy</strong> – The corresponding DOY. Only used to display it in the title.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Handle to the figure.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.plot_individual_eof_map_from_file">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">plot_individual_eof_map_from_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; matplotlib.figure.Figure<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_individual_eof_map_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_individual_eof_map_from_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.plot_individual_eof_map_from_file">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">plot_individual_eof_map_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_individual_eof_map_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_individual_eof_map_from_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a pair of EOFs, which are loaded from a file, in two maps.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> – The file with the EOF data.</p></li>
 <li><p><strong>doy</strong> – The corresponding DOY. Only used to display it in the title.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Handle to the figure.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.plot_individual_explained_variance_all_eofs">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">plot_individual_explained_variance_all_eofs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eof</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData">mjoindices.empirical_orthogonal_functions.EOFData</a></span></em>, <em class="sig-param"><span class="n">doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_eof_number</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; matplotlib.figure.Figure<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_individual_explained_variance_all_eofs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_individual_explained_variance_all_eofs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.plot_individual_explained_variance_all_eofs">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">plot_individual_explained_variance_all_eofs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFData" title="mjoindices.empirical_orthogonal_functions.EOFData"><span class="pre">EOFData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_eof_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_individual_explained_variance_all_eofs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_individual_explained_variance_all_eofs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the explained variances for each EOF function, but only for EOF data of one DOY.</p>
 <p>This is useful to confirm that the first 2 EOFs cover actually most of the variance.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>eof</strong> – The EOF data.</p></li>
 <li><p><strong>doy</strong> – The corresponding DOY. Only used to display it in the title.</p></li>
 <li><p><strong>max_eof_number</strong> – The limit of the x-axis.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Handle to the figure.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.plot_original_individual_eof_map">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">plot_original_individual_eof_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">doy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; matplotlib.figure.Figure<a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_original_individual_eof_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_original_individual_eof_map" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.plot_original_individual_eof_map">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">plot_original_individual_eof_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#plot_original_individual_eof_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.plot_original_individual_eof_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a pair of original EOFs, which are loaded from a directory, in two maps.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>path</strong> – The directory with the EOF data (see <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy" title="mjoindices.empirical_orthogonal_functions.load_original_eofs_for_doy"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_original_eofs_for_doy()</span></code></a> for details).</p></li>
 <li><p><strong>doy</strong> – The corresponding DOY. Only used to display it in the title.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Handle to the figure.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="mjoindices.empirical_orthogonal_functions.restore_all_eofs_from_npzfile">
-<code class="sig-prename descclassname">mjoindices.empirical_orthogonal_functions.</code><code class="sig-name descname">restore_all_eofs_from_npzfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)">pathlib.Path</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs">mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs</a><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#restore_all_eofs_from_npzfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.restore_all_eofs_from_npzfile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="mjoindices.empirical_orthogonal_functions.restore_all_eofs_from_npzfile">
+<span class="sig-prename descclassname"><span class="pre">mjoindices.empirical_orthogonal_functions.</span></span><span class="sig-name descname"><span class="pre">restore_all_eofs_from_npzfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs"><span class="pre">EOFDataForAllDOYs</span></a></span></span><a class="reference internal" href="../_modules/mjoindices/empirical_orthogonal_functions.html#restore_all_eofs_from_npzfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjoindices.empirical_orthogonal_functions.restore_all_eofs_from_npzfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads all EOF data from a numpy file, which was written with <a class="reference internal" href="#mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile" title="mjoindices.empirical_orthogonal_functions.EOFDataForAllDOYs.save_all_eofs_to_npzfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">EOFDataForAllDOYs.save_all_eofs_to_npzfile()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> – The filename.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The EOFs for all DOYs.</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="wheeler_kiladis_mjo_filter.html" class="btn btn-neutral float-right" title="Module mjoindices.omi.wheeler_kiladis_mjo_filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="principal_components.html" class="btn btn-neutral float-left" title="Module mjoindices.principal_components" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="wheeler_kiladis_mjo_filter.html" class="btn btn-neutral float-right" title="Module mjoindices.omi.wheeler_kiladis_mjo_filter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="principal_components.html" class="btn btn-neutral float-left" title="Module mjoindices.principal_components" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Christoph G. Hoffmann
+        &#169; Copyright 2020, Christoph G. Hoffmann.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -762,7 +850,6 @@ One file per day of the year.</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
@@ -781,6 +868,7 @@ One file per day of the year.</p></li>
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-XXXXXXX-1', 'auto');
+    
     ga('send', 'pageview');
     </script>
 

@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Hoffmann"
+  given-names: "Christoph G."
+  orcid: "https://orcid.org/0000-0003-2712-8648"
+title: "mjoindices"
+abstract: "A Python Package to Calculate the OLR-Based Index of the Madden-Julian-Oscillation (OMI)"
+license: GPL-3.0 license
+doi:  10.5281/zenodo.3957857
+repository-code: "https://github.com/cghoffmann/mjoindices"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Hoffmann"
+    given-names: "Christoph G."
+    orcid: "https://orcid.org/0000-0003-2712-8648"
+  - family-names: "Kiladis"
+    given-names: "George N."
+    orcid: "https://orcid.org/0000-0001-6588-3762"
+  - family-names: "Gehne"
+    given-names: "Maria"
+    orcid: "https://orcid.org/0000-0002-7267-8676"
+  - family-names: "von Savigny"
+    given-names: "Christian"
+    orcid: "https://orcid.org/0000-0001-7926-3986"
+  doi: "10.5334/jors.331"
+  journal: "Journal of Open Research Software"
+  title: "A Python Package to Calculate the OLR-Based Index of the Madden-Julian-Oscillation (OMI) in Climate Science and Weather Forecasting"
+  volume: 9
+  issue: 1
+  year: 2021
+  month: 5

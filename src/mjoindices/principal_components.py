@@ -38,6 +38,7 @@ class PCData:
     class as a major result of this package.
 
     :param time: Array containing the :class:`numpy.datetime64` dates.
+	:param period: Array containing the :class:`pandas.Period` dates.
     :param pc1: Array containing the values of PC1 (has to be of same length as the time array).
     :param pc2: Array containing the values of PC2 (has to be of same length as the time array).
     """
@@ -112,7 +113,7 @@ def load_pcs_from_txt_file(filename: Path) -> PCData:
 def load_original_pcs_from_txt_file(filename: Path) -> PCData:
     """
     Loads the PCs of OMI, which are stored in the original file format.
-    Particularly, the following file can be loaded: https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
+    For example, the following file can be loaded: https://www.esrl.noaa.gov/psd/mjo/mjoindex/omi.1x.txt
 
     Note that the present software package stores the PCs slightly different. Those files can be loaded with
     :func:`load_pcs_from_txt_file`.
@@ -125,8 +126,9 @@ def load_original_pcs_from_txt_file(filename: Path) -> PCData:
     dates_temp = []
     for i in range(0, my_data.shape[0]):
         dates_temp.append(
-            datetime.datetime(my_data[i, 0].astype(np.int), my_data[i, 1].astype(np.int), my_data[i, 2].astype(np.int)))
+            datetime.datetime(my_data[i, 0].astype(int), my_data[i, 1].astype(int), my_data[i, 2].astype(int)))
     dates = np.array(dates_temp, dtype='datetime64')
     pc1 = np.array(my_data[:, 4])
     pc2 = np.array(my_data[:, 5])
     return PCData(dates, pc1, pc2)
+

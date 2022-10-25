@@ -1,65 +1,33 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>mjoindices.omi.wheeler_kiladis_mjo_filter &mdash; mjoindices  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> mjoindices
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -67,86 +35,41 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html">API documentation (for running calculations)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html#api-documentation-for-working-with-results">API documentation (for working with results)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/apidoc.html#api-documentation-minor-relevance-for-users">API documentation (minor relevance for users)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References and citation hints</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../indices.html">Indices and tables</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">mjoindices</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
       <li>mjoindices.omi.wheeler_kiladis_mjo_filter</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for mjoindices.omi.wheeler_kiladis_mjo_filter</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
@@ -172,15 +95,13 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module provides the 2-dim (temporal and longitudinal) filtering algorithm used by the OMI approach.</span>
 
-<span class="sd">Although implemented generically, it is not intended to use this module stand-alone outside of the OMI context,</span>
-<span class="sd">since it is only extensively tested for the specific OMI filtering conditions.</span>
+<span class="sd">Although implemented generically, this module is not intended to be used stand-alone outside the OMI context,</span>
+<span class="sd">as it has only been extensively tested for the specific OMI filtering conditions.</span>
 
 <span class="sd">Hence, there is usually no need for the users of the mjoindices package to call functions of this module themselves.</span>
-<span class="sd">Instead, they might probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.</span>
+<span class="sd">Instead, they probably want to use the module :py:mod:`mjoindices.omi.omi_calculator` directly.</span>
 
-<span class="sd">The complete algorithm is described in Kiladis, G.N., J. Dias, K.H. Straub, M.C. Wheeler, S.N. Tulich, K. Kikuchi, K.M.</span>
-<span class="sd">Weickmann, and M.J. Ventrice, 2014: A Comparison of OLR and Circulation-Based Indices for Tracking the MJO.</span>
-<span class="sd">Mon. Wea. Rev., 142, 1697–1715, https://doi.org/10.1175/MWR-D-13-00301.1</span>
+<span class="sd">The complete algorithm is described by :ref:`refKiladis2014`</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -190,15 +111,14 @@
 
 <div class="viewcode-block" id="filter_olr_for_mjo_pc_calculation"><a class="viewcode-back" href="../../../api/wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_pc_calculation">[docs]</a><span class="k">def</span> <span class="nf">filter_olr_for_mjo_pc_calculation</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">do_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Filters OLR data temporally.</span>
+<span class="sd">    Filters OLR data temporally with a bandwidth particularly selected for the PC calculation.</span>
 
 <span class="sd">    The filter algorithm is the same as for the combined temporal and longitudinal filtering,</span>
-<span class="sd">    but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is</span>
-<span class="sd">    applied.</span>
-<span class="sd">    The temporal filtering constants are chosen to meet the values in the description by Kiladis (2014).</span>
+<span class="sd">    but the longitudinal bandpass filter constants are defined so broadly that effectively no longitudinal filtering is</span>
+<span class="sd">    applied. The temporal filtering constants are chosen to meet the values in the description by :ref:`refKiladis2014`.</span>
 
 <span class="sd">    :param olrdata: The original OLR data.</span>
-<span class="sd">    :param do_plot: If True, diagnosis plots will be generated.</span>
+<span class="sd">    :param do_plot: If ``True``, diagnosis plots will be generated.</span>
 
 <span class="sd">    :return: The filtered OLR.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -211,15 +131,15 @@
 <span class="sd">    Filters OLR data temporally.</span>
 
 <span class="sd">    The filter algorithm is the same as for the combined temporal and longitudinal filtering,</span>
-<span class="sd">    but the longitudinal bandpass filter constants are defined so broad that effectively no longitudinal filtering is</span>
+<span class="sd">    but the longitudinal bandpass filter constants are defined so broadly that effectively no longitudinal filtering is</span>
 <span class="sd">    applied.</span>
 
-<span class="sd">    Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.</span>
+<span class="sd">    Note that this function has only been strictly tested for filtering constants used by the OMI algorithm.</span>
 
 <span class="sd">    :param olrdata: The original OLR data</span>
 <span class="sd">    :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.</span>
 <span class="sd">    :param period_max: Temporal filter constant: Only lower periods (in days) remain in the data.</span>
-<span class="sd">    :param do_plot: If True, diagnosis plots will be generated.</span>
+<span class="sd">    :param do_plot: If ``True``, diagnosis plots will be generated.</span>
 
 <span class="sd">    :return: The filtered OLR.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -228,12 +148,12 @@
 
 <div class="viewcode-block" id="filter_olr_for_mjo_eof_calculation"><a class="viewcode-back" href="../../../api/wheeler_kiladis_mjo_filter.html#mjoindices.omi.wheeler_kiladis_mjo_filter.filter_olr_for_mjo_eof_calculation">[docs]</a><span class="k">def</span> <span class="nf">filter_olr_for_mjo_eof_calculation</span><span class="p">(</span><span class="n">olrdata</span><span class="p">:</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">,</span> <span class="n">do_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">olr</span><span class="o">.</span><span class="n">OLRData</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Filters OLR data temporally and longitudinally.</span>
+<span class="sd">    Filters OLR data temporally and longitudinally with a bandwidth particularly selected for the EOF calculation.</span>
 
 <span class="sd">    The filter setup meets the description of Kiladis (2014) for the EOF calculation.</span>
 
 <span class="sd">    :param olrdata: The original OLR data</span>
-<span class="sd">    :param do_plot: If True, diagnosis plots will be generated.</span>
+<span class="sd">    :param do_plot: If ``True``, diagnosis plots will be generated.</span>
 
 <span class="sd">    :return: The filtered OLR data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -250,14 +170,14 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Performs a temporal and longitudinal bandpass filtering of the OLR data with configurable filtering thresholds.</span>
 
-<span class="sd">    Note that this function has strictly only been tested for filtering constants used by the OMI algorithm.</span>
+<span class="sd">    Note that this function has only been strictly tested for filtering constants used by the OMI algorithm.</span>
 
 <span class="sd">    :param olrdata: The original OLR data.</span>
 <span class="sd">    :param period_min: Temporal filter constant: Only greater periods (in days) remain in the data.</span>
 <span class="sd">    :param period_max: Temporal filter constant: Only lower periods (in days) remain in the data.</span>
 <span class="sd">    :param wn_min: Longitudinal filter constant: Only greater wave numbers (in cycles per globe) remain in the data.</span>
 <span class="sd">    :param wn_max:  Longitudinal filter constant: Only lower wave numbers (in cycles per globe) remain in the data.</span>
-<span class="sd">    :param do_plot: If True, diagnosis plots will be generated.</span>
+<span class="sd">    :param do_plot: If ``True``, diagnosis plots will be generated.</span>
 
 <span class="sd">    :return: The filtered OLR.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -320,7 +240,7 @@
 <span class="sd">    This class contains the major Wheeler-Kiladis-Filtering functionality.</span>
 <span class="sd">    The functionality is encapsulated in a class because values of intermediate processing steps</span>
 <span class="sd">    are saved as class members for debugging purposes.</span>
-<span class="sd">    To run the filtering, only the method :func:`perform_2dim_spectral_filtering` has to be executed.</span>
+<span class="sd">    To run the filtering, only the method :py:func:`perform_2dim_spectral_filtering` has to be executed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DebugInputOLR</span> <span class="o">=</span> <span class="p">[]</span>
@@ -349,11 +269,11 @@
 <span class="sd">        Note that the temporal and longitudinal dimension have in principle</span>
 <span class="sd">        different characteristics, so that they are in detail treated a bit</span>
 <span class="sd">        differently:</span>
-<span class="sd">        While the time is evolving into infinity (so that the number of data</span>
+<span class="sd">        While the time variable may evolve to infinity (thus, the number of data</span>
 <span class="sd">        points and the time_spacing variable are needed to calculate the</span>
-<span class="sd">        full temporal coverage), the longitude is periodic with the periodicity</span>
-<span class="sd">        of one globe (so that it is assumed that the data covers exactly one</span>
-<span class="sd">        globe and only passing the number of longitudes provides already the complete information).</span>
+<span class="sd">        full temporal coverage), longitude is periodic with the periodicity</span>
+<span class="sd">        of one globe (thus, it is assumed that the data covers exactly one</span>
+<span class="sd">        globe and only passing the number of longitudes provides complete information).</span>
 
 <span class="sd">        :param data: The OLR data as 2-dim array: first dimension time, second</span>
 <span class="sd">            dimension longitude, both equally spaced.</span>
@@ -366,8 +286,8 @@
 <span class="sd">        :param period_max: Maximal period (in days) that remains in the dataset.</span>
 <span class="sd">        :param wn_min: Minimal wavenumber (in cycles per globe) that remains in the dataset.</span>
 <span class="sd">        :param wn_max: Maximal wavenumber (in cycles per globe) that remains in the dataset.</span>
-<span class="sd">        :param do_plot: If True, diagnosis plots will be generated.</span>
-<span class="sd">        :param save_debug: If true, some variables will be filled with values of intermediate processing steps</span>
+<span class="sd">        :param do_plot: If ``True``, diagnosis plots will be generated.</span>
+<span class="sd">        :param save_debug: If ``True``, some variables will be filled with values of intermediate processing steps</span>
 <span class="sd">            for debugging purposes.</span>
 
 <span class="sd">        :return: The filtered data.</span>
@@ -552,54 +472,41 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2020, Christoph G. Hoffmann
-
-    </p>
+    <p>&#169; Copyright 2020, Christoph G. Hoffmann.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-
-  
-  
-    
     <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
     <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-    ga('create', 'UA-XXXXXXX-1', 'auto');
-    ga('send', 'pageview');
-    </script>
-
-    
-   
+      gtag('config', 'UA-XXXXXXX-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
 
 </body>
 </html>

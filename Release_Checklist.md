@@ -1,3 +1,6 @@
+#To install optional development dependencies
+- pip install -e .[dev]
+
 #Jupyter Notebooks
 - clear cell outputs 
 
@@ -18,7 +21,7 @@
 
 # Setup Tools
 - activate venv
-- python3 setup.py sdist bdist_wheel
+- python -m build
 
 # GitHub
 - Create Release from new tag

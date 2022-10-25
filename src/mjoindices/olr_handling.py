@@ -29,7 +29,7 @@ import numpy as np
 import scipy
 import scipy.interpolate
 from matplotlib.figure import Figure
-from scipy.io import netcdf
+import scipy.io
 import netCDF4 as netcdf4
 import matplotlib.pyplot as plt
 
@@ -104,11 +104,11 @@ class OLRData:
 
     def close(self, other: "OLRData") -> bool:
         """
-         Checks equality of two :class:`OLRData` objects, but allows for numerical tolerances.
+         Checks equality of two :py:class:`OLRData` objects, but allows for numerical tolerances.
 
         :param other: The object to compare with.
 
-        :return: Equality of all members considering the default tolerances of :func:`numpy.allclose`
+        :return: Equality of all members considering the default tolerances of :py:func:`numpy.allclose`
         """
         return (np.allclose(self.lat, other.lat)
                 and np.allclose(self.long, other.long)
@@ -119,10 +119,10 @@ class OLRData:
         """
         Returns the spatially distributed OLR map for a particular date.
 
-        :param date: The date, which hat to be exactly matched by one of the dates in the OLR time grid.
+        :param date: The date, which has to be exactly matched by one of the dates in the OLR time grid.
 
         :return: The excerpt of the OLR data as a 2-dim array. The two dimensions correspond to
-            latitude, and longitude, in this order. Returns None if the date is not contained in the OLR time series.
+            latitude and longitude, in this order. Returns ``None`` if the date is not contained in the OLR time series.
         """
         cand = self.time == date
         if not np.all(cand == False):  # noqa: E712
@@ -130,10 +130,9 @@ class OLRData:
         else:
             return None
 
-    def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0,
-                                         strict_leap_year_treatment: bool = False) -> np.ndarray:
+    def extract_olr_matrix_for_doy_range(self, center_doy: int, window_length: int = 0, leap_year_treatment: str = "original") -> np.ndarray:
         """
-        Extracts the OLR data, which belongs to all DOYs around one center (center_doy +/- windowlength).
+        Extracts a range of OLR data from the DOYs around one center DOY (center_doy +/- windowlength).
 
         Keep in mind that the OLR time series might span several years. In this case the center DOY is found more than
         once and the respective window in considered for each year.
@@ -141,15 +140,15 @@ class OLRData:
         time axis
 
         :param center_doy: The center DOY of the window.
-        :param window_length: The window length in DOYs on both sides of the center DOY. Hence, if the window is fully
-            covered by the data, one gets 2*window_length + 1 entries per year in the result.
-        :param strict_leap_year_treatment: see description in :meth:`mjoindices.tools.find_doy_ranges_in_dates`.
-
+        :param window_length: The window length of DOYs on both sides of the center DOY. Hence, if the window is fully
+            covered by the data, one gets :math:``2*window_length + 1`` entries per year in the result.
+        :param leap_year_treatment: see :py:func:``mjoindices.omi.omi_calculator.calc_eofs_from_olr``.
         :return: The excerpt of the OLR data as a 3-dim array. The three dimensions correspond to
             time, latitude, and longitude, in this order.
+
         """
         inds, doys = tools.find_doy_ranges_in_dates(self.time, center_doy, window_length=window_length,
-                                                    strict_leap_year_treatment=strict_leap_year_treatment)
+                                                    leap_year_treatment=leap_year_treatment)
         return self.olr[inds, :, :]
 
     def save_to_npzfile(self, filename: Path) -> None:
@@ -163,8 +162,8 @@ class OLRData:
 
 def interpolate_spatial_grid_to_original(olr: OLRData) -> OLRData:
     """
-    Interpolates the OLR data in an :class:`OLRData` object spatially onto the spatial grid, which was used for the
-    original OMI calculation by Kiladis (2014).
+    Convenience function that interpolates the OLR data in an :class:`OLRData` object spatially onto the spatial grid,
+    which was used for the original OMI calculation by :ref:`refKiladis2014`.
 
     This original grid has the following properties:
 
@@ -185,11 +184,11 @@ def interpolate_spatial_grid(olr: OLRData, target_lat: np.ndarray, target_long: 
     """
     Interpolates the OLR data linearly onto the given grids.
 
-    No extrapolation will be done. Instead a :py:class:`ValueError` is raised if the data does not cover the target
+    No extrapolation will be done. Instead, a :py:class:`ValueError` is raised if the data does not cover the target
     grid.
 
-    Note that no sophisticated resampling is provided here. So, if some kind of averaging, etc., is needed, it should
-    be performed by the user himself before injecting the data into the OMI calculation.
+    Note that no sophisticated resampling is provided here. If some kind of averaging, etc., is needed, it should
+    be performed by the user before injecting the data into the OMI calculation.
 
     :param olr: The OLR data to resample.
     :param target_lat: The new latitude grid.
@@ -213,7 +212,7 @@ def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime
     Of course, it can also be used to limit the PC calculation to a specific period.
 
     Note that a temporal resampling method is not provided here, since the possible resampling methods,
-    which the user might want to apply are too diverse. Hence, it is assumed that the temporal spacing ist already
+    which the users might want to apply, are too diverse. Hence, it is assumed that the temporal spacing is already
     correct (daily averages recommended) and only a restriction of the period is needed before calculation.
 
     :param olr: The OLR data to restrict.
@@ -232,86 +231,125 @@ def restrict_time_coverage(olr: OLRData, start: np.datetime64, stop: np.datetime
         return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long)
 
 
-def load_noaa_interpolated_olr(filename: Path) -> OLRData:
+def remove_leap_years(olr: OLRData) -> OLRData:
+    """
+    Removes any leap days (any instances of February 29) and returns an :class:`OLRData` object
+    with the remaining OLR data
+
+    :param olr: The OLR data to restrict.
+
+    :return: A new :class:`OLRData` object with no leap days
+    """
+
+    window_inds = [(i.astype(object).month != 2) | (i.astype(object).day != 29) for i in olr.time]
+
+    return OLRData(olr.olr[window_inds, :, :], olr.time[window_inds], olr.lat, olr.long) 
+    
+
+
+def load_noaa_interpolated_olr(filename: Path, use_xarray: bool = False) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF3 format.
     This is mainly used to load the OLR files originally used for the OMI calculation some years ago.
 
-    ATTENTION: Note that the file format has apparently been changed by NOAA from NetCDF3 to NetCDF4 sometime
-    between the years 2019 and 2021. If you are using a recent download of the data an experience problems
-    with this loader method, you should use :func:`load_noaa_interpolated_olr_netcdf4` instead.
+    ATTENTION: Note that the file format was changed by NOAA from NetCDF3 to NetCDF4 sometime
+    between the years 2019 and 2021. If you are using a recent download of the data and experience problems
+    with this loader method, you should use :py:func:`load_noaa_interpolated_olr_netcdf4` instead.
 
     The original OLR data file is contained in the reference data package found at: https://doi.org/10.5281/zenodo.3746562
 
     The current dataset can be obtained from
-    ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
+    https://www.psl.noaa.gov/thredds/catalog/Datasets/interp_OLR/catalog.html?dataset=Datasets/interp_OLR/olr.day.mean.nc
 
     A description is found at
-    https://www.esrl.noaa.gov/psd/data/gridded/data.interp_OLR.html
+    https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html
 
     :param filename: Full filename of a local copy of OLR data file.
+    :param use_xarray: Option to use xarray instead of SciPy netcdf for faster loading of data and timestamps. Note that OMI values
+        based on this parameter have not been validated. The respective unit tests currently fail when this option is activated,
+        however, this is probably only caused by very small numerical differences, which are irrelevant for the actual use.
+        Still make sure that you trust the values when activating the option. A further advantage of this option is that is works for
+        NetCDF3 and NetCDF4 files, hence for the older and the newer NOAA OLR datafiles.
 
     :return: The OLR data.
     """
-    f = netcdf.netcdf_file(str(filename), 'r')
-    lat = f.variables['lat'].data.copy()
-    lon = f.variables['lon'].data.copy()
-    # scaling and offset as given in meta data of nc file
-    olr = f.variables['olr'].data.copy() / 100. + 327.65
-    hours_since1800 = f.variables['time'].data.copy()
-    f.close()
+    # ToDo: Validate the complete OMI calculation chain with OLR data loaded using the xarray option (Quick tests showed
+    # that the OMI values are probably essentially the same but numerical differeces lead to failiures of the integration tests).
+    # If the values are ok, make the xarray option the default (which also means that Python 3.8 is at least needed) and remove the
+    # special function for NetCDF 4 below.
+    if use_xarray:
+        import xarray as xr
+        f = xr.open_dataset(filename)
+        lat = f.lat.data.copy()
+        lon = f.lon.data.copy()
+        olr = f.olr.data.copy()
+        time = np.array(f.olr.time.values, dtype='datetime64[D]')
+    else:
+        f = scipy.io.netcdf_file(str(filename), 'r')
+        lat = f.variables['lat'].data.copy()
+        lon = f.variables['lon'].data.copy()
+        # scaling and offset as given in meta data of nc file
+        olr = f.variables['olr'].data.copy() / 100. + 327.65
+        hours_since1800 = f.variables['time'].data.copy()
+        f.close()
 
-    temptime = []
-    for item in hours_since1800:
-        delta = np.timedelta64(int(item / 24), 'D')
-        day = np.datetime64('1800-01-01') + delta
-        temptime.append(day)
-    time = np.array(temptime, dtype=np.datetime64)
+        temptime = []
+        for item in hours_since1800:
+            delta = np.timedelta64(int(item / 24), 'D')
+            day = np.datetime64('1800-01-01') + delta
+            temptime.append(day)
+        time = np.array(temptime, dtype=np.datetime64)
     result = OLRData(np.squeeze(olr), time, lat, lon)
 
     return result
 
 
-def load_noaa_interpolated_olr_netcdf4(filename: Path) -> OLRData:
+def load_noaa_interpolated_olr_netcdf4(filename: Path, use_xarray: bool = False) -> OLRData:
     """
     Loads the standard OLR data product provided by NOAA in NetCDF4 format.
 
     ATTENTION: Whereas NetCDF4 seems to be the format of the recent NOAA OLR data files, the files originally used some
-    years ago where saved in NetCDF3. So, if you are going to load the original files for reference purposes, you should
-    use the loader function :func:`load_noaa_interpolated_olr` instead.
+    years ago were saved as NetCDF3. So, if you are going to load the original files for reference purposes, you should
+    use the loader function :py:func:`load_noaa_interpolated_olr` instead.
 
     The dataset can be obtained from
-    ftp://ftp.cdc.noaa.gov/Datasets/interp_OLR/olr.day.mean.nc
+    https://www.psl.noaa.gov/thredds/catalog/Datasets/interp_OLR/catalog.html?dataset=Datasets/interp_OLR/olr.day.mean.nc
 
     A description is found at
-    https://www.esrl.noaa.gov/psd/data/gridded/data.interp_OLR.html
+    https://psl.noaa.gov/data/gridded/data.olrcdr.interp.html
 
     :param filename: Full filename of a local copy of OLR data file.
-
+    :param use_xarray: Option to use xarray instead of NetCDF4 for faster loading of data and timestamps. If you consider
+        activating this parameter, you should call instead :py:func:`load_noaa_interpolated_olr`, since it works for NetCDF
+        3 and 4. Later on, when the xarray option is established, the present function particularly for NetCDF4 will be removed.
+        Please also take into account the warnings in the docs of :py:func:`load_noaa_interpolated_olr`.
     :return: The OLR data.
     """
-    f = netcdf4.Dataset(filename, "r")
-    lat = f.variables['lat'][:].data.copy()
-    lon = f.variables['lon'][:].data.copy()
-    olr = f.variables['olr'][:].data.copy()
-    hours_since1800 = f.variables['time'][:].data.copy()
-    f.close()
+    if use_xarray:
+        result = load_noaa_interpolated_olr(filename=filename, use_xarray=True)
+    else:
+        f = netcdf4.Dataset(filename, "r")
+        lat = f.variables['lat'][:].data.copy()
+        lon = f.variables['lon'][:].data.copy()
+        olr = f.variables['olr'][:].data.copy()
+        hours_since1800 = f.variables['time'][:].data.copy()
+        f.close()
 
-    temptime = []
-    for item in hours_since1800:
-        delta = np.timedelta64(int(item / 24), 'D')
-        day = np.datetime64('1800-01-01') + delta
-        temptime.append(day)
-    time = np.array(temptime, dtype=np.datetime64)
-    result = OLRData(np.squeeze(olr), time, lat, lon)
+        temptime = []
+        for item in hours_since1800:
+            delta = np.timedelta64(int(item / 24), 'D')
+            day = np.datetime64('1800-01-01') + delta
+            temptime.append(day)
+        time = np.array(temptime, dtype=np.datetime64)
+        result = OLRData(np.squeeze(olr), time, lat, lon)
 
     return result
 
 
 def restore_from_npzfile(filename: Path) -> OLRData:
     """
-    Loads an :class:`OLRData` object from a numpy file, which has been saved with the function
-    :func:`mjoindices.olr_handling.OLRData.save_to_npzfile`
+    Loads an :py:class:`OLRData` object from a numpy file, which has been saved with the function
+    :py:func:`mjoindices.olr_handling.OLRData.save_to_npzfile`
 
     :param filename: The filename to the .npz file.
 
@@ -330,7 +368,7 @@ def plot_olr_map_for_date(olr: OLRData, date: np.datetime64) -> Figure:
     Plots a map pf the OLR data for a specific date.
 
     :param olr: The complete OLR data.
-    :param date: The date for which da OLR data should be plotted
+    :param date: The date for which the OLR data should be plotted
         (has to be exactly matched by a date of the OLR time grid).
 
     :return: The handle to the figure.
@@ -355,3 +393,4 @@ def plot_olr_map_for_date(olr: OLRData, date: np.datetime64) -> Figure:
         raise ValueError("No OLR data found for given date.")
 
     return fig
+
