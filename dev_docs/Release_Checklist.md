@@ -1,13 +1,15 @@
-#To install optional development dependencies
+# Setup development env
+ to install optional development dependencies
 - pip install -e .[dev]
 
-#Jupyter Notebooks
+# Jupyter Notebooks
 - clear cell outputs 
 
 # Testing
 - pytest in dir tests/
+- tox in root dir of package (where tox.ini is located), or "tox -e py38" for individual environments
 
-#Documentation
+# Documentation
 - activate venv with Sphinx
 - change to dir docsrc/
 - call make html

@@ -77,7 +77,7 @@ There are three basic entry points, of which you should read the documentation:
 * An OLR data container class, which has to be provided for the calculations: [OLRData](https://cghoffmann.github.io/mjoindices/api/olr_handling.html#mjoindices.olr_handling.OLRData)
 
 After you have installed mjoindices, you can download an
-[example](examples/) from the source, which consists of two files: 
+[example](https://github.com/cghoffmann/mjoindices/tree/master/examples/) from the source, which consists of two files: 
 
 * recalculate_original_omi.py: After downloading some data files, which are mentioned and linked in the source
   documentation of the example, you can run this example to recalculate the original OMI values. The script will save
@@ -100,17 +100,17 @@ Both files are also available as Jupyter notebook files.
 Documentation
 -----------------
 The documentation is found on [GitHub Pages](https://cghoffmann.github.io/mjoindices/index.html) and also in the docs
-folder of the [source](docs/index.html).
+folder of the [source](https://github.com/cghoffmann/mjoindices/tree/master/docs/).
 
 Automated testing
 -----------------
 After you have installed mjoindices, you can also download
-[unit and integration tests](tests/) from the source to check
+[unit and integration tests](https://github.com/cghoffmann/mjoindices/tree/master/tests/) from the source to check
 your installation using pytest:
 
 * Download the complete test directory to you local file system.
 
-* Download the external input and reference data files from [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](tests/testdata/README). 
+* Download the external input and reference data files from [Zenodo](https://doi.org/10.5281/zenodo.3746562). Details are given in a separate [Readme file](https://github.com/cghoffmann/mjoindices/blob/master/tests/testdata/README). 
   * Note that some necessary data files are already included in the test directory in the repository. Make sure to download
     those files together with the tests. The data files on Zenodo are complementary and not 
     included in the repository for reasons of file size and ownership.

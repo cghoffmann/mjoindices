@@ -43,7 +43,7 @@ setup(name='mjoindices',
       install_requires=['numpy', 'pandas', 'scipy', 'matplotlib', 'netCDF4'],
       extras_require={
         'full_func': ['eofs', 'xarray'],
-        'dev': ['build', 'pytest', 'pytest-pep8', 'tox', 'sphinx', 'm2r2', 'sphinx_rtd_theme'],
+        'dev': ['build', 'pytest', 'pytest-pep8', 'tox', 'sphinx', 'm2r2', 'sphinx_rtd_theme', 'twine'],
       },
       author='Christoph G. Hoffmann',
       author_email="christoph.hoffmann@uni-greifswald.de",

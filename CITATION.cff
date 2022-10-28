@@ -6,7 +6,7 @@ authors:
   orcid: "https://orcid.org/0000-0003-2712-8648"
 title: "mjoindices"
 abstract: "A Python Package to Calculate the OLR-Based Index of the Madden-Julian-Oscillation (OMI)"
-license: GPL-3.0 license
+license: "GPL-3.0"
 doi:  10.5281/zenodo.3957857
 repository-code: "https://github.com/cghoffmann/mjoindices"
 preferred-citation:
