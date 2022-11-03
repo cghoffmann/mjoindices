@@ -8,8 +8,8 @@ Setup test directory
 
 Setup Python environment
 ------------------------
-    python3 -m venv ./venvX.X.X
-    source ./venv1.4.0/bin/activate
+    python3 -m venv ./venv
+    source ./venv/bin/activate
     pip install mjoindices[full_func,dev]
     pip list
 
@@ -23,4 +23,6 @@ Start examples
 --------------
     cd examples/
     python3 ./recalculate_original_omi.py
-
+    python3 ./evaluate_omi_reproduction.py
+    jupyter notebook ./recalculate_original_omi.ipynb
+    jupyter notebook ./evaluate_omi_reproduction.ipynb

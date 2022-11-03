@@ -42,7 +42,7 @@ setup(name='mjoindices',
       cmdclass=versioneer.get_cmdclass(),
       install_requires=['numpy', 'pandas', 'scipy', 'matplotlib', 'netCDF4'],
       extras_require={
-        'full_func': ['eofs', 'xarray'],
+        'full_func': ['eofs', 'xarray', 'jupyter'],
         'dev': ['build', 'pytest', 'pytest-pep8', 'tox', 'sphinx', 'm2r2', 'sphinx_rtd_theme', 'twine'],
       },
       author='Christoph G. Hoffmann',
